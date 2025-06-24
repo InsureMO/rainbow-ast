@@ -1,0 +1,56 @@
+{
+	"name": "@rainbow-ast/groovy",
+	"version": "0.1.0",
+	"description": "Rainbow AST core.",
+	"main": "index.cjs",
+	"module": "index.js",
+	"types": "index.d.ts",
+	"type": "module",
+	"scripts": {
+		"build": "rolldown -c",
+		"test": "jest"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/InsureMO/rainbow-ast.git"
+	},
+	"author": "Rainbow Team",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/InsureMO/rainbow-ast/issues"
+	},
+	"dependencies": {
+		"@rainbow-ast/core": "0.1.0"
+	},
+	"devDependencies": {
+		"@types/node": "24.0.3",
+		"rolldown": "^1.0.0-beta.19",
+		"rolldown-plugin-dts": "^0.13.12",
+		"typescript": "5.8.3"
+	},
+	"jest": {
+		"moduleFileExtensions": [
+			"js",
+			"json",
+			"ts"
+		],
+		"testRegex": "(/test/.*\\.(test|spec))\\.[tj]sx?$",
+		"testPathIgnorePatterns": [
+			"/node_modules/"
+		],
+		"transform": {
+			"^.+\\.(t|j)s$": "ts-jest"
+		},
+		"collectCoverageFrom": [
+			"src/**/*.(t|j)s"
+		],
+		"coverageDirectory": "./coverage",
+		"coverageReporters": [
+			"html"
+		],
+		"testEnvironment": "node"
+	},
+	"volta": {
+		"extends": "../package.json"
+	}
+}

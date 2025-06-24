@@ -1,0 +1,205 @@
+import {CompilationUnitTokenId} from '@rainbow-ast/core';
+
+enum G {
+	/** first one must be COMPILATION_UNIT, value is 0 */
+	COMPILATION_UNIT = CompilationUnitTokenId,
+	// primitive types
+	BOOLEAN = 1,
+	CHAR,
+	BYTE,
+	SHORT,
+	INT,
+	LONG,
+	FLOAT,
+	DOUBLE,
+	// groovy keywords
+	AS, // G1.0
+	DEF, // G1.0
+	TRAIT, // G2.3
+	THREADSAFE, // G2.4 @ThreadSafe
+	// java keywords
+	ABSTRACT, // 1.0
+	ASSERT, // 1.4
+	AT_INTERFACE, // 5
+	BREAK, // 1.0
+	CASE, // 1.0
+	CATCH, // 1.0
+	CLASS, // 1.0
+	CONST, // reserved, 1.0
+	CONTINUE, // 1.0
+	DEFAULT, // 1.0
+	DO, // 1.0
+	ELSE, // 1.0
+	ENUM, // 5
+	EXTENDS, // 1.0
+	FINAL, // 1.0
+	FINALLY, // 1.0
+	FOR, // 1.0
+	GOTO, // reserved, 1.0
+	IF, // 1.0
+	IMPLEMENTS, // 1.0
+	IMPORT, // 1.0
+	INTERFACE, // 1.0
+	NATIVE, // 1.0
+	NEW, // 1.0
+	NON_SEALED, // 17
+	NULL, // 1.0
+	PACKAGE, // 1.0
+	PERMITS, // 17
+	PRIVATE, // 1.0
+	PROTECTED, // 1.0
+	PUBLIC, // 1.0
+	RECORD, // 16
+	RETURN, // 1.0
+	SEALED, // 17
+	STATIC, // 1.0
+	STRICTFP, // 1.2
+	SUPER, // 1.0
+	SWITCH, // 1.0
+	SYNCHRONIZED, // 1.0
+	THIS, // 1.0
+	THROW, // 1.0
+	THROWS, // 1.0
+	TRANSIENT, // 1.0
+	TRY, // 1.0
+	VAR, // 10
+	VOID, // 1.0
+	VOLATILE, // 1.0
+	WHILE, // 1.0
+	YIELD, // 14
+	// boolean
+	BooleanTrue, // true
+	BooleanFalse, // false
+	// numeric
+	NumericSignMark, // + or -
+	IntegralNumbers, // numbers
+	FractionNumbers, // numbers
+	NumericSuffixMark, // gG: BigInteger/BigDecimal, lL: Long, iI: Integer, dD: double, fF: float
+	BinaryStartMark, // 0b/0B of [+-]0b...
+	OctalStartMark, // 0 of [+-]0...
+	HexadecimalStartMark, // 0x/0X of [+-]0x...
+	DecimalExponentMark, // e/E
+	DecimalExponentSignMark, // +/- after DecimalExponentMark
+	DecimalExponentNumbers, // numbers
+	// string and gstring
+	StringQuotationMark, // '
+	StringQuotationMarkML, // '''
+	StringMLNewlineEraser, // \ for multiple lines string/gstring literal, and no character after it, erase the following newline
+	StringBackspaceEscape, // \b
+	StringFormFeedEscape, // \f
+	StringNewlineEscape, // \n
+	StringCarriageReturnEscape, // \r
+	StringTabulationEscape, // \t
+	StringBackslashEscape, // \\
+	StringSingleQuoteEscape, // \', in string, or optional in multiple string, gstring and multiple line gstring
+	StringDoubleQuoteEscape, // \" in gstring, or optional in multiple string and multiple line gstring
+	StringDollarEscape, // \$, not for slashy gstring or dollar slashy gstring
+	StringOctalEscapeMark, // \ in octal escape
+	StringOctalEscapeContent, // 1 - 3 octal digits follows \
+	StringUnicodeEscapeMark, // \u in unicode escape
+	StringUnicodeEscapeContent, // 4 hexadecimal digits follows \u
+	GStringQuotationMark, // "
+	GStringQuotationMarkML, // """
+	SlashyGStringQuotationMark, // /
+	DollarSlashyGStringQuotationStartMark, // $/
+	DollarSlashyGStringQuotationEndMark, // /$
+	SlashyGStringSlashEscape, // \/
+	DollarSlashyGStringDollarEscape, // $$
+	DollarSlashyGStringSlashEscape, // $/
+	GStringInterpolationStartMark, // $ of $...
+	GStringInterpolationLBraceStartMark, // ${ of ${...}
+	GStringInterpolationRBraceEndMark, // } of ${...}
+	// Groovy Operators
+	RangeInclusive, // ..
+	RangeExclusiveLeft, // <..
+	RangeExclusiveRight, // ..<
+	RangeExclusiveFull, // <..<
+	SpreadDot, // *.
+	SafeDot, // ?.
+	SafeIndex, // ?[
+	SafeIndexClose, // ]
+	SafeChainDot, // ??.
+	Elvis, // ?:
+	MethodPointer, // .&
+	MethodReference, // :: // this also supported by java
+	RegexFind, // =~
+	RegexMatch, // ==~
+	Power, // **
+	PowerAssign, // **=
+	Spaceship, // <=>
+	Identical, // ===
+	NotIdentical, // !==
+	Arrow, // -> // this also supported by java
+	In, // G1.0
+	NotIn, // !in
+	NotInstanceof, // !instanceof
+	// operators
+	Assign, // =
+	GreaterThan, // >
+	LessThan, // <
+	Not, // !
+	Bitnot, // ~
+	Question, // ?
+	Colon, // :
+	Equal, // ==
+	LessThanOrEqual, // <=
+	GreaterThanOrEqual, // >=
+	NotEqual, // !=
+	And, // &&
+	Or, // ||
+	Increase, // ++
+	Decrease, // --
+	Add, // +
+	Subtract, // -
+	Multiple, // *
+	Divide, // /
+	Bitand, // &
+	Bitor, // |
+	Xor, // ^
+	Mod, // %
+	Lshift, // <<
+	Rshift, // >>
+	Urshift, // >>>
+	AddAssign, // +=
+	SubtractAssign, // -=
+	MultipleAssign, // *=
+	DivideAssign, // /=
+	BitandAssign, // &=
+	BitorAssign, // |=
+	XorAssign, // ^=
+	ModAssign, // %=
+	LshiftAssign, // <<=
+	RshiftAssign, // >>=
+	UrshiftAssign, // >>>=
+	ElvisAssign, // ?=
+	Ellipsis, // ...
+	InstanceOf, // 1.0
+	// separators
+	LBrace, // {
+	RBrace, // }
+	LParen, // (
+	RParen, // )
+	LBrack, // [
+	RBrack, // ]
+	LAngle, // <
+	RAngle, // >
+	At, // @
+	Semicolon, // ;
+	Comma, // ,
+	Dot, // .
+	// comment
+	SingleLineCommentStartMark, // //
+	MultipleLinesCommentStartMark, // /*
+	MultipleLinesCommentEndMark, // */
+	// shebang command
+	ScriptCommandStartMark, // #!
+	// text content
+	Whitespaces,
+	Tabs,
+	Newline, // \n or \r\n
+	Chars,
+	Identifier,
+	UndeterminedChars,
+}
+
+export const GroovyTokenIds = G;
