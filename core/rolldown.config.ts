@@ -4,7 +4,7 @@ import {dts} from 'rolldown-plugin-dts';
 export default defineConfig([
 	{
 		input: 'src/index.ts',
-		plugins: [dts()],
+		plugins: [dts({tsconfig: './tsconfig.json'})],
 		output: {format: 'es', dir: '.'}
 	},
 	{

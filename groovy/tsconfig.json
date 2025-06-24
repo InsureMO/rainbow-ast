@@ -9,7 +9,7 @@
 		"sourceMap": true,
 		// create d.ts file
 		"declaration": true,
-		"removeComments": true,
+		"removeComments": false,
 		"noImplicitAny": false,
 		"allowSyntheticDefaultImports": true,
 		"allowUnreachableCode": true,

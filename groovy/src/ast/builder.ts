@@ -1,5 +1,6 @@
 import {AstBuilder, CompilationUnit, TokenIds} from '@rainbow-ast/core';
 import {GroovyTokenIds} from '../token';
+import {GroovyAstBuildContext} from './context';
 
 export class GroovyAstBuilder implements AstBuilder {
 	private constructor() {
@@ -11,7 +12,7 @@ export class GroovyAstBuilder implements AstBuilder {
 	}
 
 	build(cu: CompilationUnit): void {
-		const text = cu.text;
+		const context = new GroovyAstBuildContext(cu);
 
 	}
 

@@ -1,4 +1,4 @@
-import {CompilationUnitTokenId} from '@rainbow-ast/core';
+import {CompilationUnitTokenId, TokenId} from '@rainbow-ast/core';
 
 enum G {
 	/** first one must be COMPILATION_UNIT, value is 0 */
@@ -203,3 +203,29 @@ enum G {
 }
 
 export const GroovyTokenIds = G;
+
+interface Token {
+	id: TokenId;
+	name: string;
+	top?: boolean;
+}
+
+export type GroovyTokenIdKeys = Exclude<keyof typeof GroovyTokenIds, number>
+export type GroovyTokenRecord = { [key in GroovyTokenIdKeys]: Token }
+
+// key of enumeration is, according to typescript standard:
+// - explicit declared keys,
+// - and value of them.
+// noinspection JSUnusedGlobalSymbols
+export const GroovyTokens: Readonly<GroovyTokenRecord> = Object.keys(GroovyTokenIds).reduce((ret, key) => {
+	if ('0123456789'.includes(`${key}`[0])) {
+		// keys are indexes and names
+		// ignore index keys and temporary token keys
+		return ret;
+	}
+	ret[key] = {id: GroovyTokenIds[key], name: key};
+	if (ret[key].id === GroovyTokenIds.COMPILATION_UNIT) {
+		ret[key].top = true;
+	}
+	return ret;
+}, {} as GroovyTokenRecord);

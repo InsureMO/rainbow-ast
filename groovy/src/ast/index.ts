@@ -1,2 +1,2 @@
-export * from './ast-builder';
+export * from './builder';
 export * from './ast';
