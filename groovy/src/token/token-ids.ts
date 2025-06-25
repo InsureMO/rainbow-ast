@@ -1,5 +1,6 @@
 import {CompilationUnitTokenId, TokenId} from '@rainbow-ast/core';
 
+// TODO this enumeration should be auto generated
 enum G {
 	/** first one must be COMPILATION_UNIT, value is 0 */
 	COMPILATION_UNIT = CompilationUnitTokenId,
@@ -202,29 +203,30 @@ enum G {
 	UndeterminedChars,
 }
 
-export const GroovyTokenIds = G;
+export const GroovyTokenId = G;
 
+export type GroovyTokenName = Exclude<keyof typeof GroovyTokenId, number>;
+
+// following is preparing for code mirror
 interface Token {
 	id: TokenId;
 	name: string;
 	top?: boolean;
 }
 
-export type GroovyTokenIdKeys = Exclude<keyof typeof GroovyTokenIds, number>
-export type GroovyTokenRecord = { [key in GroovyTokenIdKeys]: Token }
-
+export type GroovyTokenRecord = { [key in GroovyTokenName]: Token };
 // key of enumeration is, according to typescript standard:
 // - explicit declared keys,
 // - and value of them.
 // noinspection JSUnusedGlobalSymbols
-export const GroovyTokens: Readonly<GroovyTokenRecord> = Object.keys(GroovyTokenIds).reduce((ret, key) => {
+export const GroovyToken: Readonly<GroovyTokenRecord> = Object.keys(GroovyTokenId).reduce((ret, key) => {
 	if ('0123456789'.includes(`${key}`[0])) {
 		// keys are indexes and names
 		// ignore index keys and temporary token keys
 		return ret;
 	}
-	ret[key] = {id: GroovyTokenIds[key], name: key};
-	if (ret[key].id === GroovyTokenIds.COMPILATION_UNIT) {
+	ret[key] = {id: GroovyTokenId[key], name: key};
+	if (ret[key].id === GroovyTokenId.COMPILATION_UNIT) {
 		ret[key].top = true;
 	}
 	return ret;

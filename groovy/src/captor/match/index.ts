@@ -1,3 +1,4 @@
 export * from './types';
+export * from './token-matcher';
 
-export * from './matcher';
+export * from './char-match-functions';

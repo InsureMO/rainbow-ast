@@ -1,15 +1,21 @@
-/** single char */
+/* single char */
 export type Char = string;
+/* single char match function */
 export type CharMatchFn = (char: Char) => boolean;
-export type CharMatch = Char | CharMatchFn;
-/** times must >= 1 */
-export type RepeatedCharMatch = { times: number, match: CharMatch };
-/** match as many characters as possible */
-export type EagerCharsMatch = { times: -1, match: CharMatch };
-export type TokenMatch =
-// @formatter:off
-	/** for a finite number of strings */
-	| Array<CharMatch | RepeatedCharMatch>
-	/** for an infinite number of strings */
-	| [...Array<CharMatch | RepeatedCharMatch>, EagerCharsMatch];
-// @formatter:on
+export type CharMatch = {
+	char: Char | CharMatchFn;
+	/**
+	 * number is integral, and is greater than or equals 0. cannot be infinity
+	 * - ignored when anti is true.
+	 */
+	minTimes: number;
+	/**
+	 * number is integral, and greater than minTimes. can be infinity
+	 * - ignored when anti is true.
+	 */
+	maxTimes: number;
+	/** anti-rule */
+	anti: boolean;
+};
+
+export type TokenMatch = Array<CharMatch>;
