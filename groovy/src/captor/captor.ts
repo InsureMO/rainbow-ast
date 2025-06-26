@@ -69,7 +69,7 @@ export class TokenCaptors {
 	}
 
 	addCaptor(captor: TokenCaptor): void {
-
+		// TODO
 	}
 
 	/**
