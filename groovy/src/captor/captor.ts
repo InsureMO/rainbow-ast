@@ -1,5 +1,4 @@
 import {TokenId} from '@rainbow-ast/core';
-import {GroovyAstBuildContext, GroovyAstBuildState, GroovyAstBuildStateName} from '../ast';
 import {GroovyTokenId, GroovyTokenName} from '../token';
 import {TokenMatcher} from './match';
 
