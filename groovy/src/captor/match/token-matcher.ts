@@ -1,4 +1,4 @@
-import {CharMatch, TokenMatch} from './types';
+import {TokenMatch} from './types';
 
 export class TokenMatcher {
 	private readonly _matches: TokenMatch;
@@ -15,9 +15,5 @@ export class TokenMatcher {
 
 	get description(): string {
 		return this._description;
-	}
-
-	get first(): CharMatch {
-		return this._matches[0];
 	}
 }

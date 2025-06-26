@@ -68,7 +68,8 @@ describe('Token matcher', () => {
 		const matchers = TokenMatcherBuilder.build('$');
 		expect(matchers.length).toBe(1);
 		const matcher = matchers[0];
-		const first = matcher.first;
+		const matches = matcher.matches;
+		const first = matches[0];
 		expect(first.rule).toBe('$');
 		expect((first as CharMatchSpecificTimes).min).toBe(1);
 		expect((first as CharMatchSpecificTimes).max).toBe(1);

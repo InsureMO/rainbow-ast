@@ -78,6 +78,10 @@ export class GroovyAstBuildContext {
 		return this._containers;
 	}
 
+	get currentContainer(): ContainerToken {
+		return this._containers[0];
+	}
+
 	closeContainer(): this {
 		this._containers.shift();
 		return this;
