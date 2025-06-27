@@ -1,9 +1,10 @@
+import {TokenId, TokenIds} from '../types';
 import {PrintUtils} from '../utils';
-import {CompilationUnitTokenId, TokenId, TokenIds} from './token-id';
+import {BlockToken} from './block-token';
 
 export abstract class Token {
 	protected _id: TokenId;
-	protected _parent?: ContainerToken;
+	protected _parent?: BlockToken;
 
 	protected constructor(id: TokenId) {
 		this._id = id;
@@ -23,12 +24,12 @@ export abstract class Token {
 
 	abstract get column(): number;
 
-	get parent(): ContainerToken | undefined {
+	get parent(): BlockToken | undefined {
 		return this._parent;
 	}
 
-	get ancestors(): ReadonlyArray<ContainerToken> {
-		const ancestors: Array<ContainerToken> = [];
+	get ancestors(): ReadonlyArray<BlockToken> {
+		const ancestors: Array<BlockToken> = [];
 		let ancestor = this.parent;
 		while (ancestor != null) {
 			ancestors.unshift(ancestor);
@@ -91,9 +92,9 @@ export abstract class Token {
 		}
 	}
 
-	stringify(ids: TokenIds): string {
+	stringify(tokenIds: TokenIds): string {
 		return [
-			ids[this.id],
+			tokenIds[this.id],
 			'[',
 			[
 				['id', this.id],
@@ -103,174 +104,5 @@ export abstract class Token {
 			].map(attr => attr.join('=')).join(','),
 			']'
 		].join('');
-	}
-}
-
-export class ContainerToken extends Token {
-	protected readonly _children?: Array<Token> = [];
-
-	get text(): string {
-		const root = this.root;
-		if (root == this) {
-			return '';
-		}
-		return root.text.slice(this.start, this.end);
-	}
-
-	/**
-	 * return start of first child
-	 */
-	get start(): number {
-		return this._children[0]?.start ?? -1;
-	}
-
-	/**
-	 * return end of last child
-	 */
-	get end(): number {
-		return this._children[this._children.length - 1]?.end ?? -1;
-	}
-
-	/**
-	 * return line of first child
-	 */
-	get line(): number {
-		return this._children[0]?.line ?? -1;
-	}
-
-	/**
-	 * return column of first child
-	 */
-	get column(): number {
-		return this._children[0]?.column ?? -1;
-	}
-
-	get children(): ReadonlyArray<Token> {
-		return this._children;
-	}
-}
-
-export type LeafTokenConstructOptions = {
-	id: TokenId;
-	/** start offset */
-	start: number;
-	/** start line */
-	line: number;
-	/** start column */
-	column: number;
-	/** text */
-	text: string;
-};
-
-export class CompilationUnit extends ContainerToken {
-	private readonly _text: string;
-	private readonly _end: number;
-
-	constructor(text: string) {
-		super(CompilationUnitTokenId);
-		this._text = text ?? '';
-		this._end = this._text.length;
-	}
-
-	get text(): string {
-		return this._text;
-	}
-
-	get start(): number {
-		return 0;
-	}
-
-	get end(): number {
-		return this._end;
-	}
-
-	get line(): number {
-		return 1;
-	}
-
-	get column(): number {
-		return 1;
-	}
-
-	get parent(): ContainerToken | undefined {
-		return (void 0);
-	}
-
-	get ancestors(): ReadonlyArray<ContainerToken> {
-		return [];
-	}
-
-	get root(): Token {
-		return this;
-	}
-
-	get previousSiblings(): ReadonlyArray<Token> {
-		return [];
-	}
-
-	get previousSibling(): Token | undefined {
-		return (void 0);
-	}
-
-	get nextSiblings(): ReadonlyArray<Token> {
-		return [];
-	}
-
-	get nextSibling(): Token | undefined {
-		return (void 0);
-	}
-}
-
-export class LeafToken extends Token {
-	/** keep undefined when it is a container node */
-	protected _text: string;
-	protected _start: number;
-	/** keep undefined when it is a container node */
-	protected _end: number;
-	protected _line: number;
-	protected _column: number;
-
-	constructor(options: LeafTokenConstructOptions) {
-		super(options.id);
-		this._text = options.text ?? '';
-		this._start = options.start;
-		this._end = options.start + this._text.length;
-		this._line = options.line;
-		this._column = options.column;
-	}
-
-	/**
-	 * text
-	 */
-	get text(): string {
-		return this._text;
-	}
-
-	/**
-	 * start offset
-	 */
-	get start(): number {
-		return this._start;
-	}
-
-	/**
-	 * end offset
-	 */
-	get end(): number {
-		return this._end;
-	}
-
-	/**
-	 * start line
-	 */
-	get line(): number {
-		return this._line;
-	}
-
-	/**
-	 * start column
-	 */
-	get column(): number {
-		return this._column;
 	}
 }

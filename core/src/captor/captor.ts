@@ -1,9 +1,11 @@
-import {Char, LeafToken, TokenCharMatchUsage, TokenId, TokenMatcher} from '@rainbow-ast/core';
-import {AstBuildContext} from '../ast';
-import {GroovyTokenId, GroovyTokenName} from '../token';
+import {AstBuildContext} from '../context';
+import {AtomicToken} from '../token';
+import {Char, TokenCharMatchUsage, TokenMatcher} from '../token-match';
+import {TokenId, TokenName} from '../types';
 
 export interface TokenCaptorOptions {
-	name: GroovyTokenName;
+	tokenId: TokenId;
+	name: TokenName;
 	matcher: TokenMatcher;
 }
 
@@ -13,12 +15,12 @@ export interface TokenCaptorOptions {
  */
 export class TokenCaptor {
 	private readonly _tokenId: TokenId;
-	private readonly _name: GroovyTokenName;
+	private readonly _tokenName: TokenName;
 	private readonly _matcher: TokenMatcher;
 
 	constructor(options: TokenCaptorOptions) {
-		this._name = options.name;
-		this._tokenId = GroovyTokenId[this._name];
+		this._tokenId = options.tokenId;
+		this._tokenName = options.name;
 		this._matcher = options.matcher;
 	}
 
@@ -26,8 +28,8 @@ export class TokenCaptor {
 		return this._tokenId;
 	}
 
-	get name(): GroovyTokenName {
-		return this._name;
+	get tokenName(): TokenName {
+		return this._tokenName;
 	}
 
 	get matcher(): TokenMatcher {
@@ -42,7 +44,7 @@ export class TokenCaptor {
 	 * capture token from given context.
 	 * make sure the capture operation can be performed, otherwise error raised!
 	 */
-	capture(context: AstBuildContext): LeafToken {
+	capture(context: AstBuildContext): AtomicToken {
 		const doc = context.document;
 		const matcher = this._matcher;
 		const matches = matcher.matches;
@@ -92,7 +94,7 @@ export class TokenCaptor {
 			column = text.slice(lastNewlineIndex).length;
 		}
 
-		return new LeafToken({
+		return new AtomicToken({
 			id: this._tokenId, text: chars.join(''),
 			start: context.charIndex, line, column
 		});

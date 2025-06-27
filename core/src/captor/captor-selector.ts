@@ -1,5 +1,6 @@
-import {Char, CharMatches, CharMatchFn, TokenCharMatchUsage} from '@rainbow-ast/core';
-import {AstBuildContext, DefaultTokenIdPriority, TokenIdPriority} from '../ast';
+import {DefaultTokenIdPriority} from '../consts';
+import {AstBuildContext} from '../context';
+import {Char, CharMatches, CharMatchFn, TokenCharMatchUsage} from '../token-match';
 import {TokenCaptor} from './captor';
 
 export type TokenCaptorOrSelector = TokenCaptor | TokenCaptorSelector;
@@ -175,9 +176,9 @@ export class TokenCaptorSelector {
 		const matched = captured.filter(([, captured]) => captured.length === longestLength);
 		if (matched.length > 1) {
 			// multiple captor found, check priority
-			const priority = TokenIdPriority[context.state] ?? TokenIdPriority.$Default;
+			const tokenCapturePriorities = context.tokenCapturePrioritiesOfCurrentState;
 			const withPriorityMatched = matched.map(matched => {
-				return [...matched, priority[matched[0].name] ?? DefaultTokenIdPriority];
+				return [...matched, tokenCapturePriorities?.[matched[0].tokenName] ?? DefaultTokenIdPriority];
 			}).reduce((result, matched) => {
 				if (matched[2] === result.priority) {
 					result.matched.push([matched[0], matched[1]]);
@@ -190,7 +191,7 @@ export class TokenCaptorSelector {
 			}, {priority: -Infinity, matched: [] as Array<[TokenCaptor, CapturedChars: string]>}).matched;
 			if (withPriorityMatched.length > 1) {
 				const captorsInfo = withPriorityMatched.map(([captor]) => {
-					return `Captor[name=${captor.name}, description=${captor.description}]`;
+					return `Captor[name=${captor.tokenName}, description=${captor.description}]`;
 				}).join(', ');
 				throw new Error(`Multiple captors[${captorsInfo}] found for text(${matched[0][1]}].`);
 			} else {

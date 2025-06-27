@@ -19,7 +19,6 @@ export type ParsedCharMatch = Omit<CharMatch, 'rule'> & { rule: Char | Chars };
 const BySemicolon = /(?<!\\);/g;
 const ByColon = /(?<!\\):/g;
 const CharMatchFnHead = 'fn#';
-const LongestKeywordLength = 12; // synchronized, in java
 
 const parseCharMatchRule = (namePattern: string): string => {
 	if (namePattern.startsWith(CharMatchFnHead) && namePattern.length > 3) {
@@ -199,19 +198,23 @@ const buildCharMatch = ({rule, ...rest}: ParsedCharMatch): CharMatch | Array<Cha
 	}
 };
 
+export type TokenMatchBuilderConstructOptions = {
+	LongestKeywordLength?: number;
+};
+
 // noinspection JSUnusedGlobalSymbols
 export class TokenMatcherBuilder {
-	static readonly BySemicolon = BySemicolon;
-	static readonly ByColon = ByColon;
-	static readonly CharMatchFnHead = CharMatchFnHead;
-	static LongestKeywordLength = LongestKeywordLength;
+	readonly BySemicolon = BySemicolon;
+	readonly ByColon = ByColon;
+	readonly CharMatchFnHead = CharMatchFnHead;
+	readonly LongestKeywordLength;
 
-	static readonly parseCharMatch = parseCharMatch;
-	static readonly parseCharMatches = parseCharMatches;
+	readonly parseCharMatch = parseCharMatch;
+	readonly parseCharMatches = parseCharMatches;
 
-	static readonly buildCharMatchRuleDescription = buildCharMatchRuleDescription;
-	static readonly buildCharMatchRestrictionDescription = buildCharMatchRestrictionDescription;
-	static readonly buildTokenMatcherDescription = buildTokenMatcherDescription;
+	readonly buildCharMatchRuleDescription = buildCharMatchRuleDescription;
+	readonly buildCharMatchRestrictionDescription = buildCharMatchRestrictionDescription;
+	readonly buildTokenMatcherDescription = buildTokenMatcherDescription;
 
 	/**
 	 * - replace rule with function when it is starts with {@link CharMatchFnHead},
@@ -221,7 +224,12 @@ export class TokenMatcherBuilder {
 	 *     - min = max = 1 with min times
 	 *     - min = 0, max = max - min
 	 */
-	static readonly buildCharMatch = buildCharMatch;
+	readonly buildCharMatch = buildCharMatch;
+
+	protected constructor(options?: TokenMatchBuilderConstructOptions) {
+		// synchronized, in java
+		this.LongestKeywordLength = options?.LongestKeywordLength ?? 12;
+	}
 
 	/**
 	 * the pattern contains multiple groups,
@@ -270,7 +278,7 @@ export class TokenMatcherBuilder {
 	 * - when char match is any times, then spread to one not and one once + one any times
 	 *   e.g. *: *;= -> = and *;*:*;=
 	 */
-	static build(pattern: string): Array<TokenMatcher> {
+	build(pattern: string): Array<TokenMatcher> {
 		const parsedCharMatches = parseCharMatches(pattern);
 		const description = buildTokenMatcherDescription(parsedCharMatches);
 		const charMatches = parsedCharMatches.map(parsed => buildCharMatch(parsed)).flat();
@@ -303,11 +311,11 @@ export class TokenMatcherBuilder {
 				// ignored
 				spreadCharMatchAtIndex.push([]);
 				const once = {rule, usage: TokenCharMatchUsage.ONCE};
-				new Array(TokenMatcherBuilder.LongestKeywordLength).fill(1).map((_, index) => {
+				new Array(this.LongestKeywordLength).fill(1).map((_, index) => {
 					spreadCharMatchAtIndex.push(new Array(index + 1).fill(once));
 				});
 				spreadCharMatchAtIndex.push([
-					...new Array(TokenMatcherBuilder.LongestKeywordLength + 1).fill(once),
+					...new Array(this.LongestKeywordLength + 1).fill(once),
 					{rule, usage: TokenCharMatchUsage.ANY_TIMES}
 				]);
 				hasAnyTimes = true;
@@ -348,4 +356,11 @@ export class TokenMatcherBuilder {
 
 		return tokenMatches.map(tokenMatch => new TokenMatcher(tokenMatch, description));
 	}
+
+	static readonly DEFAULT = new TokenMatcherBuilder();
+
+	static create(options: TokenMatchBuilderConstructOptions): TokenMatcherBuilder {
+		return new TokenMatcherBuilder(options);
+	}
 }
+

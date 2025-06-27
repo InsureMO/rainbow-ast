@@ -1,5 +1,6 @@
-import {Token} from '@rainbow-ast/core';
-import {AstBuildContext, AstBuildState, AstBuildStateName} from '../ast';
+import {AstBuildContext} from '../context';
+import {Token} from '../token';
+import {AstBuildState, AstBuildStateName} from '../types';
 import {TokenCaptor} from './captor';
 import {TokenCaptorSelector} from './captor-selector';
 
@@ -10,33 +11,36 @@ export enum TokenCaptureStatus {
 	None,
 }
 
+export type TokenCaptorsConstructOptions = {
+	state: AstBuildState;
+	name: AstBuildStateName;
+	captors: Array<TokenCaptor>;
+}
+
 /**
  * for each ast build state, there will be one or more token captors corresponding to it.
  */
 export class TokenCaptors {
 	private readonly _state: AstBuildState;
-	private readonly _name: AstBuildStateName;
+	private readonly _stateName: AstBuildStateName;
 	private readonly _selector: TokenCaptorSelector = new TokenCaptorSelector();
 
-	constructor(name: AstBuildStateName) {
-		this._name = name;
-		this._state = AstBuildState[this._name];
+	constructor(options: TokenCaptorsConstructOptions) {
+		this._state = options.state;
+		this._stateName = options.name;
+		this._selector.addCaptors(options.captors);
 	}
 
 	get state(): AstBuildState {
 		return this._state;
 	}
 
-	get name(): AstBuildStateName {
-		return this._name;
+	get stateName(): AstBuildStateName {
+		return this._stateName;
 	}
 
 	get selector(): TokenCaptorSelector {
 		return this._selector;
-	}
-
-	addCaptors(captors: TokenCaptor | Array<TokenCaptor>): void {
-		this._selector.addCaptors(captors);
 	}
 
 	/**

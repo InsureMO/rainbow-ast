@@ -1,7 +1,12 @@
-import {CompilationUnit, ContainerToken} from '@rainbow-ast/core';
-import {AstBuildState} from './state';
+import {BlockToken, CompilationUnit} from './token';
+import {AstBuildState, Language, LanguageAstBuildStates, LanguageTokenIds, TokenCapturePrioritiesOfState} from './types';
 
-export class AstBuildContext {
+export class AstBuildContext<
+	T extends LanguageTokenIds = LanguageTokenIds,
+	S extends LanguageAstBuildStates = LanguageAstBuildStates,
+	L extends Language<T, S> = Language<T, S>
+> {
+	private readonly _language: L;
 	private readonly _compilationUnit: CompilationUnit;
 	private readonly _document: string;
 	private readonly _documentLength: number;
@@ -17,20 +22,27 @@ export class AstBuildContext {
 	 */
 	private _states: Array<AstBuildState> = [];
 	/**
-	 * the containers start from the closest one.
-	 * that is to say, the one with index 0 is the current container, the one with index 1 is a higher-level container, and so on.
+	 * the blocks start from the closest one.
+	 * that is to say, the one with index 0 is the current block, the one with index 1 is a higher-level block, and so on.
+	 * the last one is compilation unit.
 	 */
-	private _containers: Array<ContainerToken> = [];
+	private _blocks: Array<BlockToken> = [];
 
-	constructor(compilationUnit: CompilationUnit, initState: AstBuildState) {
+	constructor(compilationUnit: CompilationUnit, language: L) {
+		this._language = language;
+
 		// readonly context
 		this._compilationUnit = compilationUnit;
 		this._document = this._compilationUnit.text;
 		this._documentLength = this._document.length;
 
 		// initialize
-		this._states.unshift(initState);
-		this._containers.unshift(this._compilationUnit);
+		this._states.unshift(language.initState);
+		this._blocks.unshift(this._compilationUnit);
+	}
+
+	get language(): L {
+		return this._language;
 	}
 
 	get compilationUnit(): CompilationUnit {
@@ -80,7 +92,7 @@ export class AstBuildContext {
 		this._charIndex += count;
 	}
 
-	get state(): AstBuildState {
+	get currentState(): AstBuildState {
 		return this._states[0];
 	}
 
@@ -89,7 +101,7 @@ export class AstBuildContext {
 		return this;
 	}
 
-	closeState(): this {
+	endCurrentState(): this {
 		this._states.shift();
 		return this;
 	}
@@ -99,25 +111,30 @@ export class AstBuildContext {
 		return this;
 	}
 
-	get containers(): Array<ContainerToken> {
-		return this._containers;
+	get tokenCapturePrioritiesOfCurrentState(): TokenCapturePrioritiesOfState | undefined {
+		const priorities = this._language.tokenCapturePriorities;
+		return priorities[this.currentState] ?? priorities.$Default;
 	}
 
-	get currentContainer(): ContainerToken {
-		return this._containers[0];
+	get blocks(): Array<BlockToken> {
+		return this._blocks;
 	}
 
-	closeContainer(): this {
-		this._containers.shift();
+	get currentBlock(): BlockToken {
+		return this._blocks[0];
+	}
+
+	appendBlock(block: BlockToken): this {
+		this._blocks.unshift(block);
 		return this;
 	}
 
-	appendContainer(container: ContainerToken): this {
-		this._containers.unshift(container);
+	endCurrentBlock(): this {
+		this._blocks.shift();
 		return this;
 	}
 
 	get isTopLevel(): boolean {
-		return this.containers.length === 1;
+		return this.blocks.length === 1;
 	}
 }
