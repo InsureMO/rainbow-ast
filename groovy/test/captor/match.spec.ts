@@ -1,13 +1,4 @@
-import {
-	Char,
-	CharMatchAnyTimes,
-	CharMatchRule,
-	CharMatchSpecificTimes,
-	CharMatchThenEndBeforeMe,
-	Chars,
-	TokenMatcher,
-	TokenMatcherBuilder
-} from '../../src/captor';
+import {Char, Chars, TokenCharMatchUsage, TokenMatcher, TokenMatcherBuilder} from '../../src/captor';
 
 const matches = (rules: Array<Chars | { anyTimeChar: Char, } | { endBeforeMeChar: Char }>, matcher: TokenMatcher) => {
 	const matches = matcher.matches;
@@ -15,7 +6,7 @@ const matches = (rules: Array<Chars | { anyTimeChar: Char, } | { endBeforeMeChar
 		if (typeof rule === 'string') {
 			return length + rule.length;
 		} else if ((rule as any).anyTimeChar != null) {
-			return length + 12;
+			return length + 2;
 		} else if ((rule as any).endBeforeMeChar != null) {
 			return length + 1;
 		} else {
@@ -28,30 +19,28 @@ const matches = (rules: Array<Chars | { anyTimeChar: Char, } | { endBeforeMeChar
 	rules.forEach(rule => {
 		if (typeof rule === 'string') {
 			for (let index = 0, count = rule.length; index < count; index++) {
-				const {rule: charRule, min, max} = matches[matchIndex++] as CharMatchRule & CharMatchSpecificTimes;
+				const {rule: charRule, usage} = matches[matchIndex++];
 				expect(charRule).toBe(rule[index]);
-				expect(min).toBe(1);
-				expect(max).toBe(1);
+				expect(usage).toBe(TokenCharMatchUsage.ONCE);
 			}
 		} else if ((rule as any).anyTimeChar != null) {
 			const {anyTimeChar} = rule as any;
-			for (let index = 0; index < 11; index++) {
-				const {rule, min, max} = matches[matchIndex++] as CharMatchRule & CharMatchSpecificTimes;
+			{
+				const {rule, usage} = matches[matchIndex++];
 				expect(rule).toBe(anyTimeChar);
-				expect(min).toBe(1);
-				expect(max).toBe(1);
+				expect(usage).toBe(TokenCharMatchUsage.ONCE);
 			}
 			{
-				const {rule, anyTimes} = matches[matchIndex++] as CharMatchRule & CharMatchAnyTimes;
+				const {rule, usage} = matches[matchIndex++];
 				expect(rule).toBe(anyTimeChar);
-				expect(anyTimes).toBeTruthy();
+				expect(usage).toBe(TokenCharMatchUsage.ANY_TIMES);
 			}
 		} else if ((rule as any).endBeforeMeChar != null) {
 			const {endBeforeMeChar} = rule as any;
 			{
-				const {rule, endBeforeMe} = matches[matchIndex++] as CharMatchRule & CharMatchThenEndBeforeMe;
+				const {rule, usage} = matches[matchIndex++];
 				expect(rule).toBe(endBeforeMeChar);
-				expect(endBeforeMe).toBeTruthy();
+				expect(usage).toBe(TokenCharMatchUsage.END_BEFORE_ME);
 			}
 		} else {
 			throw new Error(`Unsupported rule[${rule}].`);
@@ -65,14 +54,7 @@ const matchChars = (chars: Chars, matchers: Array<TokenMatcher>) => {
 
 describe('Token matcher', () => {
 	test('$', async () => {
-		const matchers = TokenMatcherBuilder.build('$');
-		expect(matchers.length).toBe(1);
-		const matcher = matchers[0];
-		const matches = matcher.matches;
-		const first = matches[0];
-		expect(first.rule).toBe('$');
-		expect((first as CharMatchSpecificTimes).min).toBe(1);
-		expect((first as CharMatchSpecificTimes).max).toBe(1);
+		matchChars('$', TokenMatcherBuilder.build('$'));
 	});
 	test('Multiple chars', async () => {
 		matchChars('$$', TokenMatcherBuilder.build('$:2'));
@@ -104,43 +86,29 @@ describe('Token matcher', () => {
 	});
 	test('Any times at first', async () => {
 		const matchers = TokenMatcherBuilder.build('!:*;in');
-		expect(matchers.length).toBe(12);
-		for (let index = 0; index < 11; index++) {
-			matchChars(`${new Array(index).fill('!').join('')}in`, [matchers[index]]);
-		}
-		matches([{anyTimeChar: '!'}, 'in'], matchers[11]);
+		expect(matchers.length).toBe(2);
+		matchChars('in', [matchers[0]]);
+		matches([{anyTimeChar: '!'}, 'in'], matchers[1]);
 	});
 	test('Any times at middle', async () => {
 		const matchers = TokenMatcherBuilder.build('i;!:*;n');
-		expect(matchers.length).toBe(12);
-		for (let index = 0; index < 11; index++) {
-			matchChars(`i${new Array(index).fill('!').join('')}n`, [matchers[index]]);
-		}
-		matches(['i', {anyTimeChar: '!'}, 'n'], matchers[11]);
+		expect(matchers.length).toBe(2);
+		matchChars('in', [matchers[0]]);
+		matches(['i', {anyTimeChar: '!'}, 'n'], matchers[1]);
 	});
 	test('Any times at last', async () => {
 		const matchers = TokenMatcherBuilder.build('in;!:*');
-		expect(matchers.length).toBe(12);
-		for (let index = 0; index < 11; index++) {
-			matchChars(`in${new Array(index).fill('!').join('')}`, [matchers[index]]);
-		}
-		matches(['in', {anyTimeChar: '!'}], matchers[11]);
+		expect(matchers.length).toBe(2);
+		matchChars('in', [matchers[0]]);
+		matches(['in', {anyTimeChar: '!'}], matchers[1]);
 	});
-	test('Any times at first and last, 144 possibilities, wow!', async () => {
+	test('Any times at first and last', async () => {
 		const matchers = TokenMatcherBuilder.build('!:*;in;!:*');
-		expect(matchers.length).toBe(144);
-		let matcherIndex = 0;
-		for (let i = 0; i < 11; i++) {
-			const prefix = new Array(i).fill('!').join('');
-			for (let j = 0; j < 11; j++) {
-				matchChars(`${prefix}in${new Array(j).fill('!').join('')}`, [matchers[matcherIndex++]]);
-			}
-			matches([`${prefix}in`, {anyTimeChar: '!'}], matchers[matcherIndex++]);
-		}
-		for (let j = 0; j < 11; j++) {
-			matches([{anyTimeChar: '!'}, `in${new Array(j).fill('!').join('')}`], matchers[matcherIndex++]);
-		}
-		matches([{anyTimeChar: '!'}, 'in', {anyTimeChar: '!'}], matchers[matcherIndex++]);
+		expect(matchers.length).toBe(4);
+		matchChars('in', [matchers[0]]);
+		matches(['in', {anyTimeChar: '!'}], matchers[1]);
+		matches([{anyTimeChar: '!'}, 'in'], matchers[2]);
+		matches([{anyTimeChar: '!'}, 'in', {anyTimeChar: '!'}], matchers[3]);
 	});
 	test('Math then end before me', async () => {
 		const matchers = TokenMatcherBuilder.build('in;!:!');

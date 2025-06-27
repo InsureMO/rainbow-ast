@@ -1,7 +1,7 @@
 import {CompilationUnit, ContainerToken} from '@rainbow-ast/core';
-import {GroovyAstBuildState} from './state';
+import {AstBuildState} from './state';
 
-export class GroovyAstBuildContext {
+export class AstBuildContext {
 	private readonly _compilationUnit: CompilationUnit;
 	private readonly _document: string;
 	private readonly _documentLength: number;
@@ -13,14 +13,14 @@ export class GroovyAstBuildContext {
 	 * the states start from the closest one.
 	 * that is to say, the one with index 0 is the current state, the one with index 1 is a higher-level state, and so on.
 	 */
-	private _states: Array<GroovyAstBuildState> = [];
+	private _states: Array<AstBuildState> = [];
 	/**
 	 * the containers start from the closest one.
 	 * that is to say, the one with index 0 is the current container, the one with index 1 is a higher-level container, and so on.
 	 */
 	private _containers: Array<ContainerToken> = [];
 
-	constructor(compilationUnit: CompilationUnit, initState: GroovyAstBuildState) {
+	constructor(compilationUnit: CompilationUnit, initState: AstBuildState) {
 		// readonly context
 		this._compilationUnit = compilationUnit;
 		this._document = this._compilationUnit.text;
@@ -55,11 +55,11 @@ export class GroovyAstBuildContext {
 		this._charIndex += count;
 	}
 
-	get state(): GroovyAstBuildState {
+	get state(): AstBuildState {
 		return this._states[0];
 	}
 
-	appendState(state: GroovyAstBuildState): this {
+	appendState(state: AstBuildState): this {
 		this._states.push(state);
 		return this;
 	}
@@ -69,7 +69,7 @@ export class GroovyAstBuildContext {
 		return this;
 	}
 
-	replaceState(state: GroovyAstBuildState): this {
+	replaceState(state: AstBuildState): this {
 		this._states[0] = state;
 		return this;
 	}
@@ -90,5 +90,9 @@ export class GroovyAstBuildContext {
 	appendContainer(container: ContainerToken): this {
 		this._containers.unshift(container);
 		return this;
+	}
+
+	get isTopLevel(): boolean {
+		return this.containers.length === 1;
 	}
 }

@@ -1,9 +1,9 @@
 import {TokenId} from '@rainbow-ast/core';
-import {GroovyTokenId, GroovyTokenName} from '../token';
+import {GroovyTokenId, TokenName} from '../token';
 import {TokenMatcher} from './match';
 
 export interface TokenCaptorOptions {
-	name: GroovyTokenName;
+	name: TokenName;
 	matcher: TokenMatcher;
 }
 
@@ -13,7 +13,7 @@ export interface TokenCaptorOptions {
  */
 export class TokenCaptor {
 	private readonly _tokenId: TokenId;
-	private readonly _name: GroovyTokenName;
+	private readonly _name: TokenName;
 	private readonly _matcher: TokenMatcher;
 
 	constructor(options: TokenCaptorOptions) {
@@ -26,7 +26,7 @@ export class TokenCaptor {
 		return this._tokenId;
 	}
 
-	get name(): GroovyTokenName {
+	get name(): TokenName {
 		return this._name;
 	}
 

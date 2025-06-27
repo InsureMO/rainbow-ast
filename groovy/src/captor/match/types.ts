@@ -21,4 +21,15 @@ export type CharMatchRestriction =
 	| CharMatchThenEndBeforeMe;
 export type CharMatch = CharMatchRule & CharMatchRestriction
 
-export type TokenMatch = Array<CharMatch>;
+export enum TokenCharMatchUsage {
+	ONCE = 0, ANY_TIMES = 1, END_BEFORE_ME = 2
+}
+
+export type TokenCharMatchOnce = CharMatchRule & { usage: TokenCharMatchUsage.ONCE };
+export type TokenCharMatchAnyTimes = CharMatchRule & { usage: TokenCharMatchUsage.ANY_TIMES };
+export type TokenCharMatchEndBeforeMe = CharMatchRule & { usage: TokenCharMatchUsage.END_BEFORE_ME };
+export type TokenCharMatch =
+	| TokenCharMatchOnce
+	| TokenCharMatchAnyTimes
+	| TokenCharMatchEndBeforeMe
+export type TokenMatch = Array<TokenCharMatch>;

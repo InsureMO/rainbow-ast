@@ -9,6 +9,8 @@ import {
 	CharMatchSpecificTimes,
 	CharMatchThenEndBeforeMe,
 	Chars,
+	TokenCharMatch,
+	TokenCharMatchUsage,
 	TokenMatch
 } from './types';
 
@@ -256,14 +258,12 @@ export class TokenMatcherBuilder {
 	 * pri; v:1; ate: 2, 3; fn#notJavaIdentifierChar: -
 	 *
 	 * and token match will be spread, follows rules:
-	 * - when char match restriction is specific times, and min is 0, then spread to max - min token matches.
-	 *   e.g. *: 1,2,= -> *,= and *,*,=
-	 *  - when char match is once or not, then spread to one once and one not,
-	 *  - when char match is any times, then spread to ignore this match, 1 match, 2 matches, .... 10 matches, and 11 matches and/or more
-	 *    which are 12 possibilities.
-	 *  there may be an explosion in quantity due to the cartesian product problem.
-	 *  however, generally speaking, the scale of language parsing won't encounter this issue.
-	 *  therefore, spreading will gain an advantage in character matching efficiency.
+	 * - when char match restriction is specific times, then spread to max - min token matches.
+	 *   e.g. *: 1,2;= -> *;= and *;*;=
+	 * - when char match is once or not, then spread to one once and one not,
+	 *   e.g. *: ?;= -> = and *;=
+	 * - when char match is any times, then spread to one not and one once + one any times
+	 *   e.g. *: *;= -> = and *;*:*;=
 	 */
 	static build(pattern: string): Array<TokenMatcher> {
 		const parsedCharMatches = parseCharMatches(pattern);
@@ -273,7 +273,7 @@ export class TokenMatcherBuilder {
 		// spread
 		// undefined means this char match could be ignored
 		// e.g. *: ? -> undefined, {min: 1, max: 1}
-		type SpreadCharMatch = Array<CharMatch>;
+		type SpreadCharMatch = Array<TokenCharMatch>;
 		type SpreadCharMatchAtIndex = Array<SpreadCharMatch>;
 		const spreadCharMatches: Array<SpreadCharMatchAtIndex> = [];
 		charMatches.forEach(({rule, ...rest}) => {
@@ -283,32 +283,20 @@ export class TokenMatcherBuilder {
 				// ignored
 				spreadCharMatchAtIndex.push([]);
 				// once
-				spreadCharMatchAtIndex.push([{rule, min: 1, max: 1}]);
+				spreadCharMatchAtIndex.push([{rule, usage: TokenCharMatchUsage.ONCE}]);
 			} else if ((rest as CharMatchAnyTimes).anyTimes) {
 				// ignored
 				spreadCharMatchAtIndex.push([]);
-				const oneTime = {rule, min: 1, max: 1};
-				// 1 time ... 10 times
-				spreadCharMatchAtIndex.push([oneTime]);
-				for (let times = 2; times <= 10; times++) {
-					spreadCharMatchAtIndex.push(new Array<CharMatch>(times).fill(oneTime));
-				}
-				// 11 times and/or more
 				spreadCharMatchAtIndex.push([
-					...new Array<CharMatch>(11).fill(oneTime),
-					{rule, ...rest}
+					{rule, usage: TokenCharMatchUsage.ONCE},
+					{rule, usage: TokenCharMatchUsage.ANY_TIMES}
 				]);
 			} else if ((rest as CharMatchSpecificTimes).min != null) {
 				const {min, max} = rest as CharMatchSpecificTimes;
-				const oneTime = {rule, min: 1, max: 1};
+				const oneTime = {rule, usage: TokenCharMatchUsage.ONCE};
 				if (min === max) {
-					if (min === 1) {
-						// no need to spread
-						spreadCharMatchAtIndex.push([oneTime]);
-					} else {
-						// spread to n times
-						spreadCharMatchAtIndex.push(new Array<CharMatch>(min).fill(oneTime));
-					}
+					// spread to min (also max) times
+					spreadCharMatchAtIndex.push(new Array<TokenCharMatch>(min).fill(oneTime));
 				} else {
 					// spread to min times, min + 1 times, .... max times
 					if (min === 0) {
@@ -317,12 +305,12 @@ export class TokenMatcherBuilder {
 					// min times ... max times,
 					// starts from 1 if min is 0
 					for (let times = Math.max(min, 1); times <= max; times++) {
-						spreadCharMatchAtIndex.push(new Array<CharMatch>(times).fill(oneTime));
+						spreadCharMatchAtIndex.push(new Array<TokenCharMatch>(times).fill(oneTime));
 					}
 				}
 			} else {
 				// CharMatchThenEndBeforeMe, do nothing
-				spreadCharMatchAtIndex.push([{rule, ...rest}]);
+				spreadCharMatchAtIndex.push([{rule, usage: TokenCharMatchUsage.END_BEFORE_ME}]);
 			}
 		});
 		// build cartesian product
