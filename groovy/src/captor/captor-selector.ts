@@ -114,14 +114,17 @@ export class TokenCaptorSelector {
 		this._fallback = captor;
 	}
 
+	// noinspection JSUnusedGlobalSymbols
 	get byCharCaptors(): ReadonlyMap<Char, TokenCaptorOrSelector> {
 		return this._byChar;
 	}
 
+	// noinspection JSUnusedGlobalSymbols
 	get byFuncCaptors(): ReadonlyMap<CharMatchFn, TokenCaptorOrSelector> {
 		return this._byFunc;
 	}
 
+	// noinspection JSUnusedGlobalSymbols
 	get fallbackCaptor(): TokenCaptor | undefined {
 		return this._fallback;
 	}
