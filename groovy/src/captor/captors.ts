@@ -46,7 +46,7 @@ export class TokenCaptors {
 	 * - char index of context,
 	 */
 	capture(context: AstBuildContext): TokenCaptureStatus {
-		const [captor, capturedChars] = this._selector.precapture(context);
+		const [captor] = this._selector.precapture(context);
 		if (captor == null) {
 			return TokenCaptureStatus.None;
 		}

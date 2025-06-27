@@ -1,6 +1,6 @@
 import {AstBuildContext} from '../ast';
 import {TokenCaptor} from './captor';
-import {Char, CharMatches, CharMatchFn} from './match';
+import {Char, CharMatches, CharMatchFn, TokenCharMatchUsage} from './match';
 
 export type TokenCaptorOrSelector = TokenCaptor | TokenCaptorSelector;
 export type PrecaptureContext = {
@@ -16,7 +16,6 @@ export type PrecaptureContext = {
  * selector has 3 parts:
  * - by char map: given char matched exactly,
  * - by function map: given char matches function,
- * - by char or function, but current char match restriction is any times,
  * - fallback: given char doesn't match, which means the fallback captor can not capture given char.
  *
  * when a char passed to selector, select the available captors or sub selectors by char map or by function map,
@@ -37,9 +36,6 @@ export type PrecaptureContext = {
  *  ║     ║     ╠  - x: captor #7 -> capture chars "b*x",
  *  ║     ║     ╚  - y: captor #8 -> capture chars "b*y",
  *  ║     ╚  - fallback: captor #9 -> char "b",
- *  ╠  - anyTimes:
- *  ║     ╚  - c: captors #10 -> capture "c+",
- *  ║             "+" means 1+ times,
  *  ╚  - fallback: captor #11 -> any char not "a" or "b".
  * </pre>
  */
@@ -157,12 +153,36 @@ export class TokenCaptorSelector {
 			charMatchIndex: precaptureContext.charMatchIndex + 1,
 			captured: precaptureContext.captured + char
 		};
-		const precapturedByMatchedSelectors = matchedSelectors
+		const matchedCaptorsByMatchedSelectors = matchedSelectors
 			.map(selector => selector.doPrecapture(context, precaptureContextOfNextChar))
 			.filter(([captor]) => captor != null);
-		// TODO
-
-		return [(void 0), ''];
+		// check the captured chars length, find the longest
+		// theoretically, there should be only one captor
+		const captured = [
+			...matchedCaptors.map<[TokenCaptor, CapturedChars: string]>(captor => {
+				if (captor.matcher.matches[captor.matcher.matches.length - 1].usage === TokenCharMatchUsage.END_BEFORE_ME) {
+					return [captor, precaptureContext.captured.slice(0, -1)];
+				} else {
+					return [captor, precaptureContext.captured];
+				}
+			}),
+			...matchedCaptorsByMatchedSelectors
+		];
+		const longestLength = captured.reduce((length, [, captured]) => Math.max(length, captured.length), 0);
+		const matched = captured.filter(([, captured]) => captured.length === longestLength);
+		if (matched.length > 1) {
+			// multiple captor found, raise error
+			const captorsInfo = matched.map(([captor]) => {
+				return `Captor[name=${captor.name}, description=${captor.description}]`;
+			}).join(', ');
+			throw new Error(`Multiple captors[${captorsInfo}] found for text(${captured}].`);
+		} else if (matched.length === 1) {
+			return matched[0];
+		} else if (this._fallback == null) {
+			return [(void 0), ''];
+		} else {
+			return [this._fallback, precaptureContext.captured];
+		}
 	}
 
 	/**
@@ -172,10 +192,6 @@ export class TokenCaptorSelector {
 		if (context.eof) {
 			throw new Error(`Meat EOF at index[${context.charIndex}].`);
 		}
-		return this.doPrecapture(context, {
-			charIndex: context.charIndex,
-			charMatchIndex: 0,
-			captured: ''
-		});
+		return this.doPrecapture(context, {charIndex: context.charIndex, charMatchIndex: 0, captured: ''});
 	}
 }
