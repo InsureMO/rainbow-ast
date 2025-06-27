@@ -204,8 +204,7 @@ enum G {
 }
 
 export const GroovyTokenId = G;
-
-export type TokenName = Exclude<keyof typeof GroovyTokenId, number>;
+export type GroovyTokenName = Exclude<keyof typeof GroovyTokenId, number>;
 
 // following is preparing for code mirror
 interface Token {
@@ -214,7 +213,7 @@ interface Token {
 	top?: boolean;
 }
 
-export type GroovyTokenRecord = { [key in TokenName]: Token };
+export type GroovyTokenRecord = { [key in GroovyTokenName]: Token };
 // key of enumeration is, according to typescript standard:
 // - explicit declared keys,
 // - and value of them.

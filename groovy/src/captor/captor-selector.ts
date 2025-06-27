@@ -1,8 +1,16 @@
 import {AstBuildContext} from '../ast';
 import {TokenCaptor} from './captor';
-import {Char, CharMatches, CharMatchFn, TokenCharMatchUsage} from './match';
+import {Char, CharMatches, CharMatchFn} from './match';
 
 export type TokenCaptorOrSelector = TokenCaptor | TokenCaptorSelector;
+export type PrecaptureContext = {
+	/** char index in document */
+	charIndex: number;
+	/** char match index of token match */
+	charMatchIndex: number;
+	/** captured chars */
+	captured: string;
+}
 
 /**
  * selector has 3 parts:
@@ -39,8 +47,6 @@ export class TokenCaptorSelector {
 	private readonly _byChar: Map<Char, TokenCaptorOrSelector> = new Map();
 	// function might be sharing
 	private readonly _byFunc: Map<CharMatchFn, TokenCaptorOrSelector> = new Map();
-	// captors with any times
-	private readonly _anyTimes: Map<CharMatches, Array<TokenCaptor>> = new Map();
 	private _fallback: TokenCaptor | undefined = (void 0);
 
 	/**
@@ -48,22 +54,8 @@ export class TokenCaptorSelector {
 	 * - if restriction is any times
 	 */
 	private doAddCaptor<R extends CharMatches>(captor: TokenCaptor, matchIndex: number, rule: R, map: Map<R, TokenCaptorOrSelector>): void {
-		const matches = captor.matcher.matches;
-
-		// if current char match is any times, push into
-		const charMatch = matches[matchIndex];
-		if (charMatch.usage === TokenCharMatchUsage.ANY_TIMES) {
-			const existing = this._anyTimes.get(rule);
-			if (existing == null) {
-				this._anyTimes.set(rule, [captor]);
-			} else {
-				existing.push(captor);
-			}
-			return;
-		}
-
 		const existing = map.get(rule);
-		if (matches.length - 1 === matchIndex) {
+		if (captor.matcher.matches.length - 1 === matchIndex) {
 			// it is last match
 			if (existing == null) {
 				// no captor for this function yet
@@ -138,26 +130,52 @@ export class TokenCaptorSelector {
 		return this._fallback;
 	}
 
-	protected doPrecapture(context: AstBuildContext, charMatchIndex: number): [TokenCaptor | undefined, CapturedChars: Array<Char>] {
+	protected doPrecapture(context: AstBuildContext, precaptureContext: PrecaptureContext): [TokenCaptor | undefined, CapturedChars: string] {
 		const document = context.document;
-		const charIndex = context.charIndex;
+		const charIndex = precaptureContext.charIndex;
 		const char = document[charIndex];
 
-		const matched = [
+		// for matched once
+		const {captors: matchedCaptors, selectors: matchedSelectors} = [
 			this._byChar.get(char),
 			...[...this._byFunc.keys()].filter(func => func(char)).map(func => this._byFunc.get(func))
-		].filter(matched => matched != null);
+		]
+			.filter(matched => matched != null)
+			.reduce((grouped, matched) => {
+				if (matched instanceof TokenCaptor) {
+					grouped.captors.push(matched);
+				} else {
+					grouped.selectors.push(matched);
+				}
+				return grouped;
+			}, {captors: [] as Array<TokenCaptor>, selectors: [] as Array<TokenCaptorSelector>});
 
-		return [(void 0), []];
+		// try to precapture next char
+		// by matched selectors first
+		const precaptureContextOfNextChar: PrecaptureContext = {
+			charIndex: precaptureContext.charIndex + 1,
+			charMatchIndex: precaptureContext.charMatchIndex + 1,
+			captured: precaptureContext.captured + char
+		};
+		const precapturedByMatchedSelectors = matchedSelectors
+			.map(selector => selector.doPrecapture(context, precaptureContextOfNextChar))
+			.filter(([captor]) => captor != null);
+		// TODO
+
+		return [(void 0), ''];
 	}
 
 	/**
 	 * make sure the context is not eof, otherwise raise error.
 	 */
-	precapture(context: AstBuildContext): [TokenCaptor | undefined, CapturedChars: Array<Char>] {
+	precapture(context: AstBuildContext): [TokenCaptor | undefined, CapturedChars: string] {
 		if (context.eof) {
 			throw new Error(`Meat EOF at index[${context.charIndex}].`);
 		}
-		return this.doPrecapture(context, 0);
+		return this.doPrecapture(context, {
+			charIndex: context.charIndex,
+			charMatchIndex: 0,
+			captured: ''
+		});
 	}
 }

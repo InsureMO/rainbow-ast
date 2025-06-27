@@ -6,7 +6,7 @@ const matches = (rules: Array<Chars | { anyTimeChar: Char, } | { endBeforeMeChar
 		if (typeof rule === 'string') {
 			return length + rule.length;
 		} else if ((rule as any).anyTimeChar != null) {
-			return length + 2;
+			return length + TokenMatcherBuilder.LongestKeywordLength + 2;
 		} else if ((rule as any).endBeforeMeChar != null) {
 			return length + 1;
 		} else {
@@ -25,7 +25,7 @@ const matches = (rules: Array<Chars | { anyTimeChar: Char, } | { endBeforeMeChar
 			}
 		} else if ((rule as any).anyTimeChar != null) {
 			const {anyTimeChar} = rule as any;
-			{
+			for (let index = 0; index <= TokenMatcherBuilder.LongestKeywordLength; index++) {
 				const {rule, usage} = matches[matchIndex++];
 				expect(rule).toBe(anyTimeChar);
 				expect(usage).toBe(TokenCharMatchUsage.ONCE);
@@ -84,31 +84,13 @@ describe('Token matcher', () => {
 		matchChars('!in', [matchers[2]]);
 		matchChars('!in!', [matchers[3]]);
 	});
-	test('Any times at first', async () => {
-		const matchers = TokenMatcherBuilder.build('!:*;in');
-		expect(matchers.length).toBe(2);
-		matchChars('in', [matchers[0]]);
-		matches([{anyTimeChar: '!'}, 'in'], matchers[1]);
-	});
-	test('Any times at middle', async () => {
-		const matchers = TokenMatcherBuilder.build('i;!:*;n');
-		expect(matchers.length).toBe(2);
-		matchChars('in', [matchers[0]]);
-		matches(['i', {anyTimeChar: '!'}, 'n'], matchers[1]);
-	});
 	test('Any times at last', async () => {
 		const matchers = TokenMatcherBuilder.build('in;!:*');
-		expect(matchers.length).toBe(2);
-		matchChars('in', [matchers[0]]);
-		matches(['in', {anyTimeChar: '!'}], matchers[1]);
-	});
-	test('Any times at first and last', async () => {
-		const matchers = TokenMatcherBuilder.build('!:*;in;!:*');
-		expect(matchers.length).toBe(4);
-		matchChars('in', [matchers[0]]);
-		matches(['in', {anyTimeChar: '!'}], matchers[1]);
-		matches([{anyTimeChar: '!'}, 'in'], matchers[2]);
-		matches([{anyTimeChar: '!'}, 'in', {anyTimeChar: '!'}], matchers[3]);
+		expect(matchers.length).toBe(TokenMatcherBuilder.LongestKeywordLength + 2);
+		for (let index = 0; index <= TokenMatcherBuilder.LongestKeywordLength; index++) {
+			matchChars(`in${new Array(index).fill('!').join('')}`, [matchers[index]]);
+		}
+		matches(['in', {anyTimeChar: '!'}], matchers[TokenMatcherBuilder.LongestKeywordLength + 1]);
 	});
 	test('Math then end before me', async () => {
 		const matchers = TokenMatcherBuilder.build('in;!:!');

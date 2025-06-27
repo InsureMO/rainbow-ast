@@ -19,6 +19,7 @@ export type ParsedCharMatch = Omit<CharMatch, 'rule'> & { rule: Char | Chars };
 const BySemicolon = /(?<!\\);/g;
 const ByColon = /(?<!\\):/g;
 const CharMatchFnHead = 'fn#';
+const LongestKeywordLength = 12; // synchronized
 
 const parseCharMatchRule = (namePattern: string): string => {
 	if (namePattern.startsWith('fn#') && namePattern.length > 3) {
@@ -200,6 +201,7 @@ export class TokenMatcherBuilder {
 	static readonly BySemicolon = BySemicolon;
 	static readonly ByColon = ByColon;
 	static readonly CharMatchFnHead = CharMatchFnHead;
+	static LongestKeywordLength = LongestKeywordLength;
 
 	static readonly parseCharMatch = parseCharMatch;
 	static readonly parseCharMatches = parseCharMatches;
@@ -251,11 +253,11 @@ export class TokenMatcherBuilder {
 	 * a: ?                                  char "a", 0 or 1 time
 	 * a: 2, 3                               char "a", 2 or 3 times
 	 * a: 2, 5                               char "a", 2 ~ 5 times
-	 * a: -                                  cannot be char "a"
-	 * fn#notJavaIdentifierChar: -           cannot matched by function notJavaIdentifierChar
+	 * a: !                                  cannot be char "a"
+	 * fn#notJavaIdentifierChar: !           cannot matched by function notJavaIdentifierChar
 	 *
 	 * e.g.
-	 * pri; v:1; ate: 2, 3; fn#notJavaIdentifierChar: -
+	 * pri; v:1; ate: 2, 3; fn#notJavaIdentifierChar: !
 	 *
 	 * and token match will be spread, follows rules:
 	 * - when char match restriction is specific times, then spread to max - min token matches.
@@ -276,27 +278,45 @@ export class TokenMatcherBuilder {
 		type SpreadCharMatch = Array<TokenCharMatch>;
 		type SpreadCharMatchAtIndex = Array<SpreadCharMatch>;
 		const spreadCharMatches: Array<SpreadCharMatchAtIndex> = [];
+		let hasAnyTimes = false, hasEndBeforeMe = false;
 		charMatches.forEach(({rule, ...rest}) => {
+			if (hasEndBeforeMe) {
+				throw new Error(`EndBeforeMe must be the last match rule, definition is [${pattern}].`);
+			}
 			const spreadCharMatchAtIndex: SpreadCharMatchAtIndex = [];
 			spreadCharMatches.push(spreadCharMatchAtIndex);
 			if ((rest as CharMatchOnceOrNot).onceOrNot) {
+				if (hasAnyTimes) {
+					throw new Error(`Cannot define OnceOrNot rule after AnyTimes rule, definition is [${pattern}].`);
+				}
 				// ignored
 				spreadCharMatchAtIndex.push([]);
 				// once
 				spreadCharMatchAtIndex.push([{rule, usage: TokenCharMatchUsage.ONCE}]);
 			} else if ((rest as CharMatchAnyTimes).anyTimes) {
+				if (hasAnyTimes) {
+					throw new Error(`Cannot define multiple AnyTimes rules, definition is [${pattern}].`);
+				}
 				// ignored
 				spreadCharMatchAtIndex.push([]);
+				const once = {rule, usage: TokenCharMatchUsage.ONCE};
+				new Array(TokenMatcherBuilder.LongestKeywordLength).fill(1).map((_, index) => {
+					spreadCharMatchAtIndex.push(new Array(index + 1).fill(once));
+				});
 				spreadCharMatchAtIndex.push([
-					{rule, usage: TokenCharMatchUsage.ONCE},
+					...new Array(TokenMatcherBuilder.LongestKeywordLength + 1).fill(once),
 					{rule, usage: TokenCharMatchUsage.ANY_TIMES}
 				]);
+				hasAnyTimes = true;
 			} else if ((rest as CharMatchSpecificTimes).min != null) {
+				if (hasAnyTimes) {
+					throw new Error(`Cannot define SpecificTimes rule after AnyTimes rule, definition is [${pattern}].`);
+				}
 				const {min, max} = rest as CharMatchSpecificTimes;
-				const oneTime = {rule, usage: TokenCharMatchUsage.ONCE};
+				const once = {rule, usage: TokenCharMatchUsage.ONCE};
 				if (min === max) {
 					// spread to min (also max) times
-					spreadCharMatchAtIndex.push(new Array<TokenCharMatch>(min).fill(oneTime));
+					spreadCharMatchAtIndex.push(new Array<TokenCharMatch>(min).fill(once));
 				} else {
 					// spread to min times, min + 1 times, .... max times
 					if (min === 0) {
@@ -305,15 +325,17 @@ export class TokenMatcherBuilder {
 					// min times ... max times,
 					// starts from 1 if min is 0
 					for (let times = Math.max(min, 1); times <= max; times++) {
-						spreadCharMatchAtIndex.push(new Array<TokenCharMatch>(times).fill(oneTime));
+						spreadCharMatchAtIndex.push(new Array<TokenCharMatch>(times).fill(once));
 					}
 				}
 			} else {
 				// CharMatchThenEndBeforeMe, do nothing
 				spreadCharMatchAtIndex.push([{rule, usage: TokenCharMatchUsage.END_BEFORE_ME}]);
+				hasEndBeforeMe = true;
 			}
 		});
 		// build cartesian product
+		// @ts-ignore
 		const tokenMatches: Array<TokenMatch> = spreadCharMatches.reduce((tokenMatches: Array<TokenMatch>, spreadCharMatchAtIndex) => {
 			if (tokenMatches.length === 0) {
 				return spreadCharMatchAtIndex.map(charMatch => [...charMatch] as TokenMatch);

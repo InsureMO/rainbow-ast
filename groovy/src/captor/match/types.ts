@@ -32,4 +32,10 @@ export type TokenCharMatch =
 	| TokenCharMatchOnce
 	| TokenCharMatchAnyTimes
 	| TokenCharMatchEndBeforeMe
-export type TokenMatch = Array<TokenCharMatch>;
+export type TokenMatch =
+	| Array<TokenCharMatchOnce>
+	| [...Array<TokenCharMatchOnce>, TokenCharMatchAnyTimes]
+	| [...Array<TokenCharMatchOnce>, TokenCharMatchEndBeforeMe]
+	| [...Array<TokenCharMatchOnce>, TokenCharMatchAnyTimes, TokenCharMatchEndBeforeMe]
+	| [TokenCharMatchAnyTimes]
+	| [TokenCharMatchAnyTimes, TokenCharMatchEndBeforeMe];
