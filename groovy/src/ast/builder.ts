@@ -40,7 +40,7 @@ export class GroovyAstBuilder extends AbstractAstBuilder<GroovyAstBuildOptions> 
 
 		while (!context.eof) {
 			const captors = this.findTokenCaptorsOfState(context);
-			const status = captors.capture(context);
+			const [status] = captors.capture(context);
 			if (status === TokenCaptureStatus.None) {
 				// cannot capture token in current state,
 				// back to parent

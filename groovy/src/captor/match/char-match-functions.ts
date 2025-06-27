@@ -38,7 +38,7 @@ export class CharMatchFunctions {
 			return true;
 		}
 		if (cp <= 127) {
-			return true;
+			return false;
 		}
 		// rule check
 		return Character.isJavaIdentifierStartAndNotIdentifierIgnorable(cp);
@@ -56,7 +56,7 @@ export class CharMatchFunctions {
 			return true;
 		}
 		if (cp <= 127) {
-			return true;
+			return false;
 		}
 		// rule check
 		return Character.isJavaIdentifierPartAndNotIdentifierIgnorable(cp);

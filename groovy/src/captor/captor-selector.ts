@@ -1,4 +1,4 @@
-import {AstBuildContext} from '../ast';
+import {AstBuildContext, DefaultTokenIdPriority, TokenIdPriority} from '../ast';
 import {TokenCaptor} from './captor';
 import {Char, CharMatches, CharMatchFn, TokenCharMatchUsage} from './match';
 
@@ -161,9 +161,9 @@ export class TokenCaptorSelector {
 		const captured = [
 			...matchedCaptors.map<[TokenCaptor, CapturedChars: string]>(captor => {
 				if (captor.matcher.matches[captor.matcher.matches.length - 1].usage === TokenCharMatchUsage.END_BEFORE_ME) {
-					return [captor, precaptureContext.captured.slice(0, -1)];
-				} else {
 					return [captor, precaptureContext.captured];
+				} else {
+					return [captor, precaptureContext.captured + char];
 				}
 			}),
 			...matchedCaptorsByMatchedSelectors
@@ -171,11 +171,29 @@ export class TokenCaptorSelector {
 		const longestLength = captured.reduce((length, [, captured]) => Math.max(length, captured.length), 0);
 		const matched = captured.filter(([, captured]) => captured.length === longestLength);
 		if (matched.length > 1) {
-			// multiple captor found, raise error
-			const captorsInfo = matched.map(([captor]) => {
-				return `Captor[name=${captor.name}, description=${captor.description}]`;
-			}).join(', ');
-			throw new Error(`Multiple captors[${captorsInfo}] found for text(${captured}].`);
+			// multiple captor found, check priority
+			const priority = TokenIdPriority[context.state] ?? TokenIdPriority.$Default;
+			const withPriorityMatched = matched.map(matched => {
+				return [...matched, priority[matched[0].name] ?? DefaultTokenIdPriority];
+			}).reduce((result, matched) => {
+				if (matched[2] === result.priority) {
+					result.matched.push([matched[0], matched[1]]);
+				} else if (matched[2] > result.priority) {
+					result.matched.length = 0;
+					result.matched.push([matched[0], matched[1]]);
+					result.priority = matched[2];
+				}
+				return result;
+			}, {priority: -Infinity, matched: [] as Array<[TokenCaptor, CapturedChars: string]>}).matched;
+			if (withPriorityMatched.length > 1) {
+				const captorsInfo = withPriorityMatched.map(([captor]) => {
+					return `Captor[name=${captor.name}, description=${captor.description}]`;
+				}).join(', ');
+				throw new Error(`Multiple captors[${captorsInfo}] found for text(${matched[0][1]}].`);
+			} else {
+				// never be 0
+				return withPriorityMatched[0];
+			}
 		} else if (matched.length === 1) {
 			return matched[0];
 		} else if (this._fallback == null) {

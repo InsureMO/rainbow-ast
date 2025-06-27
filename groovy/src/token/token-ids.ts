@@ -198,9 +198,8 @@ enum G {
 	Whitespaces,
 	Tabs,
 	Newline, // \n or \r\n
-	Chars,
 	Identifier,
-	UndeterminedChars,
+	UndeterminedChar,
 }
 
 export const GroovyTokenId = G;

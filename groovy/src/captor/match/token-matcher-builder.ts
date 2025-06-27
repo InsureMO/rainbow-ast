@@ -22,7 +22,7 @@ const CharMatchFnHead = 'fn#';
 const LongestKeywordLength = 12; // synchronized
 
 const parseCharMatchRule = (namePattern: string): string => {
-	if (namePattern.startsWith('fn#') && namePattern.length > 3) {
+	if (namePattern.startsWith(CharMatchFnHead) && namePattern.length > 3) {
 		return namePattern;
 	}
 
@@ -104,7 +104,10 @@ const parseCharMatch = (rulePattern: string): ParsedCharMatch | undefined => {
 	const parsedRestriction = parseCharMatchRestriction(parsedRule, restriction);
 	if ((parsedRestriction as CharMatchThenEndBeforeMe).endBeforeMe) {
 		// only the first char is accepted when restriction is CharMatchThenEndBeforeMe
-		parsedRule = parsedRule[0];
+		// but rule is function can ignore this rule
+		if (!parsedRule.startsWith(CharMatchFnHead) || parsedRule === CharMatchFnHead) {
+			parsedRule = parsedRule[0];
+		}
 	}
 	return {rule: parsedRule, ...parsedRestriction};
 };
@@ -155,7 +158,7 @@ const buildTokenMatcherDescription = (matches: Array<ParsedCharMatch>): string =
 };
 
 const buildCharMatch = ({rule, ...rest}: ParsedCharMatch): CharMatch | Array<CharMatch> => {
-	if (rule.startsWith('fn#') && rule.length > 3) {
+	if (rule.startsWith(CharMatchFnHead) && rule.length > 3) {
 		const fn = CharMatchFunctions.findByName(rule.slice(3));
 		if ((rest as CharMatchSpecificTimes).min != null) {
 			const {min, max} = rest as CharMatchSpecificTimes;

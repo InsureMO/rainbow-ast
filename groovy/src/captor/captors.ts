@@ -1,3 +1,4 @@
+import {Token} from '@rainbow-ast/core';
 import {AstBuildContext, AstBuildState, AstBuildStateName} from '../ast';
 import {TokenCaptor} from './captor';
 import {TokenCaptorSelector} from './captor-selector';
@@ -45,16 +46,16 @@ export class TokenCaptors {
 	 * - containers of context, optional
 	 * - char index of context,
 	 */
-	capture(context: AstBuildContext): TokenCaptureStatus {
+	capture(context: AstBuildContext): [TokenCaptureStatus, ...Array<Token>] {
 		const [captor] = this._selector.precapture(context);
 		if (captor == null) {
-			return TokenCaptureStatus.None;
+			return [TokenCaptureStatus.None];
 		}
 
-		// TODO when the last char match of captor is CharMatchThenEndBeforeMe, remove the last char
+		const token = captor.capture(context);
 
 		// TODO use captor to create token, and do create container, append into ast, etc.
 
-		return TokenCaptureStatus.Captured;
+		return [TokenCaptureStatus.Captured, token];
 	}
 }
