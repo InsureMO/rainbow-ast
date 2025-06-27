@@ -1,13 +1,5 @@
-import {CompilationUnit} from '@rainbow-ast/core';
-import {
-	AstBuildContext,
-	AstBuildState,
-	GroovyTokenId,
-	TokenCaptor,
-	TokenCaptors,
-	TokenCaptureStatus,
-	TokenMatcherBuilder
-} from '../../src';
+import {CompilationUnit, TokenMatcherBuilder} from '@rainbow-ast/core';
+import {AstBuildContext, AstBuildState, GroovyTokenId, TokenCaptor, TokenCaptors, TokenCaptureStatus} from '../../src';
 
 describe('Captors', () => {
 	const captors = new TokenCaptors('CompilationUnit');

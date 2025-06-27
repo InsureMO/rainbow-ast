@@ -1,7 +1,6 @@
-import {LeafToken, TokenId} from '@rainbow-ast/core';
+import {Char, LeafToken, TokenCharMatchUsage, TokenId, TokenMatcher} from '@rainbow-ast/core';
 import {AstBuildContext} from '../ast';
 import {GroovyTokenId, GroovyTokenName} from '../token';
-import {Char, TokenCharMatchUsage, TokenMatcher} from './match';
 
 export interface TokenCaptorOptions {
 	name: GroovyTokenName;

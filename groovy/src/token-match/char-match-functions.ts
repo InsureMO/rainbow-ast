@@ -1,31 +1,7 @@
-import {Character} from '../character';
-import {Char, CharMatchFn} from './types';
+import {Char, CharMatchFunctions} from '@rainbow-ast/core';
+import {Character} from './character';
 
-export class CharMatchFunctions {
-	private static readonly _functions = new Map<string, CharMatchFn>();
-
-	// noinspection JSUnusedLocalSymbols
-	private constructor() {
-		// to avoid extend
-	}
-
-	static findByName(name: string): CharMatchFn {
-		const fn = this._functions.get(name);
-		if (fn == null) {
-			throw new Error(`Char match function[${name}] is not found.`);
-		}
-		return fn;
-	}
-
-	/**
-	 * returns the old one, or undefined when no conflict
-	 */
-	static register(name: string, fn: CharMatchFn): CharMatchFn | undefined {
-		const old = this._functions.get(name);
-		this._functions.set(name, fn);
-		return old;
-	}
-
+export class GroovyCharMatchFunctions {
 	static JNameStart(char: Char): boolean {
 		// eof
 		if (char == null) {
@@ -99,9 +75,9 @@ export class CharMatchFunctions {
 	}
 }
 
-CharMatchFunctions.register('JNameStart', CharMatchFunctions.JNameStart);
-CharMatchFunctions.register('JNamePart', CharMatchFunctions.JNamePart);
-CharMatchFunctions.register('NotJNamePart', CharMatchFunctions.NotJNamePart);
-CharMatchFunctions.register('Oct', CharMatchFunctions.Oct);
-CharMatchFunctions.register('Num', CharMatchFunctions.Num);
-CharMatchFunctions.register('Hex', CharMatchFunctions.Hex);
+CharMatchFunctions.register('JNameStart', GroovyCharMatchFunctions.JNameStart);
+CharMatchFunctions.register('JNamePart', GroovyCharMatchFunctions.JNamePart);
+CharMatchFunctions.register('NotJNamePart', GroovyCharMatchFunctions.NotJNamePart);
+CharMatchFunctions.register('Oct', GroovyCharMatchFunctions.Oct);
+CharMatchFunctions.register('Num', GroovyCharMatchFunctions.Num);
+CharMatchFunctions.register('Hex', GroovyCharMatchFunctions.Hex);

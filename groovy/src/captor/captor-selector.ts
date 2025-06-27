@@ -1,6 +1,6 @@
+import {Char, CharMatches, CharMatchFn, TokenCharMatchUsage} from '@rainbow-ast/core';
 import {AstBuildContext, DefaultTokenIdPriority, TokenIdPriority} from '../ast';
 import {TokenCaptor} from './captor';
-import {Char, CharMatches, CharMatchFn, TokenCharMatchUsage} from './match';
 
 export type TokenCaptorOrSelector = TokenCaptor | TokenCaptorSelector;
 export type PrecaptureContext = {

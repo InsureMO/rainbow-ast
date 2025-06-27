@@ -19,7 +19,7 @@ export type ParsedCharMatch = Omit<CharMatch, 'rule'> & { rule: Char | Chars };
 const BySemicolon = /(?<!\\);/g;
 const ByColon = /(?<!\\):/g;
 const CharMatchFnHead = 'fn#';
-const LongestKeywordLength = 12; // synchronized
+const LongestKeywordLength = 12; // synchronized, in java
 
 const parseCharMatchRule = (namePattern: string): string => {
 	if (namePattern.startsWith(CharMatchFnHead) && namePattern.length > 3) {
