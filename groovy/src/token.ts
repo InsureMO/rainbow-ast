@@ -203,7 +203,6 @@ enum G {
 }
 
 export const GroovyTokenId = G;
-export type GroovyTokenIds = { [K in keyof typeof G]: GroovyTokenIds[K] };
 export type GroovyTokenName = Exclude<keyof typeof GroovyTokenId, number>;
 
 // following is preparing for code mirror

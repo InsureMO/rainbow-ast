@@ -7,7 +7,7 @@ import {
 	TokenCaptureStatus,
 	TokenMatcherBuilder
 } from '@rainbow-ast/core';
-import {GroovyAstBuildState, GroovyTokenCapturePriority, GroovyTokenId} from '../../src';
+import {GroovyAstBuildState, GroovyTokenCapturePriorities, GroovyTokenId} from '../../src';
 
 describe('Captors', () => {
 	const TMB = TokenMatcherBuilder.DEFAULT;
@@ -30,7 +30,7 @@ describe('Captors', () => {
 		// @ts-ignore
 		states: GroovyAstBuildState,
 		initState: GroovyAstBuildState.CompilationUnit,
-		tokenCapturePriorities: GroovyTokenCapturePriority,
+		tokenCapturePriorities: GroovyTokenCapturePriorities,
 		captors: {
 			[GroovyAstBuildState.CompilationUnit]: captors
 		}
