@@ -82,10 +82,20 @@ export class TokenCaptor {
 			}
 		}
 
+		let {line, column} = context;
+		const text = chars.join('');
+		const lastNewlineIndex = text.lastIndexOf('\n');
+		if (lastNewlineIndex === -1) {
+			// no newline
+			column = column + chars.length;
+		} else {
+			line = line + text.split('\n').length - 1;
+			column = text.slice(lastNewlineIndex).length;
+		}
+
 		return new LeafToken({
 			id: this._tokenId, text: chars.join(''),
-			// todo
-			start: context.charIndex, line: 1, column: 1
+			start: context.charIndex, line, column
 		});
 	}
 }

@@ -17,14 +17,13 @@ export class GroovyAstBuilder extends AbstractAstBuilder<GroovyAstBuildOptions> 
 
 	protected initOptions(options?: GroovyAstBuildOptions): Required<GroovyAstBuildOptions> {
 		return {
+			verbose: options?.verbose ?? false,
 			scriptCommandEnabled: options?.scriptCommandEnabled ?? true
 		};
 	}
 
 	protected getInitState(): AstBuildState {
-		return this.options.scriptCommandEnabled
-			? AstBuildState.CompilationUnit
-			: AstBuildState.CompilationUnitOmitScriptCommand;
+		return this.options.scriptCommandEnabled ? AstBuildState.CompilationUnit : AstBuildState.CompilationUnitOmitScriptCommand;
 	}
 
 	protected findTokenCaptorsOfState(context: AstBuildContext): TokenCaptors {
@@ -35,7 +34,7 @@ export class GroovyAstBuilder extends AbstractAstBuilder<GroovyAstBuildOptions> 
 		return captors;
 	}
 
-	protected parse(cu: CompilationUnit): void {
+	protected doParse(cu: CompilationUnit): void {
 		const context = new AstBuildContext(cu, this.getInitState());
 
 		while (!context.eof) {
@@ -48,6 +47,20 @@ export class GroovyAstBuilder extends AbstractAstBuilder<GroovyAstBuildOptions> 
 				context.closeState();
 			}
 			// otherwise continue loop
+		}
+	}
+
+	protected parse(cu: CompilationUnit): void {
+		if (this.verboseEnabled) {
+			let label = `Parse AST[chars=${(cu.text ?? '').length}]`;
+			try {
+				console.time(label);
+				this.doParse(cu);
+			} finally {
+				console.timeEnd(label);
+			}
+		} else {
+			this.doParse(cu);
 		}
 	}
 }

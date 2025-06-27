@@ -1,6 +1,7 @@
 import {CompilationUnit, ContainerToken, Token, TokenIds} from '../token';
 
 export interface AstBuildOptions {
+	verbose?: boolean;
 }
 
 export abstract class AbstractAstBuilder<Opt extends AstBuildOptions> {
@@ -16,6 +17,10 @@ export abstract class AbstractAstBuilder<Opt extends AstBuildOptions> {
 
 	get options(): Required<Opt> {
 		return this._options;
+	}
+
+	get verboseEnabled(): boolean {
+		return this.options.verbose;
 	}
 
 	ast(document?: string): CompilationUnit {

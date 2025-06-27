@@ -53,6 +53,8 @@ export class TokenCaptors {
 		}
 
 		const token = captor.capture(context);
+		const {id, text, start, line, column} = token;
+		context.moveCharIndexTo(context.charIndex + text.length).moveLineTo(line).moveColumnTo(column + text.length);
 
 		// TODO use captor to create token, and do create container, append into ast, etc.
 

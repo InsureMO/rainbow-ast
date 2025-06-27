@@ -9,6 +9,8 @@ export class AstBuildContext {
 	 * the index of the char waiting to be recognized.
 	 */
 	private _charIndex: number = 0;
+	private _line: number = 1;
+	private _column: number = 1;
 	/**
 	 * the states start from the closest one.
 	 * that is to say, the one with index 0 is the current state, the one with index 1 is a higher-level state, and so on.
@@ -45,6 +47,29 @@ export class AstBuildContext {
 
 	get charIndex(): number {
 		return this._charIndex;
+	}
+
+	moveCharIndexTo(charIndex: number): this {
+		this._charIndex = charIndex;
+		return this;
+	}
+
+	get line(): number {
+		return this._line;
+	}
+
+	moveLineTo(line: number): this {
+		this._line = line;
+		return this;
+	}
+
+	get column(): number {
+		return this._column;
+	}
+
+	moveColumnTo(column: number): this {
+		this._column = column;
+		return this;
 	}
 
 	get eof(): boolean {
