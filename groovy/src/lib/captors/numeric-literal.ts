@@ -66,7 +66,8 @@ export const NumericLiteralDefs: TokenCaptorDefs = {
 		forStates: [
 			TokenCaptorStateInclusion.Include,
 			GroovyAstBuildState.BinaryLiteralExpectNumSepOrSuffix, GroovyAstBuildState.HexadecimalLiteralExpectNumSepOrSuffix
-		]
+		],
+		onCaptured: [PostTokenCapturedActionType.EndBlock]
 	},
 	// NumDecSuffix: {
 	// 	patterns: ['f', 'F', 'd', 'D'],
@@ -77,7 +78,8 @@ export const NumericLiteralDefs: TokenCaptorDefs = {
 		forStates: [
 			TokenCaptorStateInclusion.Include,
 			GroovyAstBuildState.BinaryLiteralExpectNumSepOrSuffix, GroovyAstBuildState.HexadecimalLiteralExpectNumSepOrSuffix
-		]
+		],
+		onCaptured: [PostTokenCapturedActionType.EndBlock]
 	}
 };
 

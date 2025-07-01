@@ -84,7 +84,7 @@ export class TokenCaptors {
 				break;
 			}
 			default : {
-				// do nothing
+				context.appendAtomic(capturedToken);
 				break;
 			}
 		}
