@@ -1,7 +1,7 @@
 {
-	"name": "@rainbow-ast/groovy",
+	"name": "@rainbow-ast/java-base",
 	"version": "0.1.0",
-	"description": "Rainbow AST, Groovy.",
+	"description": "Rainbow AST, Java base definitions.",
 	"main": "index.cjs",
 	"module": "index.js",
 	"types": "index.d.ts",
@@ -21,8 +21,7 @@
 		"url": "https://github.com/InsureMO/rainbow-ast/issues"
 	},
 	"dependencies": {
-		"@rainbow-ast/core": "0.1.0",
-		"@rainbow-ast/java-base": "0.1.0"
+		"@rainbow-ast/core": "0.1.0"
 	},
 	"devDependencies": {
 		"@rollup/plugin-eslint": "^9.0.5",
@@ -58,8 +57,7 @@
 		],
 		"testEnvironment": "node",
 		"moduleNameMapper": {
-			"@rainbow-ast/core": "<rootDir>/../core/src/$1",
-			"@rainbow-ast/java-base": "<rootDir>/../java-base/src/$1"
+			"@rainbow-ast/core": "<rootDir>/../core/src/$1"
 		}
 	},
 	"volta": {

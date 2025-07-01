@@ -27,7 +27,7 @@ export const buildConfig = (lint) => {
 		},
 		external(id) {
 			return [
-				'@rainbow-ast/core', '@rainbow-ast/java-base'
+				'@rainbow-ast/core'
 			].includes(id);
 		}
 	}];

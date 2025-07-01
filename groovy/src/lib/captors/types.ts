@@ -18,7 +18,7 @@ export type TokenCaptorDef = Readonly<{
 	onCaptured?: PostTokenCapturedAction;
 }>;
 export type TokenCaptorDefs = Readonly<Partial<{
-	[K in GroovyTokenName]: TokenCaptorDef;
+	[K in GroovyTokenName]: TokenCaptorDef | Array<TokenCaptorDef>;
 }>>;
 export type TokenCaptorOfStates = Readonly<Partial<{
 	[K in GroovyAstBuildStateName]: Array<TokenCaptor>;

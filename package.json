@@ -2,12 +2,14 @@
 	"private": true,
 	"workspaces": [
 		"core",
+		"java-base",
 		"groovy"
 	],
 	"scripts": {
 		"core:build": "cd ./core && yarn build",
+		"java-base:build": "cd ./java-base && yarn build",
 		"groovy:build": "cd ./groovy && yarn build",
-		"all:build": "yarn core:build && yarn groovy:build"
+		"all:build": "yarn core:build && java-base:build && yarn groovy:build"
 	},
 	"volta": {
 		"node": "22.11.0",

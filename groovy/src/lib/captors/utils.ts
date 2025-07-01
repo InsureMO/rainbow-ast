@@ -10,7 +10,7 @@ import {GroovyAstBuildState} from '../ast-build-state';
 import {GroovyAstBuilder} from '../ast-builder';
 import {GroovyTokenId} from '../token';
 import {GroovyTokenCapturePriorities} from '../token-priorities';
-import {TokenCaptorDefs, TokenCaptorOfStates, TokenCaptorStateInclusion} from './types';
+import {TokenCaptorDef, TokenCaptorDefs, TokenCaptorOfStates, TokenCaptorStateInclusion} from './types';
 
 export const AllCUStates = [
 	GroovyAstBuildState.CompilationUnit,
@@ -23,10 +23,11 @@ export const CommentStates = [
 ];
 export const NumberLiteralStates = [
 	GroovyAstBuildState.BinaryLiteralExpectNumber,
-	GroovyAstBuildState.BinaryLiteralExpectSuffix,
+	GroovyAstBuildState.BinaryLiteralExpectNumSepOrSuffix,
 	GroovyAstBuildState.OctalLiteral,
 	GroovyAstBuildState.IntegralLiteral,
-	GroovyAstBuildState.HexadecimalLiteral,
+	GroovyAstBuildState.HexadecimalLiteralExpectNumber,
+	GroovyAstBuildState.HexadecimalLiteralExpectNumSepOrSuffix,
 	GroovyAstBuildState.DecimalLiteral
 ];
 export const StringLiteralStates = [
@@ -42,39 +43,42 @@ const TMB = TokenMatcherBuilder.create({LongestKeywordLength: 'synchronized'.len
 const AllGroovyAstBuildState = Object.values(GroovyAstBuildState).filter(x => typeof x !== 'string').map(v => v as unknown as GroovyAstBuildState);
 export const buildTokenCaptors = (defs: TokenCaptorDefs): TokenCaptorOfStates => {
 	return Object.keys(defs).reduce((tcs, key) => {
-		const {patterns, forStates: [forStatesType, ...states], onCaptured} = defs[key];
-		// states = states.flat();
-		const tokenId: GroovyTokenId = Number(GroovyTokenId[key]);
-		const matchers = (Array.isArray(patterns) ? patterns : [patterns]).map(pattern => {
-			return TMB.build(pattern);
-		}).flat();
-		const captors: Array<TokenCaptor> = matchers.map(matcher => new TokenCaptor({
-			tokenId, name: key, matcher, postAction: onCaptured
-		}));
-		switch (forStatesType) {
-			case TokenCaptorStateInclusion.Exclude: {
-				AllGroovyAstBuildState.filter(state => !states.includes(state))
-					.forEach((state: GroovyAstBuildState) => {
+		(Array.isArray(defs[key]) ? defs[key] : [defs[key]]).forEach((def: TokenCaptorDef) => {
+			const {patterns, forStates: [forStatesType, ...states], onCaptured} = def;
+			// states = states.flat();
+			const tokenId: GroovyTokenId = Number(GroovyTokenId[key]);
+			const matchers = (Array.isArray(patterns) ? patterns : [patterns]).map(pattern => {
+				return TMB.build(pattern);
+			}).flat();
+			const captors: Array<TokenCaptor> = matchers.map(matcher => new TokenCaptor({
+				tokenId, name: key, matcher, postAction: onCaptured
+			}));
+			switch (forStatesType) {
+				case TokenCaptorStateInclusion.Exclude: {
+					AllGroovyAstBuildState.filter(state => !states.includes(state))
+						.forEach((state: GroovyAstBuildState) => {
+							const existing = tcs[GroovyAstBuildState[state]];
+							if (existing == null) {
+								tcs[GroovyAstBuildState[state]] = [];
+							}
+							tcs[GroovyAstBuildState[state]].push(...captors);
+						});
+					break;
+				}
+				case TokenCaptorStateInclusion.Include:
+				default: {
+					states.forEach((state: GroovyAstBuildState) => {
 						const existing = tcs[GroovyAstBuildState[state]];
 						if (existing == null) {
 							tcs[GroovyAstBuildState[state]] = [];
 						}
 						tcs[GroovyAstBuildState[state]].push(...captors);
 					});
-				break;
+					break;
+				}
 			}
-			case TokenCaptorStateInclusion.Include:
-			default: {
-				states.forEach((state: GroovyAstBuildState) => {
-					const existing = tcs[GroovyAstBuildState[state]];
-					if (existing == null) {
-						tcs[GroovyAstBuildState[state]] = [];
-					}
-					tcs[GroovyAstBuildState[state]].push(...captors);
-				});
-				break;
-			}
-		}
+		});
+
 		return tcs;
 	}, {} as TokenCaptorOfStates);
 };

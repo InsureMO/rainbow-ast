@@ -13,19 +13,20 @@ export const NumericLiteralDefs: TokenCaptorDefs = {
 	},
 	BinNumber: {
 		patterns: 'fn#Bin;fn#Bin:*',
-		forStates: [TokenCaptorStateInclusion.Include, GroovyAstBuildState.BinaryLiteralExpectNumber]
-		// onCaptured: [PostTokenCapturedActionType.SwitchState, GroovyAstBuildState.BinaryLiteralExpectSuffix]
+		forStates: [TokenCaptorStateInclusion.Include, GroovyAstBuildState.BinaryLiteralExpectNumber],
+		onCaptured: [PostTokenCapturedActionType.SwitchState, GroovyAstBuildState.BinaryLiteralExpectNumSepOrSuffix]
 	},
 	// hexadecimal number
-	// HexStartMark: {
-	// 	patterns: ['0x;fn#Hex:!', '0X;fn#Hex:!'],
-	// 	forStates: [TokenCaptorStateInclusion.Exclude, CommentNumberString],
-	// 	onCaptured: [PostTokenCapturedActionType.CreateBlock, GroovyTokenId.HexadecimalLiteral, GroovyAstBuildState.HexadecimalLiteral]
-	// },
-	// HexNumber: {
-	// 	patterns: 'fn#Hex;fn#Hex:*',
-	// 	forStates: [TokenCaptorStateInclusion.Include, GroovyAstBuildState.HexadecimalLiteral]
-	// },
+	HexStartMark: {
+		patterns: ['0x;fn#Hex:!', '0X;fn#Hex:!'],
+		forStates: [TokenCaptorStateInclusion.Exclude, CommentNumberString],
+		onCaptured: [PostTokenCapturedActionType.CreateBlock, GroovyTokenId.HexadecimalLiteral, GroovyAstBuildState.HexadecimalLiteralExpectNumber]
+	},
+	HexNumber: {
+		patterns: 'fn#Hex;fn#Hex:*',
+		forStates: [TokenCaptorStateInclusion.Include, GroovyAstBuildState.HexadecimalLiteralExpectNumber],
+		onCaptured: [PostTokenCapturedActionType.SwitchState, GroovyAstBuildState.HexadecimalLiteralExpectNumSepOrSuffix]
+	},
 	// // octal or decimal number
 	// Number: {
 	// 	patterns: 'fn#Num;fn#Num:*',
@@ -44,13 +45,28 @@ export const NumericLiteralDefs: TokenCaptorDefs = {
 	// 	patterns: ['+;fn#Num:!', '-;fn#Num:!'],
 	// 	forStates: [TokenCaptorStateInclusion.Include, GroovyAstBuildState.DecimalLiteral]
 	// },
-	// NumSep: {
-	// 	patterns: '_;_:*;fn#Num:!',
-	// 	forStates: [TokenCaptorStateInclusion.Include, GroovyAstBuildState.DecimalLiteral]
-	// },
+	NumSep: [
+		{
+			patterns: '_;_:*;fn#Bin:!',
+			forStates: [TokenCaptorStateInclusion.Include, GroovyAstBuildState.BinaryLiteralExpectNumSepOrSuffix],
+			onCaptured: [PostTokenCapturedActionType.SwitchState, GroovyAstBuildState.BinaryLiteralExpectNumber]
+		},
+		{
+			patterns: '_;_:*;fn#Hex:!',
+			forStates: [TokenCaptorStateInclusion.Include, GroovyAstBuildState.HexadecimalLiteralExpectNumSepOrSuffix],
+			onCaptured: [PostTokenCapturedActionType.SwitchState, GroovyAstBuildState.HexadecimalLiteralExpectNumber]
+		}
+		// {
+		// 	patterns: '_;_:*;fn#Num:!',
+		// 	forStates: [TokenCaptorStateInclusion.Include, GroovyAstBuildState.DecimalLiteral]
+		// }
+	],
 	NumIntSuffix: {
 		patterns: ['i', 'I', 'l', 'L'],
-		forStates: [TokenCaptorStateInclusion.Include, GroovyAstBuildState.BinaryLiteralExpectSuffix]
+		forStates: [
+			TokenCaptorStateInclusion.Include,
+			GroovyAstBuildState.BinaryLiteralExpectNumSepOrSuffix, GroovyAstBuildState.HexadecimalLiteralExpectNumSepOrSuffix
+		]
 	},
 	// NumDecSuffix: {
 	// 	patterns: ['f', 'F', 'd', 'D'],
@@ -58,7 +74,10 @@ export const NumericLiteralDefs: TokenCaptorDefs = {
 	// },
 	NumGSuffix: {
 		patterns: ['g', 'G'],
-		forStates: [TokenCaptorStateInclusion.Include, GroovyAstBuildState.BinaryLiteralExpectSuffix]
+		forStates: [
+			TokenCaptorStateInclusion.Include,
+			GroovyAstBuildState.BinaryLiteralExpectNumSepOrSuffix, GroovyAstBuildState.HexadecimalLiteralExpectNumSepOrSuffix
+		]
 	}
 };
 
