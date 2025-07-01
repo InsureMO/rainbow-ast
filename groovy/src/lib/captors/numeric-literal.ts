@@ -13,7 +13,7 @@ export const NumericLiteralDefs: TokenCaptorDefs = {
 	},
 	BinNumber: {
 		patterns: 'fn#Bin;fn#Bin:*',
-		forStates: [TokenCaptorStateInclusion.Include, GroovyAstBuildState.BinaryLiteralExpectSuffix]
+		forStates: [TokenCaptorStateInclusion.Include, GroovyAstBuildState.BinaryLiteralExpectNumber]
 		// onCaptured: [PostTokenCapturedActionType.SwitchState, GroovyAstBuildState.BinaryLiteralExpectSuffix]
 	},
 	// hexadecimal number
