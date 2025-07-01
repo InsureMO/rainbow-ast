@@ -9,7 +9,8 @@ export enum GroovyAstBuildState {
 	SLComment,
 	MLComment,
 	// number literals
-	BinaryLiteral,
+	BinaryLiteralExpectNumber,
+	BinaryLiteralExpectSuffix,
 	OctalLiteral,
 	IntegralLiteral,
 	HexadecimalLiteral,
