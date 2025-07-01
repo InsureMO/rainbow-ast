@@ -1,12 +1,25 @@
 import {AstBuildContext} from '../context';
 import {AtomicToken} from '../token';
 import {Char, TokenCharMatchUsage, TokenMatcher} from '../token-match';
-import {TokenId, TokenName} from '../types';
+import {AstBuildState, TokenId, TokenName} from '../types';
+
+export enum PostTokenCapturedActionType {
+	CreateBlock, SwitchState, EndBlock
+}
+
+export type CreateBlockTokenOnPostTokenCaptured = [PostTokenCapturedActionType.CreateBlock, TokenId, AstBuildState];
+export type SwitchStateToOnPostTokenCaptured = [PostTokenCapturedActionType.SwitchState, AstBuildState];
+export type EndBlockOnPostTokenCaptured = [PostTokenCapturedActionType.EndBlock];
+export type PostTokenCapturedAction =
+	| CreateBlockTokenOnPostTokenCaptured
+	| SwitchStateToOnPostTokenCaptured
+	| EndBlockOnPostTokenCaptured;
 
 export interface TokenCaptorOptions {
 	tokenId: TokenId;
 	name: TokenName;
 	matcher: TokenMatcher;
+	postAction?: PostTokenCapturedAction;
 }
 
 /**
@@ -17,11 +30,13 @@ export class TokenCaptor {
 	private readonly _tokenId: TokenId;
 	private readonly _tokenName: TokenName;
 	private readonly _matcher: TokenMatcher;
+	private readonly _postAction?: PostTokenCapturedAction;
 
 	constructor(options: TokenCaptorOptions) {
 		this._tokenId = options.tokenId;
 		this._tokenName = options.name;
 		this._matcher = options.matcher;
+		this._postAction = options.postAction;
 	}
 
 	get tokenId(): TokenId {
@@ -34,6 +49,10 @@ export class TokenCaptor {
 
 	get matcher(): TokenMatcher {
 		return this._matcher;
+	}
+
+	get postAction(): PostTokenCapturedAction {
+		return this._postAction;
 	}
 
 	get description(): string {
@@ -64,11 +83,10 @@ export class TokenCaptor {
 
 			const {rule, usage} = charMatch;
 			if (rule === char || (typeof rule !== 'string' && rule(char))) {
-				if (usage === TokenCharMatchUsage.END_BEFORE_ME) {
-					// it is the last char match
-					break;
+				if (usage !== TokenCharMatchUsage.END_BEFORE_ME) {
+					// ignore the char when usage is end before me.
+					chars.push(char);
 				}
-				chars.push(char);
 				charIndex++;
 				char = doc[charIndex];
 				if (usage !== TokenCharMatchUsage.ANY_TIMES) {

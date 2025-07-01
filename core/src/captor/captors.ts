@@ -1,7 +1,12 @@
 import {AstBuildContext} from '../context';
-import {Token} from '../token';
+import {BlockToken, Token} from '../token';
 import {AstBuildState, AstBuildStateName} from '../types';
-import {TokenCaptor} from './captor';
+import {
+	CreateBlockTokenOnPostTokenCaptured,
+	PostTokenCapturedActionType,
+	SwitchStateToOnPostTokenCaptured,
+	TokenCaptor
+} from './captor';
 import {TokenCaptorSelector} from './captor-selector';
 
 export enum TokenCaptureStatus {
@@ -56,12 +61,36 @@ export class TokenCaptors {
 			return [TokenCaptureStatus.None];
 		}
 
-		const token = captor.capture(context);
-		const {id, text, start, line, column} = token;
+		const capturedToken = captor.capture(context);
+		let returnToken: Token = capturedToken;
+		const {id, text, start, line, column} = capturedToken;
+
+		const postAction = captor.postAction;
+		switch (postAction?.[0]) {
+			case PostTokenCapturedActionType.CreateBlock: {
+				const [, tokenId, state] = postAction as CreateBlockTokenOnPostTokenCaptured;
+				const blockToken = new BlockToken(tokenId, capturedToken);
+				returnToken = blockToken;
+				context.appendBlock(blockToken, state);
+				break;
+			}
+			case PostTokenCapturedActionType.EndBlock: {
+				context.appendAtomic(capturedToken).endCurrentBlock();
+				break;
+			}
+			case PostTokenCapturedActionType.SwitchState: {
+				const [, state] = postAction as SwitchStateToOnPostTokenCaptured;
+				context.appendAtomic(capturedToken).replaceState(state);
+				break;
+			}
+			default : {
+				// do nothing
+				break;
+			}
+		}
+
 		context.moveCharIndexTo(context.charIndex + text.length).moveLineTo(line).moveColumnTo(column + text.length);
 
-		// TODO use captor to create token, and do create container, append into ast, etc.
-
-		return [TokenCaptureStatus.Captured, token];
+		return [TokenCaptureStatus.Captured, capturedToken];
 	}
 }

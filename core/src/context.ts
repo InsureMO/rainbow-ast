@@ -1,5 +1,11 @@
-import {BlockToken, CompilationUnit} from './token';
-import {AstBuildState, Language, LanguageAstBuildStates, LanguageTokenIds, TokenCapturePrioritiesOfState} from './types';
+import {AtomicToken, BlockToken, CompilationUnit} from './token';
+import {
+	AstBuildState,
+	Language,
+	LanguageAstBuildStates,
+	LanguageTokenIds,
+	TokenCapturePrioritiesOfState
+} from './types';
 
 export class AstBuildContext<
 	T extends LanguageTokenIds = LanguageTokenIds,
@@ -88,22 +94,8 @@ export class AstBuildContext<
 		return this._charIndex >= this._documentLength;
 	}
 
-	consumeChars(count: number) {
-		this._charIndex += count;
-	}
-
 	get currentState(): AstBuildState {
 		return this._states[0];
-	}
-
-	appendState(state: AstBuildState): this {
-		this._states.push(state);
-		return this;
-	}
-
-	endCurrentState(): this {
-		this._states.shift();
-		return this;
 	}
 
 	replaceState(state: AstBuildState): this {
@@ -116,25 +108,25 @@ export class AstBuildContext<
 		return priorities[this.currentState] ?? priorities.$Default;
 	}
 
-	get blocks(): Array<BlockToken> {
-		return this._blocks;
-	}
-
 	get currentBlock(): BlockToken {
 		return this._blocks[0];
 	}
 
-	appendBlock(block: BlockToken): this {
-		this._blocks.unshift(block);
+	appendBlock(token: BlockToken, state: AstBuildState): this {
+		this._blocks[0].appendChild(token);
+		this._blocks.unshift(token);
+		this._states.unshift(state);
 		return this;
 	}
 
 	endCurrentBlock(): this {
+		this._states.shift();
 		this._blocks.shift();
 		return this;
 	}
 
-	get isTopLevel(): boolean {
-		return this.blocks.length === 1;
+	appendAtomic(token: AtomicToken): this {
+		this._blocks[0].appendChild(token);
+		return this;
 	}
 }

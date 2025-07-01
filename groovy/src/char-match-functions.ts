@@ -56,6 +56,10 @@ export class GroovyCharMatchFunctions {
 		return !Character.isJavaIdentifierPart(cp) || Character.isIdentifierIgnorable(cp);
 	}
 
+	static Bin(char: Char): boolean {
+		return char === '0' || char === '1';
+	}
+
 	static Oct(char: Char): boolean {
 		const codepoint = char?.codePointAt(0);
 		// 0 -> 48, 7 -> 55
@@ -73,11 +77,40 @@ export class GroovyCharMatchFunctions {
 		// 0 -> 48, 9 -> 57, a -> 97, f -> 102, A -> 65, F -> 70
 		return codepoint != null && ((codepoint >= 48 && codepoint <= 57) || (codepoint >= 97 && codepoint <= 102) || (codepoint >= 65 && codepoint <= 70));
 	}
+
+	static NumSign(char: Char): boolean {
+		return char === '+' || char === '-';
+	}
+
+	static NumExponent(char: Char): boolean {
+		return char === 'e' || char === 'E';
+	}
+
+	static IntSuffix(char: Char): boolean {
+		return char === 'i' || char === 'I'
+			|| char === 'l' || char === 'L'
+			|| char === 'g' || char === 'G';
+	}
+
+	static DecSuffix(char: Char): boolean {
+		return char === 'f' || char === 'F'
+			|| char === 'd' || char === 'D';
+	}
+
+	static DecGSuffix(char: Char): boolean {
+		return char === 'f' || char === 'F'
+			|| char === 'd' || char === 'D'
+			|| char === 'g' || char === 'G';
+	}
 }
 
 CharMatchFunctions.register('JNameStart', GroovyCharMatchFunctions.JNameStart);
 CharMatchFunctions.register('JNamePart', GroovyCharMatchFunctions.JNamePart);
 CharMatchFunctions.register('NotJNamePart', GroovyCharMatchFunctions.NotJNamePart);
+CharMatchFunctions.register('Bin', GroovyCharMatchFunctions.Bin);
 CharMatchFunctions.register('Oct', GroovyCharMatchFunctions.Oct);
 CharMatchFunctions.register('Num', GroovyCharMatchFunctions.Num);
 CharMatchFunctions.register('Hex', GroovyCharMatchFunctions.Hex);
+CharMatchFunctions.register('IntSuffix', GroovyCharMatchFunctions.IntSuffix);
+CharMatchFunctions.register('DecSuffix', GroovyCharMatchFunctions.DecSuffix);
+CharMatchFunctions.register('DecGSuffix', GroovyCharMatchFunctions.DecGSuffix);

@@ -1,7 +1,7 @@
 import {CompilationUnitTokenId, TokenId} from '@rainbow-ast/core';
 
 // TODO this enumeration should be auto generated
-enum G {
+export enum GroovyTokenId {
 	/** first one must be COMPILATION_UNIT, value is 0 */
 	COMPILATION_UNIT = CompilationUnitTokenId,
 	// primitive types
@@ -72,20 +72,26 @@ enum G {
 	BooleanTrue, // true
 	BooleanFalse, // false
 	// numeric
-	NumericSignMark, // + or -
-	IntegralNumbers, // numbers
-	FractionNumbers, // numbers
-	NumericSuffixMark, // gG: BigInteger/BigDecimal, lL: Long, iI: Integer, dD: double, fF: float
-	BinaryStartMark, // 0b/0B of [+-]0b...
-	OctalStartMark, // 0 of [+-]0...
-	HexadecimalStartMark, // 0x/0X of [+-]0x...
-	DecimalExponentMark, // e/E
-	DecimalExponentSignMark, // +/- after DecimalExponentMark
-	DecimalExponentNumbers, // numbers
+	BinNumber,
+	HexNumber,
+	Number, // numbers, not octal
+	BinaryStartMark, // 0[Bb]...
+	HexStartMark, // 0[xX]...
+	NumDot,
+	NumExponent, // number, not binary/octal/hex, includes dot or exponent
+	NumSign, // +-
+	NumSep,
+	NumIntSuffix,
+	NumDecSuffix,
+	NumGSuffix,
 	// string and gstring
-	StringQuotationMark, // '
-	StringQuotationMarkML, // '''
-	StringMLNewlineEraser, // \ for multiple lines string/gstring literal, and no character after it, erase the following newline
+	StringMark, // '
+	StringMarkML, // '''
+	GStringMark, // "
+	GStringMarkML, // """
+	SlashyGStringMark, // /
+	DollarSlashyGStringStartMark, // $/
+	DollarSlashyGStringEndMark, // /$
 	StringBackspaceEscape, // \b
 	StringFormFeedEscape, // \f
 	StringNewlineEscape, // \n
@@ -95,21 +101,15 @@ enum G {
 	StringSingleQuoteEscape, // \', in string, or optional in multiple string, gstring and multiple line gstring
 	StringDoubleQuoteEscape, // \" in gstring, or optional in multiple string and multiple line gstring
 	StringDollarEscape, // \$, not for slashy gstring or dollar slashy gstring
-	StringOctalEscapeMark, // \ in octal escape
-	StringOctalEscapeContent, // 1 - 3 octal digits follows \
-	StringUnicodeEscapeMark, // \u in unicode escape
-	StringUnicodeEscapeContent, // 4 hexadecimal digits follows \u
-	GStringQuotationMark, // "
-	GStringQuotationMarkML, // """
-	SlashyGStringQuotationMark, // /
-	DollarSlashyGStringQuotationStartMark, // $/
-	DollarSlashyGStringQuotationEndMark, // /$
+	StringOctal, // \ in octal escape
+	StringUnicode, // \u in unicode escape
 	SlashyGStringSlashEscape, // \/
 	DollarSlashyGStringDollarEscape, // $$
 	DollarSlashyGStringSlashEscape, // $/
 	GStringInterpolationStartMark, // $ of $...
 	GStringInterpolationLBraceStartMark, // ${ of ${...}
 	GStringInterpolationRBraceEndMark, // } of ${...}
+	StringMLNewlineEraser, // \ for multiple lines string/gstring literal, and no character after it, erase the following newline
 	// Groovy Operators
 	RangeInclusive, // ..
 	RangeExclusiveLeft, // <..
@@ -133,7 +133,7 @@ enum G {
 	Arrow, // -> // this also supported by java
 	In, // G1.0
 	NotIn, // !in
-	NotInstanceof, // !instanceof
+	NotInstanceOf, // !instanceof
 	// operators
 	Assign, // =
 	GreaterThan, // >
@@ -182,16 +182,18 @@ enum G {
 	RParen, // )
 	LBrack, // [
 	RBrack, // ]
-	LAngle, // <
-	RAngle, // >
-	At, // @
 	Semicolon, // ;
 	Comma, // ,
 	Dot, // .
+	// generic type
+	GenericTypeStartMark, // <
+	GenericTypeEndMark, // >
+	// annotation
+	AnnotationStartMark, // @
 	// comment
-	SingleLineCommentStartMark, // //
-	MultipleLinesCommentStartMark, // /*
-	MultipleLinesCommentEndMark, // */
+	SLCommentStartMark, // //
+	MLCommentStartMark, // /*
+	MLCommentEndMark, // */
 	// shebang command
 	ScriptCommandStartMark, // #!
 	// text content
@@ -200,9 +202,14 @@ enum G {
 	Newline, // \n or \r\n
 	Identifier,
 	UndeterminedChar,
+	// block
+	BinaryLiteral,
+	OctalLiteral,
+	IntegralLiteral,
+	HexadecimalLiteral,
+	DecimalLiteral
 }
 
-export const GroovyTokenId = G;
 export type GroovyTokenName = Exclude<keyof typeof GroovyTokenId, number>;
 
 // following is preparing for code mirror

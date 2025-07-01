@@ -291,22 +291,19 @@ export class TokenMatcherBuilder {
 		const spreadCharMatches: Array<SpreadCharMatchAtIndex> = [];
 		let hasAnyTimes = false, hasEndBeforeMe = false;
 		charMatches.forEach(({rule, ...rest}) => {
-			if (hasEndBeforeMe) {
-				throw new Error(`EndBeforeMe must be the last match rule, definition is [${pattern}].`);
-			}
 			const spreadCharMatchAtIndex: SpreadCharMatchAtIndex = [];
 			spreadCharMatches.push(spreadCharMatchAtIndex);
 			if ((rest as CharMatchOnceOrNot).onceOrNot) {
-				if (hasAnyTimes) {
-					throw new Error(`Cannot define OnceOrNot rule after AnyTimes rule, definition is [${pattern}].`);
+				if (hasAnyTimes || hasEndBeforeMe) {
+					throw new Error(`Cannot define OnceOrNot rule after AnyTimes or EndBeforeMe rule, definition is [${pattern}].`);
 				}
 				// ignored
 				spreadCharMatchAtIndex.push([]);
 				// once
 				spreadCharMatchAtIndex.push([{rule, usage: TokenCharMatchUsage.ONCE}]);
 			} else if ((rest as CharMatchAnyTimes).anyTimes) {
-				if (hasAnyTimes) {
-					throw new Error(`Cannot define multiple AnyTimes rules, definition is [${pattern}].`);
+				if (hasAnyTimes || hasEndBeforeMe) {
+					throw new Error(`Cannot define multiple AnyTimes rules or AnyTimes rule after EndBeforeMe rule, definition is [${pattern}].`);
 				}
 				// ignored
 				spreadCharMatchAtIndex.push([]);
@@ -320,8 +317,8 @@ export class TokenMatcherBuilder {
 				]);
 				hasAnyTimes = true;
 			} else if ((rest as CharMatchSpecificTimes).min != null) {
-				if (hasAnyTimes) {
-					throw new Error(`Cannot define SpecificTimes rule after AnyTimes rule, definition is [${pattern}].`);
+				if (hasAnyTimes || hasEndBeforeMe) {
+					throw new Error(`Cannot define SpecificTimes rule after AnyTimes or EndBeforeMe rule, definition is [${pattern}].`);
 				}
 				const {min, max} = rest as CharMatchSpecificTimes;
 				const once = {rule, usage: TokenCharMatchUsage.ONCE};
