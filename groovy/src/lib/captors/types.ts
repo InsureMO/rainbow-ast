@@ -6,9 +6,11 @@ export enum TokenCaptorStateInclusion {
 	Include = 'Inc', Exclude = 'Exc'
 }
 
-export type TokenCaptorStates =
-	| Readonly<[TokenCaptorStateInclusion, GroovyAstBuildState, ...Array<GroovyAstBuildState>]>
-	| Readonly<[TokenCaptorStateInclusion, Array<GroovyAstBuildState>]>;
+export type TokenCaptorStates = Readonly<[
+	TokenCaptorStateInclusion,
+		GroovyAstBuildState | ReadonlyArray<GroovyAstBuildState>,
+	...Array<GroovyAstBuildState | ReadonlyArray<GroovyAstBuildState>>
+]>;
 
 export type TokenCaptorDef = Readonly<{
 	patterns: string | ReadonlyArray<string>;

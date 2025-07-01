@@ -39,10 +39,11 @@ export const CommentNumberString = [...CommentStates, ...NumberLiteralStates, ..
 
 const TMB = TokenMatcherBuilder.create({LongestKeywordLength: 'synchronized'.length});
 // according to typescript enum compile rule, need to omit the string values */
-const AllGroovyAstBuildState = Object.values(GroovyAstBuildState).filter(x => typeof x === 'string').map(v => v as unknown as GroovyAstBuildState);
+const AllGroovyAstBuildState = Object.values(GroovyAstBuildState).filter(x => typeof x !== 'string').map(v => v as unknown as GroovyAstBuildState);
 export const buildTokenCaptors = (defs: TokenCaptorDefs): TokenCaptorOfStates => {
 	return Object.keys(defs).reduce((tcs, key) => {
 		const {patterns, forStates: [forStatesType, ...states], onCaptured} = defs[key];
+		// states = states.flat();
 		const tokenId: GroovyTokenId = Number(GroovyTokenId[key]);
 		const matchers = (Array.isArray(patterns) ? patterns : [patterns]).map(pattern => {
 			return TMB.build(pattern);

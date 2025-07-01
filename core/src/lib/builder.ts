@@ -71,7 +71,11 @@ export class AstBuilder<
 			if (status === TokenCaptureStatus.None) {
 				// cannot capture token in current state,
 				// back to parent
-				context.endCurrentBlock();
+				if (context.isCompilationUnitBlock()) {
+					throw new Error(`Cannot capture token from context, starts at char index[${context.charIndex}].`);
+				} else {
+					context.endCurrentBlock();
+				}
 			}
 			// otherwise continue loop
 		}

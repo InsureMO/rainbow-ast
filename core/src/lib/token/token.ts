@@ -28,6 +28,10 @@ export abstract class Token {
 		return this._parent;
 	}
 
+	setParent(parent: BlockToken): void {
+		this._parent = parent;
+	}
+
 	get ancestors(): ReadonlyArray<BlockToken> {
 		const ancestors: Array<BlockToken> = [];
 		let ancestor = this.parent;

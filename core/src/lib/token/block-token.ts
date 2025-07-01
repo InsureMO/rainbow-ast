@@ -55,7 +55,11 @@ export class BlockToken extends Token {
 		return this._children;
 	}
 
+	/**
+	 * append given token as last child, and set this as given token's parent
+	 */
 	appendChild(token: Token): void {
+		token.setParent(this);
 		this._children.push(token);
 	}
 }

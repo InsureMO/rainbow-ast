@@ -112,6 +112,10 @@ export class AstBuildContext<
 		return this._blocks[0];
 	}
 
+	isCompilationUnitBlock(): boolean {
+		return this._states.length === 1;
+	}
+
 	appendBlock(token: BlockToken, state: AstBuildState): this {
 		this._blocks[0].appendChild(token);
 		this._blocks.unshift(token);

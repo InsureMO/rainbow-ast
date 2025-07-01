@@ -14,6 +14,7 @@ export const NumericLiteralDefs: TokenCaptorDefs = {
 	BinNumber: {
 		patterns: 'fn#Bin;fn#Bin:*',
 		forStates: [TokenCaptorStateInclusion.Include, GroovyAstBuildState.BinaryLiteralExpectSuffix]
+		// onCaptured: [PostTokenCapturedActionType.SwitchState, GroovyAstBuildState.BinaryLiteralExpectSuffix]
 	},
 	// hexadecimal number
 	// HexStartMark: {
