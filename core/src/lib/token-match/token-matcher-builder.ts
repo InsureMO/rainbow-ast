@@ -87,6 +87,7 @@ const parseCharMatchRestriction = (rule: Char | Chars, restrictionPattern?: stri
 	}
 };
 const parseCharMatch = (rulePattern: string): ParsedCharMatch | undefined => {
+	// eslint-disable-next-line prefer-const
 	let [rule, restriction] = rulePattern.split(ByColon);
 	if (rule.endsWith('\\ ')) {
 		// trim start only, since the last char is a blank
@@ -343,7 +344,7 @@ export class TokenMatcherBuilder {
 			}
 		});
 		// build cartesian product
-		// @ts-ignore
+		// @ts-expect-error to avoid type check
 		const tokenMatches: Array<TokenMatch> = spreadCharMatches.reduce((tokenMatches: Array<TokenMatch>, spreadCharMatchAtIndex) => {
 			if (tokenMatches.length === 0) {
 				return spreadCharMatchAtIndex.map(charMatch => [...charMatch] as TokenMatch);

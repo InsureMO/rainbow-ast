@@ -7,7 +7,7 @@ import {buildTokenCaptors, CommentNumberString} from './utils';
 export const NumericLiteralDefs: TokenCaptorDefs = {
 	// binary number
 	BinaryStartMark: {
-		patterns: ['0b;fn#Bin:!', '0B;fn#Bin!'],
+		patterns: ['0b;fn#Bin:!', '0B;fn#Bin:!'],
 		forStates: [TokenCaptorStateInclusion.Exclude, CommentNumberString],
 		onCaptured: [PostTokenCapturedActionType.CreateBlock, GroovyTokenId.BinaryLiteral, GroovyAstBuildState.BinaryLiteralExpectNumber]
 	},

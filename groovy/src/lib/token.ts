@@ -1,11 +1,11 @@
-import {CompilationUnitTokenId, TokenId} from '@rainbow-ast/core';
+import {TokenId} from '@rainbow-ast/core';
 
 // TODO this enumeration should be auto generated
 export enum GroovyTokenId {
 	/** first one must be COMPILATION_UNIT, value is 0 */
-	COMPILATION_UNIT = CompilationUnitTokenId,
+	COMPILATION_UNIT,
 	// primitive types
-	BOOLEAN = 1,
+	BOOLEAN,
 	CHAR,
 	BYTE,
 	SHORT,

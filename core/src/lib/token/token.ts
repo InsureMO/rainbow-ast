@@ -39,6 +39,7 @@ export abstract class Token {
 	}
 
 	get root(): Token {
+		// eslint-disable-next-line @typescript-eslint/no-this-alias
 		let root: Token = this;
 		let parent = this.parent;
 		while (parent != null) {

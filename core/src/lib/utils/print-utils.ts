@@ -7,7 +7,7 @@ export class PrintUtils {
 		'\f': '\\f',
 		'\\': '\\\\',
 		'\'': `\\'`,
-		'\"': '\\"'
+		'"': '\\"'
 	};
 	private static readonly ESCAPE_REGEXP_FOR_PRINT = new RegExp(`[${Object.keys(PrintUtils.ESCAPE_CHARS_FOR_PRINT).join('')}]`, 'g');
 

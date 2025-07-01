@@ -63,7 +63,7 @@ export class TokenCaptors {
 
 		const capturedToken = captor.capture(context);
 		let returnToken: Token = capturedToken;
-		const {id, text, start, line, column} = capturedToken;
+		const {text, line, column} = capturedToken;
 
 		const postAction = captor.postAction;
 		switch (postAction?.[0]) {
@@ -91,6 +91,6 @@ export class TokenCaptors {
 
 		context.moveCharIndexTo(context.charIndex + text.length).moveLineTo(line).moveColumnTo(column + text.length);
 
-		return [TokenCaptureStatus.Captured, capturedToken];
+		return [TokenCaptureStatus.Captured, returnToken];
 	}
 }

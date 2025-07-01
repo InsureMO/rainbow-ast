@@ -70,7 +70,7 @@ export class GroovyCharMatchFunctions {
 		const codepoint = char?.codePointAt(0);
 		// 0 -> 48, 9 -> 57
 		return codepoint != null && (codepoint >= 48 && codepoint <= 57);
-	};
+	}
 
 	static Hex(char: Char): boolean {
 		const codepoint = char?.codePointAt(0);

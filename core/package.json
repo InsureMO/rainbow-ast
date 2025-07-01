@@ -7,7 +7,8 @@
 	"types": "index.d.ts",
 	"type": "module",
 	"scripts": {
-		"build": "rolldown -c",
+		"build": "rollup -c",
+		"build:ci": "rollup -c rollup.config.ci.js",
 		"test": "jest"
 	},
 	"repository": {
@@ -21,11 +22,14 @@
 	},
 	"dependencies": {},
 	"devDependencies": {
+		"@rollup/plugin-eslint": "^9.0.5",
 		"@types/jest": "^30.0.0",
 		"@types/node": "24.0.3",
+		"@typescript-eslint/eslint-plugin": "^8.35.1",
+		"@typescript-eslint/parser": "^8.35.1",
 		"jest": "^30.0.3",
-		"rolldown": "^1.0.0-beta.19",
-		"rolldown-plugin-dts": "^0.13.12",
+		"rollup": "^4.44.1",
+		"rollup-plugin-typescript2": "^0.36.0",
 		"typescript": "5.8.3"
 	},
 	"jest": {

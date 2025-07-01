@@ -1,6 +1,15 @@
-import {TokenCaptor, TokenMatcherBuilder} from '@rainbow-ast/core';
+import {
+	AstBuildState,
+	AstBuildStates,
+	TokenCaptor,
+	TokenCaptors,
+	TokenIds,
+	TokenMatcherBuilder
+} from '@rainbow-ast/core';
 import {GroovyAstBuildState} from '../ast-build-state';
+import {GroovyAstBuilder} from '../ast-builder';
 import {GroovyTokenId} from '../token';
+import {GroovyTokenCapturePriorities} from '../token-priorities';
 import {TokenCaptorDefs, TokenCaptorOfStates, TokenCaptorStateInclusion} from './types';
 
 export const AllCUStates = [
@@ -13,7 +22,8 @@ export const CommentStates = [
 	GroovyAstBuildState.MLComment
 ];
 export const NumberLiteralStates = [
-	GroovyAstBuildState.BinaryLiteral,
+	GroovyAstBuildState.BinaryLiteralExpectNumber,
+	GroovyAstBuildState.BinaryLiteralExpectSuffix,
 	GroovyAstBuildState.OctalLiteral,
 	GroovyAstBuildState.IntegralLiteral,
 	GroovyAstBuildState.HexadecimalLiteral,
@@ -66,4 +76,28 @@ export const buildTokenCaptors = (defs: TokenCaptorDefs): TokenCaptorOfStates =>
 		}
 		return tcs;
 	}, {} as TokenCaptorOfStates);
+};
+
+export type GroovyLanguage = {
+	verbose?: boolean;
+	initState?: GroovyAstBuildState;
+	captors: TokenCaptorOfStates;
+}
+export const buildAstBuilder = (language: GroovyLanguage): GroovyAstBuilder => {
+	const {verbose, initState, captors} = language;
+
+	return new GroovyAstBuilder({
+		verbose: verbose ?? false,
+		language: {
+			tokenIds: GroovyTokenId as unknown as TokenIds,
+			states: GroovyAstBuildState as unknown as AstBuildStates,
+			initState: initState ?? GroovyAstBuildState.CompilationUnit,
+			tokenCapturePriorities: GroovyTokenCapturePriorities,
+			captors: Object.keys(captors).reduce((rst, name) => {
+				const state = GroovyAstBuildState[name];
+				rst[state] = new TokenCaptors({state, name, captors: captors[name]});
+				return rst;
+			}, {} as Record<AstBuildState, TokenCaptors>)
+		}
+	});
 };

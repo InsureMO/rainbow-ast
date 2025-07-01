@@ -1,5 +1,4 @@
-import {AstBuilder, AstBuilderConstructOptions, CompilationUnit} from '@rainbow-ast/core';
-import {GroovyAstBuildState} from './ast-build-state';
+import {AstBuilder, AstBuilderConstructOptions} from '@rainbow-ast/core';
 
 export interface GroovyAstBuildOptions extends AstBuilderConstructOptions {
 	scriptCommandEnabled?: boolean;
@@ -17,15 +16,5 @@ export class GroovyAstBuilder extends AstBuilder {
 		extendsOptions.scriptCommandEnabled = extendsOptions.scriptCommandEnabled ?? true;
 
 		return options as Required<AstBuilderConstructOptions>;
-	}
-
-	protected getInitState(): GroovyAstBuildState {
-		return this.groovyOptions.scriptCommandEnabled
-			? GroovyAstBuildState.CompilationUnit
-			: GroovyAstBuildState.CompilationUnitOmitScriptCommand;
-	}
-
-	protected parse(cu: CompilationUnit): void {
-		// TODO
 	}
 }

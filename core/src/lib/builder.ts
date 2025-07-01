@@ -32,7 +32,7 @@ export class AstBuilder<
 	 */
 	protected initOptions(options: Opts): Required<Opts> {
 		options.verbose = options.verbose ?? false;
-		// @ts-expect-error
+		// @ts-expect-error for avoid the type check
 		return options;
 	}
 
@@ -72,7 +72,6 @@ export class AstBuilder<
 				// cannot capture token in current state,
 				// back to parent
 				context.endCurrentBlock();
-				context.endCurrentState();
 			}
 			// otherwise continue loop
 		}
@@ -80,7 +79,7 @@ export class AstBuilder<
 
 	protected parse(compilationUnit: CompilationUnit): void {
 		if (this.verboseEnabled) {
-			let label = `Parse AST[chars=${(compilationUnit.text ?? '').length}]`;
+			const label = `Parse AST[chars=${(compilationUnit.text ?? '').length}]`;
 			try {
 				console.time(label);
 				this.doParse(compilationUnit);

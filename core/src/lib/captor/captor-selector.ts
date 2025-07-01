@@ -95,7 +95,7 @@ export class TokenCaptorSelector {
 	addCaptor(captor: TokenCaptor, matchIndex: number = 0): void {
 		const matches = captor.matcher.matches;
 		const match = matches[matchIndex];
-		let rule = match.rule;
+		const rule = match.rule;
 		if (typeof rule === 'string') {
 			this.doAddCaptor(captor, matchIndex, rule, this._byChar);
 		} else {

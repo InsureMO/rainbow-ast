@@ -8,9 +8,11 @@ export class BlockToken extends Token {
 	static readonly UNKNOWN_POSITION = -1;
 	protected readonly _children?: Array<Token> = [];
 
-	constructor(id: TokenId, firstChild: Token) {
+	constructor(id: TokenId, firstChild?: Token) {
 		super(id);
-		this._children.push(firstChild);
+		if (firstChild != null) {
+			this._children.push(firstChild);
+		}
 	}
 
 	get text(): string {
