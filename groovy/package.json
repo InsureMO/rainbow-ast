@@ -54,7 +54,10 @@
 		"coverageReporters": [
 			"html"
 		],
-		"testEnvironment": "node"
+		"testEnvironment": "node",
+		"moduleNameMapper": {
+			"@rainbow-ast/core": "<rootDir>/../core/src/$1"
+		}
 	},
 	"volta": {
 		"extends": "../package.json"
