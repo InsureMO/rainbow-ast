@@ -1,4 +1,3 @@
-// TODO this enumeration should be auto generated
 export enum GroovyAstBuildState {
 	CompilationUnit,
 	CompilationUnitOmitScriptCommand,

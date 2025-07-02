@@ -11,38 +11,39 @@ import {GroovyAstBuildState, GroovyAstBuildStateName} from '../ast-build-state';
 import {GroovyAstBuilder} from '../ast-builder';
 import {GroovyTokenId, GroovyTokenName} from '../token';
 import {GroovyTokenCapturePriorities} from '../token-priorities';
+import {S} from './alias';
 import {GroovyTokenCaptorDefs} from './types';
 
 export const AllCUStates = [
-	GroovyAstBuildState.CompilationUnit,
-	GroovyAstBuildState.CompilationUnitOmitScriptCommand
+	S.CompilationUnit,
+	S.CompilationUnitOmitScriptCommand
 ];
 export const CommentStates = [
-	GroovyAstBuildState.ScriptCommand,
-	GroovyAstBuildState.SLComment,
-	GroovyAstBuildState.MLComment
+	S.ScriptCommand,
+	S.SLComment,
+	S.MLComment
 ];
 export const NumberLiteralStates = [
-	GroovyAstBuildState.BinNumLiteralStarted,
-	GroovyAstBuildState.BinNumLiteralNumEd,
-	GroovyAstBuildState.BinNumLiteralSepEd,
-	GroovyAstBuildState.HexNumLiteralStarted,
-	GroovyAstBuildState.HexNumLiteralNumEd,
-	GroovyAstBuildState.HexNumLiteralSepEd,
-	GroovyAstBuildState.NumLiteralIntEd,
-	GroovyAstBuildState.NumLiteralIntSepEd,
-	GroovyAstBuildState.NumLiteralDotEd,
-	GroovyAstBuildState.NumLiteralFracEd,
-	GroovyAstBuildState.NumLiteralFracSepEd,
-	GroovyAstBuildState.NumLiteralExpSignEd,
-	GroovyAstBuildState.NumLiteralExpNumEd,
-	GroovyAstBuildState.NumLiteralExpNumSepEd
+	S.BinNumLiteralStarted,
+	S.BinNumLiteralNumEd,
+	S.BinNumLiteralSepEd,
+	S.HexNumLiteralStarted,
+	S.HexNumLiteralNumEd,
+	S.HexNumLiteralSepEd,
+	S.NumLiteralIntEd,
+	S.NumLiteralIntSepEd,
+	S.NumLiteralDotEd,
+	S.NumLiteralFracEd,
+	S.NumLiteralFracSepEd,
+	S.NumLiteralExpSignEd,
+	S.NumLiteralExpNumEd,
+	S.NumLiteralExpNumSepEd
 ];
 export const StringLiteralStates = [
-	GroovyAstBuildState.StringLiteral,
-	GroovyAstBuildState.GStringLiteral,
-	GroovyAstBuildState.SlashyGStringLiteral,
-	GroovyAstBuildState.DollarSlashyGStringLiteral
+	S.StringLiteral,
+	S.GStringLiteral,
+	S.SlashyGStringLiteral,
+	S.DollarSlashyGStringLiteral
 ];
 export const CommentNumberString = [...CommentStates, ...NumberLiteralStates, ...StringLiteralStates];
 
@@ -71,7 +72,7 @@ export const buildAstBuilder = (language: GroovyLanguage): GroovyAstBuilder => {
 		language: {
 			tokenIds: GroovyTokenId as unknown as TokenIds,
 			states: GroovyAstBuildState as unknown as AstBuildStates,
-			initState: initState ?? GroovyAstBuildState.CompilationUnit,
+			initState: initState ?? S.CompilationUnit,
 			tokenCapturePriorities: GroovyTokenCapturePriorities,
 			captors: Object.keys(captors).reduce((rst, name) => {
 				const state = GroovyAstBuildState[name];
