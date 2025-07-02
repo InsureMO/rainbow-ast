@@ -130,7 +130,7 @@ export class TokenCaptorSelector {
 		return this._fallback;
 	}
 
-	protected doPrecapture(context: AstBuildContext, precaptureContext: PrecaptureContext): [TokenCaptor | undefined, CapturedChars: string] {
+	protected doSelect(context: AstBuildContext, precaptureContext: PrecaptureContext): [TokenCaptor | undefined, CapturedChars: string] {
 		const document = context.document;
 		const charIndex = precaptureContext.charIndex;
 		const char = document[charIndex];
@@ -158,14 +158,21 @@ export class TokenCaptorSelector {
 			captured: precaptureContext.captured + char
 		};
 		const matchedCaptorsByMatchedSelectors = matchedSelectors
-			.map(selector => selector.doPrecapture(context, precaptureContextOfNextChar))
+			.map(selector => selector.doSelect(context, precaptureContextOfNextChar))
 			.filter(([captor]) => captor != null);
 		// check the captured chars length, find the longest
 		// theoretically, there should be only one captor
 		const captured = [
 			...matchedCaptors.map<[TokenCaptor, CapturedChars: string]>(captor => {
 				if (captor.matcher.matches[captor.matcher.matches.length - 1].usage === TokenCharMatchUsage.END_BEFORE_ME) {
-					return [captor, precaptureContext.captured];
+					// continuous EndBeforeMe rules
+					let trimTrailingCharCount = 0;
+					for (let index = captor.matcher.matches.length - 2; index >= 0; index--) {
+						if (captor.matcher.matches[index].usage === TokenCharMatchUsage.END_BEFORE_ME) {
+							trimTrailingCharCount++;
+						}
+					}
+					return [captor, precaptureContext.captured.slice(0, -trimTrailingCharCount)];
 				} else {
 					return [captor, precaptureContext.captured + char];
 				}
@@ -210,10 +217,10 @@ export class TokenCaptorSelector {
 	/**
 	 * make sure the context is not eof, otherwise raise error.
 	 */
-	precapture(context: AstBuildContext): [TokenCaptor | undefined, CapturedChars: string] {
+	select(context: AstBuildContext): [TokenCaptor | undefined, CapturedChars: string] {
 		if (context.eof) {
 			throw new Error(`Meat EOF at index[${context.charIndex}].`);
 		}
-		return this.doPrecapture(context, {charIndex: context.charIndex, charMatchIndex: 0, captured: ''});
+		return this.doSelect(context, {charIndex: context.charIndex, charMatchIndex: 0, captured: ''});
 	}
 }

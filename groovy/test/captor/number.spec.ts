@@ -15,4 +15,8 @@ describe('Capture number', () => {
 		const cu = ast.ast('0b0__1_0l');
 		expect(cu).not.toBeNull();
 	});
+	test('Capture Binary Literal #4', async () => {
+		const cu = ast.ast('0b00000111110000011111l');
+		expect(cu).not.toBeNull();
+	});
 });

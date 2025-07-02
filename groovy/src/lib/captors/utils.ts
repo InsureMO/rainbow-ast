@@ -22,12 +22,12 @@ export const CommentStates = [
 	GroovyAstBuildState.MLComment
 ];
 export const NumberLiteralStates = [
-	GroovyAstBuildState.BinaryLiteralExpectNumber,
-	GroovyAstBuildState.BinaryLiteralExpectNumSepOrSuffix,
+	GroovyAstBuildState.BinaryLiteralStarted,
+	GroovyAstBuildState.BinaryLiteralNumCaptured,
 	GroovyAstBuildState.OctalLiteral,
 	GroovyAstBuildState.IntegralLiteral,
-	GroovyAstBuildState.HexadecimalLiteralExpectNumber,
-	GroovyAstBuildState.HexadecimalLiteralExpectNumSepOrSuffix,
+	GroovyAstBuildState.HexadecimalLiteralStarted,
+	GroovyAstBuildState.HexadecimalLiteralNumCaptured,
 	GroovyAstBuildState.DecimalLiteral
 ];
 export const StringLiteralStates = [

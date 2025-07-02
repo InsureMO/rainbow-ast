@@ -92,7 +92,7 @@ export class TokenCaptor {
 				if (usage !== TokenCharMatchUsage.ANY_TIMES) {
 					charMatchIndex++;
 				}
-			} else if (usage !== TokenCharMatchUsage.ANY_TIMES) {
+			} else if (usage === TokenCharMatchUsage.ANY_TIMES) {
 				// not matched, but current char match is any times
 				// means any times char match is over, check next one
 				charMatchIndex++;
