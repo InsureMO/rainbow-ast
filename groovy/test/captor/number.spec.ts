@@ -1,8 +1,19 @@
-import {buildAstBuilder, GroovyTokenId, NumericLiteralTokenCaptors} from '../../src';
+import {
+	buildAstBuilder,
+	buildTokenCaptors,
+	buildTokenPointcuts,
+	GroovyTokenId,
+	NumericLiteralCaptorDefs,
+	NumericLiteralPointcutDefs
+} from '../../src';
 import {AstChecker} from '../utils/ast-checker';
 
 describe('Capture number', () => {
-	const builder = buildAstBuilder({verbose: true, captors: NumericLiteralTokenCaptors});
+	const builder = buildAstBuilder({
+		verbose: true,
+		captors: buildTokenCaptors(NumericLiteralCaptorDefs),
+		pointcuts: buildTokenPointcuts(NumericLiteralPointcutDefs)
+	});
 
 	test('Capture Binary Literal #1', async () => {
 		const ast = builder.ast('0b010');
@@ -66,7 +77,7 @@ describe('Capture number', () => {
 			]]
 		]]);
 	});
-	test('Capture Number Literal #1', async () => {
+	test('Capture Decimal Literal #1', async () => {
 		const ast = builder.ast('12_3.45__6e+7_8g');
 		AstChecker.check(ast, [GroovyTokenId.COMPILATION_UNIT, 0, 16, 1, '12_3.45__6e+7_8g', [
 			[GroovyTokenId.DecimalLiteral, 0, 16, 1, '12_3.45__6e+7_8g', [
@@ -83,6 +94,48 @@ describe('Capture number', () => {
 				[GroovyTokenId.NumSep, 13, 14, 1, '_'],
 				[GroovyTokenId.Number, 14, 15, 1, '8'],
 				[GroovyTokenId.NumSuffix, 15, 16, 1, 'g']
+			]]
+		]]);
+	});
+	test('Capture Integral Literal #1', async () => {
+		const ast = builder.ast('123g');
+		AstChecker.check(ast, [GroovyTokenId.COMPILATION_UNIT, 0, 4, 1, '123g', [
+			[GroovyTokenId.IntegralLiteral, 0, 4, 1, '123g', [
+				[GroovyTokenId.Number, 0, 3, 1, '123'],
+				[GroovyTokenId.NumSuffix, 3, 4, 1, 'g']
+			]]
+		]]);
+	});
+	test('Capture Octal Literal #1', async () => {
+		const ast = builder.ast('0123g');
+		AstChecker.check(ast, [GroovyTokenId.COMPILATION_UNIT, 0, 5, 1, '0123g', [
+			[GroovyTokenId.OctalLiteral, 0, 5, 1, '0123g', [
+				[GroovyTokenId.OctalStartMark, 0, 1, 1, '0'],
+				[GroovyTokenId.Number, 1, 4, 1, '123'],
+				[GroovyTokenId.NumSuffix, 4, 5, 1, 'g']
+			]]
+		]]);
+	});
+	test('Capture Octal Literal #2', async () => {
+		const ast = builder.ast('0_123g');
+		AstChecker.check(ast, [GroovyTokenId.COMPILATION_UNIT, 0, 6, 1, '0_123g', [
+			[GroovyTokenId.OctalLiteral, 0, 6, 1, '0_123g', [
+				[GroovyTokenId.OctalStartMark, 0, 1, 1, '0'],
+				[GroovyTokenId.NumSep, 1, 2, 1, '_'],
+				[GroovyTokenId.Number, 2, 5, 1, '123'],
+				[GroovyTokenId.NumSuffix, 5, 6, 1, 'g']
+			]]
+		]]);
+	});
+	test('Capture Octal Literal #3', async () => {
+		const ast = builder.ast('01_23g');
+		AstChecker.check(ast, [GroovyTokenId.COMPILATION_UNIT, 0, 6, 1, '01_23g', [
+			[GroovyTokenId.OctalLiteral, 0, 6, 1, '01_23g', [
+				[GroovyTokenId.OctalStartMark, 0, 1, 1, '0'],
+				[GroovyTokenId.Number, 1, 2, 1, '1'],
+				[GroovyTokenId.NumSep, 2, 3, 1, '_'],
+				[GroovyTokenId.Number, 3, 5, 1, '23'],
+				[GroovyTokenId.NumSuffix, 5, 6, 1, 'g']
 			]]
 		]]);
 	});

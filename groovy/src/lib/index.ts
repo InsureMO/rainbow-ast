@@ -4,5 +4,6 @@ export * from './ast-build-state';
 
 export * from './char-match-functions';
 export * from './captors';
+export * from './pointcuts';
 
 export * from './ast-builder';

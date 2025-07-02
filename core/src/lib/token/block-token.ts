@@ -55,11 +55,26 @@ export class BlockToken extends Token {
 		return this._children;
 	}
 
+	// write methods
 	/**
 	 * append given token as last child, and set this as given token's parent
 	 */
 	appendChild(token: Token): void {
 		token.setParent(this);
 		this._children.push(token);
+	}
+
+	shiftChild(): Token | undefined {
+		if (this._children.length > 0) {
+			return this._children.shift();
+		} else {
+			return (void 0);
+		}
+	}
+
+	unshiftChild(token: Token, ...more: Array<Token>): void {
+		const tokens = [token, ...more];
+		tokens.forEach(token => token.setParent(this));
+		this._children.unshift(...tokens);
 	}
 }

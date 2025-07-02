@@ -1,4 +1,5 @@
 import {PostTokenCapturedAction, TokenCaptor} from '../captor';
+import {TokenPointcut, TokenPointcutConstructOptions} from '../pointcut';
 import {TokenMatcherBuilder} from '../token-match';
 import {AstBuildState, AstBuildStateName, TokenId, TokenName} from '../types';
 
@@ -21,13 +22,19 @@ export type TokenCaptorDefForStates<S extends AstBuildState> = Readonly<
 	& { forks: Array<Omit<TokenCaptorDef<S>, 'patterns'>> }
 >;
 
-export type TokenCaptorDefs<S extends AstBuildState, TN extends TokenName> = Readonly<Partial<{
-	[K in TN]: TokenCaptorDef<S> | TokenCaptorDefForStates<S> | Array<TokenCaptorDef<S> | TokenCaptorDefForStates<S>>;
+export type TokenCaptorDefs<S extends AstBuildState, Tn extends TokenName> = Readonly<Partial<{
+	[K in Tn]: TokenCaptorDef<S> | TokenCaptorDefForStates<S> | Array<TokenCaptorDef<S> | TokenCaptorDefForStates<S>>;
 }>>;
 
-export type TokenCaptorOfStates<SN extends AstBuildStateName> = Readonly<Partial<{
-	[K in SN]: Array<TokenCaptor>;
+export type TokenCaptorOfStates<Sn extends AstBuildStateName> = Readonly<Partial<{
+	[K in Sn]: Array<TokenCaptor>;
 }>>;
+
+export type TokenPointcutDefs<Tn extends TokenName> = Readonly<Partial<{
+	[K in Tn]: TokenPointcutConstructOptions;
+}>>;
+
+export type TokenPointcuts<Tn extends TokenName> = Readonly<Partial<{ [K in Tn]: TokenPointcut }>>;
 
 export class BuildUtils {
 	// const TMB: TokenMatcherBuilder = TokenMatcherBuilder.create({LongestKeywordLength: 'synchronized'.length});
@@ -37,8 +44,8 @@ export class BuildUtils {
 	// 	.filter(x => typeof x !== 'string')
 	// 	.map(v => v as unknown as GroovyAstBuildState);
 
-	private static mergeCaptorToState<SN extends AstBuildStateName>(options: {
-		target: TokenCaptorOfStates<SN>;
+	private static mergeCaptorToState<Sn extends AstBuildStateName>(options: {
+		target: TokenCaptorOfStates<Sn>;
 		state: AstBuildState;
 		captors: Array<TokenCaptor>;
 		stateNameMap: Record<AstBuildState, AstBuildStateName>;
@@ -53,9 +60,9 @@ export class BuildUtils {
 		target[stateName].push(...captors);
 	}
 
-	private static mergeTokenCaptors<S extends AstBuildState, TN extends TokenName, SN extends AstBuildStateName>(options: {
-		target: TokenCaptorOfStates<SN>;
-		defs: TokenCaptorDefs<S, TN>;
+	private static mergeTokenCaptors<S extends AstBuildState, Tn extends TokenName, Sn extends AstBuildStateName>(options: {
+		target: TokenCaptorOfStates<Sn>;
+		defs: TokenCaptorDefs<S, Tn>;
 		tokenIdMap: Record<TokenName, TokenId>;
 		stateNameMap: Record<AstBuildState, AstBuildStateName>;
 		tokenMatcherBuilder: TokenMatcherBuilder;
@@ -104,18 +111,33 @@ export class BuildUtils {
 		}
 	}
 
-	static buildTokenCaptors<S extends AstBuildState, TN extends TokenName, SN extends AstBuildStateName>(options: {
-		defs: Array<TokenCaptorDefs<S, TN>>;
+	static buildTokenCaptors<S extends AstBuildState, Tn extends TokenName, Sn extends AstBuildStateName>(options: {
+		defs: Array<TokenCaptorDefs<S, Tn>>;
 		tokenIdMap: Record<TokenName, TokenId>;
 		stateNameMap: Record<AstBuildState, AstBuildStateName>;
 		tokenMatcherBuilder: TokenMatcherBuilder;
-	}): TokenCaptorOfStates<SN> {
+	}): TokenCaptorOfStates<Sn> {
 		const {defs, tokenIdMap, stateNameMap, tokenMatcherBuilder} = options;
 
-		const target = {} as TokenCaptorOfStates<SN>;
+		const target = {} as TokenCaptorOfStates<Sn>;
 		defs.forEach(defs => BuildUtils.mergeTokenCaptors({
 			target, defs, tokenIdMap, stateNameMap, tokenMatcherBuilder
 		}));
+		return target;
+	}
+
+	static buildTokenPointcuts<Tn extends TokenName>(options: {
+		defs: Array<TokenPointcutDefs<Tn>>;
+	}): TokenPointcuts<Tn> {
+		const {defs} = options;
+
+		const target = {} as TokenPointcuts<Tn>;
+		defs.forEach(def => {
+			for (const key of Object.keys(def)) {
+				target[key] = new TokenPointcut(def[key as TokenName]);
+			}
+		});
+
 		return target;
 	}
 }

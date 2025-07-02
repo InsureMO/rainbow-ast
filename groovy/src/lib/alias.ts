@@ -1,6 +1,6 @@
 import {EndBlockOnPostTokenCaptured, PostTokenCapturedActionType, TokenCaptorStateInclusion} from '@rainbow-ast/core';
-import {GroovyAstBuildState} from '../ast-build-state';
-import {GroovyTokenId} from '../token';
+import {GroovyAstBuildState} from './ast-build-state';
+import {GroovyTokenId} from './token';
 
 export const T = GroovyTokenId;
 export const S = GroovyAstBuildState;

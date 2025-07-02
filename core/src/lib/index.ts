@@ -5,6 +5,7 @@ export * from './utils';
 export * from './token';
 export * from './token-match';
 export * from './captor';
+export * from './pointcut';
 
 export * from './context';
 export * from './ast';

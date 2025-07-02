@@ -1,8 +1,8 @@
-import {CB, EB, Excl, Incl, S, SS, T} from './alias';
+import {CB, EB, Excl, Incl, S, SS, T} from '../alias';
 import {GroovyTokenCaptorDefs} from './types';
-import {buildTokenCaptors, CommentNumberString} from './utils';
+import {CommentNumberString} from './utils';
 
-export const BinaryNumberLiteralDefs: GroovyTokenCaptorDefs = {
+export const BinaryNumberLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 	BinaryStartMark: {
 		patterns: ['0b;fn#Bin:!', '0B;fn#Bin:!'],
 		forStates: [Excl, CommentNumberString],
@@ -20,7 +20,7 @@ export const BinaryNumberLiteralDefs: GroovyTokenCaptorDefs = {
 	}
 };
 
-export const HexadecimalNumberLiteralDefs: GroovyTokenCaptorDefs = {
+export const HexadecimalNumberLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 	HexStartMark: {
 		patterns: ['0x;fn#Hex:!', '0X;fn#Hex:!'],
 		forStates: [Excl, CommentNumberString],
@@ -38,7 +38,7 @@ export const HexadecimalNumberLiteralDefs: GroovyTokenCaptorDefs = {
 	}
 };
 
-export const NumericLiteralDefs: GroovyTokenCaptorDefs = {
+export const DecimalLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 	Number: {
 		patterns: 'fn#Num;fn#Num:*',
 		forks: [
@@ -92,7 +92,7 @@ export const NumericLiteralDefs: GroovyTokenCaptorDefs = {
 		]
 	}
 };
-export const NumberLiteralSuffixDefs: GroovyTokenCaptorDefs = {
+export const NumberLiteralSuffixCaptorDefs: GroovyTokenCaptorDefs = {
 	NumSuffix: [
 		{ // available for binary, hexadecimal and number only with integral part
 			patterns: ['i', 'I', 'l', 'L'],
@@ -123,6 +123,9 @@ export const NumberLiteralSuffixDefs: GroovyTokenCaptorDefs = {
 	]
 };
 
-export const NumericLiteralTokenCaptors = buildTokenCaptors(
-	BinaryNumberLiteralDefs, HexadecimalNumberLiteralDefs, NumericLiteralDefs, NumberLiteralSuffixDefs
-);
+export const NumericLiteralCaptorDefs: Array<GroovyTokenCaptorDefs> = [
+	BinaryNumberLiteralCaptorDefs,
+	HexadecimalNumberLiteralCaptorDefs,
+	DecimalLiteralCaptorDefs,
+	NumberLiteralSuffixCaptorDefs
+];

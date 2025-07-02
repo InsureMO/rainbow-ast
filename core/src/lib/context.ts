@@ -125,12 +125,20 @@ export class AstBuildContext<
 
 	endCurrentBlock(): this {
 		this._states.shift();
-		this._blocks.shift();
+		const block = this._blocks.shift();
+		this.postBlockEnd(block);
 		return this;
 	}
 
 	appendAtomic(token: AtomicToken): this {
 		this._blocks[0].appendChild(token);
 		return this;
+	}
+
+	postBlockEnd(block: BlockToken): void {
+		const pointcut = this._language.pointcuts[block.id];
+		if (pointcut != null) {
+			pointcut.onEnd(block, this);
+		}
 	}
 }

@@ -1,5 +1,6 @@
 // token id and name
 import {TokenCaptors} from './captor';
+import {TokenPointcut} from './pointcut';
 
 /**
  * integral, 0 or positive, continuous.
@@ -52,4 +53,5 @@ export type Language<T extends LanguageTokenIds = LanguageTokenIds, S extends La
 	initState: AstBuildState;
 	tokenCapturePriorities: TokenCapturePriorities;
 	captors: Record<AstBuildState, TokenCaptors>;
+	pointcuts?: Record<TokenId, TokenPointcut>;
 }

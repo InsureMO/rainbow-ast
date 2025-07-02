@@ -110,4 +110,9 @@ export abstract class Token {
 			']'
 		].join('');
 	}
+
+	// write methods
+	rewriteId(id: TokenId): void {
+		this._id = id;
+	}
 }
