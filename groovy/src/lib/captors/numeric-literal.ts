@@ -95,32 +95,34 @@ export const NumericLiteralDefs: GroovyTokenCaptorDefs = {
 	}
 };
 export const NumberLiteralSuffixDefs: GroovyTokenCaptorDefs = {
-	NumIntSuffix: {
-		patterns: ['i', 'I', 'l', 'L'],
-		forStates: [
-			TokenCaptorStateInclusion.Include,
-			GroovyAstBuildState.BinNumLiteralNumEd, GroovyAstBuildState.HexNumLiteralNumEd,
-			GroovyAstBuildState.NumLiteralIntEd
-		],
-		onCaptured: [PostTokenCapturedActionType.EndBlock]
-	},
-	NumDecSuffix: {
-		patterns: ['f', 'F', 'd', 'D'],
-		forStates: [
-			TokenCaptorStateInclusion.Include,
-			GroovyAstBuildState.NumLiteralIntEd, GroovyAstBuildState.NumLiteralFracEd, GroovyAstBuildState.NumLiteralExpNumEd
-		],
-		onCaptured: [PostTokenCapturedActionType.EndBlock]
-	},
-	NumGSuffix: {
-		patterns: ['g', 'G'],
-		forStates: [
-			TokenCaptorStateInclusion.Include,
-			GroovyAstBuildState.BinNumLiteralNumEd, GroovyAstBuildState.HexNumLiteralNumEd,
-			GroovyAstBuildState.NumLiteralIntEd, GroovyAstBuildState.NumLiteralFracEd, GroovyAstBuildState.NumLiteralExpNumEd
-		],
-		onCaptured: [PostTokenCapturedActionType.EndBlock]
-	}
+	NumSuffix: [
+		{ // available for binary, hexadecimal and number only with integral part
+			patterns: ['i', 'I', 'l', 'L'],
+			forStates: [
+				TokenCaptorStateInclusion.Include,
+				GroovyAstBuildState.BinNumLiteralNumEd, GroovyAstBuildState.HexNumLiteralNumEd,
+				GroovyAstBuildState.NumLiteralIntEd
+			],
+			onCaptured: [PostTokenCapturedActionType.EndBlock]
+		},
+		{ // available for number only
+			patterns: ['f', 'F', 'd', 'D'],
+			forStates: [
+				TokenCaptorStateInclusion.Include,
+				GroovyAstBuildState.NumLiteralIntEd, GroovyAstBuildState.NumLiteralFracEd, GroovyAstBuildState.NumLiteralExpNumEd
+			],
+			onCaptured: [PostTokenCapturedActionType.EndBlock]
+		},
+		{ // available for all
+			patterns: ['g', 'G'],
+			forStates: [
+				TokenCaptorStateInclusion.Include,
+				GroovyAstBuildState.BinNumLiteralNumEd, GroovyAstBuildState.HexNumLiteralNumEd,
+				GroovyAstBuildState.NumLiteralIntEd, GroovyAstBuildState.NumLiteralFracEd, GroovyAstBuildState.NumLiteralExpNumEd
+			],
+			onCaptured: [PostTokenCapturedActionType.EndBlock]
+		}
+	]
 };
 
 export const NumericLiteralTokenCaptors = buildTokenCaptors(

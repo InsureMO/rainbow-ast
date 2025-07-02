@@ -79,9 +79,7 @@ export enum GroovyTokenId {
 	NumExponent, // number, not binary/octal/hex, includes dot or exponent
 	NumExponentSign, // +-
 	NumSep,
-	NumIntSuffix,
-	NumDecSuffix,
-	NumGSuffix,
+	NumSuffix,
 	// string and gstring
 	StringMark, // '
 	StringMarkML, // '''
