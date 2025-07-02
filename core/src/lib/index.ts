@@ -7,4 +7,5 @@ export * from './token-match';
 export * from './captor';
 
 export * from './context';
+export * from './ast';
 export * from './builder';

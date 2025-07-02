@@ -1,3 +1,4 @@
+import {Ast} from './ast';
 import {TokenCaptors, TokenCaptureStatus} from './captor';
 import {AstBuildContext} from './context';
 import {BlockToken, CompilationUnit, Token} from './token';
@@ -48,10 +49,10 @@ export class AstBuilder<
 		return this._options.language;
 	}
 
-	ast(document?: string): CompilationUnit {
+	ast(document?: string): Ast {
 		const cu = new CompilationUnit(document ?? '');
 		this.parse(cu);
-		return cu;
+		return new Ast(cu);
 	}
 
 	protected findTokenCaptorsOfState(context: AstBuildContext<T, S, L>): TokenCaptors {
