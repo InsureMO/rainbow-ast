@@ -166,13 +166,19 @@ export class TokenCaptorSelector {
 			...matchedCaptors.map<[TokenCaptor, CapturedChars: string]>(captor => {
 				if (captor.matcher.matches[captor.matcher.matches.length - 1].usage === TokenCharMatchUsage.END_BEFORE_ME) {
 					// continuous EndBeforeMe rules
+					// the char captured by last char match isn't appended to captured text yet
+					// so the trailing trim count is all trailing EndBeforeMe rules count - 1
 					let trimTrailingCharCount = 0;
 					for (let index = captor.matcher.matches.length - 2; index >= 0; index--) {
 						if (captor.matcher.matches[index].usage === TokenCharMatchUsage.END_BEFORE_ME) {
 							trimTrailingCharCount++;
 						}
 					}
-					return [captor, precaptureContext.captured.slice(0, -trimTrailingCharCount)];
+					if (trimTrailingCharCount === 0) {
+						return [captor, precaptureContext.captured];
+					} else {
+						return [captor, precaptureContext.captured.slice(0, -trimTrailingCharCount)];
+					}
 				} else {
 					return [captor, precaptureContext.captured + char];
 				}

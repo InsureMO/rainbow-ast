@@ -72,14 +72,12 @@ export enum GroovyTokenId {
 	BooleanTrue, // true
 	BooleanFalse, // false
 	// numeric
-	BinNumber,
-	HexNumber,
 	Number, // numbers, not octal
 	BinaryStartMark, // 0[Bb]...
 	HexStartMark, // 0[xX]...
 	NumDot,
 	NumExponent, // number, not binary/octal/hex, includes dot or exponent
-	NumSign, // +-
+	NumExponentSign, // +-
 	NumSep,
 	NumIntSuffix,
 	NumDecSuffix,

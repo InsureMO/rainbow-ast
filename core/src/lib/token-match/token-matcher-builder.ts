@@ -133,7 +133,7 @@ const buildCharMatchRuleDescription = (match: ParsedCharMatch): string => {
 };
 const buildCharMatchRestrictionDescription = (match: ParsedCharMatch): string => {
 	if ((match as unknown as CharMatchThenEndBeforeMe).endBeforeMe) {
-		return '-';
+		return '!';
 	} else if ((match as unknown as CharMatchAnyTimes).anyTimes) {
 		return '*';
 	} else if ((match as unknown as CharMatchOnceOrNot).onceOrNot) {
@@ -208,7 +208,7 @@ export class TokenMatcherBuilder {
 	readonly BySemicolon = BySemicolon;
 	readonly ByColon = ByColon;
 	readonly CharMatchFnHead = CharMatchFnHead;
-	readonly LongestKeywordLength;
+	readonly LongestKeywordLength: number;
 
 	readonly parseCharMatch = parseCharMatch;
 	readonly parseCharMatches = parseCharMatches;
