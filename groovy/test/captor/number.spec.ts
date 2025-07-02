@@ -3,7 +3,7 @@ import {
 	buildTokenCaptors,
 	buildTokenPointcuts,
 	GroovyTokenId,
-	NumericLiteralCaptorDefs,
+	NumberCaptorDefs,
 	NumericLiteralPointcutDefs
 } from '../../src';
 import {AstChecker} from '../utils/ast-checker';
@@ -11,7 +11,7 @@ import {AstChecker} from '../utils/ast-checker';
 describe('Capture number', () => {
 	const builder = buildAstBuilder({
 		verbose: true,
-		captors: buildTokenCaptors(NumericLiteralCaptorDefs),
+		captors: buildTokenCaptors(NumberCaptorDefs),
 		pointcuts: buildTokenPointcuts(NumericLiteralPointcutDefs)
 	});
 

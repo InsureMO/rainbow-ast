@@ -199,11 +199,19 @@ export enum GroovyTokenId {
 	Identifier,
 	UndeterminedChar,
 	// block
+	// numeric
 	BinaryLiteral,
 	OctalLiteral,
 	IntegralLiteral,
 	HexadecimalLiteral,
-	DecimalLiteral
+	DecimalLiteral,
+	// string
+	StringLiteral,
+	GStringLiteral,
+	SlashyGStringLiteral,
+	DollarSlashyGStringLiteral,
+	//
+	CodeBlock,
 }
 
 export type GroovyTokenName = Exclude<keyof typeof GroovyTokenId, number>;

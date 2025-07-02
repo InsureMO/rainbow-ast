@@ -123,7 +123,7 @@ export const NumberLiteralSuffixCaptorDefs: GroovyTokenCaptorDefs = {
 	]
 };
 
-export const NumericLiteralCaptorDefs: Array<GroovyTokenCaptorDefs> = [
+export const NumberCaptorDefs: Array<GroovyTokenCaptorDefs> = [
 	BinaryNumberLiteralCaptorDefs,
 	HexadecimalNumberLiteralCaptorDefs,
 	DecimalLiteralCaptorDefs,

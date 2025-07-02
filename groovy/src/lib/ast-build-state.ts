@@ -23,10 +23,14 @@ export enum GroovyAstBuildState {
 	/** exponent numbers captured */ NumLiteralExpNumEd,
 	/** exponent number separators captured */ NumLiteralExpNumSepEd,
 	// string literals
-	StringLiteral,
-	GStringLiteral,
+	SingleQuoteStringLiteral,
+	TripleQuotesStringLiteral,
+	SingleQuoteGStringLiteral,
+	TripleQuotesGStringLiteral,
 	SlashyGStringLiteral,
 	DollarSlashyGStringLiteral,
+	//
+	CodeBlock
 }
 
 export type GroovyAstBuildStateName = Exclude<keyof typeof GroovyAstBuildState, number>;

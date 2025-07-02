@@ -30,11 +30,14 @@ export const NumberLiteralStates = [
 	S.NumLiteralExpNumSepEd
 ];
 export const StringLiteralStates = [
-	S.StringLiteral,
-	S.GStringLiteral,
+	S.SingleQuoteStringLiteral,
+	S.TripleQuotesStringLiteral,
+	S.SingleQuoteGStringLiteral,
+	S.TripleQuotesGStringLiteral,
 	S.SlashyGStringLiteral,
 	S.DollarSlashyGStringLiteral
 ];
+export const CommentString = [...CommentStates, ...StringLiteralStates];
 export const CommentNumberString = [...CommentStates, ...NumberLiteralStates, ...StringLiteralStates];
 
 export const GroovyTokenMatcherBuilder = TokenMatcherBuilder.create({LongestKeywordLength: 'synchronized'.length});
