@@ -1,19 +1,8 @@
-import {
-	buildAstBuilder,
-	buildTokenCaptors,
-	buildTokenPointcuts,
-	GroovyTokenId,
-	NumberCaptorDefs,
-	NumericLiteralPointcutDefs
-} from '../../src';
-import {AstChecker} from '../utils/ast-checker';
+import {createDefaultAstBuilder, GroovyTokenId} from '../../src';
+import {AstChecker} from '../utils';
 
 describe('Capture number', () => {
-	const builder = buildAstBuilder({
-		verbose: true,
-		captors: buildTokenCaptors(NumberCaptorDefs),
-		pointcuts: buildTokenPointcuts(NumericLiteralPointcutDefs)
-	});
+	const builder = createDefaultAstBuilder({verbose: true});
 
 	test('Capture Binary Literal #1', async () => {
 		const ast = builder.ast('0b010');

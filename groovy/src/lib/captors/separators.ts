@@ -1,42 +1,42 @@
 import {Excl, S} from '../alias';
 import {GroovyTokenCaptorDefs} from './types';
-import {InclAll, InclCommentString} from './utils';
+import {ExclNumber, NumberLiteral} from './utils';
 
 export const BracketCaptorDefs: GroovyTokenCaptorDefs = {
 	LBrace: {
 		patterns: '{',
 		forks: [
-			{forStates: InclCommentString}
+			{forStates: ExclNumber}
 		]
 	},
 	RBrace: {
 		patterns: '}',
 		forks: [
-			{forStates: InclCommentString}
+			{forStates: [Excl, NumberLiteral, S.GStringInterpolation]}
 		]
 	},
 	LParen: {
 		patterns: '(',
 		forks: [
-			{forStates: InclCommentString}
+			{forStates: ExclNumber}
 		]
 	},
 	RParen: {
 		patterns: ')',
 		forks: [
-			{forStates: InclCommentString}
+			{forStates: ExclNumber}
 		]
 	},
 	LBrack: {
 		patterns: '[',
 		forks: [
-			{forStates: InclCommentString}
+			{forStates: ExclNumber}
 		]
 	},
 	RBrack: {
 		patterns: ']',
 		forks: [
-			{forStates: InclCommentString}
+			{forStates: ExclNumber}
 		]
 	}
 };
@@ -44,35 +44,36 @@ export const DotCommaSemicolonCaptorDefs: GroovyTokenCaptorDefs = {
 	Semicolon: {
 		patterns: '\\;',
 		forks: [
-			{forStates: InclCommentString}
+			{forStates: ExclNumber}
 		]
 	},
 	Comma: {
 		patterns: ',',
 		forks: [
-			{forStates: InclCommentString}
+			{forStates: ExclNumber}
 		]
 	},
 	Dot: {
 		patterns: '.',
 		forks: [
-			{forStates: InclCommentString}
+			{forStates: ExclNumber}
 		]
 	}
 };
 export const WhitespaceTabNewlineCaptorDefs: GroovyTokenCaptorDefs = {
 	Whitespaces: {
 		patterns: '\\ ;\\ :*',
-		forStates: InclAll
+		forStates: ExclNumber
 	},
 	Tabs: {
 		patterns: '\\t;\\t:*',
-		forStates: InclAll
+		forStates: ExclNumber
 	},
 	Newline: {
 		patterns: '\\r:?;\\n',
 		forStates: [
 			Excl,
+			NumberLiteral,
 			S.ScriptCommand, S.SLComment,
 			S.SingleQuoteStringLiteral, S.SingleQuoteGStringLiteral
 		]

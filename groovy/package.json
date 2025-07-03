@@ -9,7 +9,7 @@
 	"scripts": {
 		"build": "rollup -c",
 		"build:ci": "rollup -c rollup.config.ci.js",
-		"test": "jest"
+		"test": "jest --coverage --testPathIgnorePatterns \"/test/rerun-passed.spec.ts\""
 	},
 	"repository": {
 		"type": "git",

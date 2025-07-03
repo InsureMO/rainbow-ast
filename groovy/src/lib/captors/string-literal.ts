@@ -14,6 +14,7 @@ export const StringLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 				forStates: ExclCommentNumberString,
 				onCaptured: [CB, T.StringLiteral, S.SingleQuoteStringLiteral]
 			},
+			// following are excluded by first fork
 			{
 				forStates: [Incl, S.SingleQuoteStringLiteral],
 				onCaptured: EB
@@ -27,6 +28,7 @@ export const StringLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 				forStates: ExclCommentNumberString,
 				onCaptured: [CB, T.StringLiteral, S.TripleQuotesStringLiteral]
 			},
+			// following are excluded by first fork
 			{
 				forStates: [Incl, S.TripleQuotesStringLiteral],
 				onCaptured: EB
@@ -42,6 +44,7 @@ export const GStringLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 				forStates: ExclCommentNumberString,
 				onCaptured: [CB, T.GStringLiteral, S.SingleQuoteGStringLiteral]
 			},
+			// following are excluded by first fork
 			{
 				forStates: [Incl, S.SingleQuoteGStringLiteral],
 				onCaptured: EB
@@ -55,6 +58,7 @@ export const GStringLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 				forStates: ExclCommentNumberString,
 				onCaptured: [CB, T.GStringLiteral, S.TripleQuotesGStringLiteral]
 			},
+			// following are excluded by first fork
 			{
 				forStates: [Incl, S.TripleQuotesGStringLiteral],
 				onCaptured: EB
@@ -74,6 +78,7 @@ export const SlashyGStringLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 				forStates: ExclCommentNumberString,
 				onCaptured: [CB, T.SlashyGStringLiteral, S.SlashyGStringLiteral]
 			},
+			// following are excluded by first fork
 			{
 				forStates: [Incl, S.SlashyGStringLiteral],
 				onCaptured: EB
@@ -119,7 +124,7 @@ export const StringLiteralEscapeCaptorDefs: GroovyTokenCaptorDefs = {
 		forStates: NotSlashyOrDollar
 	},
 	StringSingleQuoteEscape: {
-		patterns: '\\',
+		patterns: '\\\'',
 		forStates: NotSlashyOrDollar
 	},
 	StringDoubleQuoteEscape: {

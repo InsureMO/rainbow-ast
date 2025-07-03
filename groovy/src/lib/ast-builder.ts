@@ -9,6 +9,15 @@ import {
 } from '@rainbow-ast/core';
 import {S} from './alias';
 import {GroovyAstBuildState, GroovyAstBuildStateName} from './ast-build-state';
+import {
+	BooleanCaptorDefs,
+	buildTokenCaptors,
+	NumberCaptorDefs,
+	SeparatorCaptorDefs,
+	StringCaptorDefs,
+	WordsCaptorDefs
+} from './captors';
+import {buildTokenPointcuts, NumericLiteralPointcutDefs} from './pointcuts';
 import {GroovyTokenId, GroovyTokenName} from './token';
 import {GroovyTokenCapturePriorities} from './token-priorities';
 
@@ -53,3 +62,20 @@ export const buildAstBuilder = (language: GroovyLanguage): GroovyAstBuilder => {
 		}
 	});
 };
+
+export const createDefaultAstBuilder = (language?: Omit<GroovyLanguage, 'captors' | 'pointcuts'>) => {
+	return buildAstBuilder({
+		...language,
+		captors: buildTokenCaptors([
+			...SeparatorCaptorDefs,
+			...WordsCaptorDefs,
+			...BooleanCaptorDefs,
+			...NumberCaptorDefs,
+			...StringCaptorDefs
+		]),
+		pointcuts: buildTokenPointcuts([
+			...NumericLiteralPointcutDefs
+		])
+	});
+};
+

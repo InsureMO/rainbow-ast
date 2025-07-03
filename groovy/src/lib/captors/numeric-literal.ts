@@ -46,6 +46,7 @@ export const DecimalLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 				forStates: ExclCommentNumberString,
 				onCaptured: [CB, T.DecimalLiteral, S.NumLiteralIntEd]
 			},
+			// following are excluded by first fork
 			{   // integral part after number separators
 				forStates: [Incl, S.NumLiteralIntSepEd],
 				onCaptured: [SS, S.NumLiteralIntEd]

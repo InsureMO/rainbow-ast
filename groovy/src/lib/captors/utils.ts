@@ -37,9 +37,8 @@ export const CommentString = [...Comment, ...StringLiteral];
 export const CommentNumberString = [...Comment, ...NumberLiteral, ...StringLiteral];
 
 export const InclCommentString: TokenCaptorStates<GroovyAstBuildState> = [Incl, CommentString];
+export const ExclNumber: TokenCaptorStates<GroovyAstBuildState> = [Excl, NumberLiteral];
 export const ExclCommentNumberString: TokenCaptorStates<GroovyAstBuildState> = [Excl, CommentNumberString];
-/** -1 is not a valid state, excludes -1 equals includes all */
-export const InclAll: TokenCaptorStates<GroovyAstBuildState> = [Excl, -1 as GroovyAstBuildState];
 
 export const GroovyTokenMatcherBuilder = TokenMatcherBuilder.create({LongestKeywordLength: 'synchronized'.length});
 
