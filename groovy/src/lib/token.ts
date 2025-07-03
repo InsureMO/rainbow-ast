@@ -198,7 +198,17 @@ export enum GroovyTokenId {
 	Newline, // \n or \r\n
 	Identifier,
 	UndeterminedChar,
+	Word,
+	At,
+	WellNumber,
+	Slash,
+	Backslash,
 	// block
+	// script command
+	ScriptCommand,
+	// comment
+	SLComment,
+	MLComment,
 	// numeric
 	BinaryLiteral,
 	OctalLiteral,
@@ -212,6 +222,9 @@ export enum GroovyTokenId {
 	DollarSlashyGStringLiteral,
 	//
 	CodeBlock,
+	//
+	GenericType,
+	Annotation
 }
 
 export type GroovyTokenName = Exclude<keyof typeof GroovyTokenId, number>;

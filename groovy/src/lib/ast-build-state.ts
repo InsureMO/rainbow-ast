@@ -30,7 +30,10 @@ export enum GroovyAstBuildState {
 	SlashyGStringLiteral,
 	DollarSlashyGStringLiteral,
 	//
-	CodeBlock
+	CodeBlock,
+	//
+	GenericTypeStarted,
+	AnnotationStarted
 }
 
 export type GroovyAstBuildStateName = Exclude<keyof typeof GroovyAstBuildState, number>;

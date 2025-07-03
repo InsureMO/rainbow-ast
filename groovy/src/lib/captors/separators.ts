@@ -1,57 +1,57 @@
-import {Excl, Incl, InclAll, S} from '../alias';
+import {Excl, S} from '../alias';
 import {GroovyTokenCaptorDefs} from './types';
-import {CommentString} from './utils';
+import {InclAll, InclCommentString} from './utils';
 
-export const SeparatorPatterns = {
-	LBrace: '{',
-	RBrace: '}',
-	LParen: '(',
-	RParen: ')',
-	LBrack: '[',
-	RBrack: ']',
-	Semicolon: '\\;',
-	Comma: ',',
-	Dot: '.',
-	Whitespaces: '\\ ;\\ :*',
-	Tabs: '\\t;\\t:*',
-	Newline: '\\r:?;\\n'
-};
+// export const SeparatorPatterns = {
+// 	LBrace: '{',
+// 	RBrace: '}',
+// 	LParen: '(',
+// 	RParen: ')',
+// 	LBrack: '[',
+// 	RBrack: ']',
+// 	Semicolon: '\\;',
+// 	Comma: ',',
+// 	Dot: '.',
+// 	Whitespaces: '\\ ;\\ :*',
+// 	Tabs: '\\t;\\t:*',
+// 	Newline: '\\r:?;\\n'
+// };
 
 export const BracketCaptorDefs: GroovyTokenCaptorDefs = {
 	LBrace: {
 		patterns: '{',
 		forks: [
-			{forStates: [Incl, CommentString]}
+			{forStates: InclCommentString}
 		]
 	},
 	RBrace: {
 		patterns: '}',
 		forks: [
-			{forStates: [Incl, CommentString]}
+			{forStates: InclCommentString}
 		]
 	},
 	LParen: {
 		patterns: '(',
 		forks: [
-			{forStates: [Incl, CommentString]}
+			{forStates: InclCommentString}
 		]
 	},
 	RParen: {
 		patterns: ')',
 		forks: [
-			{forStates: [Incl, CommentString]}
+			{forStates: InclCommentString}
 		]
 	},
 	LBrack: {
 		patterns: '[',
 		forks: [
-			{forStates: [Incl, CommentString]}
+			{forStates: InclCommentString}
 		]
 	},
 	RBrack: {
 		patterns: ']',
 		forks: [
-			{forStates: [Incl, CommentString]}
+			{forStates: InclCommentString}
 		]
 	}
 };
@@ -59,19 +59,19 @@ export const DotCommaSemicolonCaptorDefs: GroovyTokenCaptorDefs = {
 	Semicolon: {
 		patterns: '\\;',
 		forks: [
-			{forStates: [Incl, CommentString]}
+			{forStates: InclCommentString}
 		]
 	},
 	Comma: {
 		patterns: ',',
 		forks: [
-			{forStates: [Incl, CommentString]}
+			{forStates: InclCommentString}
 		]
 	},
 	Dot: {
 		patterns: '.',
 		forks: [
-			{forStates: [Incl, CommentString]}
+			{forStates: InclCommentString}
 		]
 	}
 };

@@ -56,6 +56,24 @@ export class JavaCharMatchFunctions {
 		return !Character.isJavaIdentifierPart(cp) || Character.isIdentifierIgnorable(cp);
 	}
 
+	static Word(char: Char): boolean {
+		// eof
+		if (char == null) {
+			return true;
+		}
+
+		const cp = char.codePointAt(0);
+		// 0-9, a-z, A-Z
+		if ((cp >= 48 && cp <= 57) || (cp >= 65 && cp <= 90) || (cp >= 97 && cp <= 122)) {
+			return true;
+		}
+		if (cp <= 127) {
+			return false;
+		}
+		// rule check
+		return !Character.isJavaIdentifierPart(cp) || Character.isIdentifierIgnorable(cp);
+	}
+
 	static Bin(char: Char): boolean {
 		return char === '0' || char === '1';
 	}
@@ -101,5 +119,9 @@ export class JavaCharMatchFunctions {
 		return char === 'f' || char === 'F'
 			|| char === 'd' || char === 'D'
 			|| char === 'g' || char === 'G';
+	}
+
+	static Any(char: Char): boolean {
+		return char != null;
 	}
 }

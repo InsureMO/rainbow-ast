@@ -20,6 +20,7 @@ export type TokenCaptorsConstructOptions = {
 	state: AstBuildState;
 	name: AstBuildStateName;
 	captors: Array<TokenCaptor>;
+	fallbackCaptor?: TokenCaptor;
 }
 
 /**
@@ -34,6 +35,9 @@ export class TokenCaptors {
 		this._state = options.state;
 		this._stateName = options.name;
 		this._selector.addCaptors(options.captors);
+		if (options.fallbackCaptor != null) {
+			this._selector.fallbackBy(options.fallbackCaptor);
+		}
 	}
 
 	get state(): AstBuildState {

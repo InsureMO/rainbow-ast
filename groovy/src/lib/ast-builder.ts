@@ -1,13 +1,10 @@
 import {
 	AstBuilder,
 	AstBuilderConstructOptions,
-	AstBuildState,
 	AstBuildStates,
+	BuildUtils,
 	TokenCaptorOfStates,
-	TokenCaptors,
-	TokenId,
 	TokenIds,
-	TokenPointcut,
 	TokenPointcuts
 } from '@rainbow-ast/core';
 import {S} from './alias';
@@ -51,16 +48,8 @@ export const buildAstBuilder = (language: GroovyLanguage): GroovyAstBuilder => {
 			states: GroovyAstBuildState as unknown as AstBuildStates,
 			initState: initState ?? S.CompilationUnit,
 			tokenCapturePriorities: GroovyTokenCapturePriorities,
-			captors: Object.keys(captors).reduce((rst, name) => {
-				const state = GroovyAstBuildState[name];
-				rst[state] = new TokenCaptors({state, name, captors: captors[name]});
-				return rst;
-			}, {} as Record<AstBuildState, TokenCaptors>),
-			pointcuts: Object.keys(pointcuts).reduce((rst, name) => {
-				const tokenId = GroovyTokenId[name];
-				rst[tokenId] = pointcuts[name];
-				return rst;
-			}, {} as Record<TokenId, TokenPointcut>)
+			captors: BuildUtils.buildLanguageCaptors(captors, GroovyAstBuildState),
+			pointcuts: BuildUtils.buildLanguagePointcuts(pointcuts, GroovyTokenId)
 		}
 	});
 };

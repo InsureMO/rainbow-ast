@@ -1,10 +1,11 @@
-import {PostTokenCapturedAction, TokenCaptor} from '../captor';
+import {PostTokenCapturedAction, TokenCaptor, TokenCaptors} from '../captor';
 import {TokenPointcut, TokenPointcutConstructOptions} from '../pointcut';
 import {TokenMatcherBuilder} from '../token-match';
 import {AstBuildState, AstBuildStateName, TokenId, TokenName} from '../types';
+import {PrintUtils} from './print-utils';
 
 export enum TokenCaptorStateInclusion {
-	Include = 'Inc', Exclude = 'Exc'
+	Include = 'Incl', Exclude = 'Excl', FallbackOf = 'Fbof'
 }
 
 export type TokenCaptorStates<S extends AstBuildState> = Readonly<[
@@ -27,7 +28,7 @@ export type TokenCaptorDefs<S extends AstBuildState, Tn extends TokenName> = Rea
 }>>;
 
 export type TokenCaptorOfStates<Sn extends AstBuildStateName> = Readonly<Partial<{
-	[K in Sn]: Array<TokenCaptor>;
+	[K in Sn]: Array<TokenCaptor | [TokenCaptorStateInclusion.FallbackOf, TokenCaptor]>;
 }>>;
 
 export type TokenPointcutDefs<Tn extends TokenName> = Readonly<Partial<{
@@ -37,27 +38,25 @@ export type TokenPointcutDefs<Tn extends TokenName> = Readonly<Partial<{
 export type TokenPointcuts<Tn extends TokenName> = Readonly<Partial<{ [K in Tn]: TokenPointcut }>>;
 
 export class BuildUtils {
-	// const TMB: TokenMatcherBuilder = TokenMatcherBuilder.create({LongestKeywordLength: 'synchronized'.length});
-	//
-	// // according to typescript enum compile rule, need to omit the string values
-	// const AllGroovyAstBuildState: Array<GroovyAstBuildState> = Object.values(GroovyAstBuildState)
-	// 	.filter(x => typeof x !== 'string')
-	// 	.map(v => v as unknown as GroovyAstBuildState);
-
 	private static mergeCaptorToState<Sn extends AstBuildStateName>(options: {
 		target: TokenCaptorOfStates<Sn>;
 		state: AstBuildState;
 		captors: Array<TokenCaptor>;
 		stateNameMap: Record<AstBuildState, AstBuildStateName>;
+		asFallback: boolean;
 	}): void {
-		const {target, state, captors, stateNameMap} = options;
+		const {target, state, captors, stateNameMap, asFallback} = options;
 
 		const stateName = stateNameMap[state];
 		const existing = target[stateName];
 		if (existing == null) {
 			target[stateName] = [];
 		}
-		target[stateName].push(...captors);
+		if (asFallback) {
+			target[stateName].push(...captors.map(captor => [TokenCaptorStateInclusion.FallbackOf, captor]));
+		} else {
+			target[stateName].push(...captors);
+		}
 	}
 
 	private static mergeTokenCaptors<S extends AstBuildState, Tn extends TokenName, Sn extends AstBuildStateName>(options: {
@@ -94,14 +93,20 @@ export class BuildUtils {
 							allStates
 								.filter(state => !states.includes(state))
 								.forEach((state: AstBuildState) => BuildUtils.mergeCaptorToState({
-									target, state, captors, stateNameMap
+									target, state, captors, stateNameMap, asFallback: false
 								}));
+							break;
+						}
+						case TokenCaptorStateInclusion.FallbackOf: {
+							states.forEach((state: AstBuildState) => BuildUtils.mergeCaptorToState({
+								target, state, captors, stateNameMap, asFallback: true
+							}));
 							break;
 						}
 						case TokenCaptorStateInclusion.Include:
 						default: {
 							states.forEach((state: AstBuildState) => BuildUtils.mergeCaptorToState({
-								target, state, captors, stateNameMap
+								target, state, captors, stateNameMap, asFallback: false
 							}));
 							break;
 						}
@@ -139,5 +144,38 @@ export class BuildUtils {
 		});
 
 		return target;
+	}
+
+	static buildLanguageCaptors<Sn extends AstBuildStateName>(captors: TokenCaptorOfStates<Sn>, states: Record<Sn, AstBuildState>): Record<AstBuildState, TokenCaptors> {
+		return Object.keys(captors).reduce((rst, name) => {
+			const state = states[name];
+			type GroupedCaptors = { standard: Array<TokenCaptor>, fallback?: TokenCaptor };
+			type DefinedCaptor = TokenCaptor | [TokenCaptorStateInclusion.FallbackOf, TokenCaptor];
+			const {
+				standard: standardCaptors, fallback: fallbackCaptor
+			} = captors[name].reduce((rst: GroupedCaptors, item: DefinedCaptor) => {
+				if (Array.isArray(item)) {
+					if (rst.fallback != null) {
+						throw new Error('Only one fallback captor is allowed, ' +
+							`now [tokenId=${rst.fallback.tokenId}, name=${rst.fallback.tokenName}, description=${PrintUtils.escapeForPrint(rst.fallback.description)}] ` +
+							`and [tokenId=${item[1].tokenId}, name=${item[1].tokenName}, description=${PrintUtils.escapeForPrint(item[1].description)}] detected.`);
+					}
+					rst.fallback = item[1];
+				} else {
+					rst.standard.push(item);
+				}
+				return rst;
+			}, {standard: []} as GroupedCaptors);
+			rst[state] = new TokenCaptors({state, name, captors: standardCaptors, fallbackCaptor});
+			return rst;
+		}, {} as Record<AstBuildState, TokenCaptors>);
+	}
+
+	static buildLanguagePointcuts<Tn extends TokenName>(pointcuts: TokenPointcuts<Tn>, tokenIds: Record<Tn, TokenId>): Record<TokenId, TokenPointcut> {
+		return Object.keys(pointcuts).reduce((rst, name: Tn) => {
+			const tokenId = tokenIds[name];
+			rst[tokenId] = pointcuts[name];
+			return rst;
+		}, {} as Record<TokenId, TokenPointcut>);
 	}
 }
