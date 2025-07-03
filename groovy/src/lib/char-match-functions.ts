@@ -1,7 +1,17 @@
-import {CharMatchFunctions} from '@rainbow-ast/core';
+import {Char, CharMatchFunctions} from '@rainbow-ast/core';
 import {JavaCharMatchFunctions} from '@rainbow-ast/java-base';
 
+export class GroovyCharMatchFunctions {
+	static JNameStartExcl$(char: Char): boolean {
+		if (char === '$') {
+			return false;
+		}
+		return JavaCharMatchFunctions.JNamePart(char);
+	}
+}
+
 CharMatchFunctions.register('JNameStart', JavaCharMatchFunctions.JNameStart);
+CharMatchFunctions.register('JNameStartExcl$', GroovyCharMatchFunctions.JNameStartExcl$);
 CharMatchFunctions.register('JNamePart', JavaCharMatchFunctions.JNamePart);
 CharMatchFunctions.register('NotJNamePart', JavaCharMatchFunctions.NotJNamePart);
 CharMatchFunctions.register('Word', JavaCharMatchFunctions.Word);

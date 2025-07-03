@@ -29,6 +29,8 @@ export enum GroovyAstBuildState {
 	TripleQuotesGStringLiteral,
 	SlashyGStringLiteral,
 	DollarSlashyGStringLiteral,
+	/** $... */ GStringInterpolationInline,
+	/** ${...} */ GStringInterpolation,
 	//
 	CodeBlock,
 	//

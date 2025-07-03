@@ -201,6 +201,7 @@ export enum GroovyTokenId {
 	Word,
 	At,
 	WellNumber,
+	Dollar,
 	Slash,
 	Backslash,
 	// block
@@ -220,6 +221,7 @@ export enum GroovyTokenId {
 	GStringLiteral,
 	SlashyGStringLiteral,
 	DollarSlashyGStringLiteral,
+	GStringInterpolation,
 	//
 	CodeBlock,
 	//

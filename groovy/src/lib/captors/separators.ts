@@ -2,21 +2,6 @@ import {Excl, S} from '../alias';
 import {GroovyTokenCaptorDefs} from './types';
 import {InclAll, InclCommentString} from './utils';
 
-// export const SeparatorPatterns = {
-// 	LBrace: '{',
-// 	RBrace: '}',
-// 	LParen: '(',
-// 	RParen: ')',
-// 	LBrack: '[',
-// 	RBrack: ']',
-// 	Semicolon: '\\;',
-// 	Comma: ',',
-// 	Dot: '.',
-// 	Whitespaces: '\\ ;\\ :*',
-// 	Tabs: '\\t;\\t:*',
-// 	Newline: '\\r:?;\\n'
-// };
-
 export const BracketCaptorDefs: GroovyTokenCaptorDefs = {
 	LBrace: {
 		patterns: '{',
