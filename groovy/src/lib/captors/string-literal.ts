@@ -165,18 +165,18 @@ export const GStringMarkCaptorDefs: GroovyTokenCaptorDefs = {
 export const GStringInterpolationCaptorDefs: GroovyTokenCaptorDefs = {
 	GStringInterpolationStartMark: [
 		{
-			patterns: '$;JNameStartExcl$:!',
+			patterns: '$;fn#JNameStartExcl$:!',
 			forStates: [Incl, S.SingleQuoteGStringLiteral, S.TripleQuotesGStringLiteral],
 			onCaptured: [CB, T.GStringInterpolation, S.GStringInterpolationInline]
 		},
 		{
 			// for gstring, $ always start interpolation, even the following part is not an identifier
-			patterns: '$',
+			patterns: '$;fn#$OrNotJNameStart:!',
 			forStates: [Incl, S.SingleQuoteGStringLiteral, S.TripleQuotesGStringLiteral],
 			onCaptured: [CE, T.GStringInterpolation, S.GStringInterpolationInline]
 		},
 		{
-			patterns: '$;JNameStartExcl$:!',
+			patterns: '$;fn#JNameStartExcl$:!',
 			forks: [
 				{ // slashy gstring, $ which follows with JNameStart(not $) char, is start of interpolation
 					forStates: [Incl, S.SlashyGStringLiteral],
