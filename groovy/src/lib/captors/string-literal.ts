@@ -158,7 +158,7 @@ export const StringLiteralEscapeCaptorDefs: GroovyTokenCaptorDefs = {
 };
 export const GStringMarkCaptorDefs: GroovyTokenCaptorDefs = {
 	StringMLNewlineEraser: {
-		patterns: '{{Backslash}};{{CarriageReturn}}:?;{{Newline}}n',
+		patterns: '{{Backslash}};{{CarriageReturn}}:?;{{Newline}}',
 		forStates: [Incl, S.TripleQuotesStringLiteral, S.TripleQuotesGStringLiteral, S.SlashyGStringLiteral, S.DollarSlashyGStringLiteral]
 	}
 };

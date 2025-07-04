@@ -8,6 +8,7 @@ export const S = GroovyAstBuildState;
 export const Incl = TokenCaptorStateInclusion.Include;
 export const Excl = TokenCaptorStateInclusion.Exclude;
 export const Fbof = TokenCaptorStateInclusion.FallbackOf;
+export const Fbex = TokenCaptorStateInclusion.FallbackOfExclude;
 
 export const CB = PostTokenCapturedActionType.CreateBlock;
 export const SS = PostTokenCapturedActionType.SwitchState;

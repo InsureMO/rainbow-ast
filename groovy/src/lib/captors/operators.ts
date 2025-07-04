@@ -19,7 +19,7 @@ export const OperatorPatterns = {
 	Spaceship: '<=>',
 	Identical: '===',
 	NotIdentical: '!==',
-	In: 'in;fn#NotJNamePart:!',
+	In: 'in',
 	NotInstanceOf: '!instanceof;fn#NotJNamePart:!',
 	NotIn: '!in;fn#NotJNamePart:!',
 	// operators
@@ -62,7 +62,7 @@ export const OperatorPatterns = {
 	UrshiftAssign: '>>>=',
 	Ellipsis: '...',
 	Arrow: '->',
-	InstanceOf: 'instanceof;fn#NotJNamePart:!',
+	InstanceOf: 'instanceof',
 	MethodReference: '::'
 };
 

@@ -1,30 +1,16 @@
-import {Incl} from '../alias';
+import {Fbex} from '../alias';
 import {GroovyTokenCaptorDefs} from './types';
-import {Comment, InclCommentString} from './utils';
+import {InclCommentString, NumberLiteral} from './utils';
 
 export const WordCaptorDefs: GroovyTokenCaptorDefs = {
-	Word: {
-		patterns: 'fn#Word;fn#Word:*',
-		forStates: InclCommentString
-	},
-	At: {
-		patterns: '@',
-		forStates: InclCommentString
-	},
-	WellNumber: {
-		patterns: '#',
-		forStates: InclCommentString
-	},
-	Slash: {
-		patterns: '/',
-		forStates: [Incl, Comment]
-	},
-	Backslash: {
-		patterns: '{{Backslash}}',
-		forStates: [Incl, Comment]
-	}
+	Word: {patterns: 'fn#Word;fn#Word:*', forStates: InclCommentString}
+};
+
+export const CharCaptorDefs: GroovyTokenCaptorDefs = {
+	UndeterminedChar: {patterns: 'fn#Any', forStates: [Fbex, NumberLiteral]}
 };
 
 export const WordsCaptorDefs: Array<GroovyTokenCaptorDefs> = [
-	WordCaptorDefs
+	WordCaptorDefs,
+	CharCaptorDefs
 ];

@@ -35,4 +35,38 @@ describe('Capture string', () => {
 			]]
 		]]);
 	});
+	test('Capture String Literal #3', async () => {
+		const ast = builder.ast(`'\\/#@ '`);
+		AstChecker.check(ast, [GroovyTokenId.COMPILATION_UNIT, 0, 7, 1, `'\\/#@ '`, [
+			[GroovyTokenId.StringLiteral, 0, 7, 1, `'\\/#@ '`, [
+				[GroovyTokenId.StringMark, 0, 1, 1, `'`],
+				[GroovyTokenId.UndeterminedChar, 1, 2, 1, '\\'],
+				[GroovyTokenId.UndeterminedChar, 2, 3, 1, '/'],
+				[GroovyTokenId.UndeterminedChar, 3, 4, 1, '#'],
+				[GroovyTokenId.UndeterminedChar, 4, 5, 1, '@'],
+				[GroovyTokenId.Whitespaces, 5, 6, 1, ' '],
+				[GroovyTokenId.StringMark, 6, 7, 1, `'`]
+			]]
+		]]);
+	});
+	test('Capture String Literal #4', async () => {
+		const ast = builder.ast(`''''''`);
+		AstChecker.check(ast, [GroovyTokenId.COMPILATION_UNIT, 0, 6, 1, `''''''`, [
+			[GroovyTokenId.StringLiteral, 0, 6, 1, `''''''`, [
+				[GroovyTokenId.StringMarkML, 0, 3, 1, `'''`],
+				[GroovyTokenId.StringMarkML, 3, 6, 1, `'''`]
+			]]
+		]]);
+	});
+	test('Capture String Literal #5', async () => {
+		const ast = builder.ast(`'''' '''`);
+		AstChecker.check(ast, [GroovyTokenId.COMPILATION_UNIT, 0, 8, 1, `'''' '''`, [
+			[GroovyTokenId.StringLiteral, 0, 8, 1, `'''' '''`, [
+				[GroovyTokenId.StringMarkML, 0, 3, 1, `'''`],
+				[GroovyTokenId.UndeterminedChar, 3, 4, 1, `'`],
+				[GroovyTokenId.Whitespaces, 4, 5, 1, ' '],
+				[GroovyTokenId.StringMarkML, 5, 8, 1, `'''`]
+			]]
+		]]);
+	});
 });

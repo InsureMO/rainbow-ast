@@ -199,11 +199,6 @@ export enum GroovyTokenId {
 	Identifier,
 	UndeterminedChar,
 	Word,
-	At,
-	WellNumber,
-	Dollar,
-	Slash,
-	Backslash,
 	// block
 	// script command
 	ScriptCommand,

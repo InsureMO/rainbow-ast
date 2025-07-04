@@ -5,7 +5,7 @@ import {AstBuildState, AstBuildStateName, TokenId, TokenName} from '../types';
 import {PrintUtils} from './print-utils';
 
 export enum TokenCaptorStateInclusion {
-	Include = 'Incl', Exclude = 'Excl', FallbackOf = 'Fbof'
+	Include = 'Incl', Exclude = 'Excl', FallbackOf = 'Fbof', FallbackOfExclude = 'Fbex'
 }
 
 export type TokenCaptorStates<S extends AstBuildState> = Readonly<[
@@ -94,6 +94,14 @@ export class BuildUtils {
 								.filter(state => !states.includes(state))
 								.forEach((state: AstBuildState) => BuildUtils.mergeCaptorToState({
 									target, state, captors, stateNameMap, asFallback: false
+								}));
+							break;
+						}
+						case TokenCaptorStateInclusion.FallbackOfExclude: {
+							allStates
+								.filter(state => !states.includes(state))
+								.forEach((state: AstBuildState) => BuildUtils.mergeCaptorToState({
+									target, state, captors, stateNameMap, asFallback: true
 								}));
 							break;
 						}
