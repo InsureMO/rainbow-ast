@@ -17,6 +17,7 @@ import {
 	StringCaptorDefs,
 	WordsCaptorDefs
 } from './captors';
+import {IdentifiersCaptorDefs} from './captors/identifier';
 import {buildTokenPointcuts, NumericLiteralPointcutDefs} from './pointcuts';
 import {GroovyTokenId, GroovyTokenName} from './token';
 import {GroovyTokenCapturePriorities} from './token-priorities';
@@ -71,7 +72,8 @@ export const createDefaultAstBuilder = (language?: Omit<GroovyLanguage, 'captors
 			...WordsCaptorDefs,
 			...BooleanCaptorDefs,
 			...NumberCaptorDefs,
-			...StringCaptorDefs
+			...StringCaptorDefs,
+			...IdentifiersCaptorDefs
 		]),
 		pointcuts: buildTokenPointcuts([
 			...NumericLiteralPointcutDefs

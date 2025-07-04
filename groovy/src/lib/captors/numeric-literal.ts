@@ -1,11 +1,11 @@
-import {CB, EB, Incl, S, SS, T} from '../alias';
+import {CB, EB, Excl, Incl, S, SS, T} from '../alias';
 import {GroovyTokenCaptorDefs} from './types';
-import {ExclCommentNumberString} from './utils';
+import {CommentNumberString, GStringInterpolationInline} from './utils';
 
 export const BinaryNumberLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 	BinaryStartMark: {
 		patterns: ['0b;fn#Bin:!', '0B;fn#Bin:!'],
-		forStates: ExclCommentNumberString,
+		forStates: [Excl, CommentNumberString, GStringInterpolationInline],
 		onCaptured: [CB, T.BinaryLiteral, S.BinNumLiteralStarted]
 	},
 	Number: {
@@ -23,7 +23,7 @@ export const BinaryNumberLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 export const HexadecimalNumberLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 	HexStartMark: {
 		patterns: ['0x;fn#Hex:!', '0X;fn#Hex:!'],
-		forStates: ExclCommentNumberString,
+		forStates: [Excl, CommentNumberString, GStringInterpolationInline],
 		onCaptured: [CB, T.HexadecimalLiteral, S.HexNumLiteralStarted]
 	},
 	Number: {
@@ -43,7 +43,7 @@ export const DecimalLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 		patterns: 'fn#Num;fn#Num:*',
 		forks: [
 			{   // integral part
-				forStates: ExclCommentNumberString,
+				forStates: [Excl, CommentNumberString, GStringInterpolationInline],
 				onCaptured: [CB, T.DecimalLiteral, S.NumLiteralIntEd]
 			},
 			// following are excluded by first fork

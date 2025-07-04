@@ -30,6 +30,8 @@ export enum GroovyAstBuildState {
 	SlashyGStringLiteral,
 	DollarSlashyGStringLiteral,
 	/** $... */ GStringInterpolationInline,
+	/** identifier captured */ GStringInterpolationInlineIdentifierEd,
+	/** dot captured */ GStringInterpolationInlineDotEd,
 	/** ${...} */ GStringInterpolation,
 	//
 	CodeBlock,

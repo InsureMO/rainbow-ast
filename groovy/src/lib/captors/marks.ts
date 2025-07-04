@@ -1,6 +1,6 @@
-import {CB, EB, Incl, S, T} from '../alias';
+import {CB, EB, Excl, Incl, S, T} from '../alias';
 import {GroovyTokenCaptorDefs} from './types';
-import {ExclCommentNumberString} from './utils';
+import {CommentNumberString, GStringInterpolationInline} from './utils';
 
 export const CommentCaptorDefs: GroovyTokenCaptorDefs = {
 	ScriptCommandStartMark: {
@@ -10,12 +10,12 @@ export const CommentCaptorDefs: GroovyTokenCaptorDefs = {
 	},
 	SLCommentStartMark: {
 		patterns: '//',
-		forStates: ExclCommentNumberString,
+		forStates: [Excl, CommentNumberString, GStringInterpolationInline],
 		onCaptured: [CB, T.SLComment, S.SLComment]
 	},
 	MLCommentStartMark: {
 		patterns: '/*',
-		forStates: ExclCommentNumberString,
+		forStates: [Excl, CommentNumberString, GStringInterpolationInline],
 		onCaptured: [CB, T.MLComment, S.MLComment]
 	},
 	MLCommentEndMark: {
@@ -25,12 +25,12 @@ export const CommentCaptorDefs: GroovyTokenCaptorDefs = {
 	}
 };
 export const GenericTypeCaptorDefs: GroovyTokenCaptorDefs = {
-	GenericTypeStartMark: {
+	GenericTypeStartMark: { // TODO LessThan
 		patterns: '<',
-		forStates: ExclCommentNumberString,
+		forStates: [Excl, CommentNumberString, GStringInterpolationInline],
 		onCaptured: [CB, T.GenericType, S.GenericTypeStarted]
 	},
-	GenericTypeEndMark: {
+	GenericTypeEndMark: { // TODO GreaterThan
 		patterns: '>',
 		forStates: [Incl, S.GenericTypeStarted],
 		onCaptured: EB
@@ -39,7 +39,7 @@ export const GenericTypeCaptorDefs: GroovyTokenCaptorDefs = {
 export const AnnotationCaptorDefs: GroovyTokenCaptorDefs = {
 	AnnotationStartMark: {
 		patterns: '@',
-		forStates: ExclCommentNumberString,
+		forStates: [Excl, CommentNumberString, GStringInterpolationInline],
 		onCaptured: EB
 	}
 };

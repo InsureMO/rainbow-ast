@@ -1,4 +1,4 @@
-import {Excl, S} from '../alias';
+import {Excl, Incl, S, SS} from '../alias';
 import {GroovyTokenCaptorDefs} from './types';
 import {ExclNumber, NumberLiteral} from './utils';
 
@@ -53,12 +53,21 @@ export const DotCommaSemicolonCaptorDefs: GroovyTokenCaptorDefs = {
 			{forStates: ExclNumber}
 		]
 	},
-	Dot: {
-		patterns: '.',
-		forks: [
-			{forStates: ExclNumber}
-		]
-	}
+	Dot: [
+		{
+			patterns: '.',
+			forStates: [
+				Excl,
+				NumberLiteral,
+				S.GStringInterpolationInline, S.GStringInterpolationInlineIdentifierEd, S.GStringInterpolationInlineDotEd
+			]
+		},
+		{ // in gstring interpolation inline, the next char must be "JNameStartExcl$"
+			patterns: '.;fn#JNameStartExcl$:!',
+			forStates: [Incl, S.GStringInterpolationInlineIdentifierEd],
+			onCaptured: [SS, S.GStringInterpolationInlineDotEd]
+		}
+	]
 };
 export const WhitespaceTabNewlineCaptorDefs: GroovyTokenCaptorDefs = {
 	Whitespaces: {
