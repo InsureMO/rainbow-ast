@@ -7,7 +7,7 @@ import {
 	TokenCaptureStatus,
 	TokenMatcherBuilder
 } from '@rainbow-ast/core';
-import {GroovyAstBuildState, GroovyTokenCapturePriorities, GroovyTokenId} from '../../src';
+import {createDefaultAstBuilder, GroovyAstBuildState, GroovyTokenCapturePriorities, GroovyTokenId} from '../../src';
 
 describe('Captors', () => {
 	const TMB = TokenMatcherBuilder.DEFAULT;
@@ -82,5 +82,10 @@ describe('Captors', () => {
 		expect(token).not.toBeNull();
 		expect(token.id).toBe(GroovyTokenId.Identifier);
 		expect(token.text).toBe('public1');
+	});
+
+	test('Print Language', async () => {
+		const builder = createDefaultAstBuilder({verbose: true});
+		builder.printLanguage();
 	});
 });

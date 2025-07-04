@@ -2,6 +2,7 @@ import {AstBuildContext} from '../context';
 import {BlockToken, Token} from '../token';
 import {AstBuildState, AstBuildStateName} from '../types';
 import {
+	CreateAndEndBlockOnPostTokenCaptured,
 	CreateBlockTokenOnPostTokenCaptured,
 	PostTokenCapturedActionType,
 	SwitchStateToOnPostTokenCaptured,
@@ -59,14 +60,13 @@ export class TokenCaptors {
 	 * - containers of context, optional
 	 * - char index of context,
 	 */
-	capture(context: AstBuildContext): [TokenCaptureStatus, ...Array<Token>] {
+	capture(context: AstBuildContext): [TokenCaptureStatus] | [TokenCaptureStatus, Token] {
 		const [captor] = this._selector.select(context);
 		if (captor == null) {
 			return [TokenCaptureStatus.None];
 		}
 
 		const capturedToken = captor.capture(context);
-		let returnToken: Token = capturedToken;
 		const {text, line, column} = capturedToken;
 
 		const postAction = captor.postAction;
@@ -74,7 +74,6 @@ export class TokenCaptors {
 			case PostTokenCapturedActionType.CreateBlock: {
 				const [, tokenId, state] = postAction as CreateBlockTokenOnPostTokenCaptured;
 				const blockToken = new BlockToken(tokenId, capturedToken);
-				returnToken = blockToken;
 				context.appendBlock(blockToken, state);
 				break;
 			}
@@ -87,6 +86,12 @@ export class TokenCaptors {
 				context.appendAtomic(capturedToken).replaceState(state);
 				break;
 			}
+			case PostTokenCapturedActionType.CreateAndEndBlock: {
+				const [, tokenId, state] = postAction as CreateAndEndBlockOnPostTokenCaptured;
+				const blockToken = new BlockToken(tokenId, capturedToken);
+				context.appendBlock(blockToken, state).endCurrentBlock();
+				break;
+			}
 			default : {
 				context.appendAtomic(capturedToken);
 				break;
@@ -95,6 +100,6 @@ export class TokenCaptors {
 
 		context.moveCharIndexTo(context.charIndex + text.length).moveLineTo(line).moveColumnTo(column + text.length);
 
-		return [TokenCaptureStatus.Captured, returnToken];
+		return [TokenCaptureStatus.Captured, capturedToken];
 	}
 }

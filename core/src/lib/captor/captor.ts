@@ -4,16 +4,20 @@ import {Char, TokenCharMatchUsage, TokenMatcher} from '../token-match';
 import {AstBuildState, TokenId, TokenName} from '../types';
 
 export enum PostTokenCapturedActionType {
-	CreateBlock, SwitchState, EndBlock
+	CreateBlock, SwitchState, EndBlock,
+	// block contains only one child, create it, append child, and end it immediately
+	CreateAndEndBlock
 }
 
 export type CreateBlockTokenOnPostTokenCaptured = [PostTokenCapturedActionType.CreateBlock, TokenId, AstBuildState];
 export type SwitchStateToOnPostTokenCaptured = [PostTokenCapturedActionType.SwitchState, AstBuildState];
 export type EndBlockOnPostTokenCaptured = [PostTokenCapturedActionType.EndBlock];
+export type CreateAndEndBlockOnPostTokenCaptured = [PostTokenCapturedActionType.CreateAndEndBlock, TokenId, AstBuildState];
 export type PostTokenCapturedAction =
 	| CreateBlockTokenOnPostTokenCaptured
 	| SwitchStateToOnPostTokenCaptured
-	| EndBlockOnPostTokenCaptured;
+	| EndBlockOnPostTokenCaptured
+	| CreateAndEndBlockOnPostTokenCaptured;
 
 export interface TokenCaptorOptions {
 	tokenId: TokenId;

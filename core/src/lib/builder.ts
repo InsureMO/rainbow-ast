@@ -1,8 +1,9 @@
 import {Ast} from './ast';
-import {TokenCaptors, TokenCaptureStatus} from './captor';
+import {TokenCaptor, TokenCaptors, TokenCaptorSelector, TokenCaptureStatus} from './captor';
 import {AstBuildContext} from './context';
+import {TokenPointcut} from './pointcut';
 import {BlockToken, CompilationUnit, Token} from './token';
-import {Language, LanguageAstBuildStates, LanguageTokenIds} from './types';
+import {AstBuildStates, Language, LanguageAstBuildStates, LanguageTokenIds, TokenIds} from './types';
 
 export type AstBuilderConstructOptions<
 	T extends LanguageTokenIds = LanguageTokenIds,
@@ -107,5 +108,159 @@ export class AstBuilder<
 		const lines: Array<string> = [];
 		this.doStringify(token, '', lines);
 		return lines.join('\n') + '\n';
+	}
+
+	printLanguage() {
+		const {tokenIds, states, initState, tokenCapturePriorities, captors, pointcuts} = this.language;
+
+		const lines: Array<string> = [];
+		this.printTokenIds(lines, tokenIds);
+		this.printAstBuildStates(lines, states, initState);
+		this.printCaptors(lines, captors, states);
+		{
+			lines.push('# Token Capture Priority');
+			lines.push('');
+			Object.keys(tokenCapturePriorities)
+				.map(stateName => stateName === '$Default' ? -1 : states[stateName])
+				.sort()
+				.forEach(state => {
+					if (state === -1) {
+						lines.push('## Default Token Priority');
+					} else {
+						lines.push(`## For state: \`${states[state]}\`(\`${state}\`)`);
+					}
+					lines.push('');
+					const {
+						lines: tokenLines, chars: tokenChars
+					} = Object.keys(tokenCapturePriorities[state === -1 ? '$Default' : states[state]])
+						.map(tokenName => tokenIds[tokenName])
+						.sort()
+						.reduce((rst, tokenId) => {
+							const token = `\`${tokenIds[tokenId]}\`(\`${tokenId}\`)`;
+							const priority = tokenCapturePriorities[state === -1 ? '$Default' : states[state]][tokenIds[tokenId]];
+							rst.chars[0] = Math.max(rst.chars[0], token.length);
+							rst.chars[1] = Math.max(rst.chars[1], `${priority}`.length);
+							rst.lines.push([tokenId, priority]);
+							return rst;
+						}, {lines: [], chars: ['Token'.length, 'Capture Priority'.length]});
+					lines.push(`| ${'Token'.padEnd(tokenChars[0], ' ')} | ${'Capture Priority'.padEnd(tokenChars[1], ' ')} |`);
+					lines.push(`| ${''.padEnd(tokenChars[0], '-')} | ${''.padEnd(tokenChars[1], '-')} |`);
+					tokenLines
+						.sort(([id1, p1], [id2, p2]) => p1 === p2 ? (id1 - id2) : (p1 - p2))
+						.forEach(([tokenId, priority]) => {
+							const token = `\`${tokenIds[tokenId]}\`(\`${tokenId}\`)`;
+							lines.push(`| ${token.padEnd(tokenChars[0], ' ')} | ${`${priority}`.padEnd(tokenChars[1], ' ')} |`);
+						});
+					lines.push('');
+				});
+		}
+		this.printPointcuts(lines, pointcuts, tokenIds);
+
+		console.log(lines.join('\n'));
+	}
+
+	private printPointcuts(lines: Array<string>, pointcuts: Record<number, TokenPointcut>, tokenIds: TokenIds) {
+		lines.push('# Token Pointcuts');
+		lines.push('');
+		const {lines: pointcutLines, chars: pointcutChars} = Object.keys(pointcuts)
+			.map(tokenId => Number(tokenId))
+			.reduce((rst, tokenId) => {
+				const token = `\`${tokenIds[tokenId]}\`(\`${tokenId}\`)`;
+				rst.chars = Math.max(rst.chars, token.length);
+				rst.lines.push(tokenId);
+				return rst;
+			}, {lines: [], chars: 'Token'.length});
+		lines.push(`| ${'Token'.padEnd(pointcutChars, ' ')} |`);
+		lines.push(`| ${''.padEnd(pointcutChars, '-')} |`);
+		pointcutLines
+			.sort()
+			.forEach(tokenId => lines.push(`| ${`\`${tokenIds[tokenId]}\`(\`${tokenId}\`)`.padEnd(pointcutChars, ' ')} |`));
+		lines.push('');
+	}
+
+	private printCaptors(lines: Array<string>, captors: Record<number, TokenCaptors>, states: AstBuildStates) {
+		const captorsOfSelectors = (selector: TokenCaptorSelector): Array<TokenCaptor> => {
+			const {byCharCaptors: byChar, byFuncCaptors: byFunc, fallbackCaptor: fallback} = selector;
+			return [
+				...[...byChar.values()].filter(cs => cs instanceof TokenCaptor),
+				...[...byFunc.values()].filter(cs => cs instanceof TokenCaptor),
+				fallback,
+				...[...byChar.values()]
+					.filter(cs => cs instanceof TokenCaptorSelector)
+					.map(selector => captorsOfSelectors(selector))
+					.flat(),
+				...[...byFunc.values()]
+					.filter(cs => cs instanceof TokenCaptorSelector)
+					.map(selector => captorsOfSelectors(selector))
+					.flat()
+			].filter(x => x != null);
+		};
+		lines.push('# Token Captors');
+		lines.push('');
+		Object.keys(captors)
+			.map(state => Number(state))
+			.sort()
+			.forEach(state => {
+				lines.push(`## For state: \`${states[state]}\`(\`${state}\`)`);
+				lines.push('');
+				const {lines: captorLines, chars: captorChars} = captorsOfSelectors(captors[state].selector)
+					.sort((c1, c2) => c1.description.localeCompare(c2.description, (void 0), {sensitivity: 'base'}))
+					.reduce((rst, captor) => {
+						const token = `\`${captor.tokenName}\`(\`${captor.tokenId}\`)`;
+						const rule = captor.description;
+						rst.chars[0] = Math.max(rst.chars[0], token.length);
+						rst.chars[1] = Math.max(rst.chars[1], rule.length);
+						rst.lines.push([token, rule]);
+						return rst;
+					}, {lines: [], chars: ['Token'.length, 'Capture Rule'.length]});
+				lines.push(`| ${'Token'.padEnd(captorChars[0], ' ')} | ${'Capture Rule'.padEnd(captorChars[1], ' ')} |`);
+				lines.push(`| ${''.padEnd(captorChars[0], '-')} | ${''.padEnd(captorChars[1], '-')} |`);
+				[...new Set(captorLines.map(([name, id]) => {
+					return `| ${name.padEnd(captorChars[0], ' ')} | ${id.padEnd(captorChars[1], ' ')} |`;
+				}))].forEach(line => lines.push(line));
+				lines.push('');
+			});
+	}
+
+	private printAstBuildStates(lines: Array<string>, states: AstBuildStates, initState: number) {
+		lines.push('# AST Build States');
+		lines.push('');
+		lines.push(`Init state: \`${states[initState]}\`(\`${initState}\`)`);
+		lines.push('');
+		const {lines: stateLines, chars: stateChars} = Object.keys(states)
+			.filter(state => isNaN(Number(state)))
+			.reduce((rst, name) => {
+				const id = `${states[name]}`;
+				rst.chars[0] = Math.max(rst.chars[0], name.length);
+				rst.chars[1] = Math.max(rst.chars[1], id.length);
+				rst.lines.push([name, id]);
+				return rst;
+			}, {lines: [], chars: ['State Name'.length, 'State Id'.length]});
+		lines.push(`| ${'State Name'.padEnd(stateChars[0], ' ')} | ${'State Id'.padEnd(stateChars[1], ' ')} |`);
+		lines.push(`| ${''.padEnd(stateChars[0], '-')} | ${''.padEnd(stateChars[1], '-')} |`);
+		stateLines.forEach(([name, id]) => {
+			lines.push(`| ${name.padEnd(stateChars[0], ' ')} | ${id.padEnd(stateChars[1], ' ')} |`);
+		});
+		lines.push('');
+	}
+
+	private printTokenIds(lines: Array<string>, tokenIds: TokenIds) {
+		lines.push('# Token Ids');
+		lines.push('');
+		const {lines: tokenIdLines, chars: tokenIdChars} = Object.keys(tokenIds)
+			.filter(tokenId => isNaN(Number(tokenId)))
+			.reduce((rst, name) => {
+				const id = `${tokenIds[name]}`;
+				rst.chars[0] = Math.max(rst.chars[0], name.length);
+				rst.chars[1] = Math.max(rst.chars[1], id.length);
+				rst.lines.push([name, id]);
+				return rst;
+			}, {lines: [], chars: ['Token Name'.length, 'Token Id'.length]});
+		lines.push(`| ${'Token Name'.padEnd(tokenIdChars[0], ' ')} | ${'Token Id'.padEnd(tokenIdChars[1], ' ')} |`);
+		lines.push(`| ${''.padEnd(tokenIdChars[0], '-')} | ${''.padEnd(tokenIdChars[1], '-')} |`);
+		tokenIdLines.forEach(([name, id]) => {
+			lines.push(`| ${name.padEnd(tokenIdChars[0], ' ')} | ${id.padEnd(tokenIdChars[1], ' ')} |`);
+		});
+		lines.push('');
 	}
 }

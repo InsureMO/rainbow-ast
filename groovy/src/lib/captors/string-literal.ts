@@ -1,5 +1,5 @@
 import {TokenCaptorStates} from '@rainbow-ast/core';
-import {CB, EB, Incl, S, T} from '../alias';
+import {CB, CE, EB, Incl, S, T} from '../alias';
 import {GroovyAstBuildState} from '../ast-build-state';
 import {GroovyTokenCaptorDefs} from './types';
 import {ExclCommentNumberString, StringLiteral} from './utils';
@@ -164,13 +164,19 @@ export const GStringMarkCaptorDefs: GroovyTokenCaptorDefs = {
 };
 export const GStringInterpolationCaptorDefs: GroovyTokenCaptorDefs = {
 	GStringInterpolationStartMark: [
-		{ // for gstring, $ always start, even the following part is not an identifier
-			patterns: '$',
+		{
+			patterns: '$;JNameStartExcl$:!',
 			forStates: [Incl, S.SingleQuoteGStringLiteral, S.TripleQuotesGStringLiteral],
 			onCaptured: [CB, T.GStringInterpolation, S.GStringInterpolationInline]
 		},
 		{
-			patterns: '$:JNameStartExcl$:!',
+			// for gstring, $ always start interpolation, even the following part is not an identifier
+			patterns: '$',
+			forStates: [Incl, S.SingleQuoteGStringLiteral, S.TripleQuotesGStringLiteral],
+			onCaptured: [CE, T.GStringInterpolation, S.GStringInterpolationInline]
+		},
+		{
+			patterns: '$;JNameStartExcl$:!',
 			forks: [
 				{ // slashy gstring, $ which follows with JNameStart(not $) char, is start of interpolation
 					forStates: [Incl, S.SlashyGStringLiteral],

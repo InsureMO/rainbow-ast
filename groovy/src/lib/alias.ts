@@ -13,3 +13,4 @@ export const Fbex = TokenCaptorStateInclusion.FallbackOfExclude;
 export const CB = PostTokenCapturedActionType.CreateBlock;
 export const SS = PostTokenCapturedActionType.SwitchState;
 export const EB: EndBlockOnPostTokenCaptured = [PostTokenCapturedActionType.EndBlock];
+export const CE = PostTokenCapturedActionType.CreateAndEndBlock;
