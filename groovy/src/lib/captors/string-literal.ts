@@ -100,43 +100,43 @@ export const DollarSlashyGStringLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 };
 export const StringLiteralEscapeCaptorDefs: GroovyTokenCaptorDefs = {
 	StringBackspaceEscape: {
-		patterns: '\\b',
+		patterns: '{{Backslash}}b',
 		forStates: NotSlashyOrDollar
 	},
 	StringFormFeedEscape: {
-		patterns: '\\f',
+		patterns: '{{Backslash}}f',
 		forStates: NotSlashyOrDollar
 	},
 	StringNewlineEscape: {
-		patterns: '\\\\n', // \ + n
+		patterns: '{{Backslash}}n', // \ + n
 		forStates: NotSlashyOrDollar
 	},
 	StringCarriageReturnEscape: {
-		patterns: '\\\\r', // \ + r
+		patterns: '{{Backslash}}r', // \ + r
 		forStates: NotSlashyOrDollar
 	},
 	StringTabulationEscape: {
-		patterns: '\\\\t', // \ + t
+		patterns: '{{Backslash}}t', // \ + t
 		forStates: NotSlashyOrDollar
 	},
 	StringBackslashEscape: {
-		patterns: '\\\\',
+		patterns: '{{Backslash}}:2',
 		forStates: NotSlashyOrDollar
 	},
 	StringSingleQuoteEscape: {
-		patterns: '\\\'',
+		patterns: '{{Backslash}}\'',
 		forStates: NotSlashyOrDollar
 	},
-	StringDoubleQuoteEscape: {
-		patterns: '\\"',
+	StringDoubleQuotesEscape: {
+		patterns: '{{Backslash}}"',
 		forStates: NotSlashyOrDollar
 	},
 	StringDollarEscape: {
-		patterns: '\\$',
+		patterns: '{{Backslash}}$',
 		forStates: NotSlashyOrDollar
 	},
 	SlashyGStringSlashEscape: {
-		patterns: '\\/',
+		patterns: '{{Backslash}}/',
 		forStates: [Incl, S.SlashyGStringLiteral]
 	},
 	DollarSlashyGStringSlashEscape: {
@@ -148,18 +148,18 @@ export const StringLiteralEscapeCaptorDefs: GroovyTokenCaptorDefs = {
 		forStates: [Incl, S.DollarSlashyGStringLiteral]
 	},
 	StringOctal: {
-		patterns: '\\;fn#Oct:1,3',
+		patterns: '{{Backslash}};fn#Oct:1,3',
 		forStates: NotSlashyOrDollar
 	},
 	StringUnicode: {
-		patterns: '\\u;fn#Hex:4',
+		patterns: '{{Backslash}}u;fn#Hex:4',
 		forStates: [Incl, StringLiteral]
 	}
 };
 export const GStringMarkCaptorDefs: GroovyTokenCaptorDefs = {
 	StringMLNewlineEraser: {
-		patterns: '\\;\\r:?;\\n',
-		forStates: [Incl, S.TripleQuotesGStringLiteral, S.SlashyGStringLiteral, S.DollarSlashyGStringLiteral]
+		patterns: '{{Backslash}};{{CarriageReturn}}:?;{{Newline}}n',
+		forStates: [Incl, S.TripleQuotesStringLiteral, S.TripleQuotesGStringLiteral, S.SlashyGStringLiteral, S.DollarSlashyGStringLiteral]
 	}
 };
 export const GStringInterpolationCaptorDefs: GroovyTokenCaptorDefs = {

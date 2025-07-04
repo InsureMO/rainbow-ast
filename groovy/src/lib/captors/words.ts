@@ -20,7 +20,7 @@ export const WordCaptorDefs: GroovyTokenCaptorDefs = {
 		forStates: [Incl, Comment]
 	},
 	Backslash: {
-		patterns: '\\',
+		patterns: '{{Backslash}}',
 		forStates: [Incl, Comment]
 	}
 };

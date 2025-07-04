@@ -29,7 +29,7 @@ export const OperatorPatterns = {
 	Not: '!',
 	Bitnot: '~',
 	Question: '?',
-	Colon: '\\:',
+	Colon: '{{Colon}}',
 	Equal: '==',
 	LessThanOrEqual: '<=',
 	GreaterThanOrEqual: '>=',

@@ -42,7 +42,7 @@ export const BracketCaptorDefs: GroovyTokenCaptorDefs = {
 };
 export const DotCommaSemicolonCaptorDefs: GroovyTokenCaptorDefs = {
 	Semicolon: {
-		patterns: '\\;',
+		patterns: '{{Semicolon}}',
 		forks: [
 			{forStates: ExclNumber}
 		]
@@ -62,15 +62,15 @@ export const DotCommaSemicolonCaptorDefs: GroovyTokenCaptorDefs = {
 };
 export const WhitespaceTabNewlineCaptorDefs: GroovyTokenCaptorDefs = {
 	Whitespaces: {
-		patterns: '\\ ;\\ :*',
+		patterns: '{{Space}};{{Space}}:*',
 		forStates: ExclNumber
 	},
 	Tabs: {
-		patterns: '\\t;\\t:*',
+		patterns: '{{Tab}};{{Tab}}:*',
 		forStates: ExclNumber
 	},
 	Newline: {
-		patterns: '\\r:?;\\n',
+		patterns: '{{CarriageReturn}}:?;{{Newline}}',
 		forStates: [
 			Excl,
 			NumberLiteral,

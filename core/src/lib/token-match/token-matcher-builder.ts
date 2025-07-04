@@ -20,37 +20,6 @@ const BySemicolon = /(?<!\\);/g;
 const ByColon = /(?<!\\):/g;
 const CharMatchFnHead = 'fn#';
 
-const parseCharMatchRule = (namePattern: string): string => {
-	if (namePattern.startsWith(CharMatchFnHead) && namePattern.length > 3) {
-		return namePattern;
-	}
-
-	return namePattern.split('').reduce((rst, char, index, chars) => {
-		if (rst.ignore) {
-			rst.ignore = false;
-			return rst;
-		}
-		if (char === '\\') {
-			rst.ignore = true;
-			const next = chars[index + 1];
-			switch (next) {
-				// @formatter:off
-				case '\\': { rst.text += '\\';                     break; }
-				case ' ':  { rst.text += ' ';                      break; }
-				case 't':  { rst.text += '\t';                     break; }
-				case ';':  { rst.text += ';';                      break; }
-				case ':':  { rst.text += ':';                      break; }
-				case 'r':  { rst.text += '\r';                     break; }
-				case 'n':  { rst.text += '\n';                     break; }
-				default:   { rst.text += '\\'; rst.ignore = false; break; }
-				// @formatter:on
-			}
-		} else {
-			rst.text += char;
-		}
-		return rst;
-	}, {text: '', ignore: false}).text;
-};
 const parseCharMatchRestriction = (rule: Char | Chars, restrictionPattern?: string): CharMatchRestriction => {
 	const [times1, times2] = restrictionPattern == null
 		? [(void 0), (void 0)]
@@ -95,12 +64,23 @@ const parseCharMatch = (rulePattern: string): ParsedCharMatch | undefined => {
 	} else {
 		rule = rule.trim();
 	}
+	rule = rule.replace(/{{Backslash}}|{{Tab}}|{{CarriageReturn}}|{{Newline}}|{{Colon}}|{{Semicolon}}|{{Space}}/g, (match) => {
+		return {
+			'{{Backslash}}': '\\',
+			'{{Tab}}': '\t',
+			'{{CarriageReturn}}': '\r',
+			'{{Newline}}': '\n',
+			'{{Colon}}': ':',
+			'{{Semicolon}}': ';',
+			'{{Space}}': ' ',
+		}[match];
+	});
 
 	if (rule.length === 0) {
 		return (void 0);
 	}
 
-	let parsedRule = parseCharMatchRule(rule);
+	let parsedRule = rule;
 	const parsedRestriction = parseCharMatchRestriction(parsedRule, restriction);
 	if ((parsedRestriction as CharMatchThenEndBeforeMe).endBeforeMe) {
 		// only the first char is accepted when restriction is CharMatchThenEndBeforeMe
@@ -121,13 +101,13 @@ const parseCharMatches = (pattern: string): Array<ParsedCharMatch> => {
 const buildCharMatchRuleDescription = (match: ParsedCharMatch): string => {
 	return match.rule.replace(/[\\\t\n\r;: ]/g, (match) => {
 		return {
-			'\\': '\\\\',
-			'\t': '\\t',
-			'\r': '\\r',
-			'\n': '\\n',
-			':': '\\:',
-			';': '\\;',
-			' ': '\\ '
+			'\\': '{{Backslash}}',
+			'\t': '{{Tab}}',
+			'\r': '{{CarriageReturn}}',
+			'\n': '{{Newline}}',
+			':': '{{Colon}}',
+			';': '{{Semicolon}}',
+			' ': '{{Space}}'
 		}[match];
 	});
 };
@@ -250,12 +230,12 @@ export class TokenMatcherBuilder {
 	 * - or "fn#function name" (starts with "fn#"), function signature is {@link CharMatchFn}, and could be found by {@link CharMatchFunctions.findByName}.
 	 * 4. in rule part, use escape to define special char:
 	 * - "\ ": a blank. escaping is only required when the space character is at the beginning or the end of the rule.
-	 * - "\\": a backslash. it is only necessary to use it when the next "\" is an escape character.
-	 *   For example, "\\t" will be recognized as chars "\" and "t", while `\\\t` will be recognized as chars "\" and a tabulation.
 	 * - "\;": a semicolon,
 	 * - "\:": a colon,
 	 * - "\r": a carriage return,
-	 * - "\n": a new line.
+	 * - "\n": a new line,
+	 * - "\t": a tabulation,
+	 * - "{{Backslash}}": a backslash
 	 *
 	 * e.g.
 	 * private                               chars "private", 1 time

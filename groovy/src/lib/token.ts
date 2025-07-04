@@ -95,7 +95,7 @@ export enum GroovyTokenId {
 	StringTabulationEscape, // \t
 	StringBackslashEscape, // \\
 	StringSingleQuoteEscape, // \', in string, or optional in multiple string, gstring and multiple line gstring
-	StringDoubleQuoteEscape, // \" in gstring, or optional in multiple string and multiple line gstring
+	StringDoubleQuotesEscape, // \" in gstring, or optional in multiple string and multiple line gstring
 	StringDollarEscape, // \$, not for slashy gstring or dollar slashy gstring
 	StringOctal, // \ in octal escape
 	StringUnicode, // \u in unicode escape
