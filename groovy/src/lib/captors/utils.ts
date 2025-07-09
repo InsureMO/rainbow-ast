@@ -1,4 +1,4 @@
-import {BuildUtils, TokenCaptorOfStates, TokenCaptorStates, TokenMatcherBuilder} from '@rainbow-ast/core';
+import {BuildUtils, Token, TokenCaptorOfStates, TokenCaptorStates, TokenMatcherBuilder} from '@rainbow-ast/core';
 import {Excl, Incl, S} from '../alias';
 import {GroovyAstBuildState, GroovyAstBuildStateName} from '../ast-build-state';
 import {GroovyTokenId, GroovyTokenName} from '../token';
@@ -45,6 +45,10 @@ export const ExclCommentNumberStringGStringInterpolationInline: TokenCaptorState
 
 export const GroovyTokenMatcherBuilder = TokenMatcherBuilder.create({LongestKeywordLength: 'synchronized'.length});
 
+export const isOperator = (token: Token): boolean => {
+	const tokenId = token.id;
+	return tokenId >= GroovyTokenId.RangeInclusive && tokenId <= GroovyTokenId.InstanceOf;
+};
 export const buildTokenCaptors = (defs: Array<GroovyTokenCaptorDefs>): TokenCaptorOfStates<GroovyAstBuildStateName> => {
 	return BuildUtils.buildTokenCaptors({
 		defs,

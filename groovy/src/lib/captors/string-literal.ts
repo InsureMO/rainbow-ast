@@ -3,7 +3,7 @@ import {CB, CE, EB, Incl, S, T} from '../alias';
 import {GroovyAstBuildState} from '../ast-build-state';
 import {GroovyTokenId} from '../token';
 import {GroovyTokenCaptorDefs} from './types';
-import {ExclCommentNumberStringGStringInterpolationInline, StringLiteral} from './utils';
+import {ExclCommentNumberStringGStringInterpolationInline, isOperator, StringLiteral} from './utils';
 
 const NotSlashyOrDollar: TokenCaptorStates<GroovyAstBuildState> = [Incl, S.SingleQuoteStringLiteral, S.TripleQuotesStringLiteral, S.SingleQuoteGStringLiteral, S.TripleQuotesGStringLiteral];
 
@@ -67,16 +67,66 @@ export const GStringLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 		]
 	}
 };
+
+/**
+ * at least one of the following conditions is met, it is allowed:
+ * 1. after operator, operator must at same line
+ * 2. after semicolon, dot, lbrace, lbrack, lparen, gstring interpolation lbrace start mark
+ * 3.
+ */
+export const IsSlashyGStringStartAllowed = (context: AstBuildContext): boolean => {
+	const block = context.currentBlock;
+	const line = context.line;
+	const children = block.children;
+	if (children.length === 0) {
+		return true;
+	}
+
+	let childIndex = children.length - 1;
+	let child = children[childIndex];
+	while (childIndex >= 0) {
+		const childTokenId = child.id;
+		switch (childTokenId) {
+			case GroovyTokenId.ScriptCommand:
+			case GroovyTokenId.SLComment:
+			case GroovyTokenId.MLComment:
+			case GroovyTokenId.Whitespaces:
+			case GroovyTokenId.Tabs: {
+				// ignore above token
+				childIndex--;
+				child = children[childIndex];
+				break;
+			}
+			case GroovyTokenId.Semicolon:
+			case GroovyTokenId.Dot:
+			case GroovyTokenId.LBrace:
+			case GroovyTokenId.LBrack:
+			case GroovyTokenId.LParen:
+			case GroovyTokenId.GStringInterpolationLBraceStartMark: {
+				// the first not ignored token is one of above, allowed
+				return true;
+			}
+			default: {
+				if (child.line !== line) {
+					// slash is first not ignored token of line, allowed
+					return true;
+				} else {
+					// at same line and after operator, allowed; otherwise not allowed.
+					return isOperator(child);
+				}
+			}
+		}
+	}
+	// only ignored tokens in front, allowed
+	return true;
+};
 export const SlashyGStringLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 	SlashyGStringMark: {
 		patterns: '/',
 		forks: [
 			{
-				// TODO has more prerequisites,
-				//  1. after operators
-				//  2. is start of statement
-				//  3. is start of line
 				forStates: ExclCommentNumberStringGStringInterpolationInline,
+				enabledWhen: IsSlashyGStringStartAllowed,
 				onCaptured: [CB, T.SlashyGStringLiteral, S.SlashyGStringLiteral]
 			},
 			// following are excluded by first fork
@@ -169,15 +219,16 @@ export const GStringMarkCaptorDefs: GroovyTokenCaptorDefs = {
 		}
 	]
 };
+
 /**
  * dollar slashy gstring, basically same as slashy string, but has special scenarios as below:
  * 1. when $ is follows $$ directly, it creates interpolation only when there is at least one interpolation before me
  * 2. when $ is follows $/ directly, it is a char anyway
  * 3. when $ is follows multiple $$s, and before these $$s is $/, it is a char anyway
  */
-const interpolationStartAllowed = (context: AstBuildContext): boolean => {
-	const blockToken = context.currentBlock;
-	const children = blockToken.children;
+export const IsInterpolationInDollarSlashyGStringStartAllowed = (context: AstBuildContext): boolean => {
+	const block = context.currentBlock;
+	const children = block.children;
 	const lastChildIndex = children.length - 1;
 	const lastChild = children[lastChildIndex];
 	if (lastChild.id === GroovyTokenId.DollarSlashyGStringSlashEscape) {
@@ -232,7 +283,7 @@ export const GStringInterpolationCaptorDefs: GroovyTokenCaptorDefs = {
 				},
 				{
 					forStates: [Incl, S.DollarSlashyGStringLiteral],
-					enabledWhen: interpolationStartAllowed,
+					enabledWhen: IsInterpolationInDollarSlashyGStringStartAllowed,
 					onCaptured: [CB, T.GStringInterpolation, S.GStringInterpolationInline]
 				}
 			]
@@ -247,7 +298,7 @@ export const GStringInterpolationCaptorDefs: GroovyTokenCaptorDefs = {
 			},
 			{
 				forStates: [Incl, S.DollarSlashyGStringLiteral],
-				enabledWhen: interpolationStartAllowed,
+				enabledWhen: IsInterpolationInDollarSlashyGStringStartAllowed,
 				onCaptured: [CB, T.GStringInterpolation, S.GStringInterpolation]
 			}
 		]

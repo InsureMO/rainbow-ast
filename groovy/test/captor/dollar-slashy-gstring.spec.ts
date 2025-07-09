@@ -74,9 +74,9 @@ describe('Capture Dollar Slashy GString Literal', () => {
 		]]);
 	});
 	test('Dollar Slashy GString Literal: Interpolation without brace', async () => {
-		const ast = builder.ast('$/$$ $$$abc $/$abc $/$$$abc $abc. $$$abc $/$abc $/$$$abc $1/$');
-		AstChecker.check(ast, [GroovyTokenId.COMPILATION_UNIT, 0, 61, 1, '$/$$ $$$abc $/$abc $/$$$abc $abc. $$$abc $/$abc $/$$$abc $1/$', [
-			[GroovyTokenId.DollarSlashyGStringLiteral, 0, 61, 1, '$/$$ $$$abc $/$abc $/$$$abc $abc. $$$abc $/$abc $/$$$abc $1/$', [
+		const ast = builder.ast('$/$$ $$$abc $/$abc $/$$$abc $abc. $$$abc $/$abc $/$$$abc $1$abc$abc/$');
+		AstChecker.check(ast, [GroovyTokenId.COMPILATION_UNIT, 0, 69, 1, '$/$$ $$$abc $/$abc $/$$$abc $abc. $$$abc $/$abc $/$$$abc $1$abc$abc/$', [
+			[GroovyTokenId.DollarSlashyGStringLiteral, 0, 69, 1, '$/$$ $$$abc $/$abc $/$$$abc $abc. $$$abc $/$abc $/$$$abc $1$abc$abc/$', [
 				[GroovyTokenId.DollarSlashyGStringStartMark, 0, 2, 1, '$/'],
 				[GroovyTokenId.DollarSlashyGStringDollarEscape, 2, 4, 1, '$$'],
 				[GroovyTokenId.Whitespaces, 4, 5, 1, ' '],
@@ -116,7 +116,15 @@ describe('Capture Dollar Slashy GString Literal', () => {
 				[GroovyTokenId.Whitespaces, 56, 57, 1, ' '],
 				[GroovyTokenId.UndeterminedChar, 57, 58, 1, '$'],
 				[GroovyTokenId.Word, 58, 59, 1, '1'],
-				[GroovyTokenId.DollarSlashyGStringEndMark, 59, 61, 1, '/$']
+				[GroovyTokenId.GStringInterpolation, 59, 63, 1, '$abc', [
+					[GroovyTokenId.GStringInterpolationStartMark, 59, 60, 1, '$'],
+					[GroovyTokenId.Identifier, 60, 63, 1, 'abc']
+				]],
+				[GroovyTokenId.GStringInterpolation, 63, 67, 1, '$abc', [
+					[GroovyTokenId.GStringInterpolationStartMark, 63, 64, 1, '$'],
+					[GroovyTokenId.Identifier, 64, 67, 1, 'abc']
+				]],
+				[GroovyTokenId.DollarSlashyGStringEndMark, 67, 69, 1, '/$']
 			]]
 		]]);
 	});

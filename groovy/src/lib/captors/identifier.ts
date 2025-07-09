@@ -3,18 +3,17 @@ import {GroovyTokenCaptorDefs} from './types';
 import {ExclCommentNumberStringGStringInterpolationInline} from './utils';
 
 export const IdentifierCaptorDefs: GroovyTokenCaptorDefs = {
-	Identifier: {
-		patterns: 'fn#JNameStart;fn#JNamePart:*;fn#NotJNamePart:!',
-		forks: [
-			{
-				forStates: ExclCommentNumberStringGStringInterpolationInline
-			},
-			{
-				forStates: [Incl, S.GStringInterpolationInline, S.GStringInterpolationInlineDotEd],
-				onCaptured: [SS, S.GStringInterpolationInlineIdentifierEd]
-			}
-		]
-	}
+	Identifier: [
+		{
+			patterns: 'fn#JNameStart;fn#JNamePart:*;fn#NotJNamePart:!',
+			forStates: ExclCommentNumberStringGStringInterpolationInline
+		},
+		{
+			patterns: 'fn#JNameStartExcl$;fn#JNameStartExcl$:*;fn#$OrNotJNameStart:!',
+			forStates: [Incl, S.GStringInterpolationInline, S.GStringInterpolationInlineDotEd],
+			onCaptured: [SS, S.GStringInterpolationInlineIdentifierEd]
+		}
+	]
 };
 export const IdentifiersCaptorDefs: Array<GroovyTokenCaptorDefs> = [
 	IdentifierCaptorDefs
