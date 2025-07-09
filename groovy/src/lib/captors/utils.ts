@@ -36,13 +36,12 @@ export const StringLiteral = [
 export const GStringInterpolationInline = [
 	S.GStringInterpolationInline,
 	S.GStringInterpolationInlineIdentifierEd,
-	S.GStringInterpolationInlineDotEd,
-]
-export const CommentString = [...Comment, ...StringLiteral];
-export const CommentNumberString = [...Comment, ...NumberLiteral, ...StringLiteral];
+	S.GStringInterpolationInlineDotEd
+];
 
-export const InclCommentString: TokenCaptorStates<GroovyAstBuildState> = [Incl, CommentString];
-export const ExclNumber: TokenCaptorStates<GroovyAstBuildState> = [Excl, NumberLiteral];
+export const InclCommentString: TokenCaptorStates<GroovyAstBuildState> = [Incl, Comment, StringLiteral];
+export const ExclNumberGStringInterpolationInline: TokenCaptorStates<GroovyAstBuildState> = [Excl, NumberLiteral, GStringInterpolationInline];
+export const ExclCommentNumberStringGStringInterpolationInline: TokenCaptorStates<GroovyAstBuildState> = [Excl, Comment, NumberLiteral, StringLiteral, GStringInterpolationInline];
 
 export const GroovyTokenMatcherBuilder = TokenMatcherBuilder.create({LongestKeywordLength: 'synchronized'.length});
 

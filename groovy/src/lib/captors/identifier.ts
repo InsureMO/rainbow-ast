@@ -1,16 +1,13 @@
-import {Excl, Incl, S, SS} from '../alias';
+import {Incl, S, SS} from '../alias';
 import {GroovyTokenCaptorDefs} from './types';
-import {CommentNumberString} from './utils';
+import {ExclCommentNumberStringGStringInterpolationInline} from './utils';
 
 export const IdentifierCaptorDefs: GroovyTokenCaptorDefs = {
 	Identifier: {
 		patterns: 'fn#JNameStart;fn#JNamePart:*;fn#NotJNamePart:!',
 		forks: [
 			{
-				forStates: [
-					Excl, CommentNumberString,
-					S.GStringInterpolationInline, S.GStringInterpolationInlineIdentifierEd, S.GStringInterpolationInlineDotEd
-				]
+				forStates: ExclCommentNumberStringGStringInterpolationInline
 			},
 			{
 				forStates: [Incl, S.GStringInterpolationInline, S.GStringInterpolationInlineDotEd],

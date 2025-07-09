@@ -3,6 +3,8 @@ import {AtomicToken} from '../token';
 import {Char, TokenCharMatchUsage, TokenMatcher} from '../token-match';
 import {AstBuildState, TokenId, TokenName} from '../types';
 
+export type TokenCaptorAvailableCheck = (context: AstBuildContext) => boolean;
+
 export enum PostTokenCapturedActionType {
 	CreateBlock, SwitchState, EndBlock,
 	// block contains only one child, create it, append child, and end it immediately
@@ -23,6 +25,7 @@ export interface TokenCaptorOptions {
 	tokenId: TokenId;
 	name: TokenName;
 	matcher: TokenMatcher;
+	availableCheck?: TokenCaptorAvailableCheck;
 	postAction?: PostTokenCapturedAction;
 }
 
@@ -34,12 +37,14 @@ export class TokenCaptor {
 	private readonly _tokenId: TokenId;
 	private readonly _tokenName: TokenName;
 	private readonly _matcher: TokenMatcher;
+	private readonly _availableCheck: TokenCaptorAvailableCheck;
 	private readonly _postAction?: PostTokenCapturedAction;
 
 	constructor(options: TokenCaptorOptions) {
 		this._tokenId = options.tokenId;
 		this._tokenName = options.name;
 		this._matcher = options.matcher;
+		this._availableCheck = options.availableCheck;
 		this._postAction = options.postAction;
 	}
 
@@ -55,7 +60,11 @@ export class TokenCaptor {
 		return this._matcher;
 	}
 
-	get postAction(): PostTokenCapturedAction {
+	get availableCheck(): TokenCaptorAvailableCheck | undefined {
+		return this._availableCheck;
+	}
+
+	get postAction(): PostTokenCapturedAction | undefined {
 		return this._postAction;
 	}
 
@@ -105,20 +114,9 @@ export class TokenCaptor {
 			}
 		}
 
-		let {line, column} = context;
-		const text = chars.join('');
-		// const lastNewlineIndex = text.lastIndexOf('\n');
-		// if (lastNewlineIndex === -1) {
-		// 	// no newline
-		// 	column = column + chars.length;
-		// } else {
-		// 	line = line + text.split('\n').length - 1;
-		// 	column = text.slice(lastNewlineIndex).length;
-		// }
-
 		return new AtomicToken({
 			id: this._tokenId, text: chars.join(''),
-			start: context.charIndex, line, column
+			start: context.charIndex, line: context.line, column: context.column
 		});
 	}
 }

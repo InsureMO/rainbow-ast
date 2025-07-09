@@ -67,7 +67,7 @@ describe('Capture GString Literal ML', () => {
 			]]
 		]]);
 	});
-	test('GString Literal ML: Newline escape', async () => {
+	test('GString Literal ML: Newline escape #1', async () => {
 		const ast = builder.ast('""" \\\n"""');
 		AstChecker.check(ast, [GroovyTokenId.COMPILATION_UNIT, 0, 9, 1, '""" \\\n"""', [
 			[GroovyTokenId.GStringLiteral, 0, 9, 1, '""" \\\n"""', [
@@ -76,6 +76,18 @@ describe('Capture GString Literal ML', () => {
 				[GroovyTokenId.StringMLNewlineEraser, 4, 5, 1, '\\'],
 				[GroovyTokenId.Newline, 5, 6, 1, '\n'],
 				[GroovyTokenId.GStringMarkML, 6, 9, 2, '"""']
+			]]
+		]]);
+	});
+	test('GString Literal ML: Newline escape #2', async () => {
+		const ast = builder.ast('""" \\\r\n"""');
+		AstChecker.check(ast, [GroovyTokenId.COMPILATION_UNIT, 0, 10, 1, '""" \\\r\n"""', [
+			[GroovyTokenId.GStringLiteral, 0, 10, 1, '""" \\\r\n"""', [
+				[GroovyTokenId.GStringMarkML, 0, 3, 1, '"""'],
+				[GroovyTokenId.Whitespaces, 3, 4, 1, ' '],
+				[GroovyTokenId.StringMLNewlineEraser, 4, 5, 1, '\\'],
+				[GroovyTokenId.Newline, 5, 7, 1, '\r\n'],
+				[GroovyTokenId.GStringMarkML, 7, 10, 2, '"""']
 			]]
 		]]);
 	});
@@ -89,6 +101,19 @@ describe('Capture GString Literal ML', () => {
 					[GroovyTokenId.GStringInterpolationStartMark, 4, 5, 1, '$']
 				]],
 				[GroovyTokenId.GStringMarkML, 5, 8, 1, '"""']
+			]]
+		]]);
+	});
+	test('GString Literal ML: Interpolation with brace', async () => {
+		const ast = builder.ast('"""${}"""');
+		AstChecker.check(ast, [GroovyTokenId.COMPILATION_UNIT, 0, 9, 1, '"""${}"""', [
+			[GroovyTokenId.GStringLiteral, 0, 9, 1, '"""${}"""', [
+				[GroovyTokenId.GStringMarkML, 0, 3, 1, '"""'],
+				[GroovyTokenId.GStringInterpolation, 3, 6, 1, '${}', [
+					[GroovyTokenId.GStringInterpolationLBraceStartMark, 3, 5, 1, '${'],
+					[GroovyTokenId.GStringInterpolationRBraceEndMark, 5, 6, 1, '}']
+				]],
+				[GroovyTokenId.GStringMarkML, 6, 9, 1, '"""']
 			]]
 		]]);
 	});

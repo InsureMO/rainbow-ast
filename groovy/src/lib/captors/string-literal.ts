@@ -1,8 +1,9 @@
-import {TokenCaptorStates} from '@rainbow-ast/core';
-import {CB, CE, EB, Excl, Incl, S, T} from '../alias';
+import {AstBuildContext, TokenCaptorStates} from '@rainbow-ast/core';
+import {CB, CE, EB, Incl, S, T} from '../alias';
 import {GroovyAstBuildState} from '../ast-build-state';
+import {GroovyTokenId} from '../token';
 import {GroovyTokenCaptorDefs} from './types';
-import {CommentNumberString, GStringInterpolationInline, StringLiteral} from './utils';
+import {ExclCommentNumberStringGStringInterpolationInline, StringLiteral} from './utils';
 
 const NotSlashyOrDollar: TokenCaptorStates<GroovyAstBuildState> = [Incl, S.SingleQuoteStringLiteral, S.TripleQuotesStringLiteral, S.SingleQuoteGStringLiteral, S.TripleQuotesGStringLiteral];
 
@@ -11,7 +12,7 @@ export const StringLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 		patterns: '\'',
 		forks: [
 			{
-				forStates: [Excl, CommentNumberString, GStringInterpolationInline],
+				forStates: ExclCommentNumberStringGStringInterpolationInline,
 				onCaptured: [CB, T.StringLiteral, S.SingleQuoteStringLiteral]
 			},
 			// following are excluded by first fork
@@ -25,7 +26,7 @@ export const StringLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 		patterns: '\':3',
 		forks: [
 			{
-				forStates: [Excl, CommentNumberString, GStringInterpolationInline],
+				forStates: ExclCommentNumberStringGStringInterpolationInline,
 				onCaptured: [CB, T.StringLiteral, S.TripleQuotesStringLiteral]
 			},
 			// following are excluded by first fork
@@ -41,7 +42,7 @@ export const GStringLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 		patterns: '"',
 		forks: [
 			{
-				forStates: [Excl, CommentNumberString, GStringInterpolationInline],
+				forStates: ExclCommentNumberStringGStringInterpolationInline,
 				onCaptured: [CB, T.GStringLiteral, S.SingleQuoteGStringLiteral]
 			},
 			// following are excluded by first fork
@@ -55,7 +56,7 @@ export const GStringLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 		patterns: '":3',
 		forks: [
 			{
-				forStates: [Excl, CommentNumberString, GStringInterpolationInline],
+				forStates: ExclCommentNumberStringGStringInterpolationInline,
 				onCaptured: [CB, T.GStringLiteral, S.TripleQuotesGStringLiteral]
 			},
 			// following are excluded by first fork
@@ -75,7 +76,7 @@ export const SlashyGStringLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 				//  1. after operators
 				//  2. is start of statement
 				//  3. is start of line
-				forStates: [Excl, CommentNumberString, GStringInterpolationInline],
+				forStates: ExclCommentNumberStringGStringInterpolationInline,
 				onCaptured: [CB, T.SlashyGStringLiteral, S.SlashyGStringLiteral]
 			},
 			// following are excluded by first fork
@@ -89,7 +90,7 @@ export const SlashyGStringLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 export const DollarSlashyGStringLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 	DollarSlashyGStringStartMark: {
 		patterns: '$/',
-		forStates: [Excl, CommentNumberString, GStringInterpolationInline],
+		forStates: ExclCommentNumberStringGStringInterpolationInline,
 		onCaptured: [CB, T.DollarSlashyGStringLiteral, S.DollarSlashyGStringLiteral]
 	},
 	DollarSlashyGStringEndMark: {
@@ -168,6 +169,47 @@ export const GStringMarkCaptorDefs: GroovyTokenCaptorDefs = {
 		}
 	]
 };
+/**
+ * dollar slashy gstring, basically same as slashy string, but has special scenarios as below:
+ * 1. when $ is follows $$ directly, it creates interpolation only when there is at least one interpolation before me
+ * 2. when $ is follows $/ directly, it is a char anyway
+ * 3. when $ is follows multiple $$s, and before these $$s is $/, it is a char anyway
+ */
+const interpolationStartAllowed = (context: AstBuildContext): boolean => {
+	const blockToken = context.currentBlock;
+	const children = blockToken.children;
+	const lastChildIndex = children.length - 1;
+	const lastChild = children[lastChildIndex];
+	if (lastChild.id === GroovyTokenId.DollarSlashyGStringSlashEscape) {
+		// previous is slash escape, not allow
+		return false;
+	}
+	if (lastChild.id !== GroovyTokenId.DollarSlashyGStringDollarEscape) {
+		// previous is not slash escape or dollar escape, allow
+		return true;
+	}
+
+	// previous is dollar escape
+	let childIndex = lastChildIndex - 1;
+	while (childIndex > 0) {
+		const child = children[childIndex];
+		if (child.id === GroovyTokenId.DollarSlashyGStringDollarEscape) {
+			// a dollar escape, continue check
+			childIndex--;
+		} else if (child.id === GroovyTokenId.DollarSlashyGStringSlashEscape) {
+			// only dollar escape between slash escape and last dollar escape, not allow
+			return false;
+		} else if (child.id === GroovyTokenId.GStringInterpolation) {
+			// interpolation exists, allow
+			return true;
+		} else {
+			// other token, continue check
+			childIndex--;
+		}
+	}
+	// no interpolation found, not allow
+	return false;
+};
 export const GStringInterpolationCaptorDefs: GroovyTokenCaptorDefs = {
 	GStringInterpolationStartMark: [
 		{
@@ -189,11 +231,8 @@ export const GStringInterpolationCaptorDefs: GroovyTokenCaptorDefs = {
 					onCaptured: [CB, T.GStringInterpolation, S.GStringInterpolationInline]
 				},
 				{
-					// TODO dollar slashy gstring, basically same as slashy string, but has special scenarios as below:
-					//  1. when $ is follows $$ directly, it creates interpolation only when there is at least one interpolation before me
-					//  2. when $ is follows $/ directly, it is a char anyway
-					//  3. when $ is follows multiple $$s, and before these $$s is $/, it is a char anyway
 					forStates: [Incl, S.DollarSlashyGStringLiteral],
+					enabledWhen: interpolationStartAllowed,
 					onCaptured: [CB, T.GStringInterpolation, S.GStringInterpolationInline]
 				}
 			]
@@ -207,11 +246,8 @@ export const GStringInterpolationCaptorDefs: GroovyTokenCaptorDefs = {
 				onCaptured: [CB, T.GStringInterpolation, S.GStringInterpolation]
 			},
 			{
-				// TODO dollar slashy gstring, basically same as slashy string, but has special scenarios as below:
-				//  1. when "${" is follows $$ directly, it creates interpolation only when there is at least one interpolation before me
-				//  2. when "${" is follows $/ directly, it is a char anyway
-				//  3. when "${" is follows multiple $$s, and before these $$s is $/, it is a char anyway
 				forStates: [Incl, S.DollarSlashyGStringLiteral],
+				enabledWhen: interpolationStartAllowed,
 				onCaptured: [CB, T.GStringInterpolation, S.GStringInterpolation]
 			}
 		]

@@ -163,7 +163,7 @@ export class TokenCaptorSelector {
 	 * found selectors are matched the heading part
 	 */
 	// @formatter:off
-	private findCaptorsAndSelectors(char: Char): { captors: Array<TokenCaptor>, selectors: Array<TokenCaptorSelector> } {
+	private findCaptorsAndSelectors(char: Char, context: AstBuildContext): { captors: Array<TokenCaptor>, selectors: Array<TokenCaptorSelector> } {
 		// @formatter:on
 		return [
 			this._byChar.get(char),
@@ -171,7 +171,10 @@ export class TokenCaptorSelector {
 		].filter(matched => matched != null)
 			.reduce((grouped, matched) => {
 				if (matched instanceof TokenCaptor) {
-					grouped.captors.push(matched);
+					const availableCheck = matched.availableCheck;
+					if (availableCheck == null || availableCheck(context)) {
+						grouped.captors.push(matched);
+					}
 				} else {
 					grouped.selectors.push(matched);
 				}
@@ -262,7 +265,7 @@ export class TokenCaptorSelector {
 		const char = document[charIndex];
 
 		// find captors and selectors by given char
-		const {captors: matchedCaptors, selectors: matchedSelectors} = this.findCaptorsAndSelectors(char);
+		const {captors: matchedCaptors, selectors: matchedSelectors} = this.findCaptorsAndSelectors(char, context);
 		// check the captured chars length, find the longest
 		// theoretically, there should be only one captor
 		const captured = [

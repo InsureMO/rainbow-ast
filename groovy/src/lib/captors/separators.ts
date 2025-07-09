@@ -1,42 +1,42 @@
 import {Excl, Incl, S, SS} from '../alias';
 import {GroovyTokenCaptorDefs} from './types';
-import {ExclNumber, NumberLiteral} from './utils';
+import {ExclNumberGStringInterpolationInline, GStringInterpolationInline, NumberLiteral} from './utils';
 
 export const BracketCaptorDefs: GroovyTokenCaptorDefs = {
 	LBrace: {
 		patterns: '{',
 		forks: [
-			{forStates: ExclNumber}
+			{forStates: ExclNumberGStringInterpolationInline}
 		]
 	},
 	RBrace: {
 		patterns: '}',
 		forks: [
-			{forStates: [Excl, NumberLiteral, S.GStringInterpolation]}
+			{forStates: [Excl, NumberLiteral, GStringInterpolationInline, S.GStringInterpolation]}
 		]
 	},
 	LParen: {
 		patterns: '(',
 		forks: [
-			{forStates: ExclNumber}
+			{forStates: ExclNumberGStringInterpolationInline}
 		]
 	},
 	RParen: {
 		patterns: ')',
 		forks: [
-			{forStates: ExclNumber}
+			{forStates: ExclNumberGStringInterpolationInline}
 		]
 	},
 	LBrack: {
 		patterns: '[',
 		forks: [
-			{forStates: ExclNumber}
+			{forStates: ExclNumberGStringInterpolationInline}
 		]
 	},
 	RBrack: {
 		patterns: ']',
 		forks: [
-			{forStates: ExclNumber}
+			{forStates: ExclNumberGStringInterpolationInline}
 		]
 	}
 };
@@ -44,23 +44,19 @@ export const DotCommaSemicolonCaptorDefs: GroovyTokenCaptorDefs = {
 	Semicolon: {
 		patterns: '{{Semicolon}}',
 		forks: [
-			{forStates: ExclNumber}
+			{forStates: ExclNumberGStringInterpolationInline}
 		]
 	},
 	Comma: {
 		patterns: ',',
 		forks: [
-			{forStates: ExclNumber}
+			{forStates: ExclNumberGStringInterpolationInline}
 		]
 	},
 	Dot: [
 		{
 			patterns: '.',
-			forStates: [
-				Excl,
-				NumberLiteral,
-				S.GStringInterpolationInline, S.GStringInterpolationInlineIdentifierEd, S.GStringInterpolationInlineDotEd
-			]
+			forStates: ExclNumberGStringInterpolationInline
 		},
 		{ // in gstring interpolation inline, the next char must be "JNameStartExcl$"
 			patterns: '.;fn#JNameStartExcl$:!',
@@ -72,17 +68,17 @@ export const DotCommaSemicolonCaptorDefs: GroovyTokenCaptorDefs = {
 export const WhitespaceTabNewlineCaptorDefs: GroovyTokenCaptorDefs = {
 	Whitespaces: {
 		patterns: '{{Space}};{{Space}}:*',
-		forStates: ExclNumber
+		forStates: ExclNumberGStringInterpolationInline
 	},
 	Tabs: {
 		patterns: '{{Tab}};{{Tab}}:*',
-		forStates: ExclNumber
+		forStates: ExclNumberGStringInterpolationInline
 	},
 	Newline: {
 		patterns: '{{CarriageReturn}}:?;{{Newline}}',
 		forStates: [
 			Excl,
-			NumberLiteral,
+			NumberLiteral, GStringInterpolationInline,
 			S.ScriptCommand, S.SLComment,
 			S.SingleQuoteStringLiteral, S.SingleQuoteGStringLiteral
 		]

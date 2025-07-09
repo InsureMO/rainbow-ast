@@ -1,13 +1,13 @@
 import {Fbex} from '../alias';
 import {GroovyTokenCaptorDefs} from './types';
-import {InclCommentString, NumberLiteral} from './utils';
+import {GStringInterpolationInline, InclCommentString, NumberLiteral} from './utils';
 
 export const WordCaptorDefs: GroovyTokenCaptorDefs = {
 	Word: {patterns: 'fn#Word;fn#Word:*', forStates: InclCommentString}
 };
 
 export const CharCaptorDefs: GroovyTokenCaptorDefs = {
-	UndeterminedChar: {patterns: 'fn#Any', forStates: [Fbex, NumberLiteral]}
+	UndeterminedChar: {patterns: 'fn#Any', forStates: [Fbex, NumberLiteral, GStringInterpolationInline]}
 };
 
 export const WordsCaptorDefs: Array<GroovyTokenCaptorDefs> = [

@@ -67,4 +67,16 @@ describe('Capture String Literal ML', () => {
 			]]
 		]]);
 	});
+	test('String Literal ML: Newline escape', async () => {
+		const ast = builder.ast(`''' \\\n'''`);
+		AstChecker.check(ast, [GroovyTokenId.COMPILATION_UNIT, 0, 9, 1, `''' \\\n'''`, [
+			[GroovyTokenId.StringLiteral, 0, 9, 1, `''' \\\n'''`, [
+				[GroovyTokenId.StringMarkML, 0, 3, 1, `'''`],
+				[GroovyTokenId.Whitespaces, 3, 4, 1, ' '],
+				[GroovyTokenId.StringMLNewlineEraser, 4, 5, 1, '\\'],
+				[GroovyTokenId.Newline, 5, 6, 1, '\n'],
+				[GroovyTokenId.StringMarkML, 6, 9, 2, `'''`]
+			]]
+		]]);
+	});
 });

@@ -61,4 +61,30 @@ describe('Capture GString Literal SL', () => {
 			]]
 		]]);
 	});
+	test('GString Literal SL: Interpolation without brace', async () => {
+		const ast = builder.ast('" $"');
+		AstChecker.check(ast, [GroovyTokenId.COMPILATION_UNIT, 0, 4, 1, '" $"', [
+			[GroovyTokenId.GStringLiteral, 0, 4, 1, '" $"', [
+				[GroovyTokenId.GStringMark, 0, 1, 1, '"'],
+				[GroovyTokenId.Whitespaces, 1, 2, 1, ' '],
+				[GroovyTokenId.GStringInterpolation, 2, 3, 1, '$', [
+					[GroovyTokenId.GStringInterpolationStartMark, 2, 3, 1, '$']
+				]],
+				[GroovyTokenId.GStringMark, 3, 4, 1, '"']
+			]]
+		]]);
+	});
+	test('GString Literal SL: Interpolation with brace', async () => {
+		const ast = builder.ast('"${}"');
+		AstChecker.check(ast, [GroovyTokenId.COMPILATION_UNIT, 0, 5, 1, '"${}"', [
+			[GroovyTokenId.GStringLiteral, 0, 5, 1, '"${}"', [
+				[GroovyTokenId.GStringMark, 0, 1, 1, '"'],
+				[GroovyTokenId.GStringInterpolation, 1, 4, 1, '${}', [
+					[GroovyTokenId.GStringInterpolationLBraceStartMark, 1, 3, 1, '${'],
+					[GroovyTokenId.GStringInterpolationRBraceEndMark, 3, 4, 1, '}']
+				]],
+				[GroovyTokenId.GStringMark, 4, 5, 1, '"']
+			]]
+		]]);
+	});
 });

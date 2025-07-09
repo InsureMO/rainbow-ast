@@ -8,3 +8,4 @@ export * from './string-sl.spec';
 export * from './string-ml.spec';
 export * from './gstring-sl.spec';
 export * from './gstring-ml.spec';
+export * from './dollar-slashy-gstring.spec';
