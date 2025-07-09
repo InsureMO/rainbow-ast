@@ -4,7 +4,7 @@ import {AstChecker} from '../utils';
 describe('Capture Octal Literal', () => {
 	const builder = createDefaultAstBuilder({verbose: true});
 
-	test('Capture Octal Literal #1', async () => {
+	test('Octal Literal: With suffix', async () => {
 		const ast = builder.ast('0123g');
 		AstChecker.check(ast, [GroovyTokenId.COMPILATION_UNIT, 0, 5, 1, '0123g', [
 			[GroovyTokenId.OctalLiteral, 0, 5, 1, '0123g', [
@@ -14,7 +14,7 @@ describe('Capture Octal Literal', () => {
 			]]
 		]]);
 	});
-	test('Capture Octal Literal #2', async () => {
+	test('Octal Literal: With separator and suffix #1', async () => {
 		const ast = builder.ast('0_123g');
 		AstChecker.check(ast, [GroovyTokenId.COMPILATION_UNIT, 0, 6, 1, '0_123g', [
 			[GroovyTokenId.OctalLiteral, 0, 6, 1, '0_123g', [
@@ -25,7 +25,7 @@ describe('Capture Octal Literal', () => {
 			]]
 		]]);
 	});
-	test('Capture Octal Literal #3', async () => {
+	test('Octal Literal: With separator and suffix #2 ', async () => {
 		const ast = builder.ast('01_23g');
 		AstChecker.check(ast, [GroovyTokenId.COMPILATION_UNIT, 0, 6, 1, '01_23g', [
 			[GroovyTokenId.OctalLiteral, 0, 6, 1, '01_23g', [

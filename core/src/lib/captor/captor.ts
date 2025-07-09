@@ -107,14 +107,14 @@ export class TokenCaptor {
 
 		let {line, column} = context;
 		const text = chars.join('');
-		const lastNewlineIndex = text.lastIndexOf('\n');
-		if (lastNewlineIndex === -1) {
-			// no newline
-			column = column + chars.length;
-		} else {
-			line = line + text.split('\n').length - 1;
-			column = text.slice(lastNewlineIndex).length;
-		}
+		// const lastNewlineIndex = text.lastIndexOf('\n');
+		// if (lastNewlineIndex === -1) {
+		// 	// no newline
+		// 	column = column + chars.length;
+		// } else {
+		// 	line = line + text.split('\n').length - 1;
+		// 	column = text.slice(lastNewlineIndex).length;
+		// }
 
 		return new AtomicToken({
 			id: this._tokenId, text: chars.join(''),

@@ -3,7 +3,7 @@ import {AstChecker} from '../utils';
 
 describe('Capture String Literal ML', () => {
 	const builder = createDefaultAstBuilder({verbose: true});
-	test('Capture String Literal ML #1', async () => {
+	test('String Literal ML: Empty string', async () => {
 		const ast = builder.ast(`''''''`);
 		AstChecker.check(ast, [GroovyTokenId.COMPILATION_UNIT, 0, 6, 1, `''''''`, [
 			[GroovyTokenId.StringLiteral, 0, 6, 1, `''''''`, [
@@ -12,7 +12,7 @@ describe('Capture String Literal ML', () => {
 			]]
 		]]);
 	});
-	test('Capture String Literal ML #2', async () => {
+	test('String Literal ML: Contains a single quote', async () => {
 		const ast = builder.ast(`'''' '''`);
 		AstChecker.check(ast, [GroovyTokenId.COMPILATION_UNIT, 0, 8, 1, `'''' '''`, [
 			[GroovyTokenId.StringLiteral, 0, 8, 1, `'''' '''`, [
@@ -23,7 +23,7 @@ describe('Capture String Literal ML', () => {
 			]]
 		]]);
 	});
-	test('Capture String Literal ML #3', async () => {
+	test('String Literal ML: Escapes', async () => {
 		const ast = builder.ast(`'''\\b\\f\\n\\r\\t\\\\\\'\\"\\$'''`);
 		AstChecker.check(ast, [GroovyTokenId.COMPILATION_UNIT, 0, 24, 1, `'''\\b\\f\\n\\r\\t\\\\\\'\\"\\$'''`, [
 			[GroovyTokenId.StringLiteral, 0, 24, 1, `'''\\b\\f\\n\\r\\t\\\\\\'\\"\\$'''`, [
@@ -41,7 +41,7 @@ describe('Capture String Literal ML', () => {
 			]]
 		]]);
 	});
-	test('Capture String Literal ML #4', async () => {
+	test('String Literal ML: Undetermined chars', async () => {
 		const ast = builder.ast(`'''\\/#@ '''`);
 		AstChecker.check(ast, [GroovyTokenId.COMPILATION_UNIT, 0, 11, 1, `'''\\/#@ '''`, [
 			[GroovyTokenId.StringLiteral, 0, 11, 1, `'''\\/#@ '''`, [
@@ -55,7 +55,7 @@ describe('Capture String Literal ML', () => {
 			]]
 		]]);
 	});
-	test('Capture String Literal ML #5', async () => {
+	test('String Literal ML: Word', async () => {
 		const ast = builder.ast(`'''\\abc '''`);
 		AstChecker.check(ast, [GroovyTokenId.COMPILATION_UNIT, 0, 11, 1, `'''\\abc '''`, [
 			[GroovyTokenId.StringLiteral, 0, 11, 1, `'''\\abc '''`, [

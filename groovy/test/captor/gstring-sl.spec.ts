@@ -3,7 +3,7 @@ import {AstChecker} from '../utils';
 
 describe('Capture GString Literal SL', () => {
 	const builder = createDefaultAstBuilder({verbose: true});
-	test('Capture GString Literal SL #1', async () => {
+	test('GString Literal SL: Empty string', async () => {
 		const ast = builder.ast('"" ""');
 		AstChecker.check(ast, [GroovyTokenId.COMPILATION_UNIT, 0, 5, 1, '"" ""', [
 			[GroovyTokenId.GStringLiteral, 0, 2, 1, '""', [
@@ -17,7 +17,7 @@ describe('Capture GString Literal SL', () => {
 			]]
 		]]);
 	});
-	test('Capture GString Literal SL #2', async () => {
+	test('GString Literal SL: Escapes', async () => {
 		const ast = builder.ast(`"\\b\\f\\n\\r\\t\\\\\\'\\"\\$"`);
 		AstChecker.check(ast, [GroovyTokenId.COMPILATION_UNIT, 0, 20, 1, `"\\b\\f\\n\\r\\t\\\\\\'\\"\\$"`, [
 			[GroovyTokenId.GStringLiteral, 0, 20, 1, `"\\b\\f\\n\\r\\t\\\\\\'\\"\\$"`, [
@@ -35,7 +35,7 @@ describe('Capture GString Literal SL', () => {
 			]]
 		]]);
 	});
-	test('Capture GString Literal SL #3', async () => {
+	test('GString Literal SL: Undetermined chars', async () => {
 		const ast = builder.ast('"\\/#@ "');
 		AstChecker.check(ast, [GroovyTokenId.COMPILATION_UNIT, 0, 7, 1, '"\\/#@ "', [
 			[GroovyTokenId.GStringLiteral, 0, 7, 1, '"\\/#@ "', [
@@ -49,7 +49,7 @@ describe('Capture GString Literal SL', () => {
 			]]
 		]]);
 	});
-	test('Capture GString Literal SL #4', async () => {
+	test('GString Literal SL: Word', async () => {
 		const ast = builder.ast('"\\abc "');
 		AstChecker.check(ast, [GroovyTokenId.COMPILATION_UNIT, 0, 7, 1, '"\\abc "', [
 			[GroovyTokenId.GStringLiteral, 0, 7, 1, '"\\abc "', [

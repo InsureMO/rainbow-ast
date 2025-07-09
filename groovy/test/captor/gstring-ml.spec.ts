@@ -3,7 +3,7 @@ import {AstChecker} from '../utils';
 
 describe('Capture GString Literal ML', () => {
 	const builder = createDefaultAstBuilder({verbose: true});
-	test('Capture GString Literal ML #1', async () => {
+	test('GString Literal ML: Empty string', async () => {
 		const ast = builder.ast('""""""');
 		AstChecker.check(ast, [GroovyTokenId.COMPILATION_UNIT, 0, 6, 1, '""""""', [
 			[GroovyTokenId.GStringLiteral, 0, 6, 1, '""""""', [
@@ -12,7 +12,7 @@ describe('Capture GString Literal ML', () => {
 			]]
 		]]);
 	});
-	test('Capture GString Literal ML #2', async () => {
+	test('GString Literal ML: Contains a single quote', async () => {
 		const ast = builder.ast('"""" """');
 		AstChecker.check(ast, [GroovyTokenId.COMPILATION_UNIT, 0, 8, 1, '"""" """', [
 			[GroovyTokenId.GStringLiteral, 0, 8, 1, '"""" """', [
@@ -23,7 +23,7 @@ describe('Capture GString Literal ML', () => {
 			]]
 		]]);
 	});
-	test('Capture GString Literal ML #3', async () => {
+	test('GString Literal ML: Escapes', async () => {
 		const ast = builder.ast(`"""\\b\\f\\n\\r\\t\\\\\\'\\"\\$"""`);
 		AstChecker.check(ast, [GroovyTokenId.COMPILATION_UNIT, 0, 24, 1, `"""\\b\\f\\n\\r\\t\\\\\\'\\"\\$"""`, [
 			[GroovyTokenId.GStringLiteral, 0, 24, 1, `"""\\b\\f\\n\\r\\t\\\\\\'\\"\\$"""`, [
@@ -41,7 +41,7 @@ describe('Capture GString Literal ML', () => {
 			]]
 		]]);
 	});
-	test('Capture GString Literal ML #4', async () => {
+	test('GString Literal ML: Undetermined chars', async () => {
 		const ast = builder.ast('"""\\/#@ """');
 		AstChecker.check(ast, [GroovyTokenId.COMPILATION_UNIT, 0, 11, 1, '"""\\/#@ """', [
 			[GroovyTokenId.GStringLiteral, 0, 11, 1, '"""\\/#@ """', [
@@ -55,7 +55,7 @@ describe('Capture GString Literal ML', () => {
 			]]
 		]]);
 	});
-	test('Capture GString Literal ML #5', async () => {
+	test('GString Literal ML: Word', async () => {
 		const ast = builder.ast('"""\\abc """');
 		AstChecker.check(ast, [GroovyTokenId.COMPILATION_UNIT, 0, 11, 1, '"""\\abc """', [
 			[GroovyTokenId.GStringLiteral, 0, 11, 1, '"""\\abc """', [
@@ -67,7 +67,19 @@ describe('Capture GString Literal ML', () => {
 			]]
 		]]);
 	});
-	test('Capture GString Literal ML #6', async () => {
+	test('GString Literal ML: Newline escape', async () => {
+		const ast = builder.ast('""" \\\n"""');
+		AstChecker.check(ast, [GroovyTokenId.COMPILATION_UNIT, 0, 9, 1, '""" \\\n"""', [
+			[GroovyTokenId.GStringLiteral, 0, 9, 1, '""" \\\n"""', [
+				[GroovyTokenId.GStringMarkML, 0, 3, 1, '"""'],
+				[GroovyTokenId.Whitespaces, 3, 4, 1, ' '],
+				[GroovyTokenId.StringMLNewlineEraser, 4, 5, 1, '\\'],
+				[GroovyTokenId.Newline, 5, 6, 1, '\n'],
+				[GroovyTokenId.GStringMarkML, 6, 9, 2, '"""']
+			]]
+		]]);
+	});
+	test('GString Literal ML: Interpolation without brace', async () => {
 		const ast = builder.ast('""" $"""');
 		AstChecker.check(ast, [GroovyTokenId.COMPILATION_UNIT, 0, 8, 1, '""" $"""', [
 			[GroovyTokenId.GStringLiteral, 0, 8, 1, '""" $"""', [

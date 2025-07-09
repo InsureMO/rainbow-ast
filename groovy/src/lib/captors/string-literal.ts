@@ -157,10 +157,16 @@ export const StringLiteralEscapeCaptorDefs: GroovyTokenCaptorDefs = {
 	}
 };
 export const GStringMarkCaptorDefs: GroovyTokenCaptorDefs = {
-	StringMLNewlineEraser: {
-		patterns: '{{Backslash}};{{CarriageReturn}}:?;{{Newline}}',
-		forStates: [Incl, S.TripleQuotesStringLiteral, S.TripleQuotesGStringLiteral, S.SlashyGStringLiteral, S.DollarSlashyGStringLiteral]
-	}
+	StringMLNewlineEraser: [
+		{
+			patterns: '{{Backslash}};{{CarriageReturn}}:!;{{Newline}}:!',
+			forStates: [Incl, S.TripleQuotesStringLiteral, S.TripleQuotesGStringLiteral, S.SlashyGStringLiteral, S.DollarSlashyGStringLiteral]
+		},
+		{
+			patterns: '{{Backslash}};{{Newline}}:!',
+			forStates: [Incl, S.TripleQuotesStringLiteral, S.TripleQuotesGStringLiteral, S.SlashyGStringLiteral, S.DollarSlashyGStringLiteral]
+		}
+	]
 };
 export const GStringInterpolationCaptorDefs: GroovyTokenCaptorDefs = {
 	GStringInterpolationStartMark: [

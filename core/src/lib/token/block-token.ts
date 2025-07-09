@@ -11,7 +11,7 @@ export class BlockToken extends Token {
 	constructor(id: TokenId, firstChild?: Token) {
 		super(id);
 		if (firstChild != null) {
-			this._children.push(firstChild);
+			this.appendChild(firstChild);
 		}
 	}
 

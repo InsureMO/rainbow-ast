@@ -67,7 +67,7 @@ export class TokenCaptors {
 		}
 
 		const capturedToken = captor.capture(context);
-		const {text, line, column} = capturedToken;
+		const {text} = capturedToken;
 
 		const postAction = captor.postAction;
 		switch (postAction?.[0]) {
@@ -98,7 +98,16 @@ export class TokenCaptors {
 			}
 		}
 
-		context.moveCharIndexTo(context.charIndex + text.length).moveLineTo(line).moveColumnTo(column + text.length);
+		let {line, column} = capturedToken;
+		const lastNewlineIndex = text.lastIndexOf('\n');
+		if (lastNewlineIndex === -1) {
+			// no newline
+			column = column + text.length;
+		} else {
+			line = line + text.split('\n').length - 1;
+			column = text.slice(lastNewlineIndex).length;
+		}
+		context.moveCharIndexTo(context.charIndex + text.length).moveLineTo(line).moveColumnTo(column);
 
 		return [TokenCaptureStatus.Captured, capturedToken];
 	}

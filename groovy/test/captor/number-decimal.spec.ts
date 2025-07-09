@@ -4,7 +4,7 @@ import {AstChecker} from '../utils';
 describe('Capture Decimal Literal', () => {
 	const builder = createDefaultAstBuilder({verbose: true});
 
-	test('Capture Decimal Literal #1', async () => {
+	test('Decimal Literal: With all features', async () => {
 		const ast = builder.ast('12_3.45__6e+7_8g');
 		AstChecker.check(ast, [GroovyTokenId.COMPILATION_UNIT, 0, 16, 1, '12_3.45__6e+7_8g', [
 			[GroovyTokenId.DecimalLiteral, 0, 16, 1, '12_3.45__6e+7_8g', [

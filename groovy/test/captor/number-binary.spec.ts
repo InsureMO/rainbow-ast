@@ -4,7 +4,7 @@ import {AstChecker} from '../utils';
 describe('Capture Binary Literal', () => {
 	const builder = createDefaultAstBuilder({verbose: true});
 
-	test('Capture Binary Literal #1', async () => {
+	test('Binary Literal: Simple', async () => {
 		const ast = builder.ast('0b010');
 		AstChecker.check(ast, [GroovyTokenId.COMPILATION_UNIT, 0, 5, 1, '0b010', [
 			[GroovyTokenId.BinaryLiteral, 0, 5, 1, '0b010', [
@@ -13,7 +13,7 @@ describe('Capture Binary Literal', () => {
 			]]
 		]]);
 	});
-	test('Capture Binary Literal #2', async () => {
+	test('Binary Literal: With suffix', async () => {
 		const ast = builder.ast('0B010l');
 		AstChecker.check(ast, [GroovyTokenId.COMPILATION_UNIT, 0, 6, 1, '0B010l', [
 			[GroovyTokenId.BinaryLiteral, 0, 6, 1, '0B010l', [
@@ -23,7 +23,7 @@ describe('Capture Binary Literal', () => {
 			]]
 		]]);
 	});
-	test('Capture Binary Literal #3', async () => {
+	test('Binary Literal: With separator and suffix', async () => {
 		const ast = builder.ast('0B0__1_0l');
 		AstChecker.check(ast, [GroovyTokenId.COMPILATION_UNIT, 0, 9, 1, '0B0__1_0l', [
 			[GroovyTokenId.BinaryLiteral, 0, 9, 1, '0B0__1_0l', [
@@ -37,7 +37,7 @@ describe('Capture Binary Literal', () => {
 			]]
 		]]);
 	});
-	test('Capture Binary Literal #4', async () => {
+	test('Binary Literal: Long', async () => {
 		const ast = builder.ast('0b00000111110000011111l');
 		AstChecker.check(ast, [GroovyTokenId.COMPILATION_UNIT, 0, 23, 1, '0b00000111110000011111l', [
 			[GroovyTokenId.BinaryLiteral, 0, 23, 1, '0b00000111110000011111l', [

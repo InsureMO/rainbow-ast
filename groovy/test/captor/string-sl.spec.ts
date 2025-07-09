@@ -3,7 +3,7 @@ import {AstChecker} from '../utils';
 
 describe('Capture String Literal SL', () => {
 	const builder = createDefaultAstBuilder({verbose: true});
-	test('Capture String Literal SL #1', async () => {
+	test('String Literal SL: Empty string', async () => {
 		const ast = builder.ast(`'' ''`);
 		AstChecker.check(ast, [GroovyTokenId.COMPILATION_UNIT, 0, 5, 1, `'' ''`, [
 			[GroovyTokenId.StringLiteral, 0, 2, 1, `''`, [
@@ -17,7 +17,7 @@ describe('Capture String Literal SL', () => {
 			]]
 		]]);
 	});
-	test('Capture String Literal SL #2', async () => {
+	test('String Literal SL: Escapes', async () => {
 		const ast = builder.ast(`'\\b\\f\\n\\r\\t\\\\\\'\\"\\$'`);
 		AstChecker.check(ast, [GroovyTokenId.COMPILATION_UNIT, 0, 20, 1, `'\\b\\f\\n\\r\\t\\\\\\'\\"\\$'`, [
 			[GroovyTokenId.StringLiteral, 0, 20, 1, `'\\b\\f\\n\\r\\t\\\\\\'\\"\\$'`, [
@@ -35,7 +35,7 @@ describe('Capture String Literal SL', () => {
 			]]
 		]]);
 	});
-	test('Capture String Literal SL #3', async () => {
+	test('String Literal SL: Undetermined chars', async () => {
 		const ast = builder.ast(`'\\/#@ '`);
 		AstChecker.check(ast, [GroovyTokenId.COMPILATION_UNIT, 0, 7, 1, `'\\/#@ '`, [
 			[GroovyTokenId.StringLiteral, 0, 7, 1, `'\\/#@ '`, [
@@ -49,7 +49,7 @@ describe('Capture String Literal SL', () => {
 			]]
 		]]);
 	});
-	test('Capture String Literal SL #4', async () => {
+	test('String Literal SL: Word', async () => {
 		const ast = builder.ast(`'\\abc '`);
 		AstChecker.check(ast, [GroovyTokenId.COMPILATION_UNIT, 0, 7, 1, `'\\abc '`, [
 			[GroovyTokenId.StringLiteral, 0, 7, 1, `'\\abc '`, [
