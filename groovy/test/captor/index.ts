@@ -14,3 +14,4 @@ export * from './slashy-gstring.spec';
 export * from './dollar-slashy-gstring.spec';
 
 export * from './script-command.spec';
+export * from './comment-sl.spec';
