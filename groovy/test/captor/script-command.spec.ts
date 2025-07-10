@@ -35,7 +35,7 @@ describe('Capture Script Command', () => {
 			]],
 			[GroovyTokenId.Newline, 18, 19, 1, '\n'],
 			[GroovyTokenId.UndeterminedChar, 19, 20, 2, '#'],
-			[GroovyTokenId.UndeterminedChar, 20, 21, 2, '!'],
+			[GroovyTokenId.Not, 20, 21, 2, '!'],
 			[GroovyTokenId.Whitespaces, 21, 22, 2, ' '],
 			[GroovyTokenId.Identifier, 22, 26, 2, 'test']
 		]]);

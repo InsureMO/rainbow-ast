@@ -217,8 +217,9 @@ export enum GroovyTokenId {
 	SlashyGStringLiteral,
 	DollarSlashyGStringLiteral,
 	GStringInterpolation,
-	//
+	// block
 	CodeBlock,
+	IndexBlock,
 	//
 	GenericType,
 	Annotation

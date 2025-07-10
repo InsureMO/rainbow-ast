@@ -1,9 +1,8 @@
 import {AstBuildContext, TokenCaptorStates} from '@rainbow-ast/core';
 import {CB, CE, EB, Incl, S, T} from '../alias';
 import {GroovyAstBuildState} from '../ast-build-state';
-import {GroovyTokenId} from '../token';
 import {GroovyTokenCaptorDefs} from './types';
-import {ExclCommentNumberStringGStringInterpolationInline, IsOperator, StringLiteral} from './utils';
+import {ExclCommentNumberStringGStringInterpolationInline, IsSlashyGStringStartAllowed, StringLiteral} from './utils';
 
 const NotSlashyOrDollar: TokenCaptorStates<GroovyAstBuildState> = [Incl, S.SingleQuoteStringLiteral, S.TripleQuotesStringLiteral, S.SingleQuoteGStringLiteral, S.TripleQuotesGStringLiteral];
 
@@ -66,59 +65,6 @@ export const GStringLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 			}
 		]
 	}
-};
-
-/**
- * at least one of the following conditions is met, it is allowed:
- * 1. after operator, operator must at same line
- * 2. after semicolon, dot, lbrace, lbrack, lparen, gstring interpolation lbrace start mark
- * 3.
- */
-export const IsSlashyGStringStartAllowed = (context: AstBuildContext): boolean => {
-	const block = context.currentBlock;
-	const line = context.line;
-	const children = block.children;
-	if (children.length === 0) {
-		return true;
-	}
-
-	let childIndex = children.length - 1;
-	let child = children[childIndex];
-	while (childIndex >= 0) {
-		const childTokenId = child.id;
-		switch (childTokenId) {
-			case GroovyTokenId.ScriptCommand:
-			case GroovyTokenId.SLComment:
-			case GroovyTokenId.MLComment:
-			case GroovyTokenId.Whitespaces:
-			case GroovyTokenId.Tabs: {
-				// ignore above token
-				childIndex--;
-				child = children[childIndex];
-				break;
-			}
-			case GroovyTokenId.Semicolon:
-			case GroovyTokenId.Dot:
-			case GroovyTokenId.LBrace:
-			case GroovyTokenId.LBrack:
-			case GroovyTokenId.LParen:
-			case GroovyTokenId.GStringInterpolationLBraceStartMark: {
-				// the first not ignored token is one of above, allowed
-				return true;
-			}
-			default: {
-				if (child.line !== line) {
-					// slash is first not ignored token of line, allowed
-					return true;
-				} else {
-					// at same line and after operator, allowed; otherwise not allowed.
-					return IsOperator(child);
-				}
-			}
-		}
-	}
-	// only ignored tokens in front, allowed
-	return true;
 };
 
 export const SlashyGStringLiteralCaptorDefs: GroovyTokenCaptorDefs = {
@@ -232,11 +178,11 @@ export const IsInterpolationInDollarSlashyGStringStartAllowed = (context: AstBui
 	const children = block.children;
 	const lastChildIndex = children.length - 1;
 	const lastChild = children[lastChildIndex];
-	if (lastChild.id === GroovyTokenId.DollarSlashyGStringSlashEscape) {
+	if (lastChild.id === T.DollarSlashyGStringSlashEscape) {
 		// previous is slash escape, not allow
 		return false;
 	}
-	if (lastChild.id !== GroovyTokenId.DollarSlashyGStringDollarEscape) {
+	if (lastChild.id !== T.DollarSlashyGStringDollarEscape) {
 		// previous is not slash escape or dollar escape, allow
 		return true;
 	}
@@ -245,13 +191,13 @@ export const IsInterpolationInDollarSlashyGStringStartAllowed = (context: AstBui
 	let childIndex = lastChildIndex - 1;
 	while (childIndex > 0) {
 		const child = children[childIndex];
-		if (child.id === GroovyTokenId.DollarSlashyGStringDollarEscape) {
+		if (child.id === T.DollarSlashyGStringDollarEscape) {
 			// a dollar escape, continue check
 			childIndex--;
-		} else if (child.id === GroovyTokenId.DollarSlashyGStringSlashEscape) {
+		} else if (child.id === T.DollarSlashyGStringSlashEscape) {
 			// only dollar escape between slash escape and last dollar escape, not allow
 			return false;
-		} else if (child.id === GroovyTokenId.GStringInterpolation) {
+		} else if (child.id === T.GStringInterpolation) {
 			// interpolation exists, allow
 			return true;
 		} else {

@@ -1,102 +1,96 @@
+import {CB, EB, Excl, Incl, S, T} from '../alias';
 import {GroovyTokenCaptorDefs} from './types';
-import {ExclCommentNumberStringGStringInterpolationInline, IsKeywordAllowed} from './utils';
+import {
+	Comment,
+	ExclCommentNumberStringGStringInterpolationInline,
+	GStringInterpolationInline,
+	IsKeywordAllowed,
+	IsSafeIndex,
+	NumberLiteral,
+	SlashyGStringStartNotAllowed,
+	StringLiteral
+} from './utils';
 
 export const OperatorCaptorDefs: GroovyTokenCaptorDefs = {
 	// groovy operators
 	RangeInclusive: {
 		patterns: '..',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		forStates: ExclCommentNumberStringGStringInterpolationInline
 	},
 	RangeExclusiveLeft: {
 		patterns: '<..',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		forStates: ExclCommentNumberStringGStringInterpolationInline
 	},
 	RangeExclusiveRight: {
 		patterns: '..<',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		forStates: ExclCommentNumberStringGStringInterpolationInline
 	},
 	RangeExclusiveFull: {
 		patterns: '<..<',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		forStates: ExclCommentNumberStringGStringInterpolationInline
 	},
 	SpreadDot: {
 		patterns: '*.',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		forStates: ExclCommentNumberStringGStringInterpolationInline
 	},
 	SafeDot: {
 		patterns: '?.',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		forStates: ExclCommentNumberStringGStringInterpolationInline
 	},
 	SafeIndex: {
 		patterns: '?[',
 		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		onCaptured: [CB, T.IndexBlock, S.IndexBlock]
 	},
 	SafeIndexClose: {
 		patterns: ']',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		forStates: [Incl, S.IndexBlock],
+		enabledWhen: IsSafeIndex,
+		onCaptured: EB
 	},
 	SafeChainDot: {
 		patterns: '??.',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		forStates: ExclCommentNumberStringGStringInterpolationInline
 	},
 	Elvis: {
 		patterns: '?{{colon}}',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		forStates: ExclCommentNumberStringGStringInterpolationInline
 	},
 	ElvisAssign: {
 		patterns: '?=',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		forStates: ExclCommentNumberStringGStringInterpolationInline
 	},
 	MethodPointer: {
 		patterns: '.&',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		forStates: ExclCommentNumberStringGStringInterpolationInline
 	},
 	RegexFind: {
 		patterns: '=~',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		forStates: ExclCommentNumberStringGStringInterpolationInline
 	},
 	RegexMatch: {
 		patterns: '==~',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		forStates: ExclCommentNumberStringGStringInterpolationInline
 	},
 	Power: {
 		patterns: '**',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		forStates: ExclCommentNumberStringGStringInterpolationInline
 	},
 	PowerAssign: {
 		patterns: '**=',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		forStates: ExclCommentNumberStringGStringInterpolationInline
 	},
 	Spaceship: {
 		patterns: '<=>',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		forStates: ExclCommentNumberStringGStringInterpolationInline
 	},
 	Identical: {
 		patterns: '===',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		forStates: ExclCommentNumberStringGStringInterpolationInline
 	},
 	NotIdentical: {
 		patterns: '!==',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		forStates: ExclCommentNumberStringGStringInterpolationInline
 	},
 	In: {
 		patterns: 'in;fn#NotJNamePart:!',
@@ -105,209 +99,169 @@ export const OperatorCaptorDefs: GroovyTokenCaptorDefs = {
 	},
 	NotInstanceOf: {
 		patterns: '!instanceof;fn#NotJNamePart:!',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		forStates: ExclCommentNumberStringGStringInterpolationInline
 	},
 	NotIn: {
 		patterns: '!in;fn#NotJNamePart:!',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		forStates: ExclCommentNumberStringGStringInterpolationInline
 	},
 	// operators
 	Assign: {
 		patterns: '=',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		forStates: ExclCommentNumberStringGStringInterpolationInline
 	},
 	GreaterThan: {
 		patterns: '>',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		forStates: [Excl, Comment, NumberLiteral, StringLiteral, GStringInterpolationInline, S.GenericType]
 	},
 	LessThan: {
 		patterns: '<',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		forStates: ExclCommentNumberStringGStringInterpolationInline
 	},
 	Not: {
 		patterns: '!',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		forStates: ExclCommentNumberStringGStringInterpolationInline
 	},
 	Bitnot: {
 		patterns: '~',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		forStates: ExclCommentNumberStringGStringInterpolationInline
 	},
 	Question: {
 		patterns: '?',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		forStates: ExclCommentNumberStringGStringInterpolationInline
 	},
 	Colon: {
 		patterns: '{{Colon}}',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		forStates: ExclCommentNumberStringGStringInterpolationInline
 	},
 	Equal: {
 		patterns: '==',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		forStates: ExclCommentNumberStringGStringInterpolationInline
 	},
 	LessThanOrEqual: {
 		patterns: '<=',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		forStates: ExclCommentNumberStringGStringInterpolationInline
 	},
 	GreaterThanOrEqual: {
 		patterns: '>=',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		forStates: ExclCommentNumberStringGStringInterpolationInline
 	},
 	NotEqual: {
 		patterns: '!=',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		forStates: ExclCommentNumberStringGStringInterpolationInline
 	},
 	And: {
 		patterns: '&&',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		forStates: ExclCommentNumberStringGStringInterpolationInline
 	},
 	Or: {
 		patterns: '||',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		forStates: ExclCommentNumberStringGStringInterpolationInline
 	},
 	Increase: {
 		patterns: '++',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		forStates: ExclCommentNumberStringGStringInterpolationInline
 	},
 	Decrease: {
 		patterns: '--',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		forStates: ExclCommentNumberStringGStringInterpolationInline
 	},
 	Add: {
 		patterns: '+',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		forStates: ExclCommentNumberStringGStringInterpolationInline
 	},
 	Subtract: {
 		patterns: '-',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		forStates: ExclCommentNumberStringGStringInterpolationInline
 	},
 	Multiple: {
 		patterns: '*',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		forStates: ExclCommentNumberStringGStringInterpolationInline
 	},
 	Divide: {
 		patterns: '/',
 		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		enabledWhen: SlashyGStringStartNotAllowed
 	},
 	Bitand: {
 		patterns: '&',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		forStates: ExclCommentNumberStringGStringInterpolationInline
 	},
 	Bitor: {
 		patterns: '|',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		forStates: ExclCommentNumberStringGStringInterpolationInline
 	},
 	Xor: {
 		patterns: '^',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		forStates: ExclCommentNumberStringGStringInterpolationInline
 	},
 	Mod: {
 		patterns: '%',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		forStates: ExclCommentNumberStringGStringInterpolationInline
 	},
 	Lshift: {
 		patterns: '<<',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		forStates: ExclCommentNumberStringGStringInterpolationInline
 	},
 	Rshift: {
 		patterns: '>>',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		forStates: ExclCommentNumberStringGStringInterpolationInline
 	},
 	Urshift: {
 		patterns: '>>>',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		forStates: ExclCommentNumberStringGStringInterpolationInline
 	},
 	AddAssign: {
 		patterns: '+=',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		forStates: ExclCommentNumberStringGStringInterpolationInline
 	},
 	SubtractAssign: {
 		patterns: '-=',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		forStates: ExclCommentNumberStringGStringInterpolationInline
 	},
 	MultipleAssign: {
 		patterns: '*=',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		forStates: ExclCommentNumberStringGStringInterpolationInline
 	},
 	DivideAssign: {
 		patterns: '/=',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		forStates: ExclCommentNumberStringGStringInterpolationInline
 	},
 	BitandAssign: {
 		patterns: '&=',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		forStates: ExclCommentNumberStringGStringInterpolationInline
 	},
 	BitorAssign: {
 		patterns: '|=',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		forStates: ExclCommentNumberStringGStringInterpolationInline
 	},
 	XorAssign: {
 		patterns: '^=',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		forStates: ExclCommentNumberStringGStringInterpolationInline
 	},
 	ModAssign: {
 		patterns: '%=',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		forStates: ExclCommentNumberStringGStringInterpolationInline
 	},
 	LshiftAssign: {
 		patterns: '<<=',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		forStates: ExclCommentNumberStringGStringInterpolationInline
 	},
 	RshiftAssign: {
 		patterns: '>>=',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		forStates: ExclCommentNumberStringGStringInterpolationInline
 	},
 	UrshiftAssign: {
 		patterns: '>>>=',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		forStates: ExclCommentNumberStringGStringInterpolationInline
 	},
 	Ellipsis: {
 		patterns: '...',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		forStates: ExclCommentNumberStringGStringInterpolationInline
 	},
 	Arrow: {
 		patterns: '->',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		forStates: ExclCommentNumberStringGStringInterpolationInline
 	},
 	InstanceOf: {
 		patterns: 'instanceof;fn#NotJNamePart:!',
@@ -316,9 +270,6 @@ export const OperatorCaptorDefs: GroovyTokenCaptorDefs = {
 	},
 	MethodReference: {
 		patterns: '{{colon}}:2',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		forStates: ExclCommentNumberStringGStringInterpolationInline
 	}
 };
-
-// export const OperatorTokenMatchers = buildTokenMatchers(OperatorPatterns);

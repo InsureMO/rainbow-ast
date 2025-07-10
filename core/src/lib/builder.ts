@@ -1,5 +1,12 @@
 import {Ast} from './ast';
-import {TokenCaptor, TokenCaptors, TokenCaptorSelector, TokenCaptureStatus} from './captor';
+import {
+	MultiChoicesCaptor,
+	TokenCaptor,
+	TokenCaptorOrSelector,
+	TokenCaptors,
+	TokenCaptorSelector,
+	TokenCaptureStatus
+} from './captor';
 import {AstBuildContext} from './context';
 import {TokenPointcut} from './pointcut';
 import {BlockToken, CompilationUnit, Token} from './token';
@@ -179,20 +186,23 @@ export class AstBuilder<
 	}
 
 	private printCaptors(lines: Array<string>, captors: Record<number, TokenCaptors>, states: AstBuildStates) {
+		const toCaptors = (captors: Array<TokenCaptorOrSelector>): Array<TokenCaptor> => {
+			return captors.map(cs => {
+				if (cs instanceof TokenCaptor) {
+					return [cs];
+				} else if (cs instanceof MultiChoicesCaptor) {
+					return cs.captors;
+				} else {
+					return captorsOfSelectors(cs);
+				}
+			}).flat();
+		};
 		const captorsOfSelectors = (selector: TokenCaptorSelector): Array<TokenCaptor> => {
 			const {byCharCaptors: byChar, byFuncCaptors: byFunc, fallbackCaptor: fallback} = selector;
 			return [
-				...[...byChar.values()].filter(cs => cs instanceof TokenCaptor),
-				...[...byFunc.values()].filter(cs => cs instanceof TokenCaptor),
-				fallback,
-				...[...byChar.values()]
-					.filter(cs => cs instanceof TokenCaptorSelector)
-					.map(selector => captorsOfSelectors(selector))
-					.flat(),
-				...[...byFunc.values()]
-					.filter(cs => cs instanceof TokenCaptorSelector)
-					.map(selector => captorsOfSelectors(selector))
-					.flat()
+				...toCaptors([...byChar.values()]),
+				...toCaptors([...byFunc.values()]),
+				...toCaptors([fallback].filter(x => x != null))
 			].filter(x => x != null);
 		};
 		lines.push('# Token Captors');

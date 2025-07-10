@@ -33,11 +33,12 @@ export enum GroovyAstBuildState {
 	/** identifier captured */ GStringInterpolationInlineIdentifierEd,
 	/** dot captured */ GStringInterpolationInlineDotEd,
 	/** ${...} */ GStringInterpolation,
-	//
+	// block
 	CodeBlock,
+	IndexBlock,  // [], ?[]
 	//
-	GenericTypeStarted,
-	AnnotationStarted
+	GenericType,
+	AnnotationStarted,
 }
 
 export type GroovyAstBuildStateName = Exclude<keyof typeof GroovyAstBuildState, number>;

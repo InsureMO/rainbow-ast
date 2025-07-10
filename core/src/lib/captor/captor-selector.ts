@@ -2,8 +2,9 @@ import {DefaultTokenIdPriority} from '../consts';
 import {AstBuildContext} from '../context';
 import {Char, CharMatches, CharMatchFn, TokenCharMatchUsage} from '../token-match';
 import {TokenCaptor} from './captor';
+import {MultiChoicesCaptor} from './multi-choices-captor';
 
-export type TokenCaptorOrSelector = TokenCaptor | TokenCaptorSelector;
+export type TokenCaptorOrSelector = TokenCaptor | MultiChoicesCaptor | TokenCaptorSelector;
 export type PrecaptureContext = {
 	/** char index in document */
 	charIndex: number;
@@ -72,7 +73,7 @@ export class TokenCaptorSelector {
 	private readonly _byChar: Map<Char, TokenCaptorOrSelector> = new Map();
 	// function might be sharing
 	private readonly _byFunc: Map<CharMatchFn, TokenCaptorOrSelector> = new Map();
-	private _fallback: TokenCaptor | undefined = (void 0);
+	private _fallback: TokenCaptor | MultiChoicesCaptor | undefined = (void 0);
 
 	/**
 	 * check char match's rule and restriction:
@@ -87,7 +88,16 @@ export class TokenCaptorSelector {
 				map.set(rule, captor);
 			} else if (existing instanceof TokenCaptor) {
 				// the existing captor has exact same rule with given captor, raise error
-				throw new Error(`Multiple captors with same rule[${captor.description}].`);
+				// throw new Error(`Multiple captors with same rule[${captor.description}].`);
+				if (existing.availableCheck == null || captor.availableCheck == null) {
+					throw new Error(`Multiple captors with same rule[${captor.description}], and at least one has no available check.`);
+				}
+				map.set(rule, new MultiChoicesCaptor().with(existing).and(captor));
+			} else if (existing instanceof MultiChoicesCaptor) {
+				if (captor.availableCheck == null) {
+					throw new Error(`Multiple captors with same rule[${captor.description}], and at least one has no available check.`);
+				}
+				existing.and(captor);
 			} else if (existing instanceof TokenCaptorSelector) {
 				// at least one captor has same match rules as heading part already
 				existing.fallbackBy(captor);
@@ -138,9 +148,21 @@ export class TokenCaptorSelector {
 	fallbackBy(captor: TokenCaptor): void {
 		if (this._fallback != null) {
 			// the exists fallback captor has exact same rule with given captor, raise error
-			throw new Error(`Multiple captors with same rule[${captor.description}].`);
+			// throw new Error(`Multiple captors with same rule[${captor.description}].`);
+			if (this._fallback instanceof TokenCaptor) {
+				if (this._fallback.availableCheck == null || captor.availableCheck == null) {
+					throw new Error(`Multiple captors with same rule[${captor.description}], and at least one has no available check.`);
+				}
+				this._fallback = new MultiChoicesCaptor().with(this._fallback).and(captor);
+			} else {
+				if (captor.availableCheck == null) {
+					throw new Error(`Multiple captors with same rule[${captor.description}], and at least one has no available check.`);
+				}
+				this._fallback.and(captor);
+			}
+		} else {
+			this._fallback = captor;
 		}
-		this._fallback = captor;
 	}
 
 	// noinspection JSUnusedGlobalSymbols
@@ -154,7 +176,7 @@ export class TokenCaptorSelector {
 	}
 
 	// noinspection JSUnusedGlobalSymbols
-	get fallbackCaptor(): TokenCaptor | undefined {
+	get fallbackCaptor(): TokenCaptor | MultiChoicesCaptor | undefined {
 		return this._fallback;
 	}
 
@@ -174,6 +196,11 @@ export class TokenCaptorSelector {
 					const availableCheck = matched.availableCheck;
 					if (availableCheck == null || availableCheck(context)) {
 						grouped.captors.push(matched);
+					}
+				} else if (matched instanceof MultiChoicesCaptor) {
+					const choice = matched.select(context);
+					if (choice != null) {
+						grouped.captors.push(choice);
 					}
 				} else {
 					grouped.selectors.push(matched);
@@ -282,6 +309,13 @@ export class TokenCaptorSelector {
 			return matched[0];
 		} else if (this._fallback == null) {
 			return [(void 0), ''];
+		} else if (this._fallback instanceof MultiChoicesCaptor) {
+			const fb = this._fallback.select(context);
+			if (fb == null) {
+				return [(void 0), ''];
+			} else {
+				return [fb, precaptureContext.captured];
+			}
 		} else {
 			return [this._fallback, precaptureContext.captured];
 		}

@@ -1,6 +1,5 @@
 import {AstBuildContext} from '@rainbow-ast/core';
 import {CB, EB, Incl, S, T} from '../alias';
-import {GroovyTokenId} from '../token';
 import {GroovyTokenCaptorDefs} from './types';
 import {ExclCommentNumberStringGStringInterpolationInline} from './utils';
 
@@ -8,9 +7,7 @@ export const IsScriptCommandStartAllowed = (context: AstBuildContext): boolean =
 	const cu = context.currentBlock;
 	const children = cu.children;
 	return !children.some(child => {
-		return ![
-			GroovyTokenId.Whitespaces, GroovyTokenId.Tabs, GroovyTokenId.Newline
-		].includes(child.id);
+		return ![T.Whitespaces, T.Tabs, T.Newline].includes(child.id);
 	});
 };
 
@@ -38,14 +35,14 @@ export const CommentCaptorDefs: GroovyTokenCaptorDefs = {
 	}
 };
 export const GenericTypeCaptorDefs: GroovyTokenCaptorDefs = {
-	GenericTypeStartMark: { // TODO LessThan
-		patterns: '<',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		onCaptured: [CB, T.GenericType, S.GenericTypeStarted]
-	},
+	// GenericTypeStartMark: { // TODO LessThan
+	// 	patterns: '<',
+	// 	forStates: ExclCommentNumberStringGStringInterpolationInline,
+	// 	onCaptured: [CB, T.GenericType, S.GenericType]
+	// },
 	GenericTypeEndMark: { // TODO GreaterThan
 		patterns: '>',
-		forStates: [Incl, S.GenericTypeStarted],
+		forStates: [Incl, S.GenericType],
 		onCaptured: EB
 	}
 };

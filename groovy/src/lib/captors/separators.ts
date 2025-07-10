@@ -1,6 +1,6 @@
-import {Excl, Incl, S, SS} from '../alias';
+import {EB, Excl, Incl, S, SS} from '../alias';
 import {GroovyTokenCaptorDefs} from './types';
-import {ExclNumberGStringInterpolationInline, GStringInterpolationInline, NumberLiteral} from './utils';
+import {ExclNumberGStringInterpolationInline, GStringInterpolationInline, NotSafeIndex, NumberLiteral} from './utils';
 
 export const BracketCaptorDefs: GroovyTokenCaptorDefs = {
 	LBrace: {
@@ -12,7 +12,10 @@ export const BracketCaptorDefs: GroovyTokenCaptorDefs = {
 	RBrace: {
 		patterns: '}',
 		forks: [
-			{forStates: [Excl, NumberLiteral, GStringInterpolationInline, S.GStringInterpolation]}
+			{
+				forStates: [Excl, NumberLiteral, GStringInterpolationInline, S.GStringInterpolation],
+				onCaptured: EB
+			}
 		]
 	},
 	LParen: {
@@ -24,7 +27,10 @@ export const BracketCaptorDefs: GroovyTokenCaptorDefs = {
 	RParen: {
 		patterns: ')',
 		forks: [
-			{forStates: ExclNumberGStringInterpolationInline}
+			{
+				forStates: ExclNumberGStringInterpolationInline,
+				onCaptured: EB
+			}
 		]
 	},
 	LBrack: {
@@ -36,7 +42,15 @@ export const BracketCaptorDefs: GroovyTokenCaptorDefs = {
 	RBrack: {
 		patterns: ']',
 		forks: [
-			{forStates: ExclNumberGStringInterpolationInline}
+			{
+				forStates: [Excl, NumberLiteral, GStringInterpolationInline, S.IndexBlock],
+				onCaptured: EB
+			},
+			{
+				forStates: [Incl, S.IndexBlock],
+				enabledWhen: NotSafeIndex,
+				onCaptured: EB
+			}
 		]
 	}
 };
