@@ -4,17 +4,17 @@ import {BlockToken} from '../token';
 export type OnBlockTokenEnd = (block: BlockToken, context: AstBuildContext) => void;
 
 export type TokenPointcutConstructOptions = {
-	onEnd?: OnBlockTokenEnd;
+	onBlockEnded?: OnBlockTokenEnd;
 }
 
 export class TokenPointcut {
-	private readonly _onEnd?: OnBlockTokenEnd;
+	private readonly _onBlockEnded?: OnBlockTokenEnd;
 
 	constructor(options: TokenPointcutConstructOptions) {
-		this._onEnd = options.onEnd;
+		this._onBlockEnded = options.onBlockEnded;
 	}
 
-	onEnd(block: BlockToken, context: AstBuildContext): void {
-		this._onEnd?.(block, context);
+	onBlockEnded(block: BlockToken, context: AstBuildContext): void {
+		this._onBlockEnded?.(block, context);
 	}
 }

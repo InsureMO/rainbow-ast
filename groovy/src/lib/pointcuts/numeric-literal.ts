@@ -5,7 +5,7 @@ import {GroovyTokenPointcutDefs} from './types';
 export const NumericLiteralPointcutDefs: Array<GroovyTokenPointcutDefs> = [
 	{
 		DecimalLiteral: {
-			onEnd: (block): void => {
+			onBlockEnded: (block): void => {
 				const children = block.children;
 				const decimal = children.some(child => {
 					const tokenId = child.id;

@@ -138,7 +138,7 @@ export class AstBuildContext<
 	postBlockEnd(block: BlockToken): void {
 		const pointcut = this._language.pointcuts[block.id];
 		if (pointcut != null) {
-			pointcut.onEnd(block, this);
+			pointcut.onBlockEnded(block, this);
 		}
 	}
 }

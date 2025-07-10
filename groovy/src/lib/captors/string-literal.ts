@@ -120,6 +120,7 @@ export const IsSlashyGStringStartAllowed = (context: AstBuildContext): boolean =
 	// only ignored tokens in front, allowed
 	return true;
 };
+
 export const SlashyGStringLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 	SlashyGStringMark: {
 		patterns: '/',
@@ -261,6 +262,7 @@ export const IsInterpolationInDollarSlashyGStringStartAllowed = (context: AstBui
 	// no interpolation found, not allow
 	return false;
 };
+
 export const GStringInterpolationCaptorDefs: GroovyTokenCaptorDefs = {
 	GStringInterpolationStartMark: [
 		{
