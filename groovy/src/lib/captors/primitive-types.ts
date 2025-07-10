@@ -1,13 +1,5 @@
-export const PrimitiveTypePatterns = {
-	BOOLEAN: 'boolean;fn#NotJNamePart:!',
-	CHAR: 'char;NoJNamePart:!',
-	BYTE: 'byte;fn#NotJNamePart:!',
-	SHORT: 'short;fn#NotJNamePart:!',
-	INT: 'int;fn#NotJNamePart:!',
-	LONG: 'long;fn#NotJNamePart:!',
-	FLOAT: 'float;fn#NotJNamePart:!',
-	DOUBLE: 'double;fn#NotJNamePart:!'
-};
+import {GroovyTokenCaptorDefs} from './types';
+import {ExclCommentNumberStringGStringInterpolationInline, IsKeywordAllowed} from './utils';
 
 /**
  * 8 base primitive types: boolean, char, byte, short, int, long, float and double.
@@ -28,4 +20,45 @@ export const PrimitiveTypePatterns = {
  *    - "[boolean: 1]"
  *    - "test.boolean"
  */
-// export const PrimitiveTypeTokenMatchers = buildTokenMatchers(PrimitiveTypePatterns);
+export const PrimitiveTypeCaptorDefs: GroovyTokenCaptorDefs = {
+	BOOLEAN: {
+		patterns: 'boolean;fn#NotJNamePart:!',
+		forStates: ExclCommentNumberStringGStringInterpolationInline,
+		enabledWhen: IsKeywordAllowed
+	},
+	CHAR: {
+		patterns: 'char;NoJNamePart:!',
+		forStates: ExclCommentNumberStringGStringInterpolationInline,
+		enabledWhen: IsKeywordAllowed
+	},
+	BYTE: {
+		patterns: 'byte;fn#NotJNamePart:!',
+		forStates: ExclCommentNumberStringGStringInterpolationInline,
+		enabledWhen: IsKeywordAllowed
+	},
+	SHORT: {
+		patterns: 'short;fn#NotJNamePart:!',
+		forStates: ExclCommentNumberStringGStringInterpolationInline,
+		enabledWhen: IsKeywordAllowed
+	},
+	INT: {
+		patterns: 'int;fn#NotJNamePart:!',
+		forStates: ExclCommentNumberStringGStringInterpolationInline,
+		enabledWhen: IsKeywordAllowed
+	},
+	LONG: {
+		patterns: 'long;fn#NotJNamePart:!',
+		forStates: ExclCommentNumberStringGStringInterpolationInline,
+		enabledWhen: IsKeywordAllowed
+	},
+	FLOAT: {
+		patterns: 'float;fn#NotJNamePart:!',
+		forStates: ExclCommentNumberStringGStringInterpolationInline,
+		enabledWhen: IsKeywordAllowed
+	},
+	DOUBLE: {
+		patterns: 'double;fn#NotJNamePart:!',
+		forStates: ExclCommentNumberStringGStringInterpolationInline,
+		enabledWhen: IsKeywordAllowed
+	}
+};

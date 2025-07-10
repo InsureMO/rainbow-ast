@@ -1,17 +1,15 @@
 import {GroovyTokenCaptorDefs} from './types';
-import {ExclCommentNumberStringGStringInterpolationInline} from './utils';
+import {ExclCommentNumberStringGStringInterpolationInline, IsKeywordAllowed} from './utils';
 
-export const BooleanLiteralCaptorDefs: GroovyTokenCaptorDefs = {
+export const BooleanCaptorDefs: GroovyTokenCaptorDefs = {
 	BooleanTrue: {
 		patterns: 'true;fn#NotJNamePart:!',
-		forStates: ExclCommentNumberStringGStringInterpolationInline
+		forStates: ExclCommentNumberStringGStringInterpolationInline,
+		enabledWhen: IsKeywordAllowed
 	},
 	BooleanFalse: {
 		patterns: 'false;fn#NotJNamePart:!',
-		forStates: ExclCommentNumberStringGStringInterpolationInline
+		forStates: ExclCommentNumberStringGStringInterpolationInline,
+		enabledWhen: IsKeywordAllowed
 	}
 };
-
-export const BooleanCaptorDefs: Array<GroovyTokenCaptorDefs> = [
-	BooleanLiteralCaptorDefs
-];

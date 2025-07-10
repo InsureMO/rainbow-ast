@@ -15,6 +15,3 @@ export const IdentifierCaptorDefs: GroovyTokenCaptorDefs = {
 		}
 	]
 };
-export const IdentifiersCaptorDefs: Array<GroovyTokenCaptorDefs> = [
-	IdentifierCaptorDefs
-];

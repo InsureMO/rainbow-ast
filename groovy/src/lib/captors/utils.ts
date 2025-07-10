@@ -1,4 +1,11 @@
-import {BuildUtils, Token, TokenCaptorOfStates, TokenCaptorStates, TokenMatcherBuilder} from '@rainbow-ast/core';
+import {
+	AstBuildContext,
+	BuildUtils,
+	Token,
+	TokenCaptorOfStates,
+	TokenCaptorStates,
+	TokenMatcherBuilder
+} from '@rainbow-ast/core';
 import {Excl, Incl, S} from '../alias';
 import {GroovyAstBuildState, GroovyAstBuildStateName} from '../ast-build-state';
 import {GroovyTokenId, GroovyTokenName} from '../token';
@@ -45,10 +52,48 @@ export const ExclCommentNumberStringGStringInterpolationInline: TokenCaptorState
 
 export const GroovyTokenMatcherBuilder = TokenMatcherBuilder.create({LongestKeywordLength: 'synchronized'.length});
 
-export const isOperator = (token: Token): boolean => {
+export const IsOperator = (token: Token): boolean => {
 	const tokenId = token.id;
 	return tokenId >= GroovyTokenId.RangeInclusive && tokenId <= GroovyTokenId.InstanceOf;
 };
+
+/**
+ * any keyword includes:
+ * 1. true/false
+ * 2. java keyword and groovy keyword, such as: public, null, void, etc.
+ * 3. in/instanceof,
+ * 4. 8 primitive types.
+ *
+ * if there is a dot in front, not allowed. keyword will be treated as identifier, to visit the properties of object.
+ */
+export const IsKeywordAllowed = (context: AstBuildContext): boolean => {
+	const block = context.currentBlock;
+	const children = block.children;
+
+	let childIndex = children.length - 1;
+	let child = children[childIndex];
+
+	while (childIndex >= 0) {
+		const childTokenId = child.id;
+		switch (childTokenId) {
+			case GroovyTokenId.ScriptCommand:
+			case GroovyTokenId.SLComment:
+			case GroovyTokenId.MLComment:
+			case GroovyTokenId.Whitespaces:
+			case GroovyTokenId.Tabs: {
+				// ignore above token
+				childIndex--;
+				child = children[childIndex];
+				break;
+			}
+			case GroovyTokenId.Dot: {
+				return false;
+			}
+		}
+	}
+	return true;
+};
+
 export const buildTokenCaptors = (defs: Array<GroovyTokenCaptorDefs>): TokenCaptorOfStates<GroovyAstBuildStateName> => {
 	return BuildUtils.buildTokenCaptors({
 		defs,

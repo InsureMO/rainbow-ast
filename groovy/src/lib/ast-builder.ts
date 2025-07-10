@@ -12,13 +12,15 @@ import {GroovyAstBuildState, GroovyAstBuildStateName} from './ast-build-state';
 import {
 	BooleanCaptorDefs,
 	buildTokenCaptors,
+	CharsCaptorDefs,
+	IdentifierCaptorDefs,
+	KeywordCaptorDefs,
 	MarkCaptorDefs,
-	NumberCaptorDefs,
+	NumberCaptorDefs, OperatorCaptorDefs,
+	PrimitiveTypeCaptorDefs,
 	SeparatorCaptorDefs,
-	StringCaptorDefs,
-	WordsCaptorDefs
+	StringCaptorDefs
 } from './captors';
-import {IdentifiersCaptorDefs} from './captors/identifier';
 import {buildTokenPointcuts, NumericLiteralPointcutDefs, ScriptCommandPointcutDefs} from './pointcuts';
 import {GroovyTokenId, GroovyTokenName} from './token';
 import {GroovyTokenCapturePriorities} from './token-priorities';
@@ -71,14 +73,17 @@ export const createDefaultAstBuilder = (language?: Omit<GroovyLanguage, 'captors
 		captors: buildTokenCaptors([
 			...SeparatorCaptorDefs,
 			...MarkCaptorDefs,
-			...WordsCaptorDefs,
-			...BooleanCaptorDefs,
+			CharsCaptorDefs,
+			BooleanCaptorDefs,
 			...NumberCaptorDefs,
 			...StringCaptorDefs,
-			...IdentifiersCaptorDefs
+			PrimitiveTypeCaptorDefs,
+			KeywordCaptorDefs,
+			IdentifierCaptorDefs,
+			OperatorCaptorDefs
 		]),
 		pointcuts: buildTokenPointcuts([
-			...NumericLiteralPointcutDefs,
+			NumericLiteralPointcutDefs,
 			ScriptCommandPointcutDefs
 		])
 	});

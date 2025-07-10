@@ -3,7 +3,7 @@ import {CB, CE, EB, Incl, S, T} from '../alias';
 import {GroovyAstBuildState} from '../ast-build-state';
 import {GroovyTokenId} from '../token';
 import {GroovyTokenCaptorDefs} from './types';
-import {ExclCommentNumberStringGStringInterpolationInline, isOperator, StringLiteral} from './utils';
+import {ExclCommentNumberStringGStringInterpolationInline, IsOperator, StringLiteral} from './utils';
 
 const NotSlashyOrDollar: TokenCaptorStates<GroovyAstBuildState> = [Incl, S.SingleQuoteStringLiteral, S.TripleQuotesStringLiteral, S.SingleQuoteGStringLiteral, S.TripleQuotesGStringLiteral];
 
@@ -112,7 +112,7 @@ export const IsSlashyGStringStartAllowed = (context: AstBuildContext): boolean =
 					return true;
 				} else {
 					// at same line and after operator, allowed; otherwise not allowed.
-					return isOperator(child);
+					return IsOperator(child);
 				}
 			}
 		}

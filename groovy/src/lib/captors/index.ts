@@ -9,5 +9,5 @@ export * from './string-literal';
 export * from './operators';
 export * from './separators';
 export * from './marks';
-
+export * from './identifier';
 export * from './words';
