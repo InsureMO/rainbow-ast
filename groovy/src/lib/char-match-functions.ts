@@ -30,4 +30,4 @@ CharMatchFunctions.register('Hex', JavaCharMatchFunctions.Hex);
 CharMatchFunctions.register('IntSuffix', JavaCharMatchFunctions.IntSuffix);
 CharMatchFunctions.register('DecSuffix', JavaCharMatchFunctions.DecSuffix);
 CharMatchFunctions.register('DecGSuffix', JavaCharMatchFunctions.DecGSuffix);
-CharMatchFunctions.register('Any', JavaCharMatchFunctions.Any);
+CharMatchFunctions.register('NotWTN', JavaCharMatchFunctions.AnyButWhitespaceTabNewline);

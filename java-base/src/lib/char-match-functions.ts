@@ -124,4 +124,8 @@ export class JavaCharMatchFunctions {
 	static Any(char: Char): boolean {
 		return char != null;
 	}
+
+	static AnyButWhitespaceTabNewline(char: Char): boolean {
+		return char != null && char != ' ' && char != '\t' && char != '\n' && char != '\r';
+	}
 }

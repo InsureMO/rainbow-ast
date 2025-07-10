@@ -6,6 +6,7 @@ describe('Capture Script Command', () => {
 
 	test('Script Command: Simple #1', async () => {
 		const ast = builder.ast('#!/usr/bin/python3');
+		// noinspection DuplicatedCode
 		AstChecker.check(ast, [GroovyTokenId.COMPILATION_UNIT, 0, 18, 1, '#!/usr/bin/python3', [
 			[GroovyTokenId.ScriptCommand, 0, 18, 1, '#!/usr/bin/python3', [
 				[GroovyTokenId.ScriptCommandStartMark, 0, 2, 1, '#!'],
@@ -21,6 +22,7 @@ describe('Capture Script Command', () => {
 
 	test('Script Command: Simple #2', async () => {
 		const ast = builder.ast('#!/usr/bin/python3\n#! test');
+		// noinspection DuplicatedCode
 		AstChecker.check(ast, [GroovyTokenId.COMPILATION_UNIT, 0, 26, 1, '#!/usr/bin/python3\n#! test', [
 			[GroovyTokenId.ScriptCommand, 0, 18, 1, '#!/usr/bin/python3', [
 				[GroovyTokenId.ScriptCommandStartMark, 0, 2, 1, '#!'],

@@ -67,6 +67,26 @@ export class TokenCaptors {
 		}
 
 		const capturedToken = captor.capture(context);
+		if (capturedToken == null) {
+			// there are some troubles with the scenarios here. consider the following scenarios:
+			// when the char(s) at the context position cannot be captured by the selected captor, there are two scenarios:
+			// - the captor is defined incorrectly. in this case, an exception should be thrown.
+			// - the current captors truly cannot capture the char(s).
+			//   that is to say, the char(s) at the current context position does not belong to the current context state,
+			//   so it really should not be captured.
+			//   in this case, an un-captured state should be returned.
+			// then the subtle difference between these two situations lies in
+			// that if the selected captor is the fallback captor of the current captor group,
+			// it can be considered that all standard captors are inappropriate,
+			// and at the same time, the fallback captor is also inappropriate.
+			// we can conclude that it does not belong to this captor group (returns un-captured state, #2).
+			// in other cases, it should obviously be captured (throw exception, #1).
+			if (captor === this._selector.fallbackCaptor) {
+				return [TokenCaptureStatus.None];
+			} else {
+				throw new Error(`Cannot capture token from context, starts at char index[${context.charIndex}].`);
+			}
+		}
 		const {text} = capturedToken;
 
 		const postAction = captor.postAction;

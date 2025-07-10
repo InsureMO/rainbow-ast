@@ -76,7 +76,7 @@ export class TokenCaptor {
 	 * capture token from given context.
 	 * make sure the capture operation can be performed, otherwise error raised!
 	 */
-	capture(context: AstBuildContext): AtomicToken {
+	capture(context: AstBuildContext): AtomicToken | undefined {
 		const doc = context.document;
 		const matcher = this._matcher;
 		const matches = matcher.matches;
@@ -110,7 +110,7 @@ export class TokenCaptor {
 				// means any times char match is over, check next one
 				charMatchIndex++;
 			} else {
-				throw new Error(`Cannot capture token from context, starts at char index[${context.charIndex}].`);
+				return (void 0);
 			}
 		}
 

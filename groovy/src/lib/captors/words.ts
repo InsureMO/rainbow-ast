@@ -7,7 +7,7 @@ export const WordCaptorDefs: GroovyTokenCaptorDefs = {
 };
 
 export const CharCaptorDefs: GroovyTokenCaptorDefs = {
-	UndeterminedChar: {patterns: 'fn#Any', forStates: [Fbex, NumberLiteral, GStringInterpolationInline]}
+	UndeterminedChar: {patterns: 'fn#NotWTN', forStates: [Fbex, NumberLiteral, GStringInterpolationInline]}
 };
 
 export const WordsCaptorDefs: Array<GroovyTokenCaptorDefs> = [
