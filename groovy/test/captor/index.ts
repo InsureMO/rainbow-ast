@@ -15,3 +15,4 @@ export * from './dollar-slashy-gstring.spec';
 
 export * from './script-command.spec';
 export * from './comment-sl.spec';
+export * from './comment-ml.spec';
