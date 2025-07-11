@@ -1,4 +1,4 @@
-import {EB, Excl, Incl, S, SS} from '../alias';
+import {CB, EB, Excl, Incl, S, SS, T} from '../alias';
 import {CFS, SG} from './state-shortcuts';
 import {GroovyTokenCaptorDefs} from './types';
 import {NotSafeIndex} from './utils';
@@ -7,16 +7,14 @@ export const BracketCaptorDefs: GroovyTokenCaptorDefs = {
 	LBrace: {
 		patterns: '{',
 		forks: [
-			{forStates: CFS.NotNumGStrItpInl}
+			{forStates: CFS.NotNumGStrItpInl, onCaptured: [CB, T.CodeBlock, S.CodeBlk]}
 		]
 	},
 	RBrace: {
 		patterns: '}',
 		forks: [
-			{
-				forStates: [Excl, SG.Num, SG.GStrItpInl, S.GStringInterpolation],
-				onCaptured: EB
-			}
+			{forStates: [Excl, SG.Num, SG.GStrItpInl, S.GStrItp, S.CodeBlk]},
+			{forStates: [Incl, S.CodeBlk], onCaptured: EB}
 		]
 	},
 	LParen: {
@@ -28,10 +26,7 @@ export const BracketCaptorDefs: GroovyTokenCaptorDefs = {
 	RParen: {
 		patterns: ')',
 		forks: [
-			{
-				forStates: CFS.NotNumGStrItpInl,
-				onCaptured: EB
-			}
+			{forStates: CFS.NotNumGStrItpInl}
 		]
 	},
 	LBrack: {
@@ -43,15 +38,8 @@ export const BracketCaptorDefs: GroovyTokenCaptorDefs = {
 	RBrack: {
 		patterns: ']',
 		forks: [
-			{
-				forStates: [Excl, SG.Num, SG.GStrItpInl, S.IndexBlock],
-				onCaptured: EB
-			},
-			{
-				forStates: [Incl, S.IndexBlock],
-				enabledWhen: NotSafeIndex,
-				onCaptured: EB
-			}
+			{forStates: [Excl, SG.Num, SG.GStrItpInl, S.IndexBlk]},
+			{forStates: [Incl, S.IndexBlk], enabledWhen: NotSafeIndex}
 		]
 	}
 };
@@ -71,12 +59,15 @@ export const DotCommaSemicolonCaptorDefs: GroovyTokenCaptorDefs = {
 	Dot: [
 		{
 			patterns: '.',
-			forStates: CFS.NotNumGStrItpInl
+			forks: [
+				{forStates: [Excl, SG.Num, S.PkgDeclIdEd, S.GStrItpInlIdEd]},
+				{forStates: [Incl, S.PkgDeclIdEd], onCaptured: [SS, S.PkgDeclDotEd]}
+			]
 		},
 		{ // in gstring interpolation inline, the next char must be "JNameStartExcl$"
 			patterns: '.;fn#JNameStartExcl$:!',
-			forStates: [Incl, S.GStringInterpolationInlineIdentifierEd],
-			onCaptured: [SS, S.GStringInterpolationInlineDotEd]
+			forStates: [Incl, S.GStrItpInlIdEd],
+			onCaptured: [SS, S.GStrItpInlDotEd]
 		}
 	]
 };
@@ -94,8 +85,8 @@ export const WhitespaceTabNewlineCaptorDefs: GroovyTokenCaptorDefs = {
 		forStates: [
 			Excl,
 			SG.Num, SG.GStrItpInl,
-			S.ScriptCommand, S.SLComment,
-			S.SingleQuoteStringLiteral, S.SingleQuoteGStringLiteral
+			S.ScriptCmd, S.SLCmt,
+			S.SQStr, S.SQGStr
 		]
 	}
 };

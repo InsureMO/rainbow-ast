@@ -11,7 +11,7 @@ describe('Capture Decimal Literal', () => {
 				[GroovyTokenId.Number, 0, 2, 1, '12'],
 				[GroovyTokenId.NumSep, 2, 3, 1, '_'],
 				[GroovyTokenId.Number, 3, 4, 1, '3'],
-				[GroovyTokenId.NumDot, 4, 5, 1, '.'],
+				[GroovyTokenId.Dot, 4, 5, 1, '.'],
 				[GroovyTokenId.Number, 5, 7, 1, '45'],
 				[GroovyTokenId.NumSep, 7, 9, 1, '__'],
 				[GroovyTokenId.Number, 9, 10, 1, '6'],

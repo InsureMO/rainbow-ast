@@ -8,7 +8,7 @@ export const NumericLiteralPointcutDefs: GroovyTokenPointcutDefs = {
 			const children = block.children;
 			const decimal = children.some(child => {
 				const tokenId = child.id;
-				return T.NumDot === tokenId || T.NumExponent === tokenId;
+				return T.Dot === tokenId || T.NumExponent === tokenId;
 			});
 			if (decimal) {
 				return;

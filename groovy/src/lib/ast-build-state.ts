@@ -1,46 +1,48 @@
 export enum GroovyAstBuildState {
-	CompilationUnit,
-	CompilationUnitOmitScriptCommand,
+	CU,
+	CUOmitScriptCmd,
 
 	// shebang command
-	ScriptCommand,
+	/** script command, shebang */ ScriptCmd,
 	// comments
-	SLComment,
-	MLComment,
+	/** single line comment */ SLCmt,
+	/** multiple lines comment */ MLCmt,
 	// number literals
-	/** 0b/0B captured */ BinNumLiteralStarted,
-	/** binary numbers captured */ BinNumLiteralNumEd,
-	/** binary number separators captured */ BinNumLiteralSepEd,
-	/** 0x/0X captured */ HexNumLiteralStarted,
-	/** hexadecimal numbers captured */ HexNumLiteralNumEd,
-	/** hexadecimal number separators captured */ HexNumLiteralSepEd,
-	/** integral numbers captured */ NumLiteralIntEd,
-	/** integral number separators captured */ NumLiteralIntSepEd,
-	/** dot captured */ NumLiteralDotEd,
-	/** fraction numbers captured */ NumLiteralFracEd,
-	/** fraction number separators captured */ NumLiteralFracSepEd,
-	/** exponent sign captured */ NumLiteralExpSignEd,
-	/** exponent numbers captured */ NumLiteralExpNumEd,
-	/** exponent number separators captured */ NumLiteralExpNumSepEd,
+	/** 0b/0B captured, binary number started */ BinNumSt,
+	/** binary numbers captured */ BinNumNumEd,
+	/** binary number separators captured */ BinNumSepEd,
+	/** 0x/0X captured, hexadecimal number started */ HexNumSt,
+	/** hexadecimal numbers captured */ HexNumNumEd,
+	/** hexadecimal number separators captured */ HexNumSepEd,
+	/** integral numbers captured */ NumIntEd,
+	/** integral number separators captured */ NumIntSepEd,
+	/** dot captured */ NumDotEd,
+	/** fraction numbers captured */ NumFracEd,
+	/** fraction number separators captured */ NumFracSepEd,
+	/** exponent sign captured */ NumExpSignEd,
+	/** exponent numbers captured */ NumExpNumEd,
+	/** exponent number separators captured */ NumExpNumSepEd,
 	// string literals
-	SingleQuoteStringLiteral,
-	TripleQuotesStringLiteral,
-	SingleQuoteGStringLiteral,
-	TripleQuotesGStringLiteral,
-	SlashyGStringLiteral,
-	DollarSlashyGStringLiteral,
-	/** $... */ GStringInterpolationInline,
-	/** identifier captured */ GStringInterpolationInlineIdentifierEd,
-	/** dot captured */ GStringInterpolationInlineDotEd,
-	/** ${...} */ GStringInterpolation,
+	/** single quote string */ SQStr,
+	/** triple quotes string */ TQStr,
+	/** single quote gstring */ SQGStr,
+	/** triple quote gstring */ TQGStr,
+	/** slashy gstring */ SGStr,
+	/** dollar slashy gstring */ DSGStr,
+	/** gstring interpolation inline, $... */ GStrItpInl,
+	/** identifier captured */ GStrItpInlIdEd,
+	/** dot captured */ GStrItpInlDotEd,
+	/** gstring interpolation, ${...} */ GStrItp,
 	// block
-	CodeBlock,
-	IndexBlock,  // [], ?[]
+	/** code block */ CodeBlk,
+	/** index block, [], ?[] */ IndexBlk,
 	//
-	GenericType,
-	AnnotationStarted,
+	/** generic type */ GenT,
+	/** annotation started */ AnnSt,
 	// package declaration
-	PackageDeclStarted
+	/** keyword package captured, started */ PkgDeclSt,
+	/** identifier captured */ PkgDeclIdEd,
+	/** dot captured */ PkgDeclDotEd
 }
 
 export type GroovyAstBuildStateName = Exclude<keyof typeof GroovyAstBuildState, number>;

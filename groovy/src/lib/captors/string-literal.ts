@@ -5,7 +5,7 @@ import {CFS, SG} from './state-shortcuts';
 import {GroovyTokenCaptorDefs} from './types';
 import {IsSlashyGStringStartAllowed} from './utils';
 
-const NotSlashyOrDollar: TokenCaptorStates<GroovyAstBuildState> = [Incl, S.SingleQuoteStringLiteral, S.TripleQuotesStringLiteral, S.SingleQuoteGStringLiteral, S.TripleQuotesGStringLiteral];
+const NotSlashyOrDollar: TokenCaptorStates<GroovyAstBuildState> = [Incl, S.SQStr, S.TQStr, S.SQGStr, S.TQGStr];
 
 export const StringLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 	StringMark: {
@@ -13,11 +13,11 @@ export const StringLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 		forks: [
 			{
 				forStates: CFS.NotCmtNumStrGStrItpInl,
-				onCaptured: [CB, T.StringLiteral, S.SingleQuoteStringLiteral]
+				onCaptured: [CB, T.StringLiteral, S.SQStr]
 			},
 			// following are excluded by first fork
 			{
-				forStates: [Incl, S.SingleQuoteStringLiteral],
+				forStates: [Incl, S.SQStr],
 				onCaptured: EB
 			}
 		]
@@ -27,11 +27,11 @@ export const StringLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 		forks: [
 			{
 				forStates: CFS.NotCmtNumStrGStrItpInl,
-				onCaptured: [CB, T.StringLiteral, S.TripleQuotesStringLiteral]
+				onCaptured: [CB, T.StringLiteral, S.TQStr]
 			},
 			// following are excluded by first fork
 			{
-				forStates: [Incl, S.TripleQuotesStringLiteral],
+				forStates: [Incl, S.TQStr],
 				onCaptured: EB
 			}
 		]
@@ -43,11 +43,11 @@ export const GStringLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 		forks: [
 			{
 				forStates: CFS.NotCmtNumStrGStrItpInl,
-				onCaptured: [CB, T.GStringLiteral, S.SingleQuoteGStringLiteral]
+				onCaptured: [CB, T.GStringLiteral, S.SQGStr]
 			},
 			// following are excluded by first fork
 			{
-				forStates: [Incl, S.SingleQuoteGStringLiteral],
+				forStates: [Incl, S.SQGStr],
 				onCaptured: EB
 			}
 		]
@@ -57,11 +57,11 @@ export const GStringLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 		forks: [
 			{
 				forStates: CFS.NotCmtNumStrGStrItpInl,
-				onCaptured: [CB, T.GStringLiteral, S.TripleQuotesGStringLiteral]
+				onCaptured: [CB, T.GStringLiteral, S.TQGStr]
 			},
 			// following are excluded by first fork
 			{
-				forStates: [Incl, S.TripleQuotesGStringLiteral],
+				forStates: [Incl, S.TQGStr],
 				onCaptured: EB
 			}
 		]
@@ -75,11 +75,11 @@ export const SlashyGStringLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 			{
 				forStates: CFS.NotCmtNumStrGStrItpInl,
 				enabledWhen: IsSlashyGStringStartAllowed,
-				onCaptured: [CB, T.SlashyGStringLiteral, S.SlashyGStringLiteral]
+				onCaptured: [CB, T.SlashyGStringLiteral, S.SGStr]
 			},
 			// following are excluded by first fork
 			{
-				forStates: [Incl, S.SlashyGStringLiteral],
+				forStates: [Incl, S.SGStr],
 				onCaptured: EB
 			}
 		]
@@ -89,11 +89,11 @@ export const DollarSlashyGStringLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 	DollarSlashyGStringStartMark: {
 		patterns: '$/',
 		forStates: CFS.NotCmtNumStrGStrItpInl,
-		onCaptured: [CB, T.DollarSlashyGStringLiteral, S.DollarSlashyGStringLiteral]
+		onCaptured: [CB, T.DollarSlashyGStringLiteral, S.DSGStr]
 	},
 	DollarSlashyGStringEndMark: {
 		patterns: '/$',
-		forStates: [Incl, S.DollarSlashyGStringLiteral],
+		forStates: [Incl, S.DSGStr],
 		onCaptured: EB
 	}
 };
@@ -136,15 +136,15 @@ export const StringLiteralEscapeCaptorDefs: GroovyTokenCaptorDefs = {
 	},
 	SlashyGStringSlashEscape: {
 		patterns: '{{Backslash}}/',
-		forStates: [Incl, S.SlashyGStringLiteral]
+		forStates: [Incl, S.SGStr]
 	},
 	DollarSlashyGStringSlashEscape: {
 		patterns: '$/',
-		forStates: [Incl, S.DollarSlashyGStringLiteral]
+		forStates: [Incl, S.DSGStr]
 	},
 	DollarSlashyGStringDollarEscape: {
 		patterns: '$$',
-		forStates: [Incl, S.DollarSlashyGStringLiteral]
+		forStates: [Incl, S.DSGStr]
 	},
 	StringOctal: {
 		patterns: '{{Backslash}};fn#Oct:1,3',
@@ -159,11 +159,11 @@ export const GStringMarkCaptorDefs: GroovyTokenCaptorDefs = {
 	StringMLNewlineEraser: [
 		{
 			patterns: '{{Backslash}};{{CarriageReturn}}:!;{{Newline}}:!',
-			forStates: [Incl, S.TripleQuotesStringLiteral, S.TripleQuotesGStringLiteral, S.SlashyGStringLiteral, S.DollarSlashyGStringLiteral]
+			forStates: [Incl, S.TQStr, S.TQGStr, S.SGStr, S.DSGStr]
 		},
 		{
 			patterns: '{{Backslash}};{{Newline}}:!',
-			forStates: [Incl, S.TripleQuotesStringLiteral, S.TripleQuotesGStringLiteral, S.SlashyGStringLiteral, S.DollarSlashyGStringLiteral]
+			forStates: [Incl, S.TQStr, S.TQGStr, S.SGStr, S.DSGStr]
 		}
 	]
 };
@@ -214,26 +214,26 @@ export const GStringInterpolationCaptorDefs: GroovyTokenCaptorDefs = {
 	GStringInterpolationStartMark: [
 		{
 			patterns: '$;fn#JNameStartExcl$:!',
-			forStates: [Incl, S.SingleQuoteGStringLiteral, S.TripleQuotesGStringLiteral],
-			onCaptured: [CB, T.GStringInterpolation, S.GStringInterpolationInline]
+			forStates: [Incl, S.SQGStr, S.TQGStr],
+			onCaptured: [CB, T.GStringInterpolation, S.GStrItpInl]
 		},
 		{
 			// for gstring, $ always start interpolation, even the following part is not an identifier
 			patterns: '$;fn#$OrNotJNameStart:!',
-			forStates: [Incl, S.SingleQuoteGStringLiteral, S.TripleQuotesGStringLiteral],
-			onCaptured: [CE, T.GStringInterpolation, S.GStringInterpolationInline]
+			forStates: [Incl, S.SQGStr, S.TQGStr],
+			onCaptured: [CE, T.GStringInterpolation, S.GStrItpInl]
 		},
 		{
 			patterns: '$;fn#JNameStartExcl$:!',
 			forks: [
 				{ // slashy gstring, $ which follows with JNameStart(not $) char, is start of interpolation
-					forStates: [Incl, S.SlashyGStringLiteral],
-					onCaptured: [CB, T.GStringInterpolation, S.GStringInterpolationInline]
+					forStates: [Incl, S.SGStr],
+					onCaptured: [CB, T.GStringInterpolation, S.GStrItpInl]
 				},
 				{
-					forStates: [Incl, S.DollarSlashyGStringLiteral],
+					forStates: [Incl, S.DSGStr],
 					enabledWhen: IsInterpolationInDollarSlashyGStringStartAllowed,
-					onCaptured: [CB, T.GStringInterpolation, S.GStringInterpolationInline]
+					onCaptured: [CB, T.GStringInterpolation, S.GStrItpInl]
 				}
 			]
 		}
@@ -242,19 +242,19 @@ export const GStringInterpolationCaptorDefs: GroovyTokenCaptorDefs = {
 		patterns: '${',
 		forks: [
 			{
-				forStates: [Incl, S.SingleQuoteGStringLiteral, S.TripleQuotesGStringLiteral, S.SlashyGStringLiteral],
-				onCaptured: [CB, T.GStringInterpolation, S.GStringInterpolation]
+				forStates: [Incl, S.SQGStr, S.TQGStr, S.SGStr],
+				onCaptured: [CB, T.GStringInterpolation, S.GStrItp]
 			},
 			{
-				forStates: [Incl, S.DollarSlashyGStringLiteral],
+				forStates: [Incl, S.DSGStr],
 				enabledWhen: IsInterpolationInDollarSlashyGStringStartAllowed,
-				onCaptured: [CB, T.GStringInterpolation, S.GStringInterpolation]
+				onCaptured: [CB, T.GStringInterpolation, S.GStrItp]
 			}
 		]
 	},
 	GStringInterpolationRBraceEndMark: {
 		patterns: '}',
-		forStates: [Incl, S.GStringInterpolation],
+		forStates: [Incl, S.GStrItp],
 		onCaptured: EB
 	}
 };

@@ -32,11 +32,11 @@ export const OperatorCaptorDefs: GroovyTokenCaptorDefs = {
 	SafeIndex: {
 		patterns: '?[',
 		forStates: CFS.NotCmtNumStrGStrItpInl,
-		onCaptured: [CB, T.IndexBlock, S.IndexBlock]
+		onCaptured: [CB, T.IndexBlock, S.IndexBlk]
 	},
 	SafeIndexClose: {
 		patterns: ']',
-		forStates: [Incl, S.IndexBlock],
+		forStates: [Incl, S.IndexBlk],
 		enabledWhen: IsSafeIndex,
 		onCaptured: EB
 	},
@@ -104,7 +104,7 @@ export const OperatorCaptorDefs: GroovyTokenCaptorDefs = {
 	},
 	GreaterThan: {
 		patterns: '>',
-		forStates: [Excl, SG.Cmt, SG.Num, SG.Str, SG.GStrItpInl, S.GenericType]
+		forStates: [Excl, SG.Cmt, SG.Num, SG.Str, SG.GStrItpInl, S.GenT]
 	},
 	LessThan: {
 		patterns: '<',

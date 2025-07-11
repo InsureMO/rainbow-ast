@@ -7,7 +7,7 @@ export const ScriptCommandPointcutDefs: GroovyTokenPointcutDefs = {
 		 * script command is allowed only once
 		 */
 		onBlockEnded: (_, context): void => {
-			context.replaceState(GroovyAstBuildState.CompilationUnitOmitScriptCommand);
+			context.replaceState(GroovyAstBuildState.CUOmitScriptCmd);
 		}
 	}
 };

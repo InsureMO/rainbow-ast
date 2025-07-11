@@ -160,7 +160,7 @@ export const KeywordCaptorDefs: GroovyTokenCaptorDefs = {
 		patterns: 'package;fn#NotJNamePart:!',
 		forStates: CFS.NotCmtNumStrGStrItpInl,
 		enabledWhen: IsKeywordAllowed,
-		onCaptured: [CB, T.PackageDecl, S.PackageDeclStarted]
+		onCaptured: [CB, T.PackageDecl, S.PkgDeclSt]
 	},
 	PERMITS: {
 		patterns: 'permits;fn#NotJNamePart:!',

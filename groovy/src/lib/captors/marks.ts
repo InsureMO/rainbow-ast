@@ -14,23 +14,23 @@ export const IsScriptCommandStartAllowed = (context: AstBuildContext): boolean =
 export const CommentCaptorDefs: GroovyTokenCaptorDefs = {
 	ScriptCommandStartMark: {
 		patterns: '#!',
-		forStates: [Incl, S.CompilationUnit],
+		forStates: [Incl, S.CU],
 		enabledWhen: IsScriptCommandStartAllowed,
-		onCaptured: [CB, T.ScriptCommand, S.ScriptCommand]
+		onCaptured: [CB, T.ScriptCommand, S.ScriptCmd]
 	},
 	SLCommentStartMark: {
 		patterns: '//',
 		forStates: CFS.NotCmtNumStrGStrItpInl,
-		onCaptured: [CB, T.SLComment, S.SLComment]
+		onCaptured: [CB, T.SLComment, S.SLCmt]
 	},
 	MLCommentStartMark: {
 		patterns: '/*',
 		forStates: CFS.NotCmtNumStrGStrItpInl,
-		onCaptured: [CB, T.MLComment, S.MLComment]
+		onCaptured: [CB, T.MLComment, S.MLCmt]
 	},
 	MLCommentEndMark: {
 		patterns: '*/',
-		forStates: [Incl, S.MLComment],
+		forStates: [Incl, S.MLCmt],
 		onCaptured: EB
 	}
 };
@@ -42,7 +42,7 @@ export const GenericTypeCaptorDefs: GroovyTokenCaptorDefs = {
 	// },
 	GenericTypeEndMark: {
 		patterns: '>',
-		forStates: [Incl, S.GenericType],
+		forStates: [Incl, S.GenT],
 		onCaptured: EB
 	}
 };

@@ -2,38 +2,44 @@ import {TokenCaptorStates} from '@rainbow-ast/core';
 import {Excl, Incl, S} from '../alias';
 import {GroovyAstBuildState} from '../ast-build-state';
 
-const ss = (given: ReadonlyArray<GroovyAstBuildState>): ReadonlyArray<GroovyAstBuildState> => given;
+const ss = (state: GroovyAstBuildState, ...more: Array<GroovyAstBuildState>): ReadonlyArray<GroovyAstBuildState> => [state, ...more];
 export const GroovyAstBuildStateGroup = {
-	Free: ss([S.CompilationUnit, S.CompilationUnitOmitScriptCommand, S.CodeBlock, S.IndexBlock]),
-	Cmt: ss([S.ScriptCommand, S.SLComment, S.MLComment]),
-	Num: ss([
-		S.BinNumLiteralStarted, S.BinNumLiteralNumEd, S.BinNumLiteralSepEd,
-		S.HexNumLiteralStarted, S.HexNumLiteralNumEd, S.HexNumLiteralSepEd,
-		S.NumLiteralIntEd, S.NumLiteralIntSepEd,
-		S.NumLiteralDotEd,
-		S.NumLiteralFracEd, S.NumLiteralFracSepEd,
-		S.NumLiteralExpSignEd, S.NumLiteralExpNumEd, S.NumLiteralExpNumSepEd
-	]),
-	Str: ss([
-		S.SingleQuoteStringLiteral, S.TripleQuotesStringLiteral,
-		S.SingleQuoteGStringLiteral, S.TripleQuotesGStringLiteral,
-		S.SlashyGStringLiteral,
-		S.DollarSlashyGStringLiteral
-	]),
-	GStrItpInl: ss([S.GStringInterpolationInline, S.GStringInterpolationInlineIdentifierEd, S.GStringInterpolationInlineDotEd])
+	Cmt: ss(S.ScriptCmd, S.SLCmt, S.MLCmt),
+	Num: ss(
+		S.BinNumSt, S.BinNumNumEd, S.BinNumSepEd,
+		S.HexNumSt, S.HexNumNumEd, S.HexNumSepEd,
+		S.NumIntEd, S.NumIntSepEd,
+		S.NumDotEd,
+		S.NumFracEd, S.NumFracSepEd,
+		S.NumExpSignEd, S.NumExpNumEd, S.NumExpNumSepEd
+	),
+	Str: ss(
+		S.SQStr, S.TQStr,
+		S.SQGStr, S.TQGStr,
+		S.SGStr,
+		S.DSGStr
+	),
+	GStrItpInl: ss(S.GStrItpInl, S.GStrItpInlIdEd, S.GStrItpInlDotEd),
+	Pkg: ss(S.PkgDeclSt, S.PkgDeclIdEd, S.PkgDeclDotEd)
 } as const;
 export const SG = GroovyAstBuildStateGroup;
 
-const tcs = (given: TokenCaptorStates<GroovyAstBuildState>): TokenCaptorStates<GroovyAstBuildState> => given;
-const incl = (key: keyof typeof SG, ...more: Array<keyof typeof SG>): TokenCaptorStates<GroovyAstBuildState> => {
-	return tcs([Incl, SG[key], ...more.map(key => SG[key])]);
+const convertState = (value: GroovyAstBuildState | keyof typeof SG): GroovyAstBuildState | ReadonlyArray<GroovyAstBuildState> => {
+	if (typeof value === 'string') {
+		return SG[value];
+	} else {
+		return value;
+	}
 };
-const excl = (key: keyof typeof SG, ...more: Array<keyof typeof SG>): TokenCaptorStates<GroovyAstBuildState> => {
-	return tcs([Excl, SG[key], ...more.map(key => SG[key])]);
+const tcs = (given: TokenCaptorStates<GroovyAstBuildState>): TokenCaptorStates<GroovyAstBuildState> => given;
+export const Of = (first: GroovyAstBuildState | keyof typeof SG, ...more: Array<GroovyAstBuildState | keyof typeof SG>): TokenCaptorStates<GroovyAstBuildState> => {
+	return tcs([Incl, convertState(first), ...more.map(key => convertState(key))]);
+};
+export const Not = (first: GroovyAstBuildState | keyof typeof SG, ...more: Array<GroovyAstBuildState | keyof typeof SG>): TokenCaptorStates<GroovyAstBuildState> => {
+	return tcs([Excl, convertState(first), ...more.map(key => convertState(key))]);
 };
 export const CaptorForStates = {
-	CmtStr: incl('Cmt', 'Str'),
-	NotNumGStrItpInl: excl('Num', 'GStrItpInl'),
-	NotCmtNumStrGStrItpInl: excl('Cmt', 'Num', 'Str', 'GStrItpInl')
+	NotNumGStrItpInl: Not('Num', 'GStrItpInl'),
+	NotCmtNumStrGStrItpInl: Not('Cmt', 'Num', 'Str', 'GStrItpInl')
 } as const;
 export const CFS = CaptorForStates;

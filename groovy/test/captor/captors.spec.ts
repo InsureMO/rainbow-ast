@@ -20,7 +20,7 @@ describe('Captors', () => {
 	TMB.build('fn#JNameStart;fn#JNamePart:*;fn#NotJNamePart:!').forEach(matcher => tokenCaptors.push(new TokenCaptor({tokenId: GroovyTokenId.Identifier, name: 'Identifier', matcher})));
 	// @formatter:on
 	const captors = new TokenCaptors({
-		state: GroovyAstBuildState.CompilationUnit,
+		state: GroovyAstBuildState.CU,
 		name: 'CompilationUnit',
 		captors: tokenCaptors
 	});
@@ -29,10 +29,10 @@ describe('Captors', () => {
 		tokenIds: GroovyTokenId,
 		// @ts-ignore
 		states: GroovyAstBuildState,
-		initState: GroovyAstBuildState.CompilationUnit,
+		initState: GroovyAstBuildState.CU,
 		tokenCapturePriorities: GroovyTokenCapturePriorities,
 		captors: {
-			[GroovyAstBuildState.CompilationUnit]: captors
+			[GroovyAstBuildState.CU]: captors
 		}
 	};
 

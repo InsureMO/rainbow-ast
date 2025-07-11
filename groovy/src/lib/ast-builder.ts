@@ -59,7 +59,7 @@ export const buildAstBuilder = (language: GroovyLanguage): GroovyAstBuilder => {
 		language: {
 			tokenIds: GroovyTokenId as unknown as TokenIds,
 			states: GroovyAstBuildState as unknown as AstBuildStates,
-			initState: initState ?? S.CompilationUnit,
+			initState: initState ?? S.CU,
 			tokenCapturePriorities: GroovyTokenCapturePriorities,
 			captors: BuildUtils.buildLanguageCaptors(captors, GroovyAstBuildState),
 			pointcuts: BuildUtils.buildLanguagePointcuts(pointcuts, GroovyTokenId)
