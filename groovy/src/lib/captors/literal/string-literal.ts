@@ -1,9 +1,9 @@
 import {AstBuildContext, TokenCaptorStates} from '@rainbow-ast/core';
-import {CB, CE, EB, Incl, S, T} from '../alias';
-import {GroovyAstBuildState} from '../ast-build-state';
-import {CFS, SG} from './state-shortcuts';
-import {GroovyTokenCaptorDefs} from './types';
-import {IsSlashyGStringStartAllowed} from './utils';
+import {CB, CE, EB, Incl, S, SS, T} from '../../alias';
+import {GroovyAstBuildState} from '../../ast-build-state';
+import {CFS, SG} from '../state-shortcuts';
+import {GroovyTokenCaptorDefs} from '../types';
+import {IsSlashyGStringStartAllowed} from '../utils';
 
 const NotSlashyOrDollar: TokenCaptorStates<GroovyAstBuildState> = [Incl, S.SQStr, S.TQStr, S.SQGStr, S.TQGStr];
 
@@ -238,6 +238,16 @@ export const GStringInterpolationCaptorDefs: GroovyTokenCaptorDefs = {
 			]
 		}
 	],
+	Dot: { // in gstring interpolation inline, the next char must be "JNameStartExcl$"
+		patterns: '.;fn#JNameStartExcl$:!',
+		forStates: [Incl, S.GStrItpInlIdEd],
+		onCaptured: [SS, S.GStrItpInlDotEd]
+	},
+	Identifier: {
+		patterns: 'fn#JNameStartExcl$;fn#JNamePartExcl$:*;fn#$OrNotJNamePart:!',
+		forStates: [Incl, S.GStrItpInl, S.GStrItpInlDotEd],
+		onCaptured: [SS, S.GStrItpInlIdEd]
+	},
 	GStringInterpolationLBraceStartMark: {
 		patterns: '${',
 		forks: [

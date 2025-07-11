@@ -10,16 +10,23 @@ import {
 import {S} from './alias';
 import {GroovyAstBuildState, GroovyAstBuildStateName} from './ast-build-state';
 import {
+	AngleBracketCaptorDefs,
 	BooleanCaptorDefs,
+	BraceCaptorDefs,
+	BracketCaptorDefs,
 	buildTokenCaptors,
 	CharsCaptorDefs,
+	CommentCaptorDefs,
+	DotCommaSemicolonCaptorDefs,
 	IdentifierCaptorDefs,
 	KeywordCaptorDefs,
-	MarkCaptorDefs,
-	NumberCaptorDefs, OperatorCaptorDefs,
+	NumberCaptorDefs,
+	OperatorCaptorDefs,
+	PackageDeclarationCaptorDefs,
+	ParenthesesCaptorDefs,
 	PrimitiveTypeCaptorDefs,
-	SeparatorCaptorDefs,
-	StringCaptorDefs
+	StringCaptorDefs,
+	WhitespaceTabNewlineCaptorDefs
 } from './captors';
 import {buildTokenPointcuts, NumericLiteralPointcutDefs, ScriptCommandPointcutDefs} from './pointcuts';
 import {GroovyTokenId, GroovyTokenName} from './token';
@@ -71,16 +78,27 @@ export const createDefaultAstBuilder = (language?: Omit<GroovyLanguage, 'captors
 	return buildAstBuilder({
 		...language,
 		captors: buildTokenCaptors([
-			...SeparatorCaptorDefs,
-			...MarkCaptorDefs,
-			CharsCaptorDefs,
 			BooleanCaptorDefs,
 			...NumberCaptorDefs,
 			...StringCaptorDefs,
+
+			BraceCaptorDefs,
+			BracketCaptorDefs,
+			ParenthesesCaptorDefs,
+			AngleBracketCaptorDefs,
+
+			DotCommaSemicolonCaptorDefs,
+			WhitespaceTabNewlineCaptorDefs,
+
+			OperatorCaptorDefs,
+
 			PrimitiveTypeCaptorDefs,
+			CharsCaptorDefs,
 			KeywordCaptorDefs,
 			IdentifierCaptorDefs,
-			OperatorCaptorDefs
+
+			CommentCaptorDefs,
+			PackageDeclarationCaptorDefs
 		]),
 		pointcuts: buildTokenPointcuts([
 			NumericLiteralPointcutDefs,

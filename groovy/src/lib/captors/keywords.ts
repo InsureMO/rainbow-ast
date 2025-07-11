@@ -1,4 +1,3 @@
-import {CB, S, T} from '../alias';
 import {CFS} from './state-shortcuts';
 import {GroovyTokenCaptorDefs} from './types';
 import {IsKeywordAllowed} from './utils';
@@ -155,12 +154,6 @@ export const KeywordCaptorDefs: GroovyTokenCaptorDefs = {
 		patterns: 'null;fn#NotJNamePart:!',
 		forStates: CFS.NotCmtNumStrGStrItpInl,
 		enabledWhen: IsKeywordAllowed
-	},
-	PACKAGE: {
-		patterns: 'package;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
-		enabledWhen: IsKeywordAllowed,
-		onCaptured: [CB, T.PackageDecl, S.PkgDeclSt]
 	},
 	PERMITS: {
 		patterns: 'permits;fn#NotJNamePart:!',

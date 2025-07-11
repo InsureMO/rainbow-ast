@@ -1,4 +1,4 @@
-import {TokenCaptorStates} from '@rainbow-ast/core';
+import {TokenCaptorStateInclusion, TokenCaptorStates} from '@rainbow-ast/core';
 import {Excl, Incl, S} from '../alias';
 import {GroovyAstBuildState} from '../ast-build-state';
 
@@ -24,19 +24,24 @@ export const GroovyAstBuildStateGroup = {
 } as const;
 export const SG = GroovyAstBuildStateGroup;
 
-const convertState = (value: GroovyAstBuildState | keyof typeof SG): GroovyAstBuildState | ReadonlyArray<GroovyAstBuildState> => {
-	if (typeof value === 'string') {
+const convertState = (value: Incl | Excl | GroovyAstBuildState | keyof typeof SG): GroovyAstBuildState | ReadonlyArray<GroovyAstBuildState> => {
+	if (Array.isArray(value)) {
+		const [, ...states] = value;
+		return states.flat();
+	} else if (typeof value === 'string') {
 		return SG[value];
 	} else {
 		return value;
 	}
 };
+type Incl = [TokenCaptorStateInclusion.Include, GroovyAstBuildState | ReadonlyArray<GroovyAstBuildState>, ...Array<GroovyAstBuildState | ReadonlyArray<GroovyAstBuildState>>]
+type Excl = [TokenCaptorStateInclusion.Exclude, GroovyAstBuildState | ReadonlyArray<GroovyAstBuildState>, ...Array<GroovyAstBuildState | ReadonlyArray<GroovyAstBuildState>>]
 const tcs = (given: TokenCaptorStates<GroovyAstBuildState>): TokenCaptorStates<GroovyAstBuildState> => given;
-export const Of = (first: GroovyAstBuildState | keyof typeof SG, ...more: Array<GroovyAstBuildState | keyof typeof SG>): TokenCaptorStates<GroovyAstBuildState> => {
-	return tcs([Incl, convertState(first), ...more.map(key => convertState(key))]);
+export const Of = (first: Incl | GroovyAstBuildState | keyof typeof SG, ...more: Array<Incl | GroovyAstBuildState | keyof typeof SG>): Incl => {
+	return tcs([Incl, convertState(first), ...more.map(key => convertState(key))]) as Incl;
 };
-export const Not = (first: GroovyAstBuildState | keyof typeof SG, ...more: Array<GroovyAstBuildState | keyof typeof SG>): TokenCaptorStates<GroovyAstBuildState> => {
-	return tcs([Excl, convertState(first), ...more.map(key => convertState(key))]);
+export const Not = (first: Excl | GroovyAstBuildState | keyof typeof SG, ...more: Array<Excl | GroovyAstBuildState | keyof typeof SG>): Excl => {
+	return tcs([Excl, convertState(first), ...more.map(key => convertState(key))]) as Excl;
 };
 export const CaptorForStates = {
 	NotNumGStrItpInl: Not('Num', 'GStrItpInl'),

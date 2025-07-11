@@ -1,7 +1,7 @@
 import {AstBuildContext} from '@rainbow-ast/core';
-import {CB, EB, Incl, S, T} from '../alias';
-import {CFS} from './state-shortcuts';
-import {GroovyTokenCaptorDefs} from './types';
+import {CB, EB, Incl, S, T} from '../../alias';
+import {CFS} from '../state-shortcuts';
+import {GroovyTokenCaptorDefs} from '../types';
 
 export const IsScriptCommandStartAllowed = (context: AstBuildContext): boolean => {
 	const cu = context.currentBlock;
@@ -34,28 +34,3 @@ export const CommentCaptorDefs: GroovyTokenCaptorDefs = {
 		onCaptured: EB
 	}
 };
-export const GenericTypeCaptorDefs: GroovyTokenCaptorDefs = {
-	// GenericTypeStartMark: { // TODO LessThan
-	// 	patterns: '<',
-	// 	forStates: CFS.NotCmtNumStrGStrItpInl,
-	// 	onCaptured: [CB, T.GenericType, S.GenericType]
-	// },
-	GenericTypeEndMark: {
-		patterns: '>',
-		forStates: [Incl, S.GenT],
-		onCaptured: EB
-	}
-};
-export const AnnotationCaptorDefs: GroovyTokenCaptorDefs = {
-	AnnotationStartMark: {
-		patterns: '@',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
-		onCaptured: EB
-	}
-};
-
-export const MarkCaptorDefs: Array<GroovyTokenCaptorDefs> = [
-	CommentCaptorDefs,
-	GenericTypeCaptorDefs,
-	AnnotationCaptorDefs
-];

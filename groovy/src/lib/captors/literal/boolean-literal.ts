@@ -1,6 +1,6 @@
-import {CFS} from './state-shortcuts';
-import {GroovyTokenCaptorDefs} from './types';
-import {IsKeywordAllowed} from './utils';
+import {CFS} from '../state-shortcuts';
+import {GroovyTokenCaptorDefs} from '../types';
+import {IsKeywordAllowed} from '../utils';
 
 export const BooleanCaptorDefs: GroovyTokenCaptorDefs = {
 	BooleanTrue: {

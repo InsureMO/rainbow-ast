@@ -119,6 +119,11 @@ export class TokenCaptorSelector {
 				selector.fallbackBy(existing);
 				map.set(rule, selector);
 				selector.addCaptor(captor, matchIndex + 1);
+			} else if (existing instanceof MultiChoicesCaptor) {
+				const selector = new TokenCaptorSelector();
+				selector.fallbackBy(existing);
+				map.set(rule, selector);
+				selector.addCaptor(captor, matchIndex + 1);
 			} else if (existing instanceof TokenCaptorSelector) {
 				// at least one captor has same match rules as heading part already
 				// join them
@@ -145,17 +150,23 @@ export class TokenCaptorSelector {
 		(Array.isArray(captors) ? captors : [captors]).forEach(captor => this.addCaptor(captor));
 	}
 
-	fallbackBy(captor: TokenCaptor): void {
+	fallbackBy(captor: TokenCaptor | MultiChoicesCaptor): void {
 		if (this._fallback != null) {
 			// the exists fallback captor has exact same rule with given captor, raise error
 			// throw new Error(`Multiple captors with same rule[${captor.description}].`);
 			if (this._fallback instanceof TokenCaptor) {
-				if (this._fallback.availableCheck == null || captor.availableCheck == null) {
-					throw new Error(`Multiple captors with same rule[${captor.description}], and at least one has no available check.`);
+				if (this._fallback.availableCheck == null) {
+					throw new Error(`Multiple captors with same rule[${this._fallback.description}], and at least one has no available check.`);
 				}
-				this._fallback = new MultiChoicesCaptor().with(this._fallback).and(captor);
+				if (captor instanceof MultiChoicesCaptor) {
+					this._fallback = captor.and(this._fallback);
+				} else if (captor.availableCheck == null) {
+					throw new Error(`Multiple captors with same rule[${captor.description}], and at least one has no available check.`);
+				} else {
+					this._fallback = new MultiChoicesCaptor().with(this._fallback).and(captor);
+				}
 			} else {
-				if (captor.availableCheck == null) {
+				if (captor instanceof TokenCaptor && captor.availableCheck == null) {
 					throw new Error(`Multiple captors with same rule[${captor.description}], and at least one has no available check.`);
 				}
 				this._fallback.and(captor);

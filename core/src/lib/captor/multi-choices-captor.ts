@@ -17,8 +17,12 @@ export class MultiChoicesCaptor {
 		return this;
 	}
 
-	and(captor: TokenCaptor): this {
-		this._captors.push(captor);
+	and(captor: TokenCaptor | MultiChoicesCaptor): this {
+		if (captor instanceof MultiChoicesCaptor) {
+			captor.captors.forEach(captor => this._captors.push(captor));
+		} else {
+			this._captors.push(captor);
+		}
 		return this;
 	}
 

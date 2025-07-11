@@ -9,11 +9,25 @@ export class GroovyCharMatchFunctions {
 		return JavaCharMatchFunctions.JNameStart(char);
 	}
 
+	static JNamePartExcl$(char: Char): boolean {
+		if (char === '$') {
+			return false;
+		}
+		return JavaCharMatchFunctions.JNamePart(char);
+	}
+
 	static $OrNotJNameStart(char: Char): boolean {
 		if (char === '$') {
 			return true;
 		}
 		return !JavaCharMatchFunctions.JNameStart(char);
+	}
+
+	static $OrNotJNamePart(char: Char): boolean {
+		if (char === '$') {
+			return true;
+		}
+		return !JavaCharMatchFunctions.JNamePart(char);
 	}
 }
 
@@ -22,6 +36,8 @@ CharMatchFunctions.register('JNameStartExcl$', GroovyCharMatchFunctions.JNameSta
 CharMatchFunctions.register('$OrNotJNameStart', GroovyCharMatchFunctions.$OrNotJNameStart);
 CharMatchFunctions.register('JNamePart', JavaCharMatchFunctions.JNamePart);
 CharMatchFunctions.register('NotJNamePart', JavaCharMatchFunctions.NotJNamePart);
+CharMatchFunctions.register('JNamePartExcl$', GroovyCharMatchFunctions.JNamePartExcl$);
+CharMatchFunctions.register('$OrNotJNamePart', GroovyCharMatchFunctions.$OrNotJNamePart);
 CharMatchFunctions.register('Word', JavaCharMatchFunctions.Word);
 CharMatchFunctions.register('Bin', JavaCharMatchFunctions.Bin);
 CharMatchFunctions.register('Oct', JavaCharMatchFunctions.Oct);

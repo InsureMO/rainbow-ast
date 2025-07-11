@@ -1,6 +1,6 @@
-import {CB, EB, Incl, S, SS, T} from '../alias';
-import {CFS} from './state-shortcuts';
-import {GroovyTokenCaptorDefs} from './types';
+import {CB, EB, Incl, S, SS, T} from '../../alias';
+import {CFS} from '../state-shortcuts';
+import {GroovyTokenCaptorDefs} from '../types';
 
 export const BinaryNumberLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 	BinaryStartMark: {
