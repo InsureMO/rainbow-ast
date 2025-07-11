@@ -1,3 +1,4 @@
+import {CB, S, T} from '../alias';
 import {GroovyTokenCaptorDefs} from './types';
 import {ExclCommentNumberStringGStringInterpolationInline, IsKeywordAllowed} from './utils';
 
@@ -157,7 +158,8 @@ export const KeywordCaptorDefs: GroovyTokenCaptorDefs = {
 	PACKAGE: {
 		patterns: 'package;fn#NotJNamePart:!',
 		forStates: ExclCommentNumberStringGStringInterpolationInline,
-		enabledWhen: IsKeywordAllowed
+		enabledWhen: IsKeywordAllowed,
+		onCaptured: [CB, T.PackageDecl, S.PackageDeclStarted]
 	},
 	PERMITS: {
 		patterns: 'permits;fn#NotJNamePart:!',

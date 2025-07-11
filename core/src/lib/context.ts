@@ -126,7 +126,7 @@ export class AstBuildContext<
 	endCurrentBlock(): this {
 		this._states.shift();
 		const block = this._blocks.shift();
-		this.postBlockEnd(block);
+		this.postBlockEnded(block);
 		return this;
 	}
 
@@ -135,7 +135,10 @@ export class AstBuildContext<
 		return this;
 	}
 
-	postBlockEnd(block: BlockToken): void {
+	/**
+	 * block ended, and already unshift from blocks stack
+	 */
+	postBlockEnded(block: BlockToken): void {
 		const pointcut = this._language.pointcuts[block.id];
 		if (pointcut != null) {
 			pointcut.onBlockEnded(block, this);

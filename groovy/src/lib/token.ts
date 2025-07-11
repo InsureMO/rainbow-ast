@@ -218,11 +218,20 @@ export enum GroovyTokenId {
 	DollarSlashyGStringLiteral,
 	GStringInterpolation,
 	// block
-	CodeBlock,
+	CodeBlock,  // TODO
 	IndexBlock,
 	//
-	GenericType,
-	Annotation
+	GenericTypeDecl,  // TODO
+	AnnotationDecl,  // TODO
+	ImportDecl,  // TODO
+	/**
+	 * started by keyword "package"
+	 * 1. pattern: identifier[ dot identifier [dot identifier [...]]],
+	 * 2. whitespaces, tabs, ml comment is allowed,
+	 * 3. keywords "as", "def", "var", "record", "sealed", "permits", "yield", "in", "trait" are treated as identifier,
+	 * 4. newline is not allowed,
+	 */
+	PackageDecl,
 }
 
 export type GroovyTokenName = Exclude<keyof typeof GroovyTokenId, number>;

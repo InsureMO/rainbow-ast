@@ -39,6 +39,8 @@ export enum GroovyAstBuildState {
 	//
 	GenericType,
 	AnnotationStarted,
+	// package declaration
+	PackageDeclStarted
 }
 
 export type GroovyAstBuildStateName = Exclude<keyof typeof GroovyAstBuildState, number>;

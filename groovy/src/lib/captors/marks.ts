@@ -40,7 +40,7 @@ export const GenericTypeCaptorDefs: GroovyTokenCaptorDefs = {
 	// 	forStates: ExclCommentNumberStringGStringInterpolationInline,
 	// 	onCaptured: [CB, T.GenericType, S.GenericType]
 	// },
-	GenericTypeEndMark: { // TODO GreaterThan
+	GenericTypeEndMark: {
 		patterns: '>',
 		forStates: [Incl, S.GenericType],
 		onCaptured: EB
