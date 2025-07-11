@@ -1,12 +1,12 @@
 import {Incl, S, SS} from '../alias';
+import {CFS} from './state-shortcuts';
 import {GroovyTokenCaptorDefs} from './types';
-import {ExclCommentNumberStringGStringInterpolationInline} from './utils';
 
 export const IdentifierCaptorDefs: GroovyTokenCaptorDefs = {
 	Identifier: [
 		{
 			patterns: 'fn#JNameStart;fn#JNamePart:*;fn#NotJNamePart:!',
-			forStates: ExclCommentNumberStringGStringInterpolationInline
+			forStates: CFS.NotCmtNumStrGStrItpInl
 		},
 		{
 			patterns: 'fn#JNameStartExcl$;fn#JNameStartExcl$:*;fn#$OrNotJNameStart:!',

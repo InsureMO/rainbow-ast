@@ -1,45 +1,37 @@
 import {CB, EB, Excl, Incl, S, T} from '../alias';
+import {CFS, SG} from './state-shortcuts';
 import {GroovyTokenCaptorDefs} from './types';
-import {
-	Comment,
-	ExclCommentNumberStringGStringInterpolationInline,
-	GStringInterpolationInline,
-	IsKeywordAllowed,
-	IsSafeIndex,
-	NumberLiteral,
-	SlashyGStringStartNotAllowed,
-	StringLiteral
-} from './utils';
+import {IsKeywordAllowed, IsSafeIndex, SlashyGStringStartNotAllowed} from './utils';
 
 export const OperatorCaptorDefs: GroovyTokenCaptorDefs = {
 	// groovy operators
 	RangeInclusive: {
 		patterns: '..',
-		forStates: ExclCommentNumberStringGStringInterpolationInline
+		forStates: CFS.NotCmtNumStrGStrItpInl
 	},
 	RangeExclusiveLeft: {
 		patterns: '<..',
-		forStates: ExclCommentNumberStringGStringInterpolationInline
+		forStates: CFS.NotCmtNumStrGStrItpInl
 	},
 	RangeExclusiveRight: {
 		patterns: '..<',
-		forStates: ExclCommentNumberStringGStringInterpolationInline
+		forStates: CFS.NotCmtNumStrGStrItpInl
 	},
 	RangeExclusiveFull: {
 		patterns: '<..<',
-		forStates: ExclCommentNumberStringGStringInterpolationInline
+		forStates: CFS.NotCmtNumStrGStrItpInl
 	},
 	SpreadDot: {
 		patterns: '*.',
-		forStates: ExclCommentNumberStringGStringInterpolationInline
+		forStates: CFS.NotCmtNumStrGStrItpInl
 	},
 	SafeDot: {
 		patterns: '?.',
-		forStates: ExclCommentNumberStringGStringInterpolationInline
+		forStates: CFS.NotCmtNumStrGStrItpInl
 	},
 	SafeIndex: {
 		patterns: '?[',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
+		forStates: CFS.NotCmtNumStrGStrItpInl,
 		onCaptured: [CB, T.IndexBlock, S.IndexBlock]
 	},
 	SafeIndexClose: {
@@ -50,226 +42,226 @@ export const OperatorCaptorDefs: GroovyTokenCaptorDefs = {
 	},
 	SafeChainDot: {
 		patterns: '??.',
-		forStates: ExclCommentNumberStringGStringInterpolationInline
+		forStates: CFS.NotCmtNumStrGStrItpInl
 	},
 	Elvis: {
 		patterns: '?{{colon}}',
-		forStates: ExclCommentNumberStringGStringInterpolationInline
+		forStates: CFS.NotCmtNumStrGStrItpInl
 	},
 	ElvisAssign: {
 		patterns: '?=',
-		forStates: ExclCommentNumberStringGStringInterpolationInline
+		forStates: CFS.NotCmtNumStrGStrItpInl
 	},
 	MethodPointer: {
 		patterns: '.&',
-		forStates: ExclCommentNumberStringGStringInterpolationInline
+		forStates: CFS.NotCmtNumStrGStrItpInl
 	},
 	RegexFind: {
 		patterns: '=~',
-		forStates: ExclCommentNumberStringGStringInterpolationInline
+		forStates: CFS.NotCmtNumStrGStrItpInl
 	},
 	RegexMatch: {
 		patterns: '==~',
-		forStates: ExclCommentNumberStringGStringInterpolationInline
+		forStates: CFS.NotCmtNumStrGStrItpInl
 	},
 	Power: {
 		patterns: '**',
-		forStates: ExclCommentNumberStringGStringInterpolationInline
+		forStates: CFS.NotCmtNumStrGStrItpInl
 	},
 	PowerAssign: {
 		patterns: '**=',
-		forStates: ExclCommentNumberStringGStringInterpolationInline
+		forStates: CFS.NotCmtNumStrGStrItpInl
 	},
 	Spaceship: {
 		patterns: '<=>',
-		forStates: ExclCommentNumberStringGStringInterpolationInline
+		forStates: CFS.NotCmtNumStrGStrItpInl
 	},
 	Identical: {
 		patterns: '===',
-		forStates: ExclCommentNumberStringGStringInterpolationInline
+		forStates: CFS.NotCmtNumStrGStrItpInl
 	},
 	NotIdentical: {
 		patterns: '!==',
-		forStates: ExclCommentNumberStringGStringInterpolationInline
+		forStates: CFS.NotCmtNumStrGStrItpInl
 	},
 	In: {
 		patterns: 'in;fn#NotJNamePart:!',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
+		forStates: CFS.NotCmtNumStrGStrItpInl,
 		enabledWhen: IsKeywordAllowed
 	},
 	NotInstanceOf: {
 		patterns: '!instanceof;fn#NotJNamePart:!',
-		forStates: ExclCommentNumberStringGStringInterpolationInline
+		forStates: CFS.NotCmtNumStrGStrItpInl
 	},
 	NotIn: {
 		patterns: '!in;fn#NotJNamePart:!',
-		forStates: ExclCommentNumberStringGStringInterpolationInline
+		forStates: CFS.NotCmtNumStrGStrItpInl
 	},
 	// operators
 	Assign: {
 		patterns: '=',
-		forStates: ExclCommentNumberStringGStringInterpolationInline
+		forStates: CFS.NotCmtNumStrGStrItpInl
 	},
 	GreaterThan: {
 		patterns: '>',
-		forStates: [Excl, Comment, NumberLiteral, StringLiteral, GStringInterpolationInline, S.GenericType]
+		forStates: [Excl, SG.Cmt, SG.Num, SG.Str, SG.GStrItpInl, S.GenericType]
 	},
 	LessThan: {
 		patterns: '<',
-		forStates: ExclCommentNumberStringGStringInterpolationInline
+		forStates: CFS.NotCmtNumStrGStrItpInl
 	},
 	Not: {
 		patterns: '!',
-		forStates: ExclCommentNumberStringGStringInterpolationInline
+		forStates: CFS.NotCmtNumStrGStrItpInl
 	},
 	Bitnot: {
 		patterns: '~',
-		forStates: ExclCommentNumberStringGStringInterpolationInline
+		forStates: CFS.NotCmtNumStrGStrItpInl
 	},
 	Question: {
 		patterns: '?',
-		forStates: ExclCommentNumberStringGStringInterpolationInline
+		forStates: CFS.NotCmtNumStrGStrItpInl
 	},
 	Colon: {
 		patterns: '{{Colon}}',
-		forStates: ExclCommentNumberStringGStringInterpolationInline
+		forStates: CFS.NotCmtNumStrGStrItpInl
 	},
 	Equal: {
 		patterns: '==',
-		forStates: ExclCommentNumberStringGStringInterpolationInline
+		forStates: CFS.NotCmtNumStrGStrItpInl
 	},
 	LessThanOrEqual: {
 		patterns: '<=',
-		forStates: ExclCommentNumberStringGStringInterpolationInline
+		forStates: CFS.NotCmtNumStrGStrItpInl
 	},
 	GreaterThanOrEqual: {
 		patterns: '>=',
-		forStates: ExclCommentNumberStringGStringInterpolationInline
+		forStates: CFS.NotCmtNumStrGStrItpInl
 	},
 	NotEqual: {
 		patterns: '!=',
-		forStates: ExclCommentNumberStringGStringInterpolationInline
+		forStates: CFS.NotCmtNumStrGStrItpInl
 	},
 	And: {
 		patterns: '&&',
-		forStates: ExclCommentNumberStringGStringInterpolationInline
+		forStates: CFS.NotCmtNumStrGStrItpInl
 	},
 	Or: {
 		patterns: '||',
-		forStates: ExclCommentNumberStringGStringInterpolationInline
+		forStates: CFS.NotCmtNumStrGStrItpInl
 	},
 	Increase: {
 		patterns: '++',
-		forStates: ExclCommentNumberStringGStringInterpolationInline
+		forStates: CFS.NotCmtNumStrGStrItpInl
 	},
 	Decrease: {
 		patterns: '--',
-		forStates: ExclCommentNumberStringGStringInterpolationInline
+		forStates: CFS.NotCmtNumStrGStrItpInl
 	},
 	Add: {
 		patterns: '+',
-		forStates: ExclCommentNumberStringGStringInterpolationInline
+		forStates: CFS.NotCmtNumStrGStrItpInl
 	},
 	Subtract: {
 		patterns: '-',
-		forStates: ExclCommentNumberStringGStringInterpolationInline
+		forStates: CFS.NotCmtNumStrGStrItpInl
 	},
 	Multiple: {
 		patterns: '*',
-		forStates: ExclCommentNumberStringGStringInterpolationInline
+		forStates: CFS.NotCmtNumStrGStrItpInl
 	},
 	Divide: {
 		patterns: '/',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
+		forStates: CFS.NotCmtNumStrGStrItpInl,
 		enabledWhen: SlashyGStringStartNotAllowed
 	},
 	Bitand: {
 		patterns: '&',
-		forStates: ExclCommentNumberStringGStringInterpolationInline
+		forStates: CFS.NotCmtNumStrGStrItpInl
 	},
 	Bitor: {
 		patterns: '|',
-		forStates: ExclCommentNumberStringGStringInterpolationInline
+		forStates: CFS.NotCmtNumStrGStrItpInl
 	},
 	Xor: {
 		patterns: '^',
-		forStates: ExclCommentNumberStringGStringInterpolationInline
+		forStates: CFS.NotCmtNumStrGStrItpInl
 	},
 	Mod: {
 		patterns: '%',
-		forStates: ExclCommentNumberStringGStringInterpolationInline
+		forStates: CFS.NotCmtNumStrGStrItpInl
 	},
 	Lshift: {
 		patterns: '<<',
-		forStates: ExclCommentNumberStringGStringInterpolationInline
+		forStates: CFS.NotCmtNumStrGStrItpInl
 	},
 	Rshift: {
 		patterns: '>>',
-		forStates: ExclCommentNumberStringGStringInterpolationInline
+		forStates: CFS.NotCmtNumStrGStrItpInl
 	},
 	Urshift: {
 		patterns: '>>>',
-		forStates: ExclCommentNumberStringGStringInterpolationInline
+		forStates: CFS.NotCmtNumStrGStrItpInl
 	},
 	AddAssign: {
 		patterns: '+=',
-		forStates: ExclCommentNumberStringGStringInterpolationInline
+		forStates: CFS.NotCmtNumStrGStrItpInl
 	},
 	SubtractAssign: {
 		patterns: '-=',
-		forStates: ExclCommentNumberStringGStringInterpolationInline
+		forStates: CFS.NotCmtNumStrGStrItpInl
 	},
 	MultipleAssign: {
 		patterns: '*=',
-		forStates: ExclCommentNumberStringGStringInterpolationInline
+		forStates: CFS.NotCmtNumStrGStrItpInl
 	},
 	DivideAssign: {
 		patterns: '/=',
-		forStates: ExclCommentNumberStringGStringInterpolationInline
+		forStates: CFS.NotCmtNumStrGStrItpInl
 	},
 	BitandAssign: {
 		patterns: '&=',
-		forStates: ExclCommentNumberStringGStringInterpolationInline
+		forStates: CFS.NotCmtNumStrGStrItpInl
 	},
 	BitorAssign: {
 		patterns: '|=',
-		forStates: ExclCommentNumberStringGStringInterpolationInline
+		forStates: CFS.NotCmtNumStrGStrItpInl
 	},
 	XorAssign: {
 		patterns: '^=',
-		forStates: ExclCommentNumberStringGStringInterpolationInline
+		forStates: CFS.NotCmtNumStrGStrItpInl
 	},
 	ModAssign: {
 		patterns: '%=',
-		forStates: ExclCommentNumberStringGStringInterpolationInline
+		forStates: CFS.NotCmtNumStrGStrItpInl
 	},
 	LshiftAssign: {
 		patterns: '<<=',
-		forStates: ExclCommentNumberStringGStringInterpolationInline
+		forStates: CFS.NotCmtNumStrGStrItpInl
 	},
 	RshiftAssign: {
 		patterns: '>>=',
-		forStates: ExclCommentNumberStringGStringInterpolationInline
+		forStates: CFS.NotCmtNumStrGStrItpInl
 	},
 	UrshiftAssign: {
 		patterns: '>>>=',
-		forStates: ExclCommentNumberStringGStringInterpolationInline
+		forStates: CFS.NotCmtNumStrGStrItpInl
 	},
 	Ellipsis: {
 		patterns: '...',
-		forStates: ExclCommentNumberStringGStringInterpolationInline
+		forStates: CFS.NotCmtNumStrGStrItpInl
 	},
 	Arrow: {
 		patterns: '->',
-		forStates: ExclCommentNumberStringGStringInterpolationInline
+		forStates: CFS.NotCmtNumStrGStrItpInl
 	},
 	InstanceOf: {
 		patterns: 'instanceof;fn#NotJNamePart:!',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
+		forStates: CFS.NotCmtNumStrGStrItpInl,
 		enabledWhen: IsKeywordAllowed
 	},
 	MethodReference: {
 		patterns: '{{colon}}:2',
-		forStates: ExclCommentNumberStringGStringInterpolationInline
+		forStates: CFS.NotCmtNumStrGStrItpInl
 	}
 };

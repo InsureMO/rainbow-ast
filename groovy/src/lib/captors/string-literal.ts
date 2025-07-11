@@ -1,8 +1,9 @@
 import {AstBuildContext, TokenCaptorStates} from '@rainbow-ast/core';
 import {CB, CE, EB, Incl, S, T} from '../alias';
 import {GroovyAstBuildState} from '../ast-build-state';
+import {CFS, SG} from './state-shortcuts';
 import {GroovyTokenCaptorDefs} from './types';
-import {ExclCommentNumberStringGStringInterpolationInline, IsSlashyGStringStartAllowed, StringLiteral} from './utils';
+import {IsSlashyGStringStartAllowed} from './utils';
 
 const NotSlashyOrDollar: TokenCaptorStates<GroovyAstBuildState> = [Incl, S.SingleQuoteStringLiteral, S.TripleQuotesStringLiteral, S.SingleQuoteGStringLiteral, S.TripleQuotesGStringLiteral];
 
@@ -11,7 +12,7 @@ export const StringLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 		patterns: '\'',
 		forks: [
 			{
-				forStates: ExclCommentNumberStringGStringInterpolationInline,
+				forStates: CFS.NotCmtNumStrGStrItpInl,
 				onCaptured: [CB, T.StringLiteral, S.SingleQuoteStringLiteral]
 			},
 			// following are excluded by first fork
@@ -25,7 +26,7 @@ export const StringLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 		patterns: '\':3',
 		forks: [
 			{
-				forStates: ExclCommentNumberStringGStringInterpolationInline,
+				forStates: CFS.NotCmtNumStrGStrItpInl,
 				onCaptured: [CB, T.StringLiteral, S.TripleQuotesStringLiteral]
 			},
 			// following are excluded by first fork
@@ -41,7 +42,7 @@ export const GStringLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 		patterns: '"',
 		forks: [
 			{
-				forStates: ExclCommentNumberStringGStringInterpolationInline,
+				forStates: CFS.NotCmtNumStrGStrItpInl,
 				onCaptured: [CB, T.GStringLiteral, S.SingleQuoteGStringLiteral]
 			},
 			// following are excluded by first fork
@@ -55,7 +56,7 @@ export const GStringLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 		patterns: '":3',
 		forks: [
 			{
-				forStates: ExclCommentNumberStringGStringInterpolationInline,
+				forStates: CFS.NotCmtNumStrGStrItpInl,
 				onCaptured: [CB, T.GStringLiteral, S.TripleQuotesGStringLiteral]
 			},
 			// following are excluded by first fork
@@ -72,7 +73,7 @@ export const SlashyGStringLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 		patterns: '/',
 		forks: [
 			{
-				forStates: ExclCommentNumberStringGStringInterpolationInline,
+				forStates: CFS.NotCmtNumStrGStrItpInl,
 				enabledWhen: IsSlashyGStringStartAllowed,
 				onCaptured: [CB, T.SlashyGStringLiteral, S.SlashyGStringLiteral]
 			},
@@ -87,7 +88,7 @@ export const SlashyGStringLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 export const DollarSlashyGStringLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 	DollarSlashyGStringStartMark: {
 		patterns: '$/',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
+		forStates: CFS.NotCmtNumStrGStrItpInl,
 		onCaptured: [CB, T.DollarSlashyGStringLiteral, S.DollarSlashyGStringLiteral]
 	},
 	DollarSlashyGStringEndMark: {
@@ -151,7 +152,7 @@ export const StringLiteralEscapeCaptorDefs: GroovyTokenCaptorDefs = {
 	},
 	StringUnicode: {
 		patterns: '{{Backslash}}u;fn#Hex:4',
-		forStates: [Incl, StringLiteral]
+		forStates: [Incl, SG.Str]
 	}
 };
 export const GStringMarkCaptorDefs: GroovyTokenCaptorDefs = {

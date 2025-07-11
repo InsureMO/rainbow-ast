@@ -1,8 +1,8 @@
 import {Fbex} from '../alias';
+import {CFS, SG} from './state-shortcuts';
 import {GroovyTokenCaptorDefs} from './types';
-import {GStringInterpolationInline, InclCommentString, NumberLiteral} from './utils';
 
 export const CharsCaptorDefs: GroovyTokenCaptorDefs = {
-	Word: {patterns: 'fn#Word;fn#Word:*', forStates: InclCommentString},
-	UndeterminedChar: {patterns: 'fn#NotWTN', forStates: [Fbex, NumberLiteral, GStringInterpolationInline]}
+	Word: {patterns: 'fn#Word;fn#Word:*', forStates: CFS.CmtStr},
+	UndeterminedChar: {patterns: 'fn#NotWTN', forStates: [Fbex, SG.Num, SG.GStrItpInl]}
 };

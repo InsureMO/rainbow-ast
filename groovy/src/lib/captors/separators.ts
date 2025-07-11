@@ -1,19 +1,20 @@
 import {EB, Excl, Incl, S, SS} from '../alias';
+import {CFS, SG} from './state-shortcuts';
 import {GroovyTokenCaptorDefs} from './types';
-import {ExclNumberGStringInterpolationInline, GStringInterpolationInline, NotSafeIndex, NumberLiteral} from './utils';
+import {NotSafeIndex} from './utils';
 
 export const BracketCaptorDefs: GroovyTokenCaptorDefs = {
 	LBrace: {
 		patterns: '{',
 		forks: [
-			{forStates: ExclNumberGStringInterpolationInline}
+			{forStates: CFS.NotNumGStrItpInl}
 		]
 	},
 	RBrace: {
 		patterns: '}',
 		forks: [
 			{
-				forStates: [Excl, NumberLiteral, GStringInterpolationInline, S.GStringInterpolation],
+				forStates: [Excl, SG.Num, SG.GStrItpInl, S.GStringInterpolation],
 				onCaptured: EB
 			}
 		]
@@ -21,14 +22,14 @@ export const BracketCaptorDefs: GroovyTokenCaptorDefs = {
 	LParen: {
 		patterns: '(',
 		forks: [
-			{forStates: ExclNumberGStringInterpolationInline}
+			{forStates: CFS.NotNumGStrItpInl}
 		]
 	},
 	RParen: {
 		patterns: ')',
 		forks: [
 			{
-				forStates: ExclNumberGStringInterpolationInline,
+				forStates: CFS.NotNumGStrItpInl,
 				onCaptured: EB
 			}
 		]
@@ -36,14 +37,14 @@ export const BracketCaptorDefs: GroovyTokenCaptorDefs = {
 	LBrack: {
 		patterns: '[',
 		forks: [
-			{forStates: ExclNumberGStringInterpolationInline}
+			{forStates: CFS.NotNumGStrItpInl}
 		]
 	},
 	RBrack: {
 		patterns: ']',
 		forks: [
 			{
-				forStates: [Excl, NumberLiteral, GStringInterpolationInline, S.IndexBlock],
+				forStates: [Excl, SG.Num, SG.GStrItpInl, S.IndexBlock],
 				onCaptured: EB
 			},
 			{
@@ -58,19 +59,19 @@ export const DotCommaSemicolonCaptorDefs: GroovyTokenCaptorDefs = {
 	Semicolon: {
 		patterns: '{{Semicolon}}',
 		forks: [
-			{forStates: ExclNumberGStringInterpolationInline}
+			{forStates: CFS.NotNumGStrItpInl}
 		]
 	},
 	Comma: {
 		patterns: ',',
 		forks: [
-			{forStates: ExclNumberGStringInterpolationInline}
+			{forStates: CFS.NotNumGStrItpInl}
 		]
 	},
 	Dot: [
 		{
 			patterns: '.',
-			forStates: ExclNumberGStringInterpolationInline
+			forStates: CFS.NotNumGStrItpInl
 		},
 		{ // in gstring interpolation inline, the next char must be "JNameStartExcl$"
 			patterns: '.;fn#JNameStartExcl$:!',
@@ -82,17 +83,17 @@ export const DotCommaSemicolonCaptorDefs: GroovyTokenCaptorDefs = {
 export const WhitespaceTabNewlineCaptorDefs: GroovyTokenCaptorDefs = {
 	Whitespaces: {
 		patterns: '{{Space}};{{Space}}:*',
-		forStates: ExclNumberGStringInterpolationInline
+		forStates: CFS.NotNumGStrItpInl
 	},
 	Tabs: {
 		patterns: '{{Tab}};{{Tab}}:*',
-		forStates: ExclNumberGStringInterpolationInline
+		forStates: CFS.NotNumGStrItpInl
 	},
 	Newline: {
 		patterns: '{{CarriageReturn}}:?;{{Newline}}',
 		forStates: [
 			Excl,
-			NumberLiteral, GStringInterpolationInline,
+			SG.Num, SG.GStrItpInl,
 			S.ScriptCommand, S.SLComment,
 			S.SingleQuoteStringLiteral, S.SingleQuoteGStringLiteral
 		]

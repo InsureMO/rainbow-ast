@@ -1,4 +1,5 @@
 export * from './types';
+export * from './state-shortcuts';
 export * from './utils';
 
 export * from './primitive-types';

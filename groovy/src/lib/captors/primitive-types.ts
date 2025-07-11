@@ -1,5 +1,6 @@
+import {CFS} from './state-shortcuts';
 import {GroovyTokenCaptorDefs} from './types';
-import {ExclCommentNumberStringGStringInterpolationInline, IsKeywordAllowed} from './utils';
+import {IsKeywordAllowed} from './utils';
 
 /**
  * 8 base primitive types: boolean, char, byte, short, int, long, float and double.
@@ -23,42 +24,42 @@ import {ExclCommentNumberStringGStringInterpolationInline, IsKeywordAllowed} fro
 export const PrimitiveTypeCaptorDefs: GroovyTokenCaptorDefs = {
 	BOOLEAN: {
 		patterns: 'boolean;fn#NotJNamePart:!',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
+		forStates: CFS.NotCmtNumStrGStrItpInl,
 		enabledWhen: IsKeywordAllowed
 	},
 	CHAR: {
 		patterns: 'char;NoJNamePart:!',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
+		forStates: CFS.NotCmtNumStrGStrItpInl,
 		enabledWhen: IsKeywordAllowed
 	},
 	BYTE: {
 		patterns: 'byte;fn#NotJNamePart:!',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
+		forStates: CFS.NotCmtNumStrGStrItpInl,
 		enabledWhen: IsKeywordAllowed
 	},
 	SHORT: {
 		patterns: 'short;fn#NotJNamePart:!',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
+		forStates: CFS.NotCmtNumStrGStrItpInl,
 		enabledWhen: IsKeywordAllowed
 	},
 	INT: {
 		patterns: 'int;fn#NotJNamePart:!',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
+		forStates: CFS.NotCmtNumStrGStrItpInl,
 		enabledWhen: IsKeywordAllowed
 	},
 	LONG: {
 		patterns: 'long;fn#NotJNamePart:!',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
+		forStates: CFS.NotCmtNumStrGStrItpInl,
 		enabledWhen: IsKeywordAllowed
 	},
 	FLOAT: {
 		patterns: 'float;fn#NotJNamePart:!',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
+		forStates: CFS.NotCmtNumStrGStrItpInl,
 		enabledWhen: IsKeywordAllowed
 	},
 	DOUBLE: {
 		patterns: 'double;fn#NotJNamePart:!',
-		forStates: ExclCommentNumberStringGStringInterpolationInline,
+		forStates: CFS.NotCmtNumStrGStrItpInl,
 		enabledWhen: IsKeywordAllowed
 	}
 };
