@@ -4,10 +4,10 @@ import {GroovyTokenCaptorDefs} from '../types';
 export const ParenthesesCaptorDefs: GroovyTokenCaptorDefs = {
 	LParen: {
 		patterns: '(',
-		forStates: CFS.NotNumGStrItpInl
+		forStates: CFS.NotNumGStrItpInlPkg
 	},
 	RParen: {
 		patterns: ')',
-		forStates: CFS.NotNumGStrItpInl
+		forStates: CFS.NotNumGStrItpInlPkg
 	}
 };

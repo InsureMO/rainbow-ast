@@ -12,7 +12,7 @@ export const StringLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 		patterns: '\'',
 		forks: [
 			{
-				forStates: CFS.NotCmtNumStrGStrItpInl,
+				forStates: CFS.NotCmtNumStrGStrItpInlPkg,
 				onCaptured: [CB, T.StringLiteral, S.SQStr]
 			},
 			// following are excluded by first fork
@@ -26,7 +26,7 @@ export const StringLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 		patterns: '\':3',
 		forks: [
 			{
-				forStates: CFS.NotCmtNumStrGStrItpInl,
+				forStates: CFS.NotCmtNumStrGStrItpInlPkg,
 				onCaptured: [CB, T.StringLiteral, S.TQStr]
 			},
 			// following are excluded by first fork
@@ -42,7 +42,7 @@ export const GStringLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 		patterns: '"',
 		forks: [
 			{
-				forStates: CFS.NotCmtNumStrGStrItpInl,
+				forStates: CFS.NotCmtNumStrGStrItpInlPkg,
 				onCaptured: [CB, T.GStringLiteral, S.SQGStr]
 			},
 			// following are excluded by first fork
@@ -56,7 +56,7 @@ export const GStringLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 		patterns: '":3',
 		forks: [
 			{
-				forStates: CFS.NotCmtNumStrGStrItpInl,
+				forStates: CFS.NotCmtNumStrGStrItpInlPkg,
 				onCaptured: [CB, T.GStringLiteral, S.TQGStr]
 			},
 			// following are excluded by first fork
@@ -73,7 +73,7 @@ export const SlashyGStringLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 		patterns: '/',
 		forks: [
 			{
-				forStates: CFS.NotCmtNumStrGStrItpInl,
+				forStates: CFS.NotCmtNumStrGStrItpInlPkg,
 				enabledWhen: IsSlashyGStringStartAllowed,
 				onCaptured: [CB, T.SlashyGStringLiteral, S.SGStr]
 			},
@@ -88,7 +88,7 @@ export const SlashyGStringLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 export const DollarSlashyGStringLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 	DollarSlashyGStringStartMark: {
 		patterns: '$/',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg,
 		onCaptured: [CB, T.DollarSlashyGStringLiteral, S.DSGStr]
 	},
 	DollarSlashyGStringEndMark: {

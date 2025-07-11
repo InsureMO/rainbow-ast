@@ -6,7 +6,7 @@ export const BraceCaptorDefs: GroovyTokenCaptorDefs = {
 	LBrace: {
 		patterns: '{',
 		forks: [
-			{forStates: CFS.NotNumGStrItpInl, onCaptured: [CB, T.CodeBlock, S.CodeBlk]}
+			{forStates: CFS.NotNumGStrItpInlPkg, onCaptured: [CB, T.CodeBlock, S.CodeBlk]}
 		]
 	},
 	RBrace: {

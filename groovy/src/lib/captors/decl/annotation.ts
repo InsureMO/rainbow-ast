@@ -5,7 +5,7 @@ import {GroovyTokenCaptorDefs} from '../types';
 export const AnnotationCaptorDefs: GroovyTokenCaptorDefs = {
 	AnnotationStartMark: {
 		patterns: '@',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg,
 		onCaptured: EB
 	}
 };

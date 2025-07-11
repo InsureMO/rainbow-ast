@@ -20,7 +20,7 @@ export const CommentCaptorDefs: GroovyTokenCaptorDefs = {
 	},
 	SLCommentStartMark: {
 		patterns: '//',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg,
 		onCaptured: [CB, T.SLComment, S.SLCmt]
 	},
 	MLCommentStartMark: {

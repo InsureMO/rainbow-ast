@@ -1,37 +1,37 @@
-import {CB, EB, Excl, Incl, S, T} from '../alias';
-import {CFS, SG} from './state-shortcuts';
+import {CB, EB, Incl, S, T} from '../alias';
+import {CFS, Not} from './state-shortcuts';
 import {GroovyTokenCaptorDefs} from './types';
-import {IsKeywordAllowed, IsSafeIndex, SlashyGStringStartNotAllowed} from './utils';
+import {IsKeywordAllowed, IsSafeIndex, KeywordForks, SlashyGStringStartNotAllowed} from './utils';
 
 export const OperatorCaptorDefs: GroovyTokenCaptorDefs = {
 	// groovy operators
 	RangeInclusive: {
 		patterns: '..',
-		forStates: CFS.NotCmtNumStrGStrItpInl
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg
 	},
 	RangeExclusiveLeft: {
 		patterns: '<..',
-		forStates: CFS.NotCmtNumStrGStrItpInl
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg
 	},
 	RangeExclusiveRight: {
 		patterns: '..<',
-		forStates: CFS.NotCmtNumStrGStrItpInl
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg
 	},
 	RangeExclusiveFull: {
 		patterns: '<..<',
-		forStates: CFS.NotCmtNumStrGStrItpInl
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg
 	},
 	SpreadDot: {
 		patterns: '*.',
-		forStates: CFS.NotCmtNumStrGStrItpInl
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg
 	},
 	SafeDot: {
 		patterns: '?.',
-		forStates: CFS.NotCmtNumStrGStrItpInl
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg
 	},
 	SafeIndex: {
 		patterns: '?[',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg,
 		onCaptured: [CB, T.IndexBlock, S.IndexBlk]
 	},
 	SafeIndexClose: {
@@ -42,226 +42,226 @@ export const OperatorCaptorDefs: GroovyTokenCaptorDefs = {
 	},
 	SafeChainDot: {
 		patterns: '??.',
-		forStates: CFS.NotCmtNumStrGStrItpInl
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg
 	},
 	Elvis: {
 		patterns: '?{{colon}}',
-		forStates: CFS.NotCmtNumStrGStrItpInl
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg
 	},
 	ElvisAssign: {
 		patterns: '?=',
-		forStates: CFS.NotCmtNumStrGStrItpInl
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg
 	},
 	MethodPointer: {
 		patterns: '.&',
-		forStates: CFS.NotCmtNumStrGStrItpInl
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg
 	},
 	RegexFind: {
 		patterns: '=~',
-		forStates: CFS.NotCmtNumStrGStrItpInl
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg
 	},
 	RegexMatch: {
 		patterns: '==~',
-		forStates: CFS.NotCmtNumStrGStrItpInl
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg
 	},
 	Power: {
 		patterns: '**',
-		forStates: CFS.NotCmtNumStrGStrItpInl
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg
 	},
 	PowerAssign: {
 		patterns: '**=',
-		forStates: CFS.NotCmtNumStrGStrItpInl
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg
 	},
 	Spaceship: {
 		patterns: '<=>',
-		forStates: CFS.NotCmtNumStrGStrItpInl
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg
 	},
 	Identical: {
 		patterns: '===',
-		forStates: CFS.NotCmtNumStrGStrItpInl
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg
 	},
 	NotIdentical: {
 		patterns: '!==',
-		forStates: CFS.NotCmtNumStrGStrItpInl
-	},
-	In: {
-		patterns: 'in;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
-		enabledWhen: IsKeywordAllowed
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg
 	},
 	NotInstanceOf: {
 		patterns: '!instanceof;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg
 	},
 	NotIn: {
 		patterns: '!in;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg
 	},
 	// operators
 	Assign: {
 		patterns: '=',
-		forStates: CFS.NotCmtNumStrGStrItpInl
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg
 	},
 	GreaterThan: {
 		patterns: '>',
-		forStates: [Excl, SG.Cmt, SG.Num, SG.Str, SG.GStrItpInl, S.GenT]
+		forStates: Not(CFS.NotCmtNumStrGStrItpInlPkg, S.GenT)
 	},
 	LessThan: {
 		patterns: '<',
-		forStates: CFS.NotCmtNumStrGStrItpInl
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg
 	},
 	Not: {
 		patterns: '!',
-		forStates: CFS.NotCmtNumStrGStrItpInl
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg
 	},
 	Bitnot: {
 		patterns: '~',
-		forStates: CFS.NotCmtNumStrGStrItpInl
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg
 	},
 	Question: {
 		patterns: '?',
-		forStates: CFS.NotCmtNumStrGStrItpInl
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg
 	},
 	Colon: {
 		patterns: '{{Colon}}',
-		forStates: CFS.NotCmtNumStrGStrItpInl
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg
 	},
 	Equal: {
 		patterns: '==',
-		forStates: CFS.NotCmtNumStrGStrItpInl
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg
 	},
 	LessThanOrEqual: {
 		patterns: '<=',
-		forStates: CFS.NotCmtNumStrGStrItpInl
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg
 	},
 	GreaterThanOrEqual: {
 		patterns: '>=',
-		forStates: CFS.NotCmtNumStrGStrItpInl
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg
 	},
 	NotEqual: {
 		patterns: '!=',
-		forStates: CFS.NotCmtNumStrGStrItpInl
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg
 	},
 	And: {
 		patterns: '&&',
-		forStates: CFS.NotCmtNumStrGStrItpInl
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg
 	},
 	Or: {
 		patterns: '||',
-		forStates: CFS.NotCmtNumStrGStrItpInl
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg
 	},
 	Increase: {
 		patterns: '++',
-		forStates: CFS.NotCmtNumStrGStrItpInl
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg
 	},
 	Decrease: {
 		patterns: '--',
-		forStates: CFS.NotCmtNumStrGStrItpInl
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg
 	},
 	Add: {
 		patterns: '+',
-		forStates: CFS.NotCmtNumStrGStrItpInl
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg
 	},
 	Subtract: {
 		patterns: '-',
-		forStates: CFS.NotCmtNumStrGStrItpInl
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg
 	},
 	Multiple: {
 		patterns: '*',
-		forStates: CFS.NotCmtNumStrGStrItpInl
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg
 	},
 	Divide: {
 		patterns: '/',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg,
 		enabledWhen: SlashyGStringStartNotAllowed
 	},
 	Bitand: {
 		patterns: '&',
-		forStates: CFS.NotCmtNumStrGStrItpInl
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg
 	},
 	Bitor: {
 		patterns: '|',
-		forStates: CFS.NotCmtNumStrGStrItpInl
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg
 	},
 	Xor: {
 		patterns: '^',
-		forStates: CFS.NotCmtNumStrGStrItpInl
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg
 	},
 	Mod: {
 		patterns: '%',
-		forStates: CFS.NotCmtNumStrGStrItpInl
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg
 	},
 	Lshift: {
 		patterns: '<<',
-		forStates: CFS.NotCmtNumStrGStrItpInl
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg
 	},
 	Rshift: {
 		patterns: '>>',
-		forStates: CFS.NotCmtNumStrGStrItpInl
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg
 	},
 	Urshift: {
 		patterns: '>>>',
-		forStates: CFS.NotCmtNumStrGStrItpInl
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg
 	},
 	AddAssign: {
 		patterns: '+=',
-		forStates: CFS.NotCmtNumStrGStrItpInl
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg
 	},
 	SubtractAssign: {
 		patterns: '-=',
-		forStates: CFS.NotCmtNumStrGStrItpInl
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg
 	},
 	MultipleAssign: {
 		patterns: '*=',
-		forStates: CFS.NotCmtNumStrGStrItpInl
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg
 	},
 	DivideAssign: {
 		patterns: '/=',
-		forStates: CFS.NotCmtNumStrGStrItpInl
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg
 	},
 	BitandAssign: {
 		patterns: '&=',
-		forStates: CFS.NotCmtNumStrGStrItpInl
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg
 	},
 	BitorAssign: {
 		patterns: '|=',
-		forStates: CFS.NotCmtNumStrGStrItpInl
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg
 	},
 	XorAssign: {
 		patterns: '^=',
-		forStates: CFS.NotCmtNumStrGStrItpInl
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg
 	},
 	ModAssign: {
 		patterns: '%=',
-		forStates: CFS.NotCmtNumStrGStrItpInl
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg
 	},
 	LshiftAssign: {
 		patterns: '<<=',
-		forStates: CFS.NotCmtNumStrGStrItpInl
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg
 	},
 	RshiftAssign: {
 		patterns: '>>=',
-		forStates: CFS.NotCmtNumStrGStrItpInl
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg
 	},
 	UrshiftAssign: {
 		patterns: '>>>=',
-		forStates: CFS.NotCmtNumStrGStrItpInl
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg
 	},
 	Ellipsis: {
 		patterns: '...',
-		forStates: CFS.NotCmtNumStrGStrItpInl
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg
 	},
 	Arrow: {
 		patterns: '->',
-		forStates: CFS.NotCmtNumStrGStrItpInl
-	},
-	InstanceOf: {
-		patterns: 'instanceof;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
-		enabledWhen: IsKeywordAllowed
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg
 	},
 	MethodReference: {
 		patterns: '{{colon}}:2',
-		forStates: CFS.NotCmtNumStrGStrItpInl
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg
+	},
+	// in and instanceof is keyword like
+	In: { // "in" can be identified as qualified name
+		patterns: 'in;fn#NotJNamePart:!',
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg,
+		enabledWhen: IsKeywordAllowed
+	},
+	InstanceOf: {
+		patterns: 'instanceof;fn#NotJNamePart:!',
+		forks: KeywordForks()
 	}
 };

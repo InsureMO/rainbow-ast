@@ -1,14 +1,22 @@
-import {CB, Incl, S, SS, T} from '../../alias';
-import {CFS} from '../state-shortcuts';
+import {CB, EB, Incl, S, SS, T} from '../../alias';
+import {CFS, SG} from '../state-shortcuts';
 import {GroovyTokenCaptorDefs} from '../types';
 import {IsKeywordAllowed} from '../utils';
 
 export const PackageDeclarationCaptorDefs: GroovyTokenCaptorDefs = {
 	PACKAGE: {
 		patterns: 'package;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
-		enabledWhen: IsKeywordAllowed,
-		onCaptured: [CB, T.PackageDecl, S.PkgDeclSt]
+		forks: [
+			{
+				forStates: CFS.NotCmtNumStrGStrItpInlPkg,
+				enabledWhen: IsKeywordAllowed,
+				onCaptured: [CB, T.PackageDecl, S.PkgDeclSt]
+			},
+			{ // in package declaration, always allowed
+				forStates: [Incl, SG.Pkg],
+				onCaptured: [CB, T.PackageDecl, S.PkgDeclSt]
+			}
+		]
 	},
 	Identifier: {
 		patterns: 'fn#JNameStart;fn#JNamePart:*;fn#NotJNamePart:!',
@@ -17,8 +25,12 @@ export const PackageDeclarationCaptorDefs: GroovyTokenCaptorDefs = {
 	},
 	Dot: {
 		patterns: '.',
-		forks: [
-			{forStates: [Incl, S.PkgDeclIdEd], onCaptured: [SS, S.PkgDeclDotEd]}
-		]
+		forStates: [Incl, S.PkgDeclIdEd], onCaptured: [SS, S.PkgDeclDotEd]
+	},
+	Semicolon: {
+		patterns: '{{Semicolon}}',
+		forStates: [Incl, SG.Pkg],
+		onCaptured: EB
 	}
+
 };

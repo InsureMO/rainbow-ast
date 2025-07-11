@@ -1,268 +1,233 @@
 import {CFS} from './state-shortcuts';
 import {GroovyTokenCaptorDefs} from './types';
-import {IsKeywordAllowed} from './utils';
+import {IsKeywordAllowed, KeywordForks} from './utils';
 
 export const KeywordCaptorDefs: GroovyTokenCaptorDefs = {
 	// groovy keywords
-	AS: {
+	AS: { // "as" can be identified as qualified name
 		patterns: 'as;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg,
 		enabledWhen: IsKeywordAllowed
 	},
-	DEF: {
+	DEF: { // "def" can be identified as qualified name
 		patterns: 'def;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg,
 		enabledWhen: IsKeywordAllowed
 	},
-	TRAIT: {
+	TRAIT: { // "trait" can be identified as qualified name
 		patterns: 'trait;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
-		enabledWhen: IsKeywordAllowed
-	},
-	THREADSAFE: {
-		patterns: '@ThreadSafe;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg,
 		enabledWhen: IsKeywordAllowed
 	},
 	// java keywords
 	ABSTRACT: {
 		patterns: 'abstract;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
-		enabledWhen: IsKeywordAllowed
+		forks: KeywordForks()
 	},
 	ASSERT: {
 		patterns: 'assert;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
-		enabledWhen: IsKeywordAllowed
+		forks: KeywordForks()
 	},
 	AT_INTERFACE: {
 		patterns: '@interface;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
-		enabledWhen: IsKeywordAllowed
+		forks: KeywordForks()
 	},
 	BREAK: {
 		patterns: 'break;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
-		enabledWhen: IsKeywordAllowed
+		forks: KeywordForks()
 	},
 	CASE: {
 		patterns: 'case;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
-		enabledWhen: IsKeywordAllowed
+		forks: KeywordForks()
 	},
 	CATCH: {
 		patterns: 'catch;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
-		enabledWhen: IsKeywordAllowed
+		forks: KeywordForks()
 	},
 	CLASS: {
 		patterns: 'class;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
-		enabledWhen: IsKeywordAllowed
+		forks: KeywordForks()
 	},
 	CONST: {
 		patterns: 'const;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
-		enabledWhen: IsKeywordAllowed
+		forks: KeywordForks()
 	},
 	CONTINUE: {
 		patterns: 'continue;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
-		enabledWhen: IsKeywordAllowed
+		forks: KeywordForks()
 	},
 	DEFAULT: {
 		patterns: 'default;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
-		enabledWhen: IsKeywordAllowed
+		forks: KeywordForks()
 	},
 	DO: {
 		patterns: 'do;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
-		enabledWhen: IsKeywordAllowed
+		forks: KeywordForks()
 	},
 	ELSE: {
 		patterns: 'else;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
-		enabledWhen: IsKeywordAllowed
+		forks: KeywordForks()
 	},
 	ENUM: {
 		patterns: 'enum;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
-		enabledWhen: IsKeywordAllowed
+		forks: KeywordForks()
 	},
 	EXTENDS: {
 		patterns: 'extends;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
-		enabledWhen: IsKeywordAllowed
+		forks: KeywordForks()
 	},
 	FINAL: {
 		patterns: 'final;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
-		enabledWhen: IsKeywordAllowed
+		forks: KeywordForks()
 	},
 	FINALLY: {
 		patterns: 'finally;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
-		enabledWhen: IsKeywordAllowed
+		forks: KeywordForks()
 	},
 	FOR: {
 		patterns: 'for;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
-		enabledWhen: IsKeywordAllowed
+		forks: KeywordForks()
 	},
 	GOTO: {
 		patterns: 'goto;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
-		enabledWhen: IsKeywordAllowed
+		forks: KeywordForks()
 	},
 	IF: {
 		patterns: 'if;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
-		enabledWhen: IsKeywordAllowed
+		forks: KeywordForks()
 	},
 	IMPLEMENTS: {
 		patterns: 'implements;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
-		enabledWhen: IsKeywordAllowed
+		forks: KeywordForks()
 	},
 	IMPORT: {
 		patterns: 'import;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
-		enabledWhen: IsKeywordAllowed
+		forks: KeywordForks()
 	},
 	INTERFACE: {
 		patterns: 'interface;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
-		enabledWhen: IsKeywordAllowed
+		forks: KeywordForks()
 	},
 	NATIVE: {
 		patterns: 'native;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
-		enabledWhen: IsKeywordAllowed
+		forks: KeywordForks()
 	},
 	NEW: {
 		patterns: 'new;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
-		enabledWhen: IsKeywordAllowed
+		forks: KeywordForks()
 	},
 	NON_SEALED: {
+		// if it is detected in package declaration, cannot pass the compilation. HOLY CRAP!
+		// it cannot be separated to "non - sealed",
+		// but for "no-sealed" -> "no - sealed", "non-ealed" -> "non - ealed", they are ok to separated,
+		// which means they are ok to compile
 		patterns: 'non-sealed;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
-		enabledWhen: IsKeywordAllowed
+		forks: KeywordForks()
 	},
 	NULL: {
 		patterns: 'null;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
-		enabledWhen: IsKeywordAllowed
-	},
-	PERMITS: {
-		patterns: 'permits;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
-		enabledWhen: IsKeywordAllowed
+		forks: KeywordForks()
 	},
 	PRIVATE: {
 		patterns: 'private;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
-		enabledWhen: IsKeywordAllowed
+		forks: KeywordForks()
 	},
 	PROTECTED: {
 		patterns: 'protected;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
-		enabledWhen: IsKeywordAllowed
+		forks: KeywordForks()
 	},
 	PUBLIC: {
 		patterns: 'public;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
-		enabledWhen: IsKeywordAllowed
-	},
-	RECORD: {
-		patterns: 'record;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
-		enabledWhen: IsKeywordAllowed
+		forks: KeywordForks()
 	},
 	RETURN: {
 		patterns: 'return;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
-		enabledWhen: IsKeywordAllowed
-	},
-	SEALED: {
-		patterns: 'sealed;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
-		enabledWhen: IsKeywordAllowed
+		forks: KeywordForks()
 	},
 	STATIC: {
 		patterns: 'static;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
-		enabledWhen: IsKeywordAllowed
+		forks: KeywordForks()
 	},
 	STRICTFP: {
 		patterns: 'strictfp;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
-		enabledWhen: IsKeywordAllowed
+		forks: KeywordForks()
 	},
 	SUPER: {
 		patterns: 'super;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
-		enabledWhen: IsKeywordAllowed
+		forks: KeywordForks()
 	},
 	SWITCH: {
 		patterns: 'switch;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
-		enabledWhen: IsKeywordAllowed
+		forks: KeywordForks()
 	},
 	SYNCHRONIZED: {
 		patterns: 'synchronized;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
-		enabledWhen: IsKeywordAllowed
+		forks: KeywordForks()
 	},
 	THIS: {
 		patterns: 'this;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
-		enabledWhen: IsKeywordAllowed
+		forks: KeywordForks()
 	},
 	THROW: {
 		patterns: 'throw;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
-		enabledWhen: IsKeywordAllowed
+		forks: KeywordForks()
 	},
 	THROWS: {
 		patterns: 'throws;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
-		enabledWhen: IsKeywordAllowed
+		forks: KeywordForks()
 	},
 	TRANSIENT: {
 		patterns: 'transient;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
-		enabledWhen: IsKeywordAllowed
+		forks: KeywordForks()
 	},
 	TRY: {
 		patterns: 'try;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
-		enabledWhen: IsKeywordAllowed
-	},
-	VAR: {
-		patterns: 'var;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
-		enabledWhen: IsKeywordAllowed
+		forks: KeywordForks()
 	},
 	VOID: {
 		patterns: 'void;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
-		enabledWhen: IsKeywordAllowed
+		forks: KeywordForks()
 	},
 	VOLATILE: {
 		patterns: 'volatile;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
-		enabledWhen: IsKeywordAllowed
+		forks: KeywordForks()
 	},
 	WHILE: {
 		patterns: 'while;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
+		forks: KeywordForks()
+	},
+	// special keywords
+	// groovy keywords
+	THREADSAFE: { // starts with @
+		patterns: '@ThreadSafe;fn#NotJNamePart:!',
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg,
+		// TODO not sure, should it be annotation allowed?
 		enabledWhen: IsKeywordAllowed
 	},
-	YIELD: {
+	// java keywords
+	PERMITS: { // "permits" can be identified as qualified name
+		patterns: 'permits;fn#NotJNamePart:!',
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg,
+		enabledWhen: IsKeywordAllowed
+	},
+	RECORD: { // "record" can be identified as qualified name
+		patterns: 'record;fn#NotJNamePart:!',
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg,
+		enabledWhen: IsKeywordAllowed
+	},
+	SEALED: { // "sealed" can be identified as qualified name
+		patterns: 'sealed;fn#NotJNamePart:!',
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg,
+		enabledWhen: IsKeywordAllowed
+	},
+	VAR: { // "var" can be identified as qualified name
+		patterns: 'var;fn#NotJNamePart:!',
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg,
+		enabledWhen: IsKeywordAllowed
+	},
+	YIELD: { // "yield" can be identified as qualified name
 		patterns: 'yield;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg,
 		enabledWhen: IsKeywordAllowed
 	}
 };

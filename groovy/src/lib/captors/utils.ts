@@ -1,7 +1,15 @@
-import {AstBuildContext, BuildUtils, Token, TokenCaptorOfStates, TokenMatcherBuilder} from '@rainbow-ast/core';
-import {T} from '../alias';
+import {
+	AstBuildContext,
+	BuildUtils,
+	Token,
+	TokenCaptorDef,
+	TokenCaptorOfStates,
+	TokenMatcherBuilder
+} from '@rainbow-ast/core';
+import {Incl, T} from '../alias';
 import {GroovyAstBuildState, GroovyAstBuildStateName} from '../ast-build-state';
 import {GroovyTokenId, GroovyTokenName} from '../token';
+import {CFS, SG} from './state-shortcuts';
 import {GroovyTokenCaptorDefs} from './types';
 
 export const GroovyTokenMatcherBuilder = TokenMatcherBuilder.create({LongestKeywordLength: 'synchronized'.length});
@@ -116,6 +124,24 @@ export const IsSafeIndex = (context: AstBuildContext): boolean => {
 export const NotSafeIndex = (context: AstBuildContext): boolean => {
 	const block = context.currentBlock;
 	return block.id !== T.IndexBlock || block.children[0].id !== T.SafeIndex;
+};
+
+/**
+ * 1. when state is not comment, number, string, gstring interpolation inline, package declaration,
+ *    and is keyword allowed
+ * 2. when state is package declaration
+ */
+export const KeywordForks = (): Array<Omit<TokenCaptorDef<GroovyAstBuildState>, 'patterns'>> => {
+	return [
+		{
+			forStates: CFS.NotCmtNumStrGStrItpInlPkg,
+			enabledWhen: IsKeywordAllowed
+		},
+		{ // in package declaration, always allowed
+			forStates: [Incl, SG.Pkg]
+			// TODO end package declaration block, and append me after package declaration block
+		}
+	];
 };
 
 export const buildTokenCaptors = (defs: Array<GroovyTokenCaptorDefs>): TokenCaptorOfStates<GroovyAstBuildStateName> => {

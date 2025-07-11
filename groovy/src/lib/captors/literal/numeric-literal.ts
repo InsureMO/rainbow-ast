@@ -5,7 +5,7 @@ import {GroovyTokenCaptorDefs} from '../types';
 export const BinaryNumberLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 	BinaryStartMark: {
 		patterns: ['0b;fn#Bin:!', '0B;fn#Bin:!'],
-		forStates: CFS.NotCmtNumStrGStrItpInl,
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg,
 		onCaptured: [CB, T.BinaryLiteral, S.BinNumSt]
 	},
 	Number: {
@@ -23,7 +23,7 @@ export const BinaryNumberLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 export const HexadecimalNumberLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 	HexStartMark: {
 		patterns: ['0x;fn#Hex:!', '0X;fn#Hex:!'],
-		forStates: CFS.NotCmtNumStrGStrItpInl,
+		forStates: CFS.NotCmtNumStrGStrItpInlPkg,
 		onCaptured: [CB, T.HexadecimalLiteral, S.HexNumSt]
 	},
 	Number: {
@@ -43,7 +43,7 @@ export const DecimalLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 		patterns: 'fn#Num;fn#Num:*',
 		forks: [
 			{   // integral part
-				forStates: CFS.NotCmtNumStrGStrItpInl,
+				forStates: CFS.NotCmtNumStrGStrItpInlPkg,
 				onCaptured: [CB, T.DecimalLiteral, S.NumIntEd]
 			},
 			// following are excluded by first fork
@@ -61,7 +61,7 @@ export const DecimalLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 			}
 		]
 	},
-	Dot: {
+	Dot: { // in number literal, next char must be number
 		patterns: '.;fn#Num:!',
 		forStates: [Incl, S.NumIntEd],
 		onCaptured: [SS, S.NumDotEd]

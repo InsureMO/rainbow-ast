@@ -45,6 +45,8 @@ export const Not = (first: Excl | GroovyAstBuildState | keyof typeof SG, ...more
 };
 export const CaptorForStates = {
 	NotNumGStrItpInl: Not('Num', 'GStrItpInl'),
-	NotCmtNumStrGStrItpInl: Not('Cmt', 'Num', 'Str', 'GStrItpInl')
+	NotNumGStrItpInlPkg: Not('Num', 'GStrItpInl', 'Pkg'),
+	NotCmtNumStrGStrItpInl: Not('Cmt', 'Num', 'Str', 'GStrItpInl'),
+	NotCmtNumStrGStrItpInlPkg: Not('Cmt', 'Num', 'Str', 'GStrItpInl', 'Pkg')
 } as const;
 export const CFS = CaptorForStates;

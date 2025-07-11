@@ -1,6 +1,5 @@
-import {CFS} from './state-shortcuts';
 import {GroovyTokenCaptorDefs} from './types';
-import {IsKeywordAllowed} from './utils';
+import {KeywordForks} from './utils';
 
 /**
  * 8 base primitive types: boolean, char, byte, short, int, long, float and double.
@@ -24,42 +23,34 @@ import {IsKeywordAllowed} from './utils';
 export const PrimitiveTypeCaptorDefs: GroovyTokenCaptorDefs = {
 	BOOLEAN: {
 		patterns: 'boolean;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
-		enabledWhen: IsKeywordAllowed
+		forks: KeywordForks()
 	},
 	CHAR: {
 		patterns: 'char;NoJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
-		enabledWhen: IsKeywordAllowed
+		forks: KeywordForks()
 	},
 	BYTE: {
 		patterns: 'byte;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
-		enabledWhen: IsKeywordAllowed
+		forks: KeywordForks()
 	},
 	SHORT: {
 		patterns: 'short;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
-		enabledWhen: IsKeywordAllowed
+		forks: KeywordForks()
 	},
 	INT: {
 		patterns: 'int;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
-		enabledWhen: IsKeywordAllowed
+		forks: KeywordForks()
 	},
 	LONG: {
 		patterns: 'long;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
-		enabledWhen: IsKeywordAllowed
+		forks: KeywordForks()
 	},
 	FLOAT: {
 		patterns: 'float;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
-		enabledWhen: IsKeywordAllowed
+		forks: KeywordForks()
 	},
 	DOUBLE: {
 		patterns: 'double;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInl,
-		enabledWhen: IsKeywordAllowed
+		forks: KeywordForks()
 	}
 };
