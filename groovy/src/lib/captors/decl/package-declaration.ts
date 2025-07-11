@@ -32,5 +32,4 @@ export const PackageDeclarationCaptorDefs: GroovyTokenCaptorDefs = {
 		forStates: [Incl, SG.Pkg],
 		onCaptured: EB
 	}
-
 };

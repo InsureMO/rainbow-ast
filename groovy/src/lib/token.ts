@@ -218,7 +218,7 @@ export enum GroovyTokenId {
 	GStringInterpolation,
 	// block
 	CodeBlock,  // TODO
-	IndexBlock,
+	IndexBlock, // TODO
 	//
 	GenericTypeDecl,  // TODO
 	AnnotationDecl,  // TODO
@@ -229,6 +229,7 @@ export enum GroovyTokenId {
 	 * 2. whitespaces, tabs, ml comment is allowed,
 	 * 3. keywords "as", "def", "var", "record", "sealed", "permits", "yield", "in", "trait" are treated as identifier,
 	 * 4. newline is not allowed,
+	 * 5. or end by semicolon
 	 */
 	PackageDecl,
 }
