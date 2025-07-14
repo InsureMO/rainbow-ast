@@ -24,6 +24,33 @@ describe('Capture Package Declaration', () => {
 			]]
 		]]);
 	});
+	test('Package Declaration: Simple #3', async () => {
+		const ast = builder.ast('package java.util\n');
+		AstChecker.check(ast, [GroovyTokenId.COMPILATION_UNIT, 0, 18, 1, 'package java.util\n', [
+			[GroovyTokenId.PackageDecl, 0, 17, 1, 'package java.util', [
+				[GroovyTokenId.PACKAGE, 0, 7, 1, 'package'],
+				[GroovyTokenId.Whitespaces, 7, 8, 1, ' '],
+				[GroovyTokenId.Identifier, 8, 12, 1, 'java'],
+				[GroovyTokenId.Dot, 12, 13, 1, '.'],
+				[GroovyTokenId.Identifier, 13, 17, 1, 'util']
+			]],
+			[GroovyTokenId.Newline, 17, 18, 1, '\n']
+		]]);
+	});
+	test('Package Declaration: Simple #4', async () => {
+		const ast = builder.ast('package java.util; ');
+		AstChecker.check(ast, [GroovyTokenId.COMPILATION_UNIT, 0, 19, 1, 'package java.util; ', [
+			[GroovyTokenId.PackageDecl, 0, 18, 1, 'package java.util;', [
+				[GroovyTokenId.PACKAGE, 0, 7, 1, 'package'],
+				[GroovyTokenId.Whitespaces, 7, 8, 1, ' '],
+				[GroovyTokenId.Identifier, 8, 12, 1, 'java'],
+				[GroovyTokenId.Dot, 12, 13, 1, '.'],
+				[GroovyTokenId.Identifier, 13, 17, 1, 'util'],
+				[GroovyTokenId.Semicolon, 17, 18, 1, ';']
+			]],
+			[GroovyTokenId.Whitespaces, 18, 19, 1, ' ']
+		]]);
+	});
 	test('Package Declaration: Continuous dots', async () => {
 		const ast = builder.ast('package java..util');
 		AstChecker.check(ast, [GroovyTokenId.COMPILATION_UNIT, 0, 18, 1, 'package java..util', [
