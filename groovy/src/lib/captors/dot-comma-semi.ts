@@ -1,5 +1,4 @@
-import {S} from '../alias';
-import {CFS, Not} from './state-shortcuts';
+import {CFS} from './state-shortcuts';
 import {GroovyTokenCaptorDefs} from './types';
 
 export const DotCommaSemicolonCaptorDefs: GroovyTokenCaptorDefs = {
@@ -13,6 +12,6 @@ export const DotCommaSemicolonCaptorDefs: GroovyTokenCaptorDefs = {
 	},
 	Dot: {
 		patterns: '.',
-		forStates: Not('Num', S.PkgDeclIdEd, S.GStrItpInlIdEd)
+		forStates: CFS.NotNumGStrItpInlPkg
 	}
 };
