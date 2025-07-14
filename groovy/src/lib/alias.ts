@@ -1,4 +1,10 @@
-import {CollectTokenActionType, EndBlock, TokenCaptorStateInclusion} from '@rainbow-ast/core';
+import {
+	BeforeCollectTokenActionType,
+	CollectTokenActionType,
+	EndBlock,
+	EndBlockBeforeCollect,
+	TokenCaptorStateInclusion
+} from '@rainbow-ast/core';
 import {GroovyAstBuildState} from './ast-build-state';
 import {GroovyTokenId} from './token';
 
@@ -14,3 +20,5 @@ export const CB = CollectTokenActionType.CreateBlock;
 export const SS = CollectTokenActionType.SwitchState;
 export const EB: EndBlock = [CollectTokenActionType.EndBlock];
 export const CE = CollectTokenActionType.CreateAndEndBlock;
+
+export const EBBC: EndBlockBeforeCollect = [BeforeCollectTokenActionType.EndBlock];

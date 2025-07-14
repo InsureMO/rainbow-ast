@@ -6,7 +6,7 @@ import {
 	TokenCaptorOfStates,
 	TokenMatcherBuilder
 } from '@rainbow-ast/core';
-import {Incl, T} from '../alias';
+import {EBBC, Incl, T} from '../alias';
 import {GroovyAstBuildState, GroovyAstBuildStateName} from '../ast-build-state';
 import {GroovyTokenId, GroovyTokenName} from '../token';
 import {CFS, SG} from './state-shortcuts';
@@ -138,8 +138,8 @@ export const KeywordForks = (): Array<Omit<TokenCaptorDef<GroovyAstBuildState>, 
 			enabledWhen: IsKeywordAllowed
 		},
 		{ // in package declaration, always allowed
-			forStates: [Incl, SG.Pkg]
-			// TODO end package declaration block, and append me after package declaration block
+			forStates: [Incl, SG.Pkg],
+			beforeCollect: EBBC
 		}
 	];
 };

@@ -5,6 +5,23 @@ import {AstBuildState, TokenId, TokenName} from '../types';
 
 export type TokenCaptorAvailableCheck = (context: AstBuildContext) => boolean;
 
+export enum BeforeCollectTokenActionType {
+	/** end current block */
+	EndBlock,
+	/** custom action */
+	Custom
+}
+
+export type EndBlockBeforeCollect = [BeforeCollectTokenActionType.EndBlock];
+/**
+ * given token has not been appended to context yet.
+ */
+export type DoBeforeCollect = (token: AtomicToken, context: AstBuildContext) => void;
+export type CustomActionBeforeCollect = [BeforeCollectTokenActionType.Custom, DoBeforeCollect];
+export type BeforeCollectTokenAction =
+	| EndBlockBeforeCollect
+	| CustomActionBeforeCollect;
+
 export enum CollectTokenActionType {
 	/**
 	 * create a block token, append to created token.
@@ -35,7 +52,10 @@ export interface TokenCaptorOptions {
 	name: TokenName;
 	matcher: TokenMatcher;
 	availableCheck?: TokenCaptorAvailableCheck;
-	collectAction?: CollectTokenAction;
+	/** default do nothing */
+	beforeCollect?: BeforeCollectTokenAction;
+	/** default append token to current block */
+	collect?: CollectTokenAction;
 }
 
 /**
@@ -47,6 +67,7 @@ export class TokenCaptor {
 	private readonly _tokenName: TokenName;
 	private readonly _matcher: TokenMatcher;
 	private readonly _availableCheck: TokenCaptorAvailableCheck;
+	private readonly _beforeCollectAction?: BeforeCollectTokenAction;
 	private readonly _collectAction?: CollectTokenAction;
 
 	constructor(options: TokenCaptorOptions) {
@@ -54,7 +75,8 @@ export class TokenCaptor {
 		this._tokenName = options.name;
 		this._matcher = options.matcher;
 		this._availableCheck = options.availableCheck;
-		this._collectAction = options.collectAction;
+		this._beforeCollectAction = options.beforeCollect;
+		this._collectAction = options.collect;
 	}
 
 	get tokenId(): TokenId {
@@ -71,6 +93,10 @@ export class TokenCaptor {
 
 	get availableCheck(): TokenCaptorAvailableCheck | undefined {
 		return this._availableCheck;
+	}
+
+	get beforeCollectAction(): BeforeCollectTokenAction | undefined {
+		return this._beforeCollectAction;
 	}
 
 	get collectAction(): CollectTokenAction | undefined {

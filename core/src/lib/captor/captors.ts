@@ -2,9 +2,10 @@ import {AstBuildContext} from '../context';
 import {BlockToken, Token} from '../token';
 import {AstBuildState, AstBuildStateName} from '../types';
 import {
+	BeforeCollectTokenActionType,
+	CollectTokenActionType,
 	CreateAndEndBlock,
 	CreateBlock,
-	CollectTokenActionType,
 	SwitchState,
 	TokenCaptor
 } from './captor';
@@ -88,6 +89,24 @@ export class TokenCaptors {
 			}
 		}
 		const {text} = capturedToken;
+
+		const beforeCollectAction = captor.beforeCollectAction;
+		switch (beforeCollectAction?.[0]) {
+			case BeforeCollectTokenActionType.EndBlock: {
+				// end current block
+				context.endCurrentBlock();
+				break;
+			}
+			case BeforeCollectTokenActionType.Custom: {
+				// execute the custom action
+				beforeCollectAction[1](capturedToken, context);
+				break;
+			}
+			default: {
+				// do nothing
+				break;
+			}
+		}
 
 		const collectAction = captor.collectAction;
 		switch (collectAction?.[0]) {

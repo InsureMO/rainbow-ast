@@ -1,4 +1,4 @@
-import {CB, EB, Incl, S, SS, T} from '../../alias';
+import {CB, EB, EBBC, Incl, S, SS, T} from '../../alias';
 import {CFS, SG} from '../state-shortcuts';
 import {GroovyTokenCaptorDefs} from '../types';
 import {IsKeywordAllowed} from '../utils';
@@ -14,6 +14,7 @@ export const PackageDeclarationCaptorDefs: GroovyTokenCaptorDefs = {
 			},
 			{ // in package declaration, always allowed
 				forStates: [Incl, SG.Pkg],
+				beforeCollect: EBBC,
 				collect: [CB, T.PackageDecl, S.PkgDeclSt]
 			}
 		]
