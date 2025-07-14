@@ -2,10 +2,10 @@ import {AstBuildContext} from '../context';
 import {BlockToken, Token} from '../token';
 import {AstBuildState, AstBuildStateName} from '../types';
 import {
-	CreateAndEndBlockOnPostTokenCaptured,
-	CreateBlockTokenOnPostTokenCaptured,
-	PostTokenCapturedActionType,
-	SwitchStateToOnPostTokenCaptured,
+	CreateAndEndBlock,
+	CreateBlock,
+	CollectTokenActionType,
+	SwitchState,
 	TokenCaptor
 } from './captor';
 import {TokenCaptorSelector} from './captor-selector';
@@ -89,25 +89,25 @@ export class TokenCaptors {
 		}
 		const {text} = capturedToken;
 
-		const postAction = captor.postAction;
-		switch (postAction?.[0]) {
-			case PostTokenCapturedActionType.CreateBlock: {
-				const [, tokenId, state] = postAction as CreateBlockTokenOnPostTokenCaptured;
+		const collectAction = captor.collectAction;
+		switch (collectAction?.[0]) {
+			case CollectTokenActionType.CreateBlock: {
+				const [, tokenId, state] = collectAction as CreateBlock;
 				const blockToken = new BlockToken(tokenId, capturedToken);
 				context.appendBlock(blockToken, state);
 				break;
 			}
-			case PostTokenCapturedActionType.EndBlock: {
+			case CollectTokenActionType.EndBlock: {
 				context.appendAtomic(capturedToken).endCurrentBlock();
 				break;
 			}
-			case PostTokenCapturedActionType.SwitchState: {
-				const [, state] = postAction as SwitchStateToOnPostTokenCaptured;
+			case CollectTokenActionType.SwitchState: {
+				const [, state] = collectAction as SwitchState;
 				context.appendAtomic(capturedToken).replaceState(state);
 				break;
 			}
-			case PostTokenCapturedActionType.CreateAndEndBlock: {
-				const [, tokenId, state] = postAction as CreateAndEndBlockOnPostTokenCaptured;
+			case CollectTokenActionType.CreateAndEndBlock: {
+				const [, tokenId, state] = collectAction as CreateAndEndBlock;
 				const blockToken = new BlockToken(tokenId, capturedToken);
 				context.appendBlock(blockToken, state).endCurrentBlock();
 				break;

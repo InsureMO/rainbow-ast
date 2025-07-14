@@ -5,28 +5,37 @@ import {AstBuildState, TokenId, TokenName} from '../types';
 
 export type TokenCaptorAvailableCheck = (context: AstBuildContext) => boolean;
 
-export enum PostTokenCapturedActionType {
-	CreateBlock, SwitchState, EndBlock,
-	// block contains only one child, create it, append child, and end it immediately
+export enum CollectTokenActionType {
+	/**
+	 * create a block token, append to created token.
+	 * and append created block token to current block,
+	 * and unshift created block to context block stack, unshift new state to context state stack
+	 */
+	CreateBlock,
+	/** append to current block, and switch current state to another */
+	SwitchState,
+	/** append to current block, and end it */
+	EndBlock,
+	/** block contains only one child, create it, append child, and end it immediately */
 	CreateAndEndBlock
 }
 
-export type CreateBlockTokenOnPostTokenCaptured = [PostTokenCapturedActionType.CreateBlock, TokenId, AstBuildState];
-export type SwitchStateToOnPostTokenCaptured = [PostTokenCapturedActionType.SwitchState, AstBuildState];
-export type EndBlockOnPostTokenCaptured = [PostTokenCapturedActionType.EndBlock];
-export type CreateAndEndBlockOnPostTokenCaptured = [PostTokenCapturedActionType.CreateAndEndBlock, TokenId, AstBuildState];
-export type PostTokenCapturedAction =
-	| CreateBlockTokenOnPostTokenCaptured
-	| SwitchStateToOnPostTokenCaptured
-	| EndBlockOnPostTokenCaptured
-	| CreateAndEndBlockOnPostTokenCaptured;
+export type CreateBlock = [CollectTokenActionType.CreateBlock, TokenId, AstBuildState];
+export type SwitchState = [CollectTokenActionType.SwitchState, AstBuildState];
+export type EndBlock = [CollectTokenActionType.EndBlock];
+export type CreateAndEndBlock = [CollectTokenActionType.CreateAndEndBlock, TokenId, AstBuildState];
+export type CollectTokenAction =
+	| CreateBlock
+	| SwitchState
+	| EndBlock
+	| CreateAndEndBlock;
 
 export interface TokenCaptorOptions {
 	tokenId: TokenId;
 	name: TokenName;
 	matcher: TokenMatcher;
 	availableCheck?: TokenCaptorAvailableCheck;
-	postAction?: PostTokenCapturedAction;
+	collectAction?: CollectTokenAction;
 }
 
 /**
@@ -38,14 +47,14 @@ export class TokenCaptor {
 	private readonly _tokenName: TokenName;
 	private readonly _matcher: TokenMatcher;
 	private readonly _availableCheck: TokenCaptorAvailableCheck;
-	private readonly _postAction?: PostTokenCapturedAction;
+	private readonly _collectAction?: CollectTokenAction;
 
 	constructor(options: TokenCaptorOptions) {
 		this._tokenId = options.tokenId;
 		this._tokenName = options.name;
 		this._matcher = options.matcher;
 		this._availableCheck = options.availableCheck;
-		this._postAction = options.postAction;
+		this._collectAction = options.collectAction;
 	}
 
 	get tokenId(): TokenId {
@@ -64,8 +73,8 @@ export class TokenCaptor {
 		return this._availableCheck;
 	}
 
-	get postAction(): PostTokenCapturedAction | undefined {
-		return this._postAction;
+	get collectAction(): CollectTokenAction | undefined {
+		return this._collectAction;
 	}
 
 	get description(): string {

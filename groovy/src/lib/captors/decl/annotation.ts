@@ -6,6 +6,6 @@ export const AnnotationCaptorDefs: GroovyTokenCaptorDefs = {
 	AnnotationStartMark: {
 		patterns: '@',
 		forStates: CFS.NotCmtNumStrGStrItpInlPkg,
-		onCaptured: EB
+		collect: EB
 	}
 };

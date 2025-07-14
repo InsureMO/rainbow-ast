@@ -1,4 +1,4 @@
-import {PostTokenCapturedAction, TokenCaptor, TokenCaptorAvailableCheck, TokenCaptors} from '../captor';
+import {CollectTokenAction, TokenCaptor, TokenCaptorAvailableCheck, TokenCaptors} from '../captor';
 import {TokenPointcut, TokenPointcutConstructOptions} from '../pointcut';
 import {TokenMatcherBuilder} from '../token-match';
 import {AstBuildState, AstBuildStateName, TokenId, TokenName} from '../types';
@@ -16,7 +16,7 @@ export type TokenCaptorDef<S extends AstBuildState> = Readonly<{
 	patterns: string | ReadonlyArray<string>;
 	forStates: TokenCaptorStates<S>;
 	enabledWhen?: TokenCaptorAvailableCheck;
-	onCaptured?: PostTokenCapturedAction;
+	collect?: CollectTokenAction;
 }>;
 
 export type TokenCaptorDefForStates<S extends AstBuildState> = Readonly<
@@ -82,9 +82,9 @@ export class BuildUtils {
 				const patterns = oneOfDefOfKey.patterns;
 				const matchers = (Array.isArray(patterns) ? patterns : [patterns]).map(pattern => tokenMatcherBuilder.build(pattern)).flat();
 				for (const def of ((oneOfDefOfKey as TokenCaptorDefForStates<S>).forks != null ? (oneOfDefOfKey as TokenCaptorDefForStates<S>).forks : [oneOfDefOfKey as TokenCaptorDef<S>])) {
-					const {forStates, enabledWhen, onCaptured} = def;
+					const {forStates, enabledWhen, collect} = def;
 					const captors: Array<TokenCaptor> = matchers.map(matcher => new TokenCaptor({
-						tokenId, name: key, matcher, availableCheck: enabledWhen, postAction: onCaptured
+						tokenId, name: key, matcher, availableCheck: enabledWhen, collectAction: collect
 					}));
 
 					const [forStatesType, ...definedStates] = forStates;

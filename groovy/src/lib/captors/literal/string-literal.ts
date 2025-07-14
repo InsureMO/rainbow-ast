@@ -13,12 +13,12 @@ export const StringLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 		forks: [
 			{
 				forStates: CFS.NotCmtNumStrGStrItpInlPkg,
-				onCaptured: [CB, T.StringLiteral, S.SQStr]
+				collect: [CB, T.StringLiteral, S.SQStr]
 			},
 			// following are excluded by first fork
 			{
 				forStates: [Incl, S.SQStr],
-				onCaptured: EB
+				collect: EB
 			}
 		]
 	},
@@ -27,12 +27,12 @@ export const StringLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 		forks: [
 			{
 				forStates: CFS.NotCmtNumStrGStrItpInlPkg,
-				onCaptured: [CB, T.StringLiteral, S.TQStr]
+				collect: [CB, T.StringLiteral, S.TQStr]
 			},
 			// following are excluded by first fork
 			{
 				forStates: [Incl, S.TQStr],
-				onCaptured: EB
+				collect: EB
 			}
 		]
 	}
@@ -43,12 +43,12 @@ export const GStringLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 		forks: [
 			{
 				forStates: CFS.NotCmtNumStrGStrItpInlPkg,
-				onCaptured: [CB, T.GStringLiteral, S.SQGStr]
+				collect: [CB, T.GStringLiteral, S.SQGStr]
 			},
 			// following are excluded by first fork
 			{
 				forStates: [Incl, S.SQGStr],
-				onCaptured: EB
+				collect: EB
 			}
 		]
 	},
@@ -57,12 +57,12 @@ export const GStringLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 		forks: [
 			{
 				forStates: CFS.NotCmtNumStrGStrItpInlPkg,
-				onCaptured: [CB, T.GStringLiteral, S.TQGStr]
+				collect: [CB, T.GStringLiteral, S.TQGStr]
 			},
 			// following are excluded by first fork
 			{
 				forStates: [Incl, S.TQGStr],
-				onCaptured: EB
+				collect: EB
 			}
 		]
 	}
@@ -75,12 +75,12 @@ export const SlashyGStringLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 			{
 				forStates: CFS.NotCmtNumStrGStrItpInlPkg,
 				enabledWhen: IsSlashyGStringStartAllowed,
-				onCaptured: [CB, T.SlashyGStringLiteral, S.SGStr]
+				collect: [CB, T.SlashyGStringLiteral, S.SGStr]
 			},
 			// following are excluded by first fork
 			{
 				forStates: [Incl, S.SGStr],
-				onCaptured: EB
+				collect: EB
 			}
 		]
 	}
@@ -89,12 +89,12 @@ export const DollarSlashyGStringLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 	DollarSlashyGStringStartMark: {
 		patterns: '$/',
 		forStates: CFS.NotCmtNumStrGStrItpInlPkg,
-		onCaptured: [CB, T.DollarSlashyGStringLiteral, S.DSGStr]
+		collect: [CB, T.DollarSlashyGStringLiteral, S.DSGStr]
 	},
 	DollarSlashyGStringEndMark: {
 		patterns: '/$',
 		forStates: [Incl, S.DSGStr],
-		onCaptured: EB
+		collect: EB
 	}
 };
 export const StringLiteralEscapeCaptorDefs: GroovyTokenCaptorDefs = {
@@ -216,23 +216,23 @@ export const GStringInterpolationCaptorDefs: GroovyTokenCaptorDefs = {
 			// for gstring, $ always start interpolation, even the following part is not an identifier
 			patterns: '$;fn#$OrNotJNameStart:!',
 			forStates: [Incl, S.SQGStr, S.TQGStr],
-			onCaptured: [CE, T.GStringInterpolation, S.GStrItpInl]
+			collect: [CE, T.GStringInterpolation, S.GStrItpInl]
 		},
 		{
 			patterns: '$;fn#JNameStartExcl$:!',
 			forks: [
 				{
 					forStates: [Incl, S.SQGStr, S.TQGStr],
-					onCaptured: [CB, T.GStringInterpolation, S.GStrItpInl]
+					collect: [CB, T.GStringInterpolation, S.GStrItpInl]
 				},
 				{ // slashy gstring, $ which follows with JNameStart(not $) char, is start of interpolation
 					forStates: [Incl, S.SGStr],
-					onCaptured: [CB, T.GStringInterpolation, S.GStrItpInl]
+					collect: [CB, T.GStringInterpolation, S.GStrItpInl]
 				},
 				{
 					forStates: [Incl, S.DSGStr],
 					enabledWhen: IsInterpolationInDollarSlashyGStringStartAllowed,
-					onCaptured: [CB, T.GStringInterpolation, S.GStrItpInl]
+					collect: [CB, T.GStringInterpolation, S.GStrItpInl]
 				}
 			]
 		}
@@ -240,31 +240,31 @@ export const GStringInterpolationCaptorDefs: GroovyTokenCaptorDefs = {
 	Dot: { // in gstring interpolation inline, the next char must be "JNameStartExcl$"
 		patterns: '.;fn#JNameStartExcl$:!',
 		forStates: [Incl, S.GStrItpInlIdEd],
-		onCaptured: [SS, S.GStrItpInlDotEd]
+		collect: [SS, S.GStrItpInlDotEd]
 	},
 	Identifier: {
 		patterns: 'fn#JNameStartExcl$;fn#JNamePartExcl$:*;fn#$OrNotJNamePart:!',
 		forStates: [Incl, S.GStrItpInl, S.GStrItpInlDotEd],
-		onCaptured: [SS, S.GStrItpInlIdEd]
+		collect: [SS, S.GStrItpInlIdEd]
 	},
 	GStringInterpolationLBraceStartMark: {
 		patterns: '${',
 		forks: [
 			{
 				forStates: [Incl, S.SQGStr, S.TQGStr, S.SGStr],
-				onCaptured: [CB, T.GStringInterpolation, S.GStrItp]
+				collect: [CB, T.GStringInterpolation, S.GStrItp]
 			},
 			{
 				forStates: [Incl, S.DSGStr],
 				enabledWhen: IsInterpolationInDollarSlashyGStringStartAllowed,
-				onCaptured: [CB, T.GStringInterpolation, S.GStrItp]
+				collect: [CB, T.GStringInterpolation, S.GStrItp]
 			}
 		]
 	},
 	GStringInterpolationRBraceEndMark: {
 		patterns: '}',
 		forStates: [Incl, S.GStrItp],
-		onCaptured: EB
+		collect: EB
 	}
 };
 

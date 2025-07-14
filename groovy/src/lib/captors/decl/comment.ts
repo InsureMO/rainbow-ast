@@ -16,21 +16,21 @@ export const CommentCaptorDefs: GroovyTokenCaptorDefs = {
 		patterns: '#!',
 		forStates: [Incl, S.CU],
 		enabledWhen: IsScriptCommandStartAllowed,
-		onCaptured: [CB, T.ScriptCommand, S.ScriptCmd]
+		collect: [CB, T.ScriptCommand, S.ScriptCmd]
 	},
 	SLCommentStartMark: {
 		patterns: '//',
 		forStates: CFS.NotCmtNumStrGStrItpInlPkg,
-		onCaptured: [CB, T.SLComment, S.SLCmt]
+		collect: [CB, T.SLComment, S.SLCmt]
 	},
 	MLCommentStartMark: {
 		patterns: '/*',
 		forStates: CFS.NotCmtNumStrGStrItpInl,
-		onCaptured: [CB, T.MLComment, S.MLCmt]
+		collect: [CB, T.MLComment, S.MLCmt]
 	},
 	MLCommentEndMark: {
 		patterns: '*/',
 		forStates: [Incl, S.MLCmt],
-		onCaptured: EB
+		collect: EB
 	}
 };

@@ -10,26 +10,26 @@ export const PackageDeclarationCaptorDefs: GroovyTokenCaptorDefs = {
 			{
 				forStates: CFS.NotCmtNumStrGStrItpInlPkg,
 				enabledWhen: IsKeywordAllowed,
-				onCaptured: [CB, T.PackageDecl, S.PkgDeclSt]
+				collect: [CB, T.PackageDecl, S.PkgDeclSt]
 			},
 			{ // in package declaration, always allowed
 				forStates: [Incl, SG.Pkg],
-				onCaptured: [CB, T.PackageDecl, S.PkgDeclSt]
+				collect: [CB, T.PackageDecl, S.PkgDeclSt]
 			}
 		]
 	},
 	Identifier: {
 		patterns: 'fn#JNameStart;fn#JNamePart:*;fn#NotJNamePart:!',
 		forStates: [Incl, S.PkgDeclSt, S.PkgDeclDotEd],
-		onCaptured: [SS, S.PkgDeclIdEd]
+		collect: [SS, S.PkgDeclIdEd]
 	},
 	Dot: {
 		patterns: '.',
-		forStates: [Incl, S.PkgDeclIdEd], onCaptured: [SS, S.PkgDeclDotEd]
+		forStates: [Incl, S.PkgDeclIdEd], collect: [SS, S.PkgDeclDotEd]
 	},
 	Semicolon: {
 		patterns: '{{Semicolon}}',
 		forStates: [Incl, SG.Pkg],
-		onCaptured: EB
+		collect: EB
 	}
 };

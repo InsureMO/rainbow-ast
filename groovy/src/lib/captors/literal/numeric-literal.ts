@@ -6,17 +6,17 @@ export const BinaryNumberLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 	BinaryStartMark: {
 		patterns: ['0b;fn#Bin:!', '0B;fn#Bin:!'],
 		forStates: CFS.NotCmtNumStrGStrItpInlPkg,
-		onCaptured: [CB, T.BinaryLiteral, S.BinNumSt]
+		collect: [CB, T.BinaryLiteral, S.BinNumSt]
 	},
 	Number: {
 		patterns: 'fn#Bin;fn#Bin:*',
 		forStates: [Incl, S.BinNumSt, S.BinNumSepEd],
-		onCaptured: [SS, S.BinNumNumEd]
+		collect: [SS, S.BinNumNumEd]
 	},
 	NumSep: {
 		patterns: '_;_:*;fn#Bin:!',
 		forStates: [Incl, S.BinNumNumEd],
-		onCaptured: [SS, S.BinNumSepEd]
+		collect: [SS, S.BinNumSepEd]
 	}
 };
 
@@ -24,17 +24,17 @@ export const HexadecimalNumberLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 	HexStartMark: {
 		patterns: ['0x;fn#Hex:!', '0X;fn#Hex:!'],
 		forStates: CFS.NotCmtNumStrGStrItpInlPkg,
-		onCaptured: [CB, T.HexadecimalLiteral, S.HexNumSt]
+		collect: [CB, T.HexadecimalLiteral, S.HexNumSt]
 	},
 	Number: {
 		patterns: 'fn#Hex;fn#Hex:*',
 		forStates: [Incl, S.HexNumSt, S.HexNumSepEd],
-		onCaptured: [SS, S.HexNumNumEd]
+		collect: [SS, S.HexNumNumEd]
 	},
 	NumSep: {
 		patterns: '_;_:*;fn#Hex:!',
 		forStates: [Incl, S.HexNumNumEd],
-		onCaptured: [SS, S.HexNumSepEd]
+		collect: [SS, S.HexNumSepEd]
 	}
 };
 
@@ -44,32 +44,32 @@ export const DecimalLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 		forks: [
 			{   // integral part
 				forStates: CFS.NotCmtNumStrGStrItpInlPkg,
-				onCaptured: [CB, T.DecimalLiteral, S.NumIntEd]
+				collect: [CB, T.DecimalLiteral, S.NumIntEd]
 			},
 			// following are excluded by first fork
 			{   // integral part after number separators
 				forStates: [Incl, S.NumIntSepEd],
-				onCaptured: [SS, S.NumIntEd]
+				collect: [SS, S.NumIntEd]
 			},
 			{ // fraction part
 				forStates: [Incl, S.NumDotEd, S.NumFracSepEd],
-				onCaptured: [SS, S.NumFracEd]
+				collect: [SS, S.NumFracEd]
 			},
 			{ // exponent part
 				forStates: [Incl, S.NumExpSignEd, S.NumExpNumSepEd],
-				onCaptured: [SS, S.NumExpNumEd]
+				collect: [SS, S.NumExpNumEd]
 			}
 		]
 	},
 	Dot: { // in number literal, next char must be number
 		patterns: '.;fn#Num:!',
 		forStates: [Incl, S.NumIntEd],
-		onCaptured: [SS, S.NumDotEd]
+		collect: [SS, S.NumDotEd]
 	},
 	NumExponent: {
 		patterns: ['e;fn#Num:!', 'e;+:!;fn#Num:!', 'e;-:!;fn#Num:!', 'E;fn#Num:!', 'E;+:!;fn#Num:!', 'E;-:!;fn#Num:!'],
 		forStates: [Incl, S.NumIntEd, S.NumFracEd],
-		onCaptured: [SS, S.NumExpSignEd]
+		collect: [SS, S.NumExpSignEd]
 	},
 	NumExponentSign: {
 		patterns: ['+;fn#Num:!', '-;fn#Num:!'],
@@ -80,15 +80,15 @@ export const DecimalLiteralCaptorDefs: GroovyTokenCaptorDefs = {
 		forks: [
 			{
 				forStates: [Incl, S.NumIntEd],
-				onCaptured: [SS, S.NumIntSepEd]
+				collect: [SS, S.NumIntSepEd]
 			},
 			{
 				forStates: [Incl, S.NumFracEd],
-				onCaptured: [SS, S.NumFracSepEd]
+				collect: [SS, S.NumFracSepEd]
 			},
 			{
 				forStates: [Incl, S.NumExpNumEd],
-				onCaptured: [SS, S.NumExpNumSepEd]
+				collect: [SS, S.NumExpNumSepEd]
 			}
 		]
 	}
@@ -102,7 +102,7 @@ export const NumberLiteralSuffixCaptorDefs: GroovyTokenCaptorDefs = {
 				S.BinNumNumEd, S.HexNumNumEd,
 				S.NumIntEd
 			],
-			onCaptured: EB
+			collect: EB
 		},
 		{ // available for number only
 			patterns: ['f', 'F', 'd', 'D'],
@@ -110,7 +110,7 @@ export const NumberLiteralSuffixCaptorDefs: GroovyTokenCaptorDefs = {
 				Incl,
 				S.NumIntEd, S.NumFracEd, S.NumExpNumEd
 			],
-			onCaptured: EB
+			collect: EB
 		},
 		{ // available for all
 			patterns: ['g', 'G'],
@@ -119,7 +119,7 @@ export const NumberLiteralSuffixCaptorDefs: GroovyTokenCaptorDefs = {
 				S.BinNumNumEd, S.HexNumNumEd,
 				S.NumIntEd, S.NumFracEd, S.NumExpNumEd
 			],
-			onCaptured: EB
+			collect: EB
 		}
 	]
 };
