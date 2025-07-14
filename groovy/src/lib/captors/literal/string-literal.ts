@@ -213,11 +213,6 @@ export const IsInterpolationInDollarSlashyGStringStartAllowed = (context: AstBui
 export const GStringInterpolationCaptorDefs: GroovyTokenCaptorDefs = {
 	GStringInterpolationStartMark: [
 		{
-			patterns: '$;fn#JNameStartExcl$:!',
-			forStates: [Incl, S.SQGStr, S.TQGStr],
-			onCaptured: [CB, T.GStringInterpolation, S.GStrItpInl]
-		},
-		{
 			// for gstring, $ always start interpolation, even the following part is not an identifier
 			patterns: '$;fn#$OrNotJNameStart:!',
 			forStates: [Incl, S.SQGStr, S.TQGStr],
@@ -226,6 +221,10 @@ export const GStringInterpolationCaptorDefs: GroovyTokenCaptorDefs = {
 		{
 			patterns: '$;fn#JNameStartExcl$:!',
 			forks: [
+				{
+					forStates: [Incl, S.SQGStr, S.TQGStr],
+					onCaptured: [CB, T.GStringInterpolation, S.GStrItpInl]
+				},
 				{ // slashy gstring, $ which follows with JNameStart(not $) char, is start of interpolation
 					forStates: [Incl, S.SGStr],
 					onCaptured: [CB, T.GStringInterpolation, S.GStrItpInl]
