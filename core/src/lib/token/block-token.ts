@@ -64,6 +64,9 @@ export class BlockToken extends Token {
 		this._children.push(token);
 	}
 
+	/**
+	 * shift the first child or do nothing if there is no child
+	 */
 	shiftChild(): Token | undefined {
 		if (this._children.length > 0) {
 			return this._children.shift();
@@ -72,9 +75,26 @@ export class BlockToken extends Token {
 		}
 	}
 
+	/**
+	 * unshift the given tokens
+	 */
 	unshiftChild(token: Token, ...more: Array<Token>): void {
 		const tokens = [token, ...more];
 		tokens.forEach(token => token.setParent(this));
 		this._children.unshift(...tokens);
+	}
+
+	/**
+	 * pop a specified number of child tokens
+	 */
+	popChild(count: number): void {
+		if (count <= 0) {
+			throw new Error('The number of children to be popped must be greater than 0.');
+		}
+		const length = this._children.length;
+		if (length < count) {
+			throw new Error(`There are not enough children[count=${length}] for the pop operation[count=${count}].`);
+		}
+		this._children.splice(-count);
 	}
 }
