@@ -1,22 +1,17 @@
-import {CFS} from './state-shortcuts';
-import {GroovyTokenCaptorDefs} from './types';
-import {IsKeywordAllowed, KeywordForks} from './utils';
+import {CFS} from '../state-shortcuts';
+import {GroovyTokenCaptorDefs} from '../types';
+import {IsKeywordAllowed, KeywordForks} from '../utils';
 
-export const KeywordCaptorDefs: GroovyTokenCaptorDefs = {
+export const StandardKeywordCaptorDefs: GroovyTokenCaptorDefs = {
 	// groovy keywords
-	AS: { // "as" can be identified as qualified name
-		patterns: 'as;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInlPkg,
-		enabledWhen: IsKeywordAllowed
-	},
 	DEF: { // "def" can be identified as qualified name
 		patterns: 'def;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInlPkg,
+		forStates: CFS.NotCmtNumStrGStrItpInlPkgImp,
 		enabledWhen: IsKeywordAllowed
 	},
 	TRAIT: { // "trait" can be identified as qualified name
 		patterns: 'trait;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInlPkg,
+		forStates: CFS.NotCmtNumStrGStrItpInlPkgImp,
 		enabledWhen: IsKeywordAllowed
 	},
 	// java keywords
@@ -100,10 +95,6 @@ export const KeywordCaptorDefs: GroovyTokenCaptorDefs = {
 		patterns: 'implements;fn#NotJNamePart:!',
 		forks: KeywordForks()
 	},
-	IMPORT: {
-		patterns: 'import;fn#NotJNamePart:!',
-		forks: KeywordForks()
-	},
 	INTERFACE: {
 		patterns: 'interface;fn#NotJNamePart:!',
 		forks: KeywordForks()
@@ -142,10 +133,6 @@ export const KeywordCaptorDefs: GroovyTokenCaptorDefs = {
 	},
 	RETURN: {
 		patterns: 'return;fn#NotJNamePart:!',
-		forks: KeywordForks()
-	},
-	STATIC: {
-		patterns: 'static;fn#NotJNamePart:!',
 		forks: KeywordForks()
 	},
 	STRICTFP: {
@@ -200,34 +187,34 @@ export const KeywordCaptorDefs: GroovyTokenCaptorDefs = {
 	// groovy keywords
 	THREADSAFE: { // starts with @
 		patterns: '@ThreadSafe;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInlPkg,
+		forStates: CFS.NotCmtNumStrGStrItpInlPkgImp,
 		// TODO not sure, should it be annotation allowed?
 		enabledWhen: IsKeywordAllowed
 	},
 	// java keywords
 	PERMITS: { // "permits" can be identified as qualified name
 		patterns: 'permits;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInlPkg,
+		forStates: CFS.NotCmtNumStrGStrItpInlPkgImp,
 		enabledWhen: IsKeywordAllowed
 	},
 	RECORD: { // "record" can be identified as qualified name
 		patterns: 'record;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInlPkg,
+		forStates: CFS.NotCmtNumStrGStrItpInlPkgImp,
 		enabledWhen: IsKeywordAllowed
 	},
 	SEALED: { // "sealed" can be identified as qualified name
 		patterns: 'sealed;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInlPkg,
+		forStates: CFS.NotCmtNumStrGStrItpInlPkgImp,
 		enabledWhen: IsKeywordAllowed
 	},
 	VAR: { // "var" can be identified as qualified name
 		patterns: 'var;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInlPkg,
+		forStates: CFS.NotCmtNumStrGStrItpInlPkgImp,
 		enabledWhen: IsKeywordAllowed
 	},
 	YIELD: { // "yield" can be identified as qualified name
 		patterns: 'yield;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInlPkg,
+		forStates: CFS.NotCmtNumStrGStrItpInlPkgImp,
 		enabledWhen: IsKeywordAllowed
 	}
 };

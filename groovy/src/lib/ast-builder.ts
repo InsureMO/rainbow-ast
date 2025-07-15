@@ -19,6 +19,7 @@ import {
 	CommentCaptorDefs,
 	DotCommaSemicolonCaptorDefs,
 	IdentifierCaptorDefs,
+	ImportDeclarationCaptorDefs,
 	KeywordCaptorDefs,
 	NumberCaptorDefs,
 	OperatorCaptorDefs,
@@ -98,7 +99,8 @@ export const createDefaultAstBuilder = (language?: Omit<GroovyLanguage, 'captors
 			IdentifierCaptorDefs,
 
 			CommentCaptorDefs,
-			PackageDeclarationCaptorDefs
+			PackageDeclarationCaptorDefs,
+			ImportDeclarationCaptorDefs
 		]),
 		pointcuts: buildTokenPointcuts([
 			NumericLiteralPointcutDefs,

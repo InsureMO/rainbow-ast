@@ -127,18 +127,21 @@ export const NotSafeIndex = (context: AstBuildContext): boolean => {
 };
 
 /**
- * 1. when state is not comment, number, string, gstring interpolation inline, package declaration,
- *    and is keyword allowed
+ * 1. when state is not one of follow, and is keyword allowed:
+ *    comment,
+ *    number, string, gstring interpolation inline,
+ *    package declaration, import declaration
  * 2. when state is package declaration
+ * 3. when state is import declaration
  */
 export const KeywordForks = (): Array<Omit<TokenCaptorDef<GroovyAstBuildState>, 'patterns'>> => {
 	return [
 		{
-			forStates: CFS.NotCmtNumStrGStrItpInlPkg,
+			forStates: CFS.NotCmtNumStrGStrItpInlPkgImp,
 			enabledWhen: IsKeywordAllowed
 		},
-		{ // in package declaration, always allowed
-			forStates: [Incl, SG.Pkg],
+		{ // in package declaration or import declaration, always allowed
+			forStates: [Incl, SG.Pkg, SG.Imp],
 			beforeCollect: EBBC
 		}
 	];

@@ -4,14 +4,14 @@ import {GroovyTokenCaptorDefs} from './types';
 export const DotCommaSemicolonCaptorDefs: GroovyTokenCaptorDefs = {
 	Semicolon: {
 		patterns: '{{Semicolon}}',
-		forStates: CFS.NotNumGStrItpInlPkg
+		forStates: CFS.NotNumGStrItpInlPkgImp
 	},
 	Comma: {
 		patterns: ',',
-		forStates: CFS.NotNumGStrItpInlPkg
+		forStates: CFS.NotNumGStrItpInlPkgImp
 	},
 	Dot: {
 		patterns: '.',
-		forStates: CFS.NotNumGStrItpInlPkg
+		forStates: CFS.NotNumGStrItpInlPkgImp
 	}
 };

@@ -20,7 +20,8 @@ export const GroovyAstBuildStateGroup = {
 		S.DSGStr
 	),
 	GStrItpInl: ss(S.GStrItpInl, S.GStrItpInlIdEd, S.GStrItpInlDotEd),
-	Pkg: ss(S.PkgDeclSt, S.PkgDeclIdEd, S.PkgDeclDotEd)
+	Pkg: ss(S.PkgDeclSt, S.PkgDeclIdEd, S.PkgDeclDotEd),
+	Imp: ss(S.ImpDeclSt, S.ImpDeclStaticEd, S.ImpDeclIdEd, S.ImpDeclDotEd, S.ImpDeclStarEd, S.ImpDeclAsEd, S.ImpDeclAsIdEd)
 } as const;
 export const SG = GroovyAstBuildStateGroup;
 
@@ -45,8 +46,8 @@ export const Not = (first: Excl | GroovyAstBuildState | keyof typeof SG, ...more
 };
 export const CaptorForStates = {
 	NotNumGStrItpInl: Not('Num', 'GStrItpInl'),
-	NotNumGStrItpInlPkg: Not('Num', 'GStrItpInl', 'Pkg'),
+	NotNumGStrItpInlPkgImp: Not('Num', 'GStrItpInl', 'Pkg', 'Imp'),
 	NotCmtNumStrGStrItpInl: Not('Cmt', 'Num', 'Str', 'GStrItpInl'),
-	NotCmtNumStrGStrItpInlPkg: Not('Cmt', 'Num', 'Str', 'GStrItpInl', 'Pkg')
+	NotCmtNumStrGStrItpInlPkgImp: Not('Cmt', 'Num', 'Str', 'GStrItpInl', 'Pkg', 'Imp')
 } as const;
 export const CFS = CaptorForStates;

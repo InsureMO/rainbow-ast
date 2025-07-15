@@ -42,7 +42,15 @@ export enum GroovyAstBuildState {
 	// package declaration
 	/** keyword package captured, started */ PkgDeclSt,
 	/** identifier captured */ PkgDeclIdEd,
-	/** dot captured */ PkgDeclDotEd
+	/** dot captured */ PkgDeclDotEd,
+	// import declaration
+	/** keyword import captured, started */ ImpDeclSt,
+	/** keyword static captured */ ImpDeclStaticEd,
+	/** identifier captured */ ImpDeclIdEd,
+	/** dot captured */ ImpDeclDotEd,
+	/** star(asterisk) captured */ ImpDeclStarEd,
+	/** as captured */ ImpDeclAsEd,
+	/** identifier after as captured */ ImpDeclAsIdEd,
 }
 
 export type GroovyAstBuildStateName = Exclude<keyof typeof GroovyAstBuildState, number>;

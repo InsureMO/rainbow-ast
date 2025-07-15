@@ -18,3 +18,4 @@ export * from './comment-sl.spec';
 export * from './comment-ml.spec';
 
 export * from './package-declaration.spec';
+export * from './import-declaration.spec';

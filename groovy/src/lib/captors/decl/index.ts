@@ -1,6 +1,7 @@
 export * from './comment';
 
 export * from './package-declaration';
+export * from './import-declaration';
 export * from './annotation';
 
 export * from './brace';
