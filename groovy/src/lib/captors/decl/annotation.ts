@@ -1,4 +1,4 @@
-import {CB, EB, EBBC, Incl, PtnId, S, SS, T} from '../../alias';
+import {CB, EBBC, Incl, PtnId, S, SS, T} from '../../alias';
 import {CFS, SG} from '../state-shortcuts';
 import {GroovyTokenCaptorDefs} from '../types';
 
@@ -66,10 +66,5 @@ export const AnnotationCaptorDefs: GroovyTokenCaptorDefs = {
 		patterns: '(',
 		forStates: [Incl, S.AnnDeclIdEd],
 		collect: [CB, T.AnnotationDeclValues, S.AnnDeclVals]
-	},
-	RParen: {
-		patterns: ')',
-		forStates: [Incl, S.AnnDeclVals, S.AnnDeclCommaEd],
-		collect: EB
 	}
 };
