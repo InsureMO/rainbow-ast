@@ -50,6 +50,7 @@ export const CaptorForStates = {
 	NotNumGStrItpInl: Not('Num', 'GStrItpInl'),
 	NotNumGStrItpInlPkgImpAnn: Not('Num', 'GStrItpInl', 'Pkg', 'Imp', 'Ann'),
 	NotCmtNumStrGStrItpInl: Not('Cmt', 'Num', 'Str', 'GStrItpInl'),
-	NotCmtNumStrGStrItpInlPkgImpAnn: Not('Cmt', 'Num', 'Str', 'GStrItpInl', 'Pkg', 'Imp', 'Ann')
+	NotCmtNumStrGStrItpInlPkgImpAnn: Not('Cmt', 'Num', 'Str', 'GStrItpInl', 'Pkg', 'Imp', 'Ann'),
+	NoKeywords: Not('Cmt', 'Num', 'Str', 'GStrItpInl', 'Pkg', 'Imp', 'Ann', S.AnnDeclVals, S.AnnDeclCommaEd)
 } as const;
 export const CFS = CaptorForStates;

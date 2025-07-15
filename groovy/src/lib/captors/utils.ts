@@ -6,10 +6,10 @@ import {
 	TokenCaptorOfStates,
 	TokenMatcherBuilder
 } from '@rainbow-ast/core';
-import {EBBC, Incl, S, T} from '../alias';
+import {EBBC, Incl, T} from '../alias';
 import {GroovyAstBuildState, GroovyAstBuildStateName} from '../ast-build-state';
 import {GroovyTokenId, GroovyTokenName} from '../token';
-import {CFS, Not, SG} from './state-shortcuts';
+import {CFS, SG} from './state-shortcuts';
 import {GroovyTokenCaptorDefs} from './types';
 
 export const GroovyTokenMatcherBuilder = TokenMatcherBuilder.create({LongestKeywordLength: 'synchronized'.length});
@@ -137,7 +137,7 @@ export const NotSafeIndex = (context: AstBuildContext): boolean => {
 export const KeywordForks = (): Array<Omit<TokenCaptorDef<GroovyAstBuildState>, 'patterns'>> => {
 	return [
 		{
-			forStates: Not(CFS.NotCmtNumStrGStrItpInlPkgImpAnn, S.AnnDeclVals, S.AnnDeclCommaEd),
+			forStates: CFS.NoKeywords,
 			enabledWhen: IsKeywordAllowed
 		},
 		{

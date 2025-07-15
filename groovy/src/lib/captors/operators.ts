@@ -95,7 +95,7 @@ export const OperatorCaptorDefs: GroovyTokenCaptorDefs = {
 	// operators
 	Assign: {
 		patterns: '=',
-		forStates: Not(CFS.NotCmtNumStrGStrItpInlPkgImpAnn, S.AnnDeclVals, S.AnnDeclValIdEd, S.AnnDeclCommaEd)
+		forStates: Not(CFS.NoKeywords, S.AnnDeclValIdEd)
 	},
 	GreaterThan: {
 		patterns: '>',
@@ -257,7 +257,7 @@ export const OperatorCaptorDefs: GroovyTokenCaptorDefs = {
 	// in and instanceof is keyword like
 	In: { // "in" can be identified as qualified name
 		patterns: 'in;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInlPkgImpAnn,
+		forStates: CFS.NoKeywords,
 		enabledWhen: IsKeywordAllowed
 	},
 	InstanceOf: {
