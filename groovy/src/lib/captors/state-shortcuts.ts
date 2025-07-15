@@ -21,7 +21,7 @@ export const GroovyAstBuildStateGroup = {
 	),
 	GStrItpInl: ss(S.GStrItpInl, S.GStrItpInlIdEd, S.GStrItpInlDotEd),
 	Pkg: ss(S.PkgDeclSt, S.PkgDeclIdEd, S.PkgDeclDotEd),
-	Imp: ss(S.ImpDeclSt, S.ImpDeclStaticEd, S.ImpDeclIdEd, S.ImpDeclDotEd, S.ImpDeclStarEd, S.ImpDeclAsEd, S.ImpDeclAsIdEd)
+	Imp: ss(S.ImpDeclSt, S.ImpDeclStaticEd, S.ImpDeclIdEd, S.ImpDeclDotEd, S.ImpDeclStarEd, S.ImpDeclAsEd)
 } as const;
 export const SG = GroovyAstBuildStateGroup;
 

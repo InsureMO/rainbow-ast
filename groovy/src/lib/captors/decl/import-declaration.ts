@@ -28,12 +28,12 @@ export const ImportDeclarationCaptorDefs: GroovyTokenCaptorDefs = {
 		patterns: 'fn#JNameStart;fn#JNamePart:*;fn#NotJNamePart:!',
 		forks: [
 			{
-				forStates: [Incl, S.ImpDeclSt, S.ImpDeclDotEd],
+				forStates: [Incl, S.ImpDeclSt, S.ImpDeclStaticEd, S.ImpDeclDotEd],
 				collect: [SS, S.ImpDeclIdEd]
 			},
 			{
 				forStates: [Incl, S.ImpDeclAsEd],
-				collect: [SS, S.ImpDeclAsIdEd]
+				collect: EB
 			}
 		]
 	},
@@ -49,7 +49,7 @@ export const ImportDeclarationCaptorDefs: GroovyTokenCaptorDefs = {
 	},
 	AS: { // as after asterisk is incorrect, but collect it anyway
 		patterns: 'as;fn#NotJNamePart:!',
-		forStates: [Incl, S.ImpDeclIdEd, S.ImpDeclStarEd],
+		forStates: [Incl, S.ImpDeclIdEd, S.ImpDeclAsEd, S.ImpDeclStarEd],
 		collect: [SS, S.ImpDeclAsEd]
 	},
 	Semicolon: {
