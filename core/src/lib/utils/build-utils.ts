@@ -135,7 +135,7 @@ export class BuildUtils {
 	}
 
 	static buildTokenCaptors<S extends AstBuildState, Tn extends TokenName, Sn extends AstBuildStateName>(options: {
-		defs: Array<TokenCaptorDefs<S, Tn>>;
+		defs: ReadonlyArray<TokenCaptorDefs<S, Tn>>;
 		tokenIdMap: Record<TokenName, TokenId>;
 		stateNameMap: Record<AstBuildState, AstBuildStateName>;
 		tokenMatcherBuilder: TokenMatcherBuilder;
@@ -150,7 +150,7 @@ export class BuildUtils {
 	}
 
 	static buildTokenPointcuts<Tn extends TokenName>(options: {
-		defs: Array<TokenPointcutDefs<Tn>>;
+		defs: ReadonlyArray<TokenPointcutDefs<Tn>>;
 	}): TokenPointcuts<Tn> {
 		const {defs} = options;
 

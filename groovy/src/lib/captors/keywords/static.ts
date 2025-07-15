@@ -8,7 +8,7 @@ export const KeywordStaticCaptorDefs: GroovyTokenCaptorDefs = {
 		patterns: 'static;fn#NotJNamePart:!',
 		forks: [
 			{
-				forStates: CFS.NotCmtNumStrGStrItpInlPkgImp,
+				forStates: CFS.NotCmtNumStrGStrItpInlPkgImpAnn,
 				enabledWhen: IsKeywordAllowed
 			},
 			{

@@ -222,6 +222,8 @@ export enum GroovyTokenId {
 	//
 	GenericTypeDecl,  // TODO
 	AnnotationDecl,  // TODO
+	AnnotationDeclValues, // TODO
+	AnnotationDeclValue, // TODO
 	ImportDecl,  // TODO
 	/**
 	 * started by keyword "package"

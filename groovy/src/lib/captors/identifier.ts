@@ -1,9 +1,10 @@
-import {CFS} from './state-shortcuts';
+import {PtnId, S} from '../alias';
+import {CFS, Not} from './state-shortcuts';
 import {GroovyTokenCaptorDefs} from './types';
 
 export const IdentifierCaptorDefs: GroovyTokenCaptorDefs = {
 	Identifier: {
-		patterns: 'fn#JNameStart;fn#JNamePart:*;fn#NotJNamePart:!',
-		forStates: CFS.NotCmtNumStrGStrItpInlPkgImp
+		patterns: PtnId,
+		forStates: Not(CFS.NotCmtNumStrGStrItpInlPkgImpAnn, S.AnnDeclVals, S.AnnDeclCommaEd)
 	}
 };

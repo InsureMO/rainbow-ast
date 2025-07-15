@@ -1,16 +1,29 @@
+import {CharsCaptorDefs} from './chars';
+import {DeclCaptorDefs} from './decl';
+import {DotCommaSemicolonCaptorDefs} from './dot-comma-semi';
+import {IdentifierCaptorDefs} from './identifier';
+import {KeywordCaptorDefs} from './keywords';
+import {LiteralCaptorDefs} from './literal';
+import {OperatorCaptorDefs} from './operators';
+import {PrimitiveTypeCaptorDefs} from './primitive-types';
+import {GroovyTokenCaptorDefs} from './types';
+import {WhitespaceTabNewlineCaptorDefs} from './whitespace-tab-newline';
+
 export * from './types';
 export * from './utils';
 
-export * from './literal';
+export const TokenCaptorDefs: ReadonlyArray<GroovyTokenCaptorDefs> = [
+	...LiteralCaptorDefs,
 
-export * from './dot-comma-semi';
-export * from './whitespace-tab-newline';
+	DotCommaSemicolonCaptorDefs,
+	WhitespaceTabNewlineCaptorDefs,
 
-export * from './operators';
+	OperatorCaptorDefs,
 
-export * from './chars';
-export * from './primitive-types';
-export * from './keywords';
-export * from './identifier';
+	PrimitiveTypeCaptorDefs,
+	CharsCaptorDefs,
+	...KeywordCaptorDefs,
+	IdentifierCaptorDefs,
 
-export * from './decl';
+	...DeclCaptorDefs
+];

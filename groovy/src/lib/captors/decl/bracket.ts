@@ -6,12 +6,12 @@ import {NotSafeIndex} from '../utils';
 export const BracketCaptorDefs: GroovyTokenCaptorDefs = {
 	LBrack: {
 		patterns: '[',
-		forStates: CFS.NotNumGStrItpInlPkgImp
+		forStates: CFS.NotNumGStrItpInlPkgImpAnn
 	},
 	RBrack: {
 		patterns: ']',
 		forks: [
-			{forStates: Not(CFS.NotNumGStrItpInlPkgImp, S.IndexBlk)},
+			{forStates: Not(CFS.NotNumGStrItpInlPkgImpAnn, S.IndexBlk)},
 			{forStates: [Incl, S.IndexBlk], enabledWhen: NotSafeIndex}
 		]
 	}

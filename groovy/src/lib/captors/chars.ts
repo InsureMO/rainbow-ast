@@ -9,6 +9,6 @@ export const CharsCaptorDefs: GroovyTokenCaptorDefs = {
 	},
 	UndeterminedChar: {
 		patterns: 'fn#NotWTN',
-		forStates: [Fbex, SG.Num, SG.GStrItpInl, SG.Pkg, SG.Imp]
+		forStates: [Fbex, SG.Num, SG.GStrItpInl, SG.Pkg, SG.Imp, SG.Ann]
 	}
 };

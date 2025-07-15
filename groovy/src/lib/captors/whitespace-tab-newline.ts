@@ -13,6 +13,6 @@ export const WhitespaceTabNewlineCaptorDefs: GroovyTokenCaptorDefs = {
 	},
 	Newline: {
 		patterns: '{{CarriageReturn}}:?;{{Newline}}',
-		forStates: Not(CFS.NotNumGStrItpInlPkgImp, S.ScriptCmd, S.SLCmt, S.SQStr, S.SQGStr)
+		forStates: Not(CFS.NotNumGStrItpInlPkgImpAnn, S.ScriptCmd, S.SLCmt, S.SQStr, S.SQGStr)
 	}
 };

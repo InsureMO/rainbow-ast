@@ -1,4 +1,4 @@
-import {CB, EB, EBBC, Incl, S, SS, T} from '../../alias';
+import {CB, EB, EBBC, Incl, PtnId, S, SS, T} from '../../alias';
 import {CFS, SG} from '../state-shortcuts';
 import {GroovyTokenCaptorDefs} from '../types';
 import {IsKeywordAllowed} from '../utils';
@@ -8,19 +8,19 @@ export const PackageDeclarationCaptorDefs: GroovyTokenCaptorDefs = {
 		patterns: 'package;fn#NotJNamePart:!',
 		forks: [
 			{
-				forStates: CFS.NotCmtNumStrGStrItpInlPkgImp,
+				forStates: CFS.NotCmtNumStrGStrItpInlPkgImpAnn,
 				enabledWhen: IsKeywordAllowed,
 				collect: [CB, T.PackageDecl, S.PkgDeclSt]
 			},
-			{ // in package declaration, always allowed
-				forStates: [Incl, SG.Pkg, SG.Imp],
+			{
+				forStates: [Incl, SG.Pkg, SG.Imp, SG.Ann],
 				beforeCollect: EBBC,
 				collect: [CB, T.PackageDecl, S.PkgDeclSt]
 			}
 		]
 	},
 	Identifier: {
-		patterns: 'fn#JNameStart;fn#JNamePart:*;fn#NotJNamePart:!',
+		patterns: PtnId,
 		forStates: [Incl, S.PkgDeclSt, S.PkgDeclDotEd],
 		collect: [SS, S.PkgDeclIdEd]
 	},

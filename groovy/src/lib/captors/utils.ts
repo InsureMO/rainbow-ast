@@ -6,10 +6,10 @@ import {
 	TokenCaptorOfStates,
 	TokenMatcherBuilder
 } from '@rainbow-ast/core';
-import {EBBC, Incl, T} from '../alias';
+import {EBBC, Incl, S, T} from '../alias';
 import {GroovyAstBuildState, GroovyAstBuildStateName} from '../ast-build-state';
 import {GroovyTokenId, GroovyTokenName} from '../token';
-import {CFS, SG} from './state-shortcuts';
+import {CFS, Not, SG} from './state-shortcuts';
 import {GroovyTokenCaptorDefs} from './types';
 
 export const GroovyTokenMatcherBuilder = TokenMatcherBuilder.create({LongestKeywordLength: 'synchronized'.length});
@@ -137,17 +137,23 @@ export const NotSafeIndex = (context: AstBuildContext): boolean => {
 export const KeywordForks = (): Array<Omit<TokenCaptorDef<GroovyAstBuildState>, 'patterns'>> => {
 	return [
 		{
-			forStates: CFS.NotCmtNumStrGStrItpInlPkgImp,
+			forStates: Not(CFS.NotCmtNumStrGStrItpInlPkgImpAnn, S.AnnDeclVals, S.AnnDeclCommaEd),
 			enabledWhen: IsKeywordAllowed
 		},
-		{ // in package declaration or import declaration, always allowed
-			forStates: [Incl, SG.Pkg, SG.Imp],
+		{
+			/**
+			 * in following states, always allowed:
+			 * 1. package declaration
+			 * 2. import declaration
+			 * 3. annotation declaration
+			 */
+			forStates: [Incl, SG.Pkg, SG.Imp, SG.Ann],
 			beforeCollect: EBBC
 		}
 	];
 };
 
-export const buildTokenCaptors = (defs: Array<GroovyTokenCaptorDefs>): TokenCaptorOfStates<GroovyAstBuildStateName> => {
+export const buildTokenCaptors = (defs: ReadonlyArray<GroovyTokenCaptorDefs>): TokenCaptorOfStates<GroovyAstBuildStateName> => {
 	return BuildUtils.buildTokenCaptors({
 		defs,
 		tokenIdMap: GroovyTokenId as unknown as Record<GroovyTokenName, GroovyTokenId>,

@@ -5,8 +5,8 @@ import {KeywordAsCaptorDefs} from './as';
 import {StandardKeywordCaptorDefs} from './standard';
 import {KeywordStaticCaptorDefs} from './static';
 
-export const KeywordCaptorDefs: GroovyTokenCaptorDefs = {
-	...StandardKeywordCaptorDefs,
-	...KeywordAsCaptorDefs,
-	...KeywordStaticCaptorDefs
-};
+export const KeywordCaptorDefs: ReadonlyArray<GroovyTokenCaptorDefs> = [
+	StandardKeywordCaptorDefs,
+	KeywordAsCaptorDefs,
+	KeywordStaticCaptorDefs
+];

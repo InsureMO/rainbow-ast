@@ -5,14 +5,13 @@ import {GroovyTokenCaptorDefs} from '../types';
 export const BraceCaptorDefs: GroovyTokenCaptorDefs = {
 	LBrace: {
 		patterns: '{',
-		forks: [
-			{forStates: CFS.NotNumGStrItpInlPkgImp, collect: [CB, T.CodeBlock, S.CodeBlk]}
-		]
+		forStates: CFS.NotNumGStrItpInlPkgImpAnn,
+		collect: [CB, T.CodeBlock, S.CodeBlk]
 	},
 	RBrace: {
 		patterns: '}',
 		forks: [
-			{forStates: Not('Num', 'GStrItpInl', S.GStrItp, S.CodeBlk)},
+			{forStates: Not(CFS.NotNumGStrItpInlPkgImpAnn, S.GStrItp, S.CodeBlk)},
 			{forStates: [Incl, S.CodeBlk], collect: EB}
 		]
 	}

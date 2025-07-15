@@ -21,7 +21,9 @@ export const GroovyAstBuildStateGroup = {
 	),
 	GStrItpInl: ss(S.GStrItpInl, S.GStrItpInlIdEd, S.GStrItpInlDotEd),
 	Pkg: ss(S.PkgDeclSt, S.PkgDeclIdEd, S.PkgDeclDotEd),
-	Imp: ss(S.ImpDeclSt, S.ImpDeclStaticEd, S.ImpDeclIdEd, S.ImpDeclDotEd, S.ImpDeclStarEd, S.ImpDeclAsEd)
+	Imp: ss(S.ImpDeclSt, S.ImpDeclStaticEd, S.ImpDeclIdEd, S.ImpDeclDotEd, S.ImpDeclStarEd, S.ImpDeclAsEd),
+	/** only declaration states included, states of annotation values are not included */
+	Ann: ss(S.AnnDeclSt, S.AnnDeclIdEd, S.AnnDeclDotEd)
 } as const;
 export const SG = GroovyAstBuildStateGroup;
 
@@ -46,8 +48,8 @@ export const Not = (first: Excl | GroovyAstBuildState | keyof typeof SG, ...more
 };
 export const CaptorForStates = {
 	NotNumGStrItpInl: Not('Num', 'GStrItpInl'),
-	NotNumGStrItpInlPkgImp: Not('Num', 'GStrItpInl', 'Pkg', 'Imp'),
+	NotNumGStrItpInlPkgImpAnn: Not('Num', 'GStrItpInl', 'Pkg', 'Imp', 'Ann'),
 	NotCmtNumStrGStrItpInl: Not('Cmt', 'Num', 'Str', 'GStrItpInl'),
-	NotCmtNumStrGStrItpInlPkgImp: Not('Cmt', 'Num', 'Str', 'GStrItpInl', 'Pkg', 'Imp')
+	NotCmtNumStrGStrItpInlPkgImpAnn: Not('Cmt', 'Num', 'Str', 'GStrItpInl', 'Pkg', 'Imp', 'Ann')
 } as const;
 export const CFS = CaptorForStates;

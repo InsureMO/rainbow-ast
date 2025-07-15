@@ -1,11 +1,21 @@
-export * from './comment';
+import {GroovyTokenCaptorDefs} from '../types';
+import {AngleBracketCaptorDefs} from './angle-bracket';
+import {AnnotationCaptorDefs} from './annotation';
+import {BraceCaptorDefs} from './brace';
+import {BracketCaptorDefs} from './bracket';
+import {CommentCaptorDefs} from './comment';
+import {ImportDeclarationCaptorDefs} from './import-declaration';
+import {PackageDeclarationCaptorDefs} from './package-declaration';
+import {ParenthesesCaptorDefs} from './parentheses';
 
-export * from './package-declaration';
-export * from './import-declaration';
-export * from './annotation';
+export const DeclCaptorDefs: ReadonlyArray<GroovyTokenCaptorDefs> = [
+	BraceCaptorDefs,
+	BracketCaptorDefs,
+	ParenthesesCaptorDefs,
+	AngleBracketCaptorDefs,
 
-export * from './brace';
-export * from './bracket';
-export * from './parentheses';
-export * from './angle-bracket';
-
+	CommentCaptorDefs,
+	PackageDeclarationCaptorDefs,
+	ImportDeclarationCaptorDefs,
+	AnnotationCaptorDefs
+];

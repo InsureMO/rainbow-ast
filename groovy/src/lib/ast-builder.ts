@@ -9,27 +9,8 @@ import {
 } from '@rainbow-ast/core';
 import {S} from './alias';
 import {GroovyAstBuildState, GroovyAstBuildStateName} from './ast-build-state';
-import {
-	AngleBracketCaptorDefs,
-	BooleanCaptorDefs,
-	BraceCaptorDefs,
-	BracketCaptorDefs,
-	buildTokenCaptors,
-	CharsCaptorDefs,
-	CommentCaptorDefs,
-	DotCommaSemicolonCaptorDefs,
-	IdentifierCaptorDefs,
-	ImportDeclarationCaptorDefs,
-	KeywordCaptorDefs,
-	NumberCaptorDefs,
-	OperatorCaptorDefs,
-	PackageDeclarationCaptorDefs,
-	ParenthesesCaptorDefs,
-	PrimitiveTypeCaptorDefs,
-	StringCaptorDefs,
-	WhitespaceTabNewlineCaptorDefs
-} from './captors';
-import {buildTokenPointcuts, NumericLiteralPointcutDefs, ScriptCommandPointcutDefs} from './pointcuts';
+import {buildTokenCaptors, TokenCaptorDefs} from './captors';
+import {buildTokenPointcuts, TokenPointcutDefs} from './pointcuts';
 import {GroovyTokenId, GroovyTokenName} from './token';
 import {GroovyTokenCapturePriorities} from './token-priorities';
 
@@ -78,34 +59,8 @@ export const buildAstBuilder = (language: GroovyLanguage): GroovyAstBuilder => {
 export const createDefaultAstBuilder = (language?: Omit<GroovyLanguage, 'captors' | 'pointcuts'>) => {
 	return buildAstBuilder({
 		...language,
-		captors: buildTokenCaptors([
-			BooleanCaptorDefs,
-			...NumberCaptorDefs,
-			...StringCaptorDefs,
-
-			BraceCaptorDefs,
-			BracketCaptorDefs,
-			ParenthesesCaptorDefs,
-			AngleBracketCaptorDefs,
-
-			DotCommaSemicolonCaptorDefs,
-			WhitespaceTabNewlineCaptorDefs,
-
-			OperatorCaptorDefs,
-
-			PrimitiveTypeCaptorDefs,
-			CharsCaptorDefs,
-			KeywordCaptorDefs,
-			IdentifierCaptorDefs,
-
-			CommentCaptorDefs,
-			PackageDeclarationCaptorDefs,
-			ImportDeclarationCaptorDefs
-		]),
-		pointcuts: buildTokenPointcuts([
-			NumericLiteralPointcutDefs,
-			ScriptCommandPointcutDefs
-		])
+		captors: buildTokenCaptors(TokenCaptorDefs),
+		pointcuts: buildTokenPointcuts(TokenPointcutDefs)
 	});
 };
 

@@ -38,7 +38,15 @@ export enum GroovyAstBuildState {
 	/** index block, [], ?[] */ IndexBlk,
 	//
 	/** generic type */ GenT,
-	/** annotation started */ AnnSt,
+	// annotation
+	/** at captured, started */ AnnDeclSt,
+	/** identifier captured */ AnnDeclIdEd,
+	/** dot captured */ AnnDeclDotEd,
+	/** lparen captured, values */ AnnDeclVals,
+	/** identifier captured */ AnnDeclValIdEd,
+	/** equal captured */ AnnDeclValEqEd,
+	/** lbrack captured */ AnnDeclValArr,
+	/** comma captured, could be in values, value array */ AnnDeclCommaEd,
 	// package declaration
 	/** keyword package captured, started */ PkgDeclSt,
 	/** identifier captured */ PkgDeclIdEd,

@@ -22,3 +22,5 @@ export const EB: EndBlock = [CollectTokenActionType.EndBlock];
 export const CE = CollectTokenActionType.CreateAndEndBlock;
 
 export const EBBC: EndBlockBeforeCollect = [BeforeCollectTokenActionType.EndBlock];
+
+export const PtnId = 'fn#JNameStart;fn#JNamePart:*;fn#NotJNamePart:!';
