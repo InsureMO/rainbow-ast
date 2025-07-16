@@ -221,10 +221,10 @@ export enum GroovyTokenId {
 	IndexBlock, // TODO
 	//
 	GenericTypeDecl,  // TODO
-	AnnotationDecl,  // TODO
-	AnnotationDeclValues, // TODO
-	AnnotationDeclValue, // TODO
-	ImportDecl,  // TODO
+	AnnotationDecl,
+	AnnotationDeclValues,
+	AnnotationDeclValue,
+	ImportDecl,
 	/**
 	 * started by keyword "package"
 	 * 1. pattern: identifier[ dot identifier [dot identifier [...]]],

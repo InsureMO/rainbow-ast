@@ -88,6 +88,7 @@ export class AstBuilder<
 			}
 			// otherwise continue loop
 		}
+		context.endAllBlocks();
 	}
 
 	protected parse(compilationUnit: CompilationUnit): void {

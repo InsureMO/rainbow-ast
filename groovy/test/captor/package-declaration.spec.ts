@@ -67,12 +67,12 @@ describe('Capture Package Declaration', () => {
 	test('Package Declaration: Continuous identifiers', async () => {
 		const ast = builder.ast('package java util');
 		AstChecker.check(ast, [GroovyTokenId.COMPILATION_UNIT, 0, 17, 1, 'package java util', [
-			[GroovyTokenId.PackageDecl, 0, 13, 1, 'package java ', [
+			[GroovyTokenId.PackageDecl, 0, 12, 1, 'package java', [
 				[GroovyTokenId.PACKAGE, 0, 7, 1, 'package'],
 				[GroovyTokenId.Whitespaces, 7, 8, 1, ' '],
 				[GroovyTokenId.Identifier, 8, 12, 1, 'java'],
-				[GroovyTokenId.Whitespaces, 12, 13, 1, ' ']
 			]],
+			[GroovyTokenId.Whitespaces, 12, 13, 1, ' '],
 			[GroovyTokenId.Identifier, 13, 17, 1, 'util']
 		]]);
 	});

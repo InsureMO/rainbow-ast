@@ -25,7 +25,7 @@ export const AnnotationCaptorDefs: GroovyTokenCaptorDefs = {
 				collect: [SS, S.AnnDeclIdEd]
 			},
 			{
-				forStates: [Incl, S.AnnDeclVals, S.AnnDeclCommaEd],
+				forStates: [Incl, S.AnnDeclValsSt, S.AnnDeclValsCommaEd],
 				collect: [CB, T.AnnotationDeclValue, S.AnnDeclValIdEd]
 			}
 		]
@@ -43,7 +43,7 @@ export const AnnotationCaptorDefs: GroovyTokenCaptorDefs = {
 				collect: [SS, S.AnnDeclValEqEd]
 			},
 			{
-				forStates: [Incl, S.AnnDeclVals, S.AnnDeclCommaEd],
+				forStates: [Incl, S.AnnDeclValsSt, S.AnnDeclValsCommaEd],
 				collect: [CB, T.AnnotationDeclValue, S.AnnDeclValEqEd]
 			}
 		]
@@ -52,19 +52,19 @@ export const AnnotationCaptorDefs: GroovyTokenCaptorDefs = {
 		patterns: ',',
 		forks: [
 			{
-				forStates: [Incl, S.AnnDeclVals, S.AnnDeclCommaEd],
-				collect: [SS, S.AnnDeclCommaEd]
+				forStates: [Incl, S.AnnDeclValsSt, S.AnnDeclValsCommaEd],
+				collect: [SS, S.AnnDeclValsCommaEd]
 			},
 			{
 				forStates: [Incl, S.AnnDeclValIdEd, S.AnnDeclValEqEd],
 				beforeCollect: EBBC,
-				collect: [SS, S.AnnDeclCommaEd]
+				collect: [SS, S.AnnDeclValsCommaEd]
 			}
 		]
 	},
 	LParen: {
 		patterns: '(',
 		forStates: [Incl, S.AnnDeclIdEd],
-		collect: [CB, T.AnnotationDeclValues, S.AnnDeclVals]
+		collect: [CB, T.AnnotationDeclValues, S.AnnDeclValsSt]
 	}
 };

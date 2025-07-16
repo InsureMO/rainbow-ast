@@ -114,36 +114,36 @@ describe('Capture Import Declaration', () => {
 	test('Import Declaration: Continuous statics', async () => {
 		const ast = builder.ast('import static static');
 		AstChecker.check(ast, [GroovyTokenId.COMPILATION_UNIT, 0, 20, 1, 'import static static', [
-			[GroovyTokenId.ImportDecl, 0, 14, 1, 'import static ', [
+			[GroovyTokenId.ImportDecl, 0, 13, 1, 'import static', [
 				[GroovyTokenId.IMPORT, 0, 6, 1, 'import'],
 				[GroovyTokenId.Whitespaces, 6, 7, 1, ' '],
 				[GroovyTokenId.STATIC, 7, 13, 1, 'static'],
-				[GroovyTokenId.Whitespaces, 13, 14, 1, ' ']
 			]],
+			[GroovyTokenId.Whitespaces, 13, 14, 1, ' '],
 			[GroovyTokenId.STATIC, 14, 20, 1, 'static']
 		]]);
 	});
 	test('Import Declaration: Static and dot', async () => {
 		const ast = builder.ast('import static .');
 		AstChecker.check(ast, [GroovyTokenId.COMPILATION_UNIT, 0, 15, 1, 'import static .', [
-			[GroovyTokenId.ImportDecl, 0, 14, 1, 'import static ', [
+			[GroovyTokenId.ImportDecl, 0, 13, 1, 'import static', [
 				[GroovyTokenId.IMPORT, 0, 6, 1, 'import'],
 				[GroovyTokenId.Whitespaces, 6, 7, 1, ' '],
 				[GroovyTokenId.STATIC, 7, 13, 1, 'static'],
-				[GroovyTokenId.Whitespaces, 13, 14, 1, ' ']
 			]],
+			[GroovyTokenId.Whitespaces, 13, 14, 1, ' '],
 			[GroovyTokenId.Dot, 14, 15, 1, '.']
 		]]);
 	});
 	test('Import Declaration: Continuous identifiers', async () => {
 		const ast = builder.ast('import java util');
 		AstChecker.check(ast, [GroovyTokenId.COMPILATION_UNIT, 0, 16, 1, 'import java util', [
-			[GroovyTokenId.ImportDecl, 0, 12, 1, 'import java ', [
+			[GroovyTokenId.ImportDecl, 0, 11, 1, 'import java', [
 				[GroovyTokenId.IMPORT, 0, 6, 1, 'import'],
 				[GroovyTokenId.Whitespaces, 6, 7, 1, ' '],
 				[GroovyTokenId.Identifier, 7, 11, 1, 'java'],
-				[GroovyTokenId.Whitespaces, 11, 12, 1, ' ']
 			]],
+			[GroovyTokenId.Whitespaces, 11, 12, 1, ' '],
 			[GroovyTokenId.Identifier, 12, 16, 1, 'util']
 		]]);
 	});

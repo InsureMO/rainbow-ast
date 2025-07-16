@@ -9,7 +9,7 @@ export const DotCommaSemicolonCaptorDefs: GroovyTokenCaptorDefs = {
 	},
 	Comma: {
 		patterns: ',',
-		forStates: Not(CFS.NotNumGStrItpInlPkgImpAnn, S.AnnDeclVals, S.AnnDeclValIdEd, S.AnnDeclValEqEd, S.AnnDeclCommaEd)
+		forStates: Not(CFS.NotNumGStrItpInlPkgImpAnn, S.AnnDeclValsSt, S.AnnDeclValIdEd, S.AnnDeclValEqEd, S.AnnDeclValsCommaEd)
 	},
 	Dot: {
 		patterns: '.',

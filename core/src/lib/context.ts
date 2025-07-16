@@ -130,6 +130,13 @@ export class AstBuildContext<
 		return this;
 	}
 
+	endAllBlocks(): this {
+		while (this._blocks.length > 1) {
+			this.endCurrentBlock();
+		}
+		return this;
+	}
+
 	appendAtomic(token: AtomicToken): this {
 		this._blocks[0].appendChild(token);
 		return this;

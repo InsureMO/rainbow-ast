@@ -1,16 +1,10 @@
 import {GroovyTokenPointcutDefs} from './types';
 import {moveTrailingWhitespaceTabCommentNewLineOfLastChildToCurrentBlock} from './utils';
 
-export const AnnotationPointcutDefs: GroovyTokenPointcutDefs = {
-	AnnotationDecl: {
+export const ImportDeclarationPointcutDefs: GroovyTokenPointcutDefs = {
+	ImportDecl: {
 		onBlockEnded: (_, context): void => {
 			moveTrailingWhitespaceTabCommentNewLineOfLastChildToCurrentBlock(context);
-		}
-	},
-	AnnotationDeclValues: {
-		onBlockEnded: (_, context): void => {
-			moveTrailingWhitespaceTabCommentNewLineOfLastChildToCurrentBlock(context);
-			context.endCurrentBlock();
 		}
 	}
 };

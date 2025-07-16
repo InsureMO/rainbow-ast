@@ -1,6 +1,9 @@
 import {
 	AstBuildContext,
+	AtomicToken,
+	BeforeCollectTokenActionType,
 	BuildUtils,
+	CustomActionBeforeCollect,
 	Token,
 	TokenCaptorDef,
 	TokenCaptorOfStates,
@@ -152,6 +155,54 @@ export const KeywordForks = (): Array<Omit<TokenCaptorDef<GroovyAstBuildState>, 
 		}
 	];
 };
+
+export const RBracketBC: CustomActionBeforeCollect = [BeforeCollectTokenActionType.Custom, (token: AtomicToken, context: AstBuildContext): void => {
+	const currentBlock = context.currentBlock;
+	const currentBlockTokenId = currentBlock.id;
+	if (currentBlockTokenId === T.COMPILATION_UNIT) {
+		// under compilation unit, do nothing
+		return;
+	}
+
+	const tokenId = token.id;
+	let leftBracketTokenId: GroovyTokenId;
+	let otherBracketTokenIds: Array<GroovyTokenId>;
+	switch (tokenId) {
+		case T.RBrace:
+			leftBracketTokenId = T.LBrace;
+			otherBracketTokenIds = [T.LBrack, T.LParen];
+			break;
+		case T.RBrack:
+			leftBracketTokenId = T.LBrack;
+			otherBracketTokenIds = [T.LBrace, T.LParen];
+			break;
+		case T.RParen:
+			leftBracketTokenId = T.LParen;
+			otherBracketTokenIds = [T.LBrace, T.LBrack];
+			break;
+		default:
+			throw new Error(`Unsupported bracket token[${tokenId}, ${GroovyTokenId[tokenId]}].`);
+	}
+
+	let block = currentBlock;
+	while (true) {
+		const firstChildOfBlock = block.children[0];
+		const firstChildOfBlockTokenId = firstChildOfBlock.id;
+		if (firstChildOfBlockTokenId === leftBracketTokenId) {
+			// left and right matched, do nothing
+			return;
+		} else if (otherBracketTokenIds.includes(firstChildOfBlockTokenId)) {
+			// left and right unmatched, and this block starts with other left bracket
+			// which means the started bracket not closed yet, and captured token appears at incorrect position
+			// do nothing
+			return;
+		} else {
+			// close current block, and check again
+			context.endCurrentBlock();
+			block = context.currentBlock;
+		}
+	}
+}];
 
 export const buildTokenCaptors = (defs: ReadonlyArray<GroovyTokenCaptorDefs>): TokenCaptorOfStates<GroovyAstBuildStateName> => {
 	return BuildUtils.buildTokenCaptors({

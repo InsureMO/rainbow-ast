@@ -1,5 +1,7 @@
-import {CFS} from '../state-shortcuts';
+import {EB} from '../../alias';
+import {CFS, Not} from '../state-shortcuts';
 import {GroovyTokenCaptorDefs} from '../types';
+import {RBracketBC} from '../utils';
 
 export const ParenthesesCaptorDefs: GroovyTokenCaptorDefs = {
 	LParen: {
@@ -8,6 +10,8 @@ export const ParenthesesCaptorDefs: GroovyTokenCaptorDefs = {
 	},
 	RParen: {
 		patterns: ')',
-		forStates: CFS.NotNumGStrItpInlPkgImpAnn
+		forStates: Not(CFS.NotNumGStrItpInlPkgImpAnn),
+		beforeCollect: RBracketBC,
+		collect: EB
 	}
 };
