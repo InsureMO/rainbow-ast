@@ -117,6 +117,34 @@ describe('Capture Annotation', () => {
 		]]);
 	});
 	test('Annotation: Simple #8', async () => {
+		const ast = builder.ast('@Ann (100,"2")');
+		// noinspection DuplicatedCode
+		AstChecker.check(ast, [GroovyTokenId.COMPILATION_UNIT, 0, 14, 1, '@Ann (100,"2")', [
+			[GroovyTokenId.AnnotationDecl, 0, 14, 1, '@Ann (100,"2")', [
+				[GroovyTokenId.AnnotationStartMark, 0, 1, 1, '@'],
+				[GroovyTokenId.Identifier, 1, 4, 1, 'Ann'],
+				[GroovyTokenId.Whitespaces, 4, 5, 1, ' '],
+				[GroovyTokenId.AnnotationDeclValues, 5, 14, 1, '(100,"2")', [
+					[GroovyTokenId.LParen, 5, 6, 1, '('],
+					[GroovyTokenId.AnnotationDeclValue, 6, 9, 1, '100', [
+						[GroovyTokenId.IntegralLiteral, 6, 9, 1, '100', [
+							[GroovyTokenId.Number, 6, 9, 1, '100']
+						]]
+					]],
+					[GroovyTokenId.Comma, 9, 10, 1, ','],
+					[GroovyTokenId.AnnotationDeclValue, 10, 13, 1, '"2"', [
+						[GroovyTokenId.GStringLiteral, 10, 13, 1, '"2"', [
+							[GroovyTokenId.GStringMark, 10, 11, 1, '"'],
+							[GroovyTokenId.Word, 11, 12, 1, '2'],
+							[GroovyTokenId.GStringMark, 12, 13, 1, '"']
+						]]
+					]],
+					[GroovyTokenId.RParen, 13, 14, 1, ')']
+				]]
+			]]
+		]]);
+	});
+	test('Annotation: Simple #9', async () => {
 		const ast = builder.ast('@Ann(value=100)');
 		// noinspection DuplicatedCode
 		AstChecker.check(ast, [GroovyTokenId.COMPILATION_UNIT, 0, 15, 1, '@Ann(value=100)', [

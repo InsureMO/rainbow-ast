@@ -54,7 +54,7 @@ export const AnnotationCaptorDefs: GroovyTokenCaptorDefs = {
 				collect: [SS, S.AnnDeclValsCommaEd]
 			},
 			{
-				forStates: [Incl, S.AnnDeclValIdEd, S.AnnDeclValEqEd],
+				forStates: [Incl, SG.AnnVal],
 				beforeCollect: EBBC,
 				collect: [SS, S.AnnDeclValsCommaEd]
 			}

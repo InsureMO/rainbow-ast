@@ -1,5 +1,4 @@
-import {S} from '../alias';
-import {CFS, Not, SG} from './state-shortcuts';
+import {CFS, Not} from './state-shortcuts';
 import {GroovyTokenCaptorDefs} from './types';
 
 export const DotCommaSemicolonCaptorDefs: GroovyTokenCaptorDefs = {
