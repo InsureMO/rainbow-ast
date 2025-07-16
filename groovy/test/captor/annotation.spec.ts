@@ -106,8 +106,10 @@ describe('Capture Annotation', () => {
 				[GroovyTokenId.Whitespaces, 4, 5, 1, ' '],
 				[GroovyTokenId.AnnotationDeclValues, 5, 10, 1, '(100)', [
 					[GroovyTokenId.LParen, 5, 6, 1, '('],
-					[GroovyTokenId.IntegralLiteral, 6, 9, 1, '100', [
-						[GroovyTokenId.Number, 6, 9, 1, '100']
+					[GroovyTokenId.AnnotationDeclValue, 6, 9, 1, '100', [
+						[GroovyTokenId.IntegralLiteral, 6, 9, 1, '100', [
+							[GroovyTokenId.Number, 6, 9, 1, '100']
+						]]
 					]],
 					[GroovyTokenId.RParen, 9, 10, 1, ')']
 				]]

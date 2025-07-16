@@ -27,7 +27,8 @@ export const AnnotationCaptorDefs: GroovyTokenCaptorDefs = {
 			{
 				forStates: [Incl, S.AnnDeclValsSt, S.AnnDeclValsCommaEd],
 				collect: [CB, T.AnnotationDeclValue, S.AnnDeclValIdEd]
-			}
+			},
+			{forStates: [Incl, S.AnnDeclValSt], collect: [SS, S.AnnDeclValIdEd]}
 		]
 	},
 	Dot: {
@@ -39,13 +40,10 @@ export const AnnotationCaptorDefs: GroovyTokenCaptorDefs = {
 		patterns: '=',
 		forks: [
 			{
-				forStates: [Incl, S.AnnDeclValIdEd],
-				collect: [SS, S.AnnDeclValEqEd]
-			},
-			{
 				forStates: [Incl, S.AnnDeclValsSt, S.AnnDeclValsCommaEd],
 				collect: [CB, T.AnnotationDeclValue, S.AnnDeclValEqEd]
-			}
+			},
+			{forStates: [Incl, SG.AnnVal], collect: [SS, S.AnnDeclValEqEd]}
 		]
 	},
 	Comma: {

@@ -185,7 +185,7 @@ export const RBracketBC: CustomActionBeforeCollect = [BeforeCollectTokenActionTy
 	}
 
 	let block = currentBlock;
-	while (true) {
+	while (block.id !== T.COMPILATION_UNIT) {
 		const firstChildOfBlock = block.children[0];
 		const firstChildOfBlockTokenId = firstChildOfBlock.id;
 		if (firstChildOfBlockTokenId === leftBracketTokenId) {

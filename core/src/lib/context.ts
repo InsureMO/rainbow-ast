@@ -1,4 +1,4 @@
-import {AtomicToken, BlockToken, CompilationUnit} from './token';
+import {AtomicToken, BlockToken, CompilationUnit, Token} from './token';
 import {
 	AstBuildState,
 	Language,
@@ -117,6 +117,7 @@ export class AstBuildContext<
 	}
 
 	appendBlock(token: BlockToken, state: AstBuildState): this {
+		this.preChildAppend(this._blocks[0], token);
 		this._blocks[0].appendChild(token);
 		this._blocks.unshift(token);
 		this._states.unshift(state);
@@ -138,17 +139,19 @@ export class AstBuildContext<
 	}
 
 	appendAtomic(token: AtomicToken): this {
+		this.preChildAppend(this._blocks[0], token);
 		this._blocks[0].appendChild(token);
 		return this;
+	}
+
+	preChildAppend(block: BlockToken, child: Token): void {
+		this._language.pointcuts?.[block.id]?.onBeforeChildAppend?.(block, child, this);
 	}
 
 	/**
 	 * block ended, and already unshift from blocks stack
 	 */
 	postBlockEnded(block: BlockToken): void {
-		const pointcut = this._language.pointcuts[block.id];
-		if (pointcut != null) {
-			pointcut.onBlockEnded(block, this);
-		}
+		this._language.pointcuts?.[block.id]?.onAfterBlockEnd?.(block, this);
 	}
 }

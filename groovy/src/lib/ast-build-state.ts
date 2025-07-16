@@ -43,9 +43,10 @@ export enum GroovyAstBuildState {
 	/** identifier captured */ AnnDeclIdEd,
 	/** dot captured */ AnnDeclDotEd,
 	/** lparen captured, values */ AnnDeclValsSt,
+	/** value expressions comma captured */ AnnDeclValsCommaEd,
+	/** value expression started */ AnnDeclValSt,
 	/** value expression identifier captured */ AnnDeclValIdEd,
 	/** value expression equal captured */ AnnDeclValEqEd,
-	/** value expressions comma captured */ AnnDeclValsCommaEd,
 	// package declaration
 	/** keyword package captured, started */ PkgDeclSt,
 	/** identifier captured */ PkgDeclIdEd,

@@ -24,7 +24,8 @@ export const GroovyAstBuildStateGroup = {
 	Imp: ss(S.ImpDeclSt, S.ImpDeclStaticEd, S.ImpDeclIdEd, S.ImpDeclDotEd, S.ImpDeclStarEd, S.ImpDeclAsEd),
 	/** only declaration states included, states of annotation values are not included */
 	Ann: ss(S.AnnDeclSt, S.AnnDeclIdEd, S.AnnDeclDotEd),
-	AnnVals: ss(S.AnnDeclValsSt, S.AnnDeclValsCommaEd)
+	AnnVals: ss(S.AnnDeclValsSt, S.AnnDeclValsCommaEd),
+	AnnVal: ss(S.AnnDeclValSt, S.AnnDeclValIdEd, S.AnnDeclValEqEd)
 } as const;
 export const SG = GroovyAstBuildStateGroup;
 
@@ -52,6 +53,6 @@ export const CaptorForStates = {
 	NotNumGStrItpInlPkgImpAnn: Not('Num', 'GStrItpInl', 'Pkg', 'Imp', 'Ann'),
 	NotCmtNumStrGStrItpInl: Not('Cmt', 'Num', 'Str', 'GStrItpInl'),
 	NotCmtNumStrGStrItpInlPkgImpAnn: Not('Cmt', 'Num', 'Str', 'GStrItpInl', 'Pkg', 'Imp', 'Ann'),
-	NoKeywords: Not('Cmt', 'Num', 'Str', 'GStrItpInl', 'Pkg', 'Imp', 'Ann', S.AnnDeclValsSt, S.AnnDeclValsCommaEd)
+	NoKeywords: Not('Cmt', 'Num', 'Str', 'GStrItpInl', 'Pkg', 'Imp', 'Ann', S.AnnDeclValSt)
 } as const;
 export const CFS = CaptorForStates;

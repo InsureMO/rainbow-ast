@@ -95,7 +95,7 @@ export const OperatorCaptorDefs: GroovyTokenCaptorDefs = {
 	// operators
 	Assign: {
 		patterns: '=',
-		forStates: Not(CFS.NoKeywords, S.AnnDeclValIdEd)
+		forStates: Not(CFS.NotCmtNumStrGStrItpInlPkgImpAnn, 'AnnVals', 'AnnVal')
 	},
 	GreaterThan: {
 		patterns: '>',
