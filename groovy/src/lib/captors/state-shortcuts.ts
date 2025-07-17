@@ -4,6 +4,7 @@ import {GroovyAstBuildState} from '../ast-build-state';
 
 const ss = (state: GroovyAstBuildState, ...more: Array<GroovyAstBuildState>): ReadonlyArray<GroovyAstBuildState> => [state, ...more];
 export const GroovyAstBuildStateGroup = {
+	CU: ss(S.CU, S.CUOmitScriptCmd),
 	Cmt: ss(S.ScriptCmd, S.SLCmt, S.MLCmt),
 	Num: ss(
 		S.BinNumSt, S.BinNumNumEd, S.BinNumSepEd,
@@ -53,6 +54,9 @@ export const CaptorForStates = {
 	NotNumGStrItpInlPkgImpAnn: Not('Num', 'GStrItpInl', 'Pkg', 'Imp', 'Ann'),
 	NotCmtNumStrGStrItpInl: Not('Cmt', 'Num', 'Str', 'GStrItpInl'),
 	NotCmtNumStrGStrItpInlPkgImpAnn: Not('Cmt', 'Num', 'Str', 'GStrItpInl', 'Pkg', 'Imp', 'Ann'),
-	NoKeywords: Not('Cmt', 'Num', 'Str', 'GStrItpInl', 'Pkg', 'Imp', 'Ann', S.AnnDeclValSt)
+	/**
+	 * for states that keywords allowed
+	 */
+	Keywords: Not('Cmt', 'Num', 'Str', 'GStrItpInl', 'Pkg', 'Imp', 'Ann', 'AnnVals', S.AnnDeclValSt)
 } as const;
 export const CFS = CaptorForStates;

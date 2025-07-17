@@ -5,7 +5,7 @@ import {IsKeywordAllowed} from '../utils';
 export const KeywordAsCaptorDefs: GroovyTokenCaptorDefs = {
 	AS: { // "as" can be identified as qualified name
 		patterns: 'as;fn#NotJNamePart:!',
-		forStates: CFS.NoKeywords,
+		forStates: CFS.Keywords,
 		enabledWhen: IsKeywordAllowed
 	}
 };

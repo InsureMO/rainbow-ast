@@ -257,7 +257,7 @@ export const OperatorCaptorDefs: GroovyTokenCaptorDefs = {
 	// in and instanceof is keyword like
 	In: { // "in" can be identified as qualified name
 		patterns: 'in;fn#NotJNamePart:!',
-		forStates: CFS.NoKeywords,
+		forStates: CFS.Keywords,
 		enabledWhen: IsKeywordAllowed
 	},
 	InstanceOf: {

@@ -140,7 +140,7 @@ export const NotSafeIndex = (context: AstBuildContext): boolean => {
 export const KeywordForks = (): Array<Omit<TokenCaptorDef<GroovyAstBuildState>, 'patterns'>> => {
 	return [
 		{
-			forStates: CFS.NoKeywords,
+			forStates: CFS.Keywords,
 			enabledWhen: IsKeywordAllowed
 		},
 		{

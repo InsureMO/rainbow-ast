@@ -6,12 +6,12 @@ export const StandardKeywordCaptorDefs: GroovyTokenCaptorDefs = {
 	// groovy keywords
 	DEF: { // "def" can be identified as qualified name
 		patterns: 'def;fn#NotJNamePart:!',
-		forStates: CFS.NoKeywords,
+		forStates: CFS.Keywords,
 		enabledWhen: IsKeywordAllowed
 	},
 	TRAIT: { // "trait" can be identified as qualified name
 		patterns: 'trait;fn#NotJNamePart:!',
-		forStates: CFS.NoKeywords,
+		forStates: CFS.Keywords,
 		enabledWhen: IsKeywordAllowed
 	},
 	// java keywords
@@ -194,27 +194,27 @@ export const StandardKeywordCaptorDefs: GroovyTokenCaptorDefs = {
 	// java keywords
 	PERMITS: { // "permits" can be identified as qualified name
 		patterns: 'permits;fn#NotJNamePart:!',
-		forStates: CFS.NoKeywords,
+		forStates: CFS.Keywords,
 		enabledWhen: IsKeywordAllowed
 	},
 	RECORD: { // "record" can be identified as qualified name
 		patterns: 'record;fn#NotJNamePart:!',
-		forStates: CFS.NoKeywords,
+		forStates: CFS.Keywords,
 		enabledWhen: IsKeywordAllowed
 	},
 	SEALED: { // "sealed" can be identified as qualified name
 		patterns: 'sealed;fn#NotJNamePart:!',
-		forStates: CFS.NoKeywords,
+		forStates: CFS.Keywords,
 		enabledWhen: IsKeywordAllowed
 	},
 	VAR: { // "var" can be identified as qualified name
 		patterns: 'var;fn#NotJNamePart:!',
-		forStates: CFS.NoKeywords,
+		forStates: CFS.Keywords,
 		enabledWhen: IsKeywordAllowed
 	},
 	YIELD: { // "yield" can be identified as qualified name
 		patterns: 'yield;fn#NotJNamePart:!',
-		forStates: CFS.NoKeywords,
+		forStates: CFS.Keywords,
 		enabledWhen: IsKeywordAllowed
 	}
 };

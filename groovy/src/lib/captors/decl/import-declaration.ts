@@ -8,7 +8,7 @@ export const ImportDeclarationCaptorDefs: GroovyTokenCaptorDefs = {
 		patterns: 'import;fn#NotJNamePart:!',
 		forks: [
 			{
-				forStates: CFS.NoKeywords,
+				forStates: CFS.Keywords,
 				enabledWhen: IsKeywordAllowed,
 				collect: [CB, T.ImportDecl, S.ImpDeclSt]
 			},

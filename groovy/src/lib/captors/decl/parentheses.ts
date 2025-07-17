@@ -10,7 +10,7 @@ export const ParenthesesCaptorDefs: GroovyTokenCaptorDefs = {
 	},
 	RParen: {
 		patterns: ')',
-		forStates: Not(CFS.NotNumGStrItpInlPkgImpAnn),
+		forStates: CFS.NotNumGStrItpInlPkgImpAnn,
 		beforeCollect: RBracketBC,
 		collect: EB
 	}

@@ -8,7 +8,7 @@ export const PackageDeclarationCaptorDefs: GroovyTokenCaptorDefs = {
 		patterns: 'package;fn#NotJNamePart:!',
 		forks: [
 			{
-				forStates: CFS.NoKeywords,
+				forStates: CFS.Keywords,
 				enabledWhen: IsKeywordAllowed,
 				collect: [CB, T.PackageDecl, S.PkgDeclSt]
 			},
