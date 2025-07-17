@@ -5,6 +5,7 @@ import {
 	BuildUtils,
 	CustomActionBeforeCollect,
 	Token,
+	TokenCaptorAvailableCheck,
 	TokenCaptorDef,
 	TokenCaptorOfStates,
 	TokenMatcherBuilder
@@ -31,7 +32,7 @@ export const IsOperator = (token: Token): boolean => {
  *
  * if there is a dot in front, not allowed. keyword will be treated as identifier, to visit the properties of object.
  */
-export const IsKeywordAllowed = (context: AstBuildContext): boolean => {
+export const IsKeywordAllowed: TokenCaptorAvailableCheck = (context: AstBuildContext): boolean => {
 	const block = context.currentBlock;
 	const children = block.children;
 
@@ -56,6 +57,9 @@ export const IsKeywordAllowed = (context: AstBuildContext): boolean => {
 			case T.SafeChainDot: {
 				return false;
 			}
+			default: {
+				return true;
+			}
 		}
 	}
 	return true;
@@ -66,7 +70,7 @@ export const IsKeywordAllowed = (context: AstBuildContext): boolean => {
  * 2. after semicolon, dot, lbrace, lbrack, lparen, gstring interpolation lbrace start mark
  * 3.
  */
-export const IsSlashyGStringStartAllowed = (context: AstBuildContext): boolean => {
+export const IsSlashyGStringStartAllowed: TokenCaptorAvailableCheck = (context: AstBuildContext): boolean => {
 	const block = context.currentBlock;
 	const line = context.line;
 	const children = block.children;
@@ -118,13 +122,13 @@ export const IsSlashyGStringStartAllowed = (context: AstBuildContext): boolean =
 /**
  * when {@link IsSlashyGStringStartAllowed} returns false
  */
-export const SlashyGStringStartNotAllowed = (context: AstBuildContext): boolean => !IsSlashyGStringStartAllowed(context);
+export const SlashyGStringStartNotAllowed: TokenCaptorAvailableCheck = (context: AstBuildContext): boolean => !IsSlashyGStringStartAllowed(context);
 
-export const IsSafeIndex = (context: AstBuildContext): boolean => {
+export const IsSafeIndex: TokenCaptorAvailableCheck = (context: AstBuildContext): boolean => {
 	const block = context.currentBlock;
 	return block.id === T.IndexBlock && block.children[0].id === T.SafeIndex;
 };
-export const NotSafeIndex = (context: AstBuildContext): boolean => {
+export const NotSafeIndex: TokenCaptorAvailableCheck = (context: AstBuildContext): boolean => {
 	const block = context.currentBlock;
 	return block.id !== T.IndexBlock || block.children[0].id !== T.SafeIndex;
 };
@@ -156,6 +160,14 @@ export const KeywordForks = (): Array<Omit<TokenCaptorDef<GroovyAstBuildState>, 
 	];
 };
 
+/**
+ * check the symmetry of right parentheses, including {@link T.RBrace}, {@link T.RBrack}, and {@link T.RParen}.
+ * - if block is compilation unit, do nothing,
+ * - if first child is matched, do nothing,
+ * - if first child is not matched,
+ *   - if first child is other types of parentheses, do nothing,
+ *   - if first child is not any type of parentheses, end current block; and check again.
+ */
 export const RBracketBC: CustomActionBeforeCollect = [BeforeCollectTokenActionType.Custom, (token: AtomicToken, context: AstBuildContext): void => {
 	const currentBlock = context.currentBlock;
 	const currentBlockTokenId = currentBlock.id;
@@ -188,7 +200,7 @@ export const RBracketBC: CustomActionBeforeCollect = [BeforeCollectTokenActionTy
 	while (block.id !== T.COMPILATION_UNIT) {
 		const firstChildOfBlock = block.children[0];
 		const firstChildOfBlockTokenId = firstChildOfBlock.id;
-		if (firstChildOfBlockTokenId === leftBracketTokenId) {
+		if (leftBracketTokenId === firstChildOfBlockTokenId) {
 			// left and right matched, do nothing
 			return;
 		} else if (otherBracketTokenIds.includes(firstChildOfBlockTokenId)) {

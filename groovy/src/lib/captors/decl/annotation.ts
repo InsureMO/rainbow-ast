@@ -25,14 +25,17 @@ export const AnnotationCaptorDefs: GroovyTokenCaptorDefs = {
 			// when current state is any of annotation values, create annotation value
 			{forStates: [Incl, SG.AnnVals], collect: [CB, T.AnnotationDeclValue, S.AnnDeclValIdEd]},
 			// when current state is annotation value started, transit to identifier end
-			{forStates: [Incl, S.AnnDeclValSt], collect: [SS, S.AnnDeclValIdEd]}
+			{forStates: [Incl, S.AnnDeclValSt, S.AnnDeclValDotEd], collect: [SS, S.AnnDeclValIdEd]}
 		]
 	},
-	Dot: { // appears only after annotation identifier
+	Dot: {
 		patterns: '.',
-		forStates: [Incl, S.AnnDeclIdEd],
-		collect: [SS, S.AnnDeclDotEd]
-		// TODO annotation value also could be qualified name, which is a class
+		forks: [
+			// appears only after annotation identifier
+			{forStates: [Incl, S.AnnDeclIdEd], collect: [SS, S.AnnDeclDotEd]},
+			// appears only after annotation value identifier (typically, qualified class name)
+			{forStates: [Incl, S.AnnDeclValIdEd], collect: [SS, S.AnnDeclValDotEd]}
+		]
 	},
 	Assign: {
 		patterns: '=',

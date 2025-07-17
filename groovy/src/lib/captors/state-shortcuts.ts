@@ -26,7 +26,7 @@ export const GroovyAstBuildStateGroup = {
 	/** only declaration states included, states of annotation values are not included */
 	Ann: ss(S.AnnDeclSt, S.AnnDeclIdEd, S.AnnDeclDotEd),
 	AnnVals: ss(S.AnnDeclValsSt, S.AnnDeclValsCommaEd),
-	AnnVal: ss(S.AnnDeclValSt, S.AnnDeclValIdEd, S.AnnDeclValEqEd)
+	AnnVal: ss(S.AnnDeclValSt, S.AnnDeclValIdEd, S.AnnDeclValDotEd, S.AnnDeclValEqEd)
 } as const;
 export const SG = GroovyAstBuildStateGroup;
 

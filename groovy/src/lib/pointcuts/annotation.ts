@@ -23,6 +23,7 @@ export const AnnotationPointcutDefs: GroovyTokenPointcutDefs = {
 		},
 		onBlockEnded: (_, context): void => {
 			moveTrailingWhitespaceTabCommentNewLineOfLastChildToCurrentBlock(context);
+			/** also end {@link T.AnnotationDecl} */
 			context.endCurrentBlock();
 		}
 	}

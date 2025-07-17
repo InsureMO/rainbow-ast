@@ -6,7 +6,6 @@ describe('Capture ML Comment', () => {
 
 	test('ML Comment: Empty', async () => {
 		const ast = builder.ast('/**/');
-		// noinspection DuplicatedCode
 		AstChecker.check(ast, [GroovyTokenId.COMPILATION_UNIT, 0, 4, 1, '/**/', [
 			[GroovyTokenId.MLComment, 0, 4, 1, '/**/', [
 				[GroovyTokenId.MLCommentStartMark, 0, 2, 1, '/*'],
@@ -17,7 +16,6 @@ describe('Capture ML Comment', () => {
 
 	test('ML Comment: Simple', async () => {
 		const ast = builder.ast('/*/usr/bin/python3\n * test*/');
-		// noinspection DuplicatedCode
 		AstChecker.check(ast, [GroovyTokenId.COMPILATION_UNIT, 0, 28, 1, '/*/usr/bin/python3\n * test*/', [
 			[GroovyTokenId.MLComment, 0, 28, 1, '/*/usr/bin/python3\n * test*/', [
 				[GroovyTokenId.MLCommentStartMark, 0, 2, 1, '/*'],
