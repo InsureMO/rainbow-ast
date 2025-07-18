@@ -23,34 +23,34 @@ import {KeywordForks} from './utils';
 export const PrimitiveTypeCaptorDefs: GroovyTokenCaptorDefs = {
 	BOOLEAN: {
 		patterns: 'boolean;fn#NotJNamePart:!',
-		forks: KeywordForks()
+		forks: KeywordForks
 	},
 	CHAR: {
 		patterns: 'char;NoJNamePart:!',
-		forks: KeywordForks()
+		forks: KeywordForks
 	},
 	BYTE: {
 		patterns: 'byte;fn#NotJNamePart:!',
-		forks: KeywordForks()
+		forks: KeywordForks
 	},
 	SHORT: {
 		patterns: 'short;fn#NotJNamePart:!',
-		forks: KeywordForks()
+		forks: KeywordForks
 	},
 	INT: {
 		patterns: 'int;fn#NotJNamePart:!',
-		forks: KeywordForks()
+		forks: KeywordForks
 	},
 	LONG: {
 		patterns: 'long;fn#NotJNamePart:!',
-		forks: KeywordForks()
+		forks: KeywordForks
 	},
 	FLOAT: {
 		patterns: 'float;fn#NotJNamePart:!',
-		forks: KeywordForks()
+		forks: KeywordForks
 	},
 	DOUBLE: {
 		patterns: 'double;fn#NotJNamePart:!',
-		forks: KeywordForks()
+		forks: KeywordForks
 	}
 };

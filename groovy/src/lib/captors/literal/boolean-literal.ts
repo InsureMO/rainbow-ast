@@ -4,11 +4,11 @@ import {KeywordForks} from '../utils';
 export const BooleanCaptorDefs: GroovyTokenCaptorDefs = {
 	BooleanTrue: {
 		patterns: 'true;fn#NotJNamePart:!',
-		forks: KeywordForks()
+		forks: KeywordForks
 
 	},
 	BooleanFalse: {
 		patterns: 'false;fn#NotJNamePart:!',
-		forks: KeywordForks()
+		forks: KeywordForks
 	}
 };

@@ -262,6 +262,6 @@ export const OperatorCaptorDefs: GroovyTokenCaptorDefs = {
 	},
 	InstanceOf: {
 		patterns: 'instanceof;fn#NotJNamePart:!',
-		forks: KeywordForks()
+		forks: KeywordForks
 	}
 };

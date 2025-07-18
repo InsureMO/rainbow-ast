@@ -28,7 +28,7 @@ export type TokenCaptorDef<S extends AstBuildState> = Readonly<{
 
 export type TokenCaptorDefForStates<S extends AstBuildState> = Readonly<
 	& Pick<TokenCaptorDef<S>, 'patterns'>
-	& { forks: Array<Omit<TokenCaptorDef<S>, 'patterns'>> }
+	& { forks: ReadonlyArray<Omit<TokenCaptorDef<S>, 'patterns'>> }
 >;
 
 export type TokenCaptorDefs<S extends AstBuildState, Tn extends TokenName> = Readonly<Partial<{
@@ -36,7 +36,7 @@ export type TokenCaptorDefs<S extends AstBuildState, Tn extends TokenName> = Rea
 }>>;
 
 export type TokenCaptorOfStates<Sn extends AstBuildStateName> = Readonly<Partial<{
-	[K in Sn]: Array<TokenCaptor | [TokenCaptorStateInclusion.FallbackOf, TokenCaptor]>;
+	[K in Sn]: ReadonlyArray<TokenCaptor | [TokenCaptorStateInclusion.FallbackOf, TokenCaptor]>;
 }>>;
 
 export type TokenPointcutDefs<Tn extends TokenName> = Readonly<Partial<{

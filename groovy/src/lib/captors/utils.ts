@@ -133,6 +133,16 @@ export const NotSafeIndex: TokenCaptorAvailableCheck = (context: AstBuildContext
 	return block.id !== T.IndexBlock || block.children[0].id !== T.SafeIndex;
 };
 
+export const EndBlockBeforeCollectKeywordFork: Readonly<Omit<TokenCaptorDef<GroovyAstBuildState>, 'patterns'>> = {
+	/**
+	 * in following states, always allowed:
+	 * 1. package declaration
+	 * 2. import declaration
+	 * 3. annotation declaration
+	 */
+	forStates: [Incl, SG.Pkg, SG.Imp, SG.Ann],
+	beforeCollect: EBBC
+};
 /**
  * 1. when state is not one of follow, and is keyword allowed:
  *    comment,
@@ -141,24 +151,13 @@ export const NotSafeIndex: TokenCaptorAvailableCheck = (context: AstBuildContext
  * 2. when state is package declaration
  * 3. when state is import declaration
  */
-export const KeywordForks = (): Array<Omit<TokenCaptorDef<GroovyAstBuildState>, 'patterns'>> => {
-	return [
-		{
-			forStates: CFS.Keywords,
-			enabledWhen: IsKeywordAllowed
-		},
-		{
-			/**
-			 * in following states, always allowed:
-			 * 1. package declaration
-			 * 2. import declaration
-			 * 3. annotation declaration
-			 */
-			forStates: [Incl, SG.Pkg, SG.Imp, SG.Ann],
-			beforeCollect: EBBC
-		}
-	];
-};
+export const KeywordForks: ReadonlyArray<Omit<TokenCaptorDef<GroovyAstBuildState>, 'patterns'>> = [
+	{
+		forStates: CFS.Keywords,
+		enabledWhen: IsKeywordAllowed
+	},
+	EndBlockBeforeCollectKeywordFork
+];
 
 /**
  * check the symmetry of right parentheses, including {@link T.RBrace}, {@link T.RBrack}, and {@link T.RParen}.

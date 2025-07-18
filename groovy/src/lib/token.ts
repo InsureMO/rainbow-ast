@@ -220,21 +220,18 @@ export enum GroovyTokenId {
 	/* {} */ CodeBlock,  // TODO
 	/* ?[], [] */ IndexBlock, // TODO
 	/* () */ ParenBlock, // TODO
-	//
+	// generic type
 	GenericTypeDecl,  // TODO
+	// annotation
 	AnnotationDecl,
 	AnnotationDeclValues,
 	AnnotationDeclValue,
-	ImportDecl,
-	/**
-	 * started by keyword "package"
-	 * 1. pattern: identifier[ dot identifier [dot identifier [...]]],
-	 * 2. whitespaces, tabs, ml comment is allowed,
-	 * 3. keywords "as", "def", "var", "record", "sealed", "permits", "yield", "in", "trait" are treated as identifier,
-	 * 4. newline is not allowed,
-	 * 5. or end by semicolon
-	 */
+	// package
 	PackageDecl,
+	// import
+	ImportDecl,
+	// class, constructor, method, field, static block, synchronized block
+	/* could be one of class, constructor, method, field, static block or synchronized block */ CcmfssDecl
 }
 
 export type GroovyTokenName = Exclude<keyof typeof GroovyTokenId, number>;
