@@ -117,10 +117,12 @@ describe('Capture Import Declaration', () => {
 			[GroovyTokenId.ImportDecl, 0, 13, 1, 'import static', [
 				[GroovyTokenId.IMPORT, 0, 6, 1, 'import'],
 				[GroovyTokenId.Whitespaces, 6, 7, 1, ' '],
-				[GroovyTokenId.STATIC, 7, 13, 1, 'static'],
+				[GroovyTokenId.STATIC, 7, 13, 1, 'static']
 			]],
 			[GroovyTokenId.Whitespaces, 13, 14, 1, ' '],
-			[GroovyTokenId.STATIC, 14, 20, 1, 'static']
+			[GroovyTokenId.CcmfssDecl, 14, 20, 1, 'static', [
+				[GroovyTokenId.STATIC, 14, 20, 1, 'static']
+			]]
 		]]);
 	});
 	test('Import Declaration: Static and dot', async () => {
@@ -129,7 +131,7 @@ describe('Capture Import Declaration', () => {
 			[GroovyTokenId.ImportDecl, 0, 13, 1, 'import static', [
 				[GroovyTokenId.IMPORT, 0, 6, 1, 'import'],
 				[GroovyTokenId.Whitespaces, 6, 7, 1, ' '],
-				[GroovyTokenId.STATIC, 7, 13, 1, 'static'],
+				[GroovyTokenId.STATIC, 7, 13, 1, 'static']
 			]],
 			[GroovyTokenId.Whitespaces, 13, 14, 1, ' '],
 			[GroovyTokenId.Dot, 14, 15, 1, '.']
@@ -141,7 +143,7 @@ describe('Capture Import Declaration', () => {
 			[GroovyTokenId.ImportDecl, 0, 11, 1, 'import java', [
 				[GroovyTokenId.IMPORT, 0, 6, 1, 'import'],
 				[GroovyTokenId.Whitespaces, 6, 7, 1, ' '],
-				[GroovyTokenId.Identifier, 7, 11, 1, 'java'],
+				[GroovyTokenId.Identifier, 7, 11, 1, 'java']
 			]],
 			[GroovyTokenId.Whitespaces, 11, 12, 1, ' '],
 			[GroovyTokenId.Identifier, 12, 16, 1, 'util']
@@ -194,7 +196,9 @@ describe('Capture Import Declaration', () => {
 				[GroovyTokenId.Identifier, 7, 9, 1, 'as'],
 				[GroovyTokenId.Dot, 9, 10, 1, '.']
 			]],
-			[GroovyTokenId.NON_SEALED, 10, 20, 1, 'non-sealed']
+			[GroovyTokenId.CcmfssDecl, 10, 20, 1, 'non-sealed', [
+				[GroovyTokenId.NON_SEALED, 10, 20, 1, 'non-sealed']
+			]]
 		]]);
 	});
 	test('Import Declaration: Continuous as', async () => {

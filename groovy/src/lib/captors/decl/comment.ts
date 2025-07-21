@@ -1,6 +1,6 @@
 import {AstBuildContext} from '@rainbow-ast/core';
 import {CB, EB, Incl, S, T} from '../../alias';
-import {CFS} from '../state-shortcuts';
+import {CFS, Not} from '../state-shortcuts';
 import {GroovyTokenCaptorDefs} from '../types';
 
 export const IsScriptCommandStartAllowed = (context: AstBuildContext): boolean => {

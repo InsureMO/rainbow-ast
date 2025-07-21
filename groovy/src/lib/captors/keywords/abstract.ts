@@ -3,9 +3,9 @@ import {CFS, Not, SG} from '../state-shortcuts';
 import {GroovyTokenCaptorDefs} from '../types';
 import {IsKeywordAllowed} from '../utils';
 
-export const KeywordStaticCaptorDefs: GroovyTokenCaptorDefs = {
-	STATIC: {
-		patterns: 'static;fn#NotJNamePart:!',
+export const KeywordAbstractCaptorDefs: GroovyTokenCaptorDefs = {
+	ABSTRACT: {
+		patterns: 'abstract;fn#NotJNamePart:!',
 		forks: [
 			{
 				forStates: Not(CFS.Keywords, S.CcmfssSt),
@@ -13,9 +13,7 @@ export const KeywordStaticCaptorDefs: GroovyTokenCaptorDefs = {
 				collect: [CB, T.CcmfssDecl, S.CcmfssSt]
 			},
 			{
-				// in package declaration, always allowed
-				// in import declaration, allowed only when static not appears
-				forStates: [Incl, SG.Pkg, SG.Imp.filter(s => s !== S.ImpDeclSt), SG.Ann],
+				forStates: [Incl, SG.Pkg, SG.Imp, SG.Ann],
 				beforeCollect: EBBC,
 				collect: [CB, T.CcmfssDecl, S.CcmfssSt]
 			},

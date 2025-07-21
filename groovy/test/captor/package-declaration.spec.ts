@@ -70,7 +70,7 @@ describe('Capture Package Declaration', () => {
 			[GroovyTokenId.PackageDecl, 0, 12, 1, 'package java', [
 				[GroovyTokenId.PACKAGE, 0, 7, 1, 'package'],
 				[GroovyTokenId.Whitespaces, 7, 8, 1, ' '],
-				[GroovyTokenId.Identifier, 8, 12, 1, 'java'],
+				[GroovyTokenId.Identifier, 8, 12, 1, 'java']
 			]],
 			[GroovyTokenId.Whitespaces, 12, 13, 1, ' '],
 			[GroovyTokenId.Identifier, 13, 17, 1, 'util']
@@ -123,7 +123,9 @@ describe('Capture Package Declaration', () => {
 				[GroovyTokenId.Identifier, 8, 10, 1, 'as'],
 				[GroovyTokenId.Dot, 10, 11, 1, '.']
 			]],
-			[GroovyTokenId.NON_SEALED, 11, 21, 1, 'non-sealed']
+			[GroovyTokenId.CcmfssDecl, 11, 21, 1, 'non-sealed', [
+				[GroovyTokenId.NON_SEALED, 11, 21, 1, 'non-sealed']
+			]]
 		]]);
 	});
 });

@@ -58,6 +58,11 @@ export const AnnotationCaptorDefs: GroovyTokenCaptorDefs = {
 			}
 		]
 	},
+	SLCommentStartMark: {
+		patterns: '//',
+		forStates: [Incl, S.AnnDeclIdEd],
+		collect: [CB, T.SLComment, S.SLCmt]
+	},
 	LParen: { // appears only after annotation identifier
 		patterns: '(',
 		forStates: [Incl, S.AnnDeclIdEd],
