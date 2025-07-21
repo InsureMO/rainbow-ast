@@ -1,12 +1,4 @@
-import {
-	AstBuilder,
-	AstBuilderConstructOptions,
-	AstBuildStates,
-	BuildUtils,
-	TokenCaptorOfStates,
-	TokenIds,
-	TokenPointcuts
-} from '@rainbow-ast/core';
+import {AstBuilder, AstBuildStates, BuildUtils, TokenCaptorOfStates, TokenIds, TokenPointcuts} from '@rainbow-ast/core';
 import {S} from './alias';
 import {GroovyAstBuildState, GroovyAstBuildStateName} from './ast-build-state';
 import {buildTokenCaptors, TokenCaptorDefs} from './captors';
@@ -14,49 +6,40 @@ import {buildTokenPointcuts, TokenPointcutDefs} from './pointcuts';
 import {GroovyTokenId, GroovyTokenName} from './token';
 import {GroovyTokenCapturePriorities} from './token-priorities';
 
-export interface GroovyAstBuildOptions extends AstBuilderConstructOptions {
-	scriptCommandEnabled?: boolean;
-}
-
-export class GroovyAstBuilder extends AstBuilder {
-	get groovyOptions(): Required<GroovyAstBuildOptions> {
-		return super.options as Required<GroovyAstBuildOptions>;
-	}
-
-	protected initOptions(options: AstBuilderConstructOptions): Required<AstBuilderConstructOptions> {
-		options = super.initOptions(options);
-
-		const extendsOptions = options as GroovyAstBuildOptions;
-		extendsOptions.scriptCommandEnabled = extendsOptions.scriptCommandEnabled ?? true;
-
-		return options as Required<AstBuilderConstructOptions>;
-	}
-}
-
 export type GroovyLanguage = {
+	scriptCommandEnabled?: boolean;
+	jdkVersion?: number;
+};
+
+export type GroovyLanguageOptions = GroovyLanguage & {
 	verbose?: boolean;
-	initState?: GroovyAstBuildState;
 	captors: TokenCaptorOfStates<GroovyAstBuildStateName>;
 	pointcuts: TokenPointcuts<GroovyTokenName>;
 }
 
-export const buildAstBuilder = (language: GroovyLanguage): GroovyAstBuilder => {
-	const {verbose, initState, captors, pointcuts} = language;
+export const buildAstBuilder = (language: GroovyLanguageOptions): AstBuilder => {
+	const {
+		verbose = false, scriptCommandEnabled = true, jdkVersion = 17,
+		captors, pointcuts
+	} = language;
 
-	return new GroovyAstBuilder({
-		verbose: verbose ?? false,
+	return new AstBuilder({
+		verbose: verbose,
 		language: {
 			tokenIds: GroovyTokenId as unknown as TokenIds,
 			states: GroovyAstBuildState as unknown as AstBuildStates,
-			initState: initState ?? S.CU,
+			initState: scriptCommandEnabled ? S.CU : S.CUOmitScriptCmd,
 			tokenCapturePriorities: GroovyTokenCapturePriorities,
 			captors: BuildUtils.buildLanguageCaptors(captors, GroovyAstBuildState),
-			pointcuts: BuildUtils.buildLanguagePointcuts(pointcuts, GroovyTokenId)
+			pointcuts: BuildUtils.buildLanguagePointcuts(pointcuts, GroovyTokenId),
+
+			scriptCommandEnabled,
+			jdkVersion
 		}
 	});
 };
 
-export const createDefaultAstBuilder = (language?: Omit<GroovyLanguage, 'captors' | 'pointcuts'>) => {
+export const createDefaultAstBuilder = (language?: Omit<GroovyLanguageOptions, 'captors' | 'pointcuts'>): AstBuilder => {
 	return buildAstBuilder({
 		...language,
 		captors: buildTokenCaptors(TokenCaptorDefs),

@@ -1,9 +1,15 @@
 import {AstBuildContext} from '@rainbow-ast/core';
 import {CB, EB, Incl, S, T} from '../../alias';
+import {GroovyLanguage} from '../../ast-builder';
 import {CFS} from '../state-shortcuts';
 import {GroovyTokenCaptorDefs} from '../types';
 
 export const IsScriptCommandStartAllowed = (context: AstBuildContext): boolean => {
+	const lang = context.language as GroovyLanguage;
+	if (!lang.scriptCommandEnabled) {
+		return false;
+	}
+
 	const cu = context.currentBlock;
 	const children = cu.children;
 	return !children.some(child => {
