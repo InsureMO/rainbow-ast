@@ -1,3 +1,3 @@
-export const CompilationUnitTokenId = 0;
-export const CompilationUnitState = 0;
-export const DefaultTokenIdPriority = Infinity;
+import {TokenId} from './types';
+
+export const CompilationUnitTokenId: TokenId = 0;
