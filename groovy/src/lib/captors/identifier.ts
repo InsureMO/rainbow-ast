@@ -5,6 +5,10 @@ import {GroovyTokenCaptorDefs} from './types';
 export const IdentifierCaptorDefs: GroovyTokenCaptorDefs = {
 	Identifier: {
 		patterns: PtnId,
-		forStates: Not(CFS.Keywords, 'AnnVals', S.AnnDeclValSt, S.AnnDeclValDotEd)
+		forStates: Not(
+			CFS.Keywords,
+			'AnnVals', S.AnnDeclValSt, S.AnnDeclValDotEd,
+			S.CcmfssDeclSt, S.TypeDeclSt
+		)
 	}
 };

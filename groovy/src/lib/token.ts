@@ -232,7 +232,8 @@ export enum GroovyTokenId {
 	ImportDecl,
 	// class, constructor, method, field, static block, synchronized block
 	/* could be one of class, constructor, method, field, static block or synchronized block */ CcmfssDecl,
-	TypeDecl
+	TypeDecl,
+	MethodDecl
 }
 
 export type GroovyTokenName = Exclude<keyof typeof GroovyTokenId, number>;

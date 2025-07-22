@@ -9,17 +9,17 @@ export const KeywordsClassExtendCaptorDefs: GroovyTokenCaptorDefs = {
 		patterns: 'extends;fn#NotJNamePart:!',
 		forks: [
 			{
-				forStates: Not(CFS.Keywords, S.CcmfssSt),
+				forStates: Not(CFS.Keywords, S.CcmfssDeclSt),
 				enabledWhen: IsKeywordAllowed,
-				collect: [CB, T.CcmfssDecl, S.CcmfssSt]
+				collect: [CB, T.CcmfssDecl, S.CcmfssDeclSt]
 			},
 			{
 				forStates: [Incl, SG.Pkg, SG.Imp, SG.Ann],
 				beforeCollect: EBBC,
-				collect: [CB, T.CcmfssDecl, S.CcmfssSt]
+				collect: [CB, T.CcmfssDecl, S.CcmfssDeclSt]
 			},
 			{
-				forStates: [Incl, S.CcmfssSt]
+				forStates: [Incl, S.CcmfssDeclSt]
 			}
 		]
 	},
@@ -27,17 +27,17 @@ export const KeywordsClassExtendCaptorDefs: GroovyTokenCaptorDefs = {
 		patterns: 'implements;fn#NotJNamePart:!',
 		forks: [
 			{
-				forStates: Not(CFS.Keywords, S.CcmfssSt),
+				forStates: Not(CFS.Keywords, S.CcmfssDeclSt),
 				enabledWhen: IsKeywordAllowed,
-				collect: [CB, T.CcmfssDecl, S.CcmfssSt]
+				collect: [CB, T.CcmfssDecl, S.CcmfssDeclSt]
 			},
 			{
 				forStates: [Incl, SG.Pkg, SG.Imp, SG.Ann],
 				beforeCollect: EBBC,
-				collect: [CB, T.CcmfssDecl, S.CcmfssSt]
+				collect: [CB, T.CcmfssDecl, S.CcmfssDeclSt]
 			},
 			{
-				forStates: [Incl, S.CcmfssSt]
+				forStates: [Incl, S.CcmfssDeclSt]
 			}
 		]
 	}

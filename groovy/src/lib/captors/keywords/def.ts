@@ -10,12 +10,12 @@ export const KeywordDefCaptorDefs: GroovyTokenCaptorDefs = {
 		patterns: 'def;fn#NotJNamePart:!',
 		forks: [
 			{
-				forStates: Not(CFS.Keywords, S.CcmfssSt),
+				forStates: Not(CFS.Keywords, S.CcmfssDeclSt),
 				enabledWhen: IsKeywordAllowed,
-				collect: [CB, T.CcmfssDecl, S.CcmfssSt]
+				collect: [CB, T.CcmfssDecl, S.CcmfssDeclSt]
 			},
 			{
-				forStates: [Incl, S.CcmfssSt]
+				forStates: [Incl, S.CcmfssDeclSt]
 			}
 		]
 	}

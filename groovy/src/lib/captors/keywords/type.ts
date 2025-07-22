@@ -14,20 +14,21 @@ const IsRecordKeywordAllowed: TokenCaptorAvailableCheck = (context: AstBuildCont
 	return IsRecordClassAllowed(context) && IsKeywordAllowed(context);
 };
 
+// TODO rewrite block token id to T.TypeDecl
 const StandardTypeKeywordForks: ReadonlyArray<Omit<TokenCaptorDef<GroovyAstBuildState>, 'patterns'>> = [
 	{
-		forStates: Not(CFS.Keywords, S.CcmfssSt),
+		forStates: Not(CFS.Keywords, S.CcmfssDeclSt),
 		enabledWhen: IsKeywordAllowed,
-		collect: [CB, T.TypeDecl, S.TypeSt]
+		collect: [CB, T.TypeDecl, S.TypeDeclSt]
 	},
 	{
 		forStates: [Incl, SG.Pkg, SG.Imp, SG.Ann],
 		beforeCollect: EBBC,
-		collect: [CB, T.CcmfssDecl, S.CcmfssSt]
+		collect: [CB, T.TypeDecl, S.TypeDeclSt]
 	},
 	{
-		forStates: [Incl, S.CcmfssSt],
-		collect: [SS, S.TypeSt]
+		forStates: [Incl, S.CcmfssDeclSt],
+		collect: [SS, S.TypeDeclSt]
 	}
 ];
 
@@ -37,13 +38,13 @@ export const KeywordsTypeCaptorDefs: GroovyTokenCaptorDefs = {
 		patterns: 'trait;fn#NotJNamePart:!',
 		forks: [
 			{
-				forStates: Not(CFS.Keywords, S.CcmfssSt),
+				forStates: Not(CFS.Keywords, S.CcmfssDeclSt),
 				enabledWhen: IsKeywordAllowed,
-				collect: [CB, T.TypeDecl, S.TypeSt]
+				collect: [CB, T.TypeDecl, S.TypeDeclSt]
 			},
 			{
-				forStates: [Incl, S.CcmfssSt],
-				collect: [SS, S.TypeSt]
+				forStates: [Incl, S.CcmfssDeclSt],
+				collect: [SS, S.TypeDeclSt]
 			}
 		]
 	},
@@ -68,14 +69,14 @@ export const KeywordsTypeCaptorDefs: GroovyTokenCaptorDefs = {
 		patterns: 'record;fn#NotJNamePart:!',
 		forks: [
 			{
-				forStates: Not(CFS.Keywords, S.CcmfssSt),
+				forStates: Not(CFS.Keywords, S.CcmfssDeclSt),
 				enabledWhen: IsRecordKeywordAllowed,
-				collect: [CB, T.TypeDecl, S.TypeSt]
+				collect: [CB, T.TypeDecl, S.TypeDeclSt]
 			},
 			{
-				forStates: [Incl, S.CcmfssSt],
+				forStates: [Incl, S.CcmfssDeclSt],
 				enabledWhen: IsRecordClassAllowed,
-				collect: [SS, S.TypeSt]
+				collect: [SS, S.TypeDeclSt]
 			}
 		]
 	}

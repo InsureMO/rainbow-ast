@@ -29,18 +29,18 @@ export const KeywordsSealClassCaptorDefs: GroovyTokenCaptorDefs = {
 		patterns: 'non-sealed;fn#NotJNamePart:!',
 		forks: [
 			{
-				forStates: Not(CFS.Keywords, S.CcmfssSt),
+				forStates: Not(CFS.Keywords, S.CcmfssDeclSt),
 				enabledWhen: IsNonSealedKeywordAllowed,
-				collect: [CB, T.CcmfssDecl, S.CcmfssSt]
+				collect: [CB, T.CcmfssDecl, S.CcmfssDeclSt]
 			},
 			{
 				forStates: [Incl, SG.Pkg, SG.Imp, SG.Ann],
 				enabledWhen: IsNonSealedClassAllowed,
 				beforeCollect: EBBC,
-				collect: [CB, T.CcmfssDecl, S.CcmfssSt]
+				collect: [CB, T.CcmfssDecl, S.CcmfssDeclSt]
 			},
 			{
-				forStates: [Incl, S.CcmfssSt],
+				forStates: [Incl, S.CcmfssDeclSt],
 				enabledWhen: IsNonSealedClassAllowed
 			}
 		]
@@ -49,12 +49,12 @@ export const KeywordsSealClassCaptorDefs: GroovyTokenCaptorDefs = {
 		patterns: 'permits;fn#NotJNamePart:!',
 		forks: [
 			{
-				forStates: Not(CFS.Keywords, S.CcmfssSt),
+				forStates: Not(CFS.Keywords, S.CcmfssDeclSt),
 				enabledWhen: IsSealedKeywordAllowed,
-				collect: [CB, T.CcmfssDecl, S.CcmfssSt]
+				collect: [CB, T.CcmfssDecl, S.CcmfssDeclSt]
 			},
 			{
-				forStates: [Incl, S.CcmfssSt],
+				forStates: [Incl, S.CcmfssDeclSt],
 				enabledWhen: IsSealedClassAllowed
 			}
 		]
@@ -64,12 +64,12 @@ export const KeywordsSealClassCaptorDefs: GroovyTokenCaptorDefs = {
 		patterns: 'sealed;fn#NotJNamePart:!',
 		forks: [
 			{
-				forStates: Not(CFS.Keywords, S.CcmfssSt),
+				forStates: Not(CFS.Keywords, S.CcmfssDeclSt),
 				enabledWhen: IsSealedKeywordAllowed,
-				collect: [CB, T.CcmfssDecl, S.CcmfssSt]
+				collect: [CB, T.CcmfssDecl, S.CcmfssDeclSt]
 			},
 			{
-				forStates: [Incl, S.CcmfssSt],
+				forStates: [Incl, S.CcmfssDeclSt],
 				enabledWhen: IsSealedClassAllowed
 			}
 		]

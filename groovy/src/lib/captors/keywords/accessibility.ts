@@ -7,17 +7,17 @@ import {IsKeywordAllowed} from '../utils';
 
 const AccessibilityKeywordForks: ReadonlyArray<Omit<TokenCaptorDef<GroovyAstBuildState>, 'patterns'>> = [
 	{
-		forStates: Not(CFS.Keywords, S.CcmfssSt),
+		forStates: Not(CFS.Keywords, S.CcmfssDeclSt),
 		enabledWhen: IsKeywordAllowed,
-		collect: [CB, T.CcmfssDecl, S.CcmfssSt]
+		collect: [CB, T.CcmfssDecl, S.CcmfssDeclSt]
 	},
 	{
 		forStates: [Incl, SG.Pkg, SG.Imp, SG.Ann],
 		beforeCollect: EBBC,
-		collect: [CB, T.CcmfssDecl, S.CcmfssSt]
+		collect: [CB, T.CcmfssDecl, S.CcmfssDeclSt]
 	},
 	{
-		forStates: [Incl, S.CcmfssSt]
+		forStates: [Incl, S.CcmfssDeclSt]
 	}
 ];
 

@@ -61,8 +61,9 @@ export enum GroovyAstBuildState {
 	/** star(asterisk) captured */ ImpDeclStarEd,
 	/** as captured */ ImpDeclAsEd,
 	// class, constructor, method, field, static block, synchronized block
-	CcmfssSt,
-	/** class, interface, @interface, enum, record, trait */ TypeSt,
+	CcmfssDeclSt,
+	/** class, interface, @interface, enum, record, trait */ TypeDeclSt,
+	MethodDeclSt
 }
 
 export type GroovyAstBuildStateName = Exclude<keyof typeof GroovyAstBuildState, number>;

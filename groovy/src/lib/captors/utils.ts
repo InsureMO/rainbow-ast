@@ -165,7 +165,7 @@ export const KeywordForks: ReadonlyArray<Omit<TokenCaptorDef<GroovyAstBuildState
  * - if first child is matched, do nothing,
  * - if first child is not matched,
  *   - if first child is other types of parentheses, do nothing,
- *   - if first child is not any type of parentheses, end current block; and check again.
+ *   - if first child is not any type of parentheses, move to parent block, and check again.
  */
 export const RBracketBC: CustomActionBeforeCollect = [BeforeCollectTokenActionType.Custom, (token: AtomicToken, context: AstBuildContext): void => {
 	const currentBlock = context.currentBlock;
@@ -176,32 +176,35 @@ export const RBracketBC: CustomActionBeforeCollect = [BeforeCollectTokenActionTy
 	}
 
 	const tokenId = token.id;
-	let leftBracketTokenId: GroovyTokenId;
+	let leftBracketTokenIds: Array<GroovyTokenId>;
 	let otherBracketTokenIds: Array<GroovyTokenId>;
 	switch (tokenId) {
 		case T.RBrace:
-			leftBracketTokenId = T.LBrace;
-			otherBracketTokenIds = [T.LBrack, T.LParen];
+			leftBracketTokenIds = [T.LBrace, T.GStringInterpolationLBraceStartMark];
+			otherBracketTokenIds = [T.LBrack, T.SafeIndex, T.LParen];
 			break;
 		case T.RBrack:
-			leftBracketTokenId = T.LBrack;
-			otherBracketTokenIds = [T.LBrace, T.LParen];
+			leftBracketTokenIds = [T.LBrack, T.SafeIndex];
+			otherBracketTokenIds = [T.LBrace, T.GStringInterpolationLBraceStartMark, T.LParen];
 			break;
 		case T.RParen:
-			leftBracketTokenId = T.LParen;
-			otherBracketTokenIds = [T.LBrace, T.LBrack];
+			leftBracketTokenIds = [T.LParen];
+			otherBracketTokenIds = [T.LBrace, T.GStringInterpolationLBraceStartMark, T.LBrack, T.SafeIndex];
 			break;
 		default:
 			throw new Error(`Unsupported bracket token[${tokenId}, ${GroovyTokenId[tokenId]}].`);
 	}
 
+	let matched = false;
+	let endBlockCount = 0;
 	let block = currentBlock;
 	while (block.id !== T.COMPILATION_UNIT) {
 		const firstChildOfBlock = block.children[0];
 		const firstChildOfBlockTokenId = firstChildOfBlock.id;
-		if (leftBracketTokenId === firstChildOfBlockTokenId) {
+		if (leftBracketTokenIds.includes(firstChildOfBlockTokenId)) {
 			// left and right matched, do nothing
-			return;
+			matched = true;
+			break;
 		} else if (otherBracketTokenIds.includes(firstChildOfBlockTokenId)) {
 			// left and right unmatched, and this block starts with other left bracket
 			// which means the started bracket not closed yet, and captured token appears at incorrect position
@@ -209,9 +212,29 @@ export const RBracketBC: CustomActionBeforeCollect = [BeforeCollectTokenActionTy
 			return;
 		} else {
 			// close current block, and check again
-			context.endCurrentBlock();
-			block = context.currentBlock;
+			endBlockCount++;
+			// context.endCurrentBlock();
+			block = block.parent;
 		}
+	}
+	if (matched) {
+		for (let index = 0; index < endBlockCount; index++) {
+			context.endCurrentBlock();
+		}
+		const bracketMap = {
+			[T.LBrace]: T.RBrace,
+			[T.GStringInterpolationLBraceStartMark]: T.GStringInterpolationRBraceEndMark,
+			[T.LBrack]: T.RBrack,
+			[T.SafeIndex]: T.SafeIndexClose,
+			[T.LParen]: T.RParen
+		};
+		const firstChildOfBlock = block.children[0];
+		const firstChildOfBlockTokenId = firstChildOfBlock.id;
+		const rewriteTokenId = bracketMap[firstChildOfBlockTokenId];
+		if (rewriteTokenId !== tokenId) {
+			token.rewriteId(rewriteTokenId);
+		}
+		context.endCurrentBlock();
 	}
 }];
 
