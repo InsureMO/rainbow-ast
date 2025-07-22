@@ -1,0 +1,97 @@
+import {BlockToken, Char, CompilationUnit} from '@rainbow-ast/core';
+
+export interface ParseContextArgs {
+	shebang: boolean;
+	jdkVersion: number;
+}
+
+export class ParseContext {
+	private readonly _shebangEnabled?: boolean;
+	private readonly _jdkVersion?: number;
+
+	private readonly _cu: CompilationUnit;
+	private readonly _document: string;
+
+	private readonly _blocks: Array<BlockToken>;
+
+	private _charIndex = 0;
+	private _line = 1;
+	private _column = 1;
+
+	constructor(cu: CompilationUnit, args: ParseContextArgs) {
+		this._shebangEnabled = args.shebang;
+		this._jdkVersion = args.jdkVersion;
+
+		this._cu = cu;
+		this._document = this._cu.text;
+		this._blocks = [cu];
+	}
+
+	get shebangEnabled(): boolean {
+		return this._shebangEnabled;
+	}
+
+	get jdkVersion(): number {
+		return this._jdkVersion;
+	}
+
+	isRecordClassEnabled(): boolean {
+		return this._jdkVersion >= 14;
+	}
+
+	isSealedClassEnabled(): boolean {
+		return this._jdkVersion >= 15;
+	}
+
+	isNonSealedClassEnabled(): boolean {
+		return this._jdkVersion >= 17;
+	}
+
+	get charIndex(): number {
+		return this._charIndex;
+	}
+
+	set charIndex(value: number) {
+		this._charIndex = value;
+	}
+
+	get line(): number {
+		return this._line;
+	}
+
+	set line(value: number) {
+		this._line = value;
+	}
+
+	get column(): number {
+		return this._column;
+	}
+
+	set column(value: number) {
+		this._column = value;
+	}
+
+	char(): Char | undefined {
+		return this._document[this._charIndex];
+	}
+
+	charAt(index: number): Char | undefined {
+		return this._document[index];
+	}
+
+	text(start: number, end: number): string {
+		return this._document.slice(start, end);
+	}
+
+	block(): BlockToken {
+		return this._blocks[this._blocks.length - 1];
+	}
+
+	/**
+	 * inline move forward
+	 */
+	forward(chars: number): void {
+		this._charIndex += chars;
+		this._column += chars;
+	}
+}

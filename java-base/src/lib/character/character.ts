@@ -20,4 +20,8 @@ export class Character {
 	static isJavaIdentifierPartAndNotIdentifierIgnorable(codePoint: number): boolean {
 		return Character.isJavaIdentifierPart(codePoint) && !Character.isIdentifierIgnorable(codePoint);
 	}
+
+	static isWhitespace(codePoint: number): boolean {
+		return CharacterDataSelector.of(codePoint).isWhitespace(codePoint);
+	}
 }

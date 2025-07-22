@@ -23,4 +23,10 @@ export abstract class AbstractCharacterData implements CharacterData {
 	isJavaIdentifierStart(_codePoint: number): boolean {
 		return false;
 	}
+
+	/** default return false */
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	isWhitespace(_codePoint: number): boolean {
+		return false;
+	}
 }

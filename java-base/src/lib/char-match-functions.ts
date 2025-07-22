@@ -125,7 +125,22 @@ export class JavaCharMatchFunctions {
 		return char != null;
 	}
 
-	static AnyButWhitespaceTabNewline(char: Char): boolean {
-		return char != null && char != ' ' && char != '\t' && char != '\n' && char != '\r';
+	/**
+	 * not exact same as java, it excludes tab, carriage return and newline
+	 */
+	static Whitespace(char: Char): boolean {
+		// eof
+		if (char == null) {
+			return false;
+		}
+
+		if (char === '\t' || char === '\r' || char === '\n') {
+			return false;
+		}
+
+		const cp = char.codePointAt(0);
+		return Character.isWhitespace(cp);
 	}
 }
+
+export const JCM = JavaCharMatchFunctions;

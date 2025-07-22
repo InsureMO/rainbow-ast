@@ -14,4 +14,9 @@ export abstract class AbstractCheckableCharacterData extends AbstractCharacterDa
 	isJavaIdentifierStart(codePoint: number): boolean {
 		return ((this.getProperties(codePoint) & 0x00007000) >= 0x00005000);
 	}
+
+	isWhitespace(codePoint: number): boolean {
+		const props = this.getProperties(codePoint);
+		return ((props & 0x00007000) == 0x00004000);
+	}
 }

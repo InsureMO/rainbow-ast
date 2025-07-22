@@ -1,4 +1,6 @@
 import {CompilationUnit} from '@rainbow-ast/core';
+import {ParseContext} from './parse-context';
+import {CompilationUnitParser} from './compilation-unit-parser';
 
 export interface GroovyLangParseArgs {
 	shebang: boolean;
@@ -7,19 +9,14 @@ export interface GroovyLangParseArgs {
 }
 
 export class GroovyLangParser {
-	private readonly _shebangEnabled?: boolean;
-	private readonly _jdkVersion?: number;
 	private readonly _cu: CompilationUnit;
-	private readonly _document: string;
 
-	private _charIndex = 0;
+	private readonly _context: ParseContext;
 
 	private constructor(args: GroovyLangParseArgs) {
 		// to avoid extend
-		this._shebangEnabled = args.shebang;
-		this._jdkVersion = args.jdkVersion;
 		this._cu = args.compilationUnit;
-		this._document = this._cu.text;
+		this._context = new ParseContext(this._cu, args);
 	}
 
 	static parse(args: GroovyLangParseArgs) {
@@ -28,8 +25,10 @@ export class GroovyLangParser {
 	}
 
 	parse(): void {
-		if (this._document.length === 0) {
+		if (this._cu.text.length === 0) {
 			return;
 		}
+
+		CompilationUnitParser.instance.parse(this._context);
 	}
 }
