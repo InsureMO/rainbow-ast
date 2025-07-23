@@ -71,7 +71,7 @@ export class JavaCharMatchFunctions {
 			return false;
 		}
 		// rule check
-		return !Character.isJavaIdentifierPart(cp) || Character.isIdentifierIgnorable(cp);
+		return Character.isJavaIdentifierPartAndNotIdentifierIgnorable(cp);
 	}
 
 	static Bin(char: Char): boolean {

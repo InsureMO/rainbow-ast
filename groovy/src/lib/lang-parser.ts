@@ -1,6 +1,6 @@
 import {CompilationUnit} from '@rainbow-ast/core';
+import {CompilationUnitParser} from './compilation-unit';
 import {ParseContext} from './parse-context';
-import {CompilationUnitParser} from './compilation-unit-parser';
 
 export interface GroovyLangParseArgs {
 	shebang: boolean;

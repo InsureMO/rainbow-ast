@@ -1,17 +1,22 @@
-import {ParseContext} from './parse-context';
-import {ByFuncTokenParser, ParserSelector, TabsParser, WhitespacesParser} from './token-parser';
-import {T} from './tokens';
+import {UndeterminedCharParser, WsTabNlParsers} from '../common-token';
+import {ParseContext} from '../parse-context';
+import {ShebangParser} from '../shebang';
+import {ParserSelector} from '../token-parser';
+import {T} from '../tokens';
 
 export class CompilationUnitParser {
-	private static ByFunc: Array<ByFuncTokenParser> = [
-		WhitespacesParser.instance,
-		TabsParser.instance
+	private static readonly Parsers = [
+		WsTabNlParsers,
+		UndeterminedCharParser.instance
 	];
 	private static readonly WithShebang: ParserSelector = new ParserSelector({
-		byFunc: CompilationUnitParser.ByFunc
+		parsers: [
+			ShebangParser.instance,
+			...CompilationUnitParser.Parsers
+		]
 	});
 	private static readonly NoShebang: ParserSelector = new ParserSelector({
-		byFunc: CompilationUnitParser.ByFunc
+		parsers: CompilationUnitParser.Parsers
 	});
 
 	/**
@@ -31,12 +36,16 @@ export class CompilationUnitParser {
 	}
 
 	parse(context: ParseContext): boolean {
-		let ch = context.char();
+		let c = context.char();
 
-		while (ch != null) {
+		while (c != null) {
 			const selector = this.isShebangAllowed(context) ? CompilationUnitParser.WithShebang : CompilationUnitParser.NoShebang;
-			selector.find(ch, context).parse(ch, context);
-			ch = context.char();
+			const parser = selector.find(c, context);
+			if (parser == null) {
+				throw new Error(`No token parser found for char[${c}] at [offset=${context.charIndex}, line=${context.line}, column=${context.column}].`);
+			}
+			parser.parse(c, context);
+			c = context.char();
 		}
 
 		return true;

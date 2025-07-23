@@ -1,23 +1,41 @@
 import {Char} from '@rainbow-ast/core';
 import {ParseContext} from '../parse-context';
-import {ByCharTokenParser, ByFuncTokenParser, TokenParser} from './token-parser';
+import {ByCharTokenParser} from './by-char-token-parser';
+import {ByFuncTokenParser} from './by-func-token-parser';
+import {TokenParser} from './token-parser';
 
 export interface ParserSelectorArgs {
-	byChar?: Array<ByCharTokenParser>;
-	byFunc?: Array<ByFuncTokenParser>;
+	parsers?: ReadonlyArray<ByCharTokenParser | ByFuncTokenParser | ReadonlyArray<ByCharTokenParser | ByFuncTokenParser>>;
 }
 
 export class ParserSelector {
-	private readonly _byChar: Map<Char, TokenParser> = new Map();
+	private readonly _byChar: Map<Char, Array<ByCharTokenParser>> = new Map();
 	private readonly _byFunc: Array<ByFuncTokenParser> = [];
 
 	constructor(args: ParserSelectorArgs) {
-		args.byChar?.forEach(p => this._byChar.set(p.firstChar, p));
-		args.byFunc?.forEach(p => this._byFunc.push(p));
+		args.parsers?.flat().forEach(p => {
+			if (p instanceof ByCharTokenParser) {
+				const existing = this._byChar.get(p.firstChar);
+				if (existing == null) {
+					this._byChar.set(p.firstChar, [p]);
+				} else {
+					existing.push(p);
+				}
+			} else if (p instanceof ByFuncTokenParser) {
+				this._byFunc.push(p);
+			} else {
+				// @ts-expect-error guard logic
+				throw new Error(`Unsupported parser[${p.constructor?.name ?? p}].`);
+			}
+		});
 	}
 
-	private findByChar(ch: Char): TokenParser | undefined {
-		return this._byChar.get(ch);
+	private findByChar(ch: Char, context: ParseContext): TokenParser | undefined {
+		const parsers = this._byChar.get(ch);
+		if (parsers == null) {
+			return (void 0);
+		}
+		return parsers.find(p => p.matches(ch, context));
 	}
 
 	private findByFunc(ch: Char, context: ParseContext): TokenParser | undefined {
@@ -25,15 +43,6 @@ export class ParserSelector {
 	}
 
 	find(ch: Char, context: ParseContext): TokenParser {
-		let parser = this.findByChar(ch);
-		if (parser != null && parser.matches(ch, context)) {
-			return parser;
-		}
-		parser = this.findByFunc(ch, context);
-		if (parser != null) {
-			return parser;
-		}
-
-		throw new Error(`No token parser found for char[${ch}] at [offset=${context.charIndex}, line=${context.line}, column=${context.column}].`);
+		return this.findByChar(ch, context) ?? this.findByFunc(ch, context);
 	}
 }

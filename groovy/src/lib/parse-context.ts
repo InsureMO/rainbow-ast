@@ -87,11 +87,27 @@ export class ParseContext {
 		return this._blocks[this._blocks.length - 1];
 	}
 
+	sink(block: BlockToken): void {
+		const current = this.block();
+		current.appendChild(block);
+		this._blocks.push(block);
+	}
+
+	rise(): void {
+		this._blocks.pop();
+	}
+
 	/**
 	 * inline move forward
 	 */
 	forward(chars: number): void {
 		this._charIndex += chars;
 		this._column += chars;
+	}
+
+	newline(chars: 1 | 2): void {
+		this._charIndex += chars;
+		this._line += 1;
+		this._column = 1;
 	}
 }
