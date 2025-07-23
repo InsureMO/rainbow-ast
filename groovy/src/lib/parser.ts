@@ -14,3 +14,5 @@ export class GroovyParser extends AbstractAstParser {
 		return new Ast(cu);
 	}
 }
+
+export const DGP = new GroovyParser();

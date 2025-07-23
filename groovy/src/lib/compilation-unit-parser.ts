@@ -1,12 +1,11 @@
 import {ParseContext} from './parse-context';
-import {WhitespacesParser} from './token-parser';
-import {ParserSelector} from './token-parser/parser-selector';
-import {ByFuncTokenParser} from './token-parser/token-parser';
+import {ByFuncTokenParser, ParserSelector, TabsParser, WhitespacesParser} from './token-parser';
 import {T} from './tokens';
 
 export class CompilationUnitParser {
 	private static ByFunc: Array<ByFuncTokenParser> = [
-		WhitespacesParser.instance
+		WhitespacesParser.instance,
+		TabsParser.instance
 	];
 	private static readonly WithShebang: ParserSelector = new ParserSelector({
 		byFunc: CompilationUnitParser.ByFunc

@@ -20,16 +20,16 @@ export class ParserSelector {
 		return this._byChar.get(ch);
 	}
 
-	private findByFunc(ch: Char): TokenParser | undefined {
-		return this._byFunc.find(p => p.matches(ch));
+	private findByFunc(ch: Char, context: ParseContext): TokenParser | undefined {
+		return this._byFunc.find(p => p.matches(ch, context));
 	}
 
 	find(ch: Char, context: ParseContext): TokenParser {
 		let parser = this.findByChar(ch);
-		if (parser != null) {
+		if (parser != null && parser.matches(ch, context)) {
 			return parser;
 		}
-		parser = this.findByFunc(ch);
+		parser = this.findByFunc(ch, context);
 		if (parser != null) {
 			return parser;
 		}
