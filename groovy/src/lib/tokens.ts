@@ -43,6 +43,12 @@ export enum GroovyTokenId {
 	// shebang
 	Shebang,
 	ShebangStartMark,
+	// comment
+	SLComment,
+	SLCommentStartMark,
+	MLComment,
+	MLCommentStartMark,
+	MLCommentEndMark,
 }
 
 export const T = GroovyTokenId;

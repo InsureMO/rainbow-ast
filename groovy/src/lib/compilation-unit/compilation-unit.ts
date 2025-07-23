@@ -1,3 +1,4 @@
+import {CommentParsers} from '../comment';
 import {UndeterminedCharParser, WsTabNlParsers} from '../common-token';
 import {ParseContext} from '../parse-context';
 import {ShebangParser} from '../shebang';
@@ -6,6 +7,7 @@ import {T} from '../tokens';
 
 export class CompilationUnitParser {
 	private static readonly Parsers = [
+		CommentParsers,
 		WsTabNlParsers,
 		UndeterminedCharParser.instance
 	];

@@ -83,6 +83,15 @@ export class ParseContext {
 		return this._document[this._charIndex + 1];
 	}
 
+	/**
+	 * get next chars by given count, and also returns the next char after this char sequence.
+	 * e.g. "abcdefg": current char index is 0, count is 3, then returns ["bcd", "e"].
+	 * Usually use to check keyword.
+	 */
+	nextChars(count: number): [string, Char | undefined] {
+		return [this._document.slice(this._charIndex + 1, this._charIndex + 1 + count), this._document[this._charIndex + 1 + count]];
+	}
+
 	text(start: number, end: number): string {
 		return this._document.slice(start, end);
 	}
