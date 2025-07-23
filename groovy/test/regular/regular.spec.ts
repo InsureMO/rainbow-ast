@@ -68,7 +68,13 @@ describe('Regular test', () => {
 				[T.Tabs, 65, 66, 3, '\t'],
 				[T.Word, 66, 69, 3, 'cmt']
 			]],
-			[T.Newline, 69, 70, 3, '\n']
+			[T.Newline, 69, 70, 3, '\n'],
+			[T.MLComment, 70, 75, 4, '/*\n*/', [
+				[T.MLCommentStartMark, 70, 72, 4, '/*'],
+				[T.Newline, 72, 73, 4, '\n'],
+				[T.MLCommentEndMark, 73, 75, 5, '*/']
+			]],
+			[T.Newline, 75, 76, 5, '\n'],
 		]]);
 	});
 });
