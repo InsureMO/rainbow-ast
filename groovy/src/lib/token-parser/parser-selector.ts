@@ -35,11 +35,11 @@ export class ParserSelector {
 		if (parsers == null) {
 			return (void 0);
 		}
-		return parsers.find(p => p.matches(ch, context));
+		return parsers.find(p => p.isAvailable(context) && p.matches(ch, context));
 	}
 
 	private findByFunc(ch: Char, context: ParseContext): TokenParser | undefined {
-		return this._byFunc.find(p => p.matches(ch, context));
+		return this._byFunc.find(p => p.isAvailable(context) && p.matches(ch, context));
 	}
 
 	find(ch: Char, context: ParseContext): TokenParser {

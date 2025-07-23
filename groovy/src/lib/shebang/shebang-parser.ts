@@ -13,6 +13,22 @@ export class ShebangParser extends ByCharTokenParser {
 		super('#');
 	}
 
+	/**
+	 * returns false when any of following matched
+	 * 1. line > 1
+	 * 2. any token but whitespaces or tabs determined
+	 */
+	isAvailable(context: ParseContext): boolean {
+		if (context.line !== 1) {
+			return false;
+		}
+		if (context.column === 1) {
+			return context.shebangEnabled;
+		}
+		const children = context.block().children;
+		return !children.some(c => c.id !== T.Whitespaces && c.id !== T.Tabs);
+	}
+
 	matches(_ch: Char, context: ParseContext): boolean {
 		return context.nextChar() === '!';
 	}
