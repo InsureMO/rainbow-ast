@@ -43,7 +43,7 @@ export class UndeterminedCharParser extends ByFuncTokenParser {
 		} else if (ch === '\n') {
 			return false;
 		} else if (ch === '\r') {
-			return context.charAt(context.charIndex + 1) !== '\n';
+			return context.nextChar() !== '\n';
 		} else if (JCM.Whitespace(ch)) {
 			return false;
 		}

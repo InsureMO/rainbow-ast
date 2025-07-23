@@ -10,7 +10,7 @@ const readFileAsText = (filePath: string): string => {
 
 describe('Regular test', () => {
 	test('Regular test', async () => {
-		const text = readFileAsText('regular.groovy');
+		const text = readFileAsText('test.groovy');
 		const ast = DGP.parse(text, {shebang: true});
 		AstChecker.check(ast, [T.CompilationUnit, 0, text.length, 1, text, [
 			[T.Shebang, 0, 21, 1, '#!/usr/bin/env groovy', [
@@ -28,7 +28,7 @@ describe('Regular test', () => {
 			[T.Whitespaces, 22, 24, 2, '  '],
 			[T.Tabs, 24, 26, 2, '\t\t'],
 			[T.UndeterminedChar, 26, 27, 2, '#'],
-			[T.Newline, 27, 28, 2, '\n'],
+			[T.Newline, 27, 28, 2, '\n']
 		]]);
 	});
 });

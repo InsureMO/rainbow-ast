@@ -1,4 +1,4 @@
-import './captor';
+import './regular';
 
 describe('Rerun all passed test', () => {
 });

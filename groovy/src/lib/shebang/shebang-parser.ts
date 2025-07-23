@@ -14,7 +14,7 @@ export class ShebangParser extends ByCharTokenParser {
 	}
 
 	matches(_ch: Char, context: ParseContext): boolean {
-		return context.charAt(context.charIndex + 1) === '!';
+		return context.nextChar() === '!';
 	}
 
 	private startBlock(_ch: Char, context: ParseContext): void {

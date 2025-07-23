@@ -79,6 +79,10 @@ export class ParseContext {
 		return this._document[index];
 	}
 
+	nextChar(): Char | undefined {
+		return this._document[this._charIndex + 1];
+	}
+
 	text(start: number, end: number): string {
 		return this._document.slice(start, end);
 	}

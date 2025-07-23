@@ -94,7 +94,7 @@ export class NewlineParser2 extends ByCharTokenParser {
 
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	matches(_ch: Char, context: ParseContext): boolean {
-		return context.charAt(context.charIndex + 1) === '\n';
+		return context.nextChar() === '\n';
 	}
 
 	parse(_ch: Char, context: ParseContext): boolean {
