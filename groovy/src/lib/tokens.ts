@@ -38,6 +38,7 @@ export enum GroovyTokenId {
 	Colon,
 	Semicolon,
 	// literal
+	// number literal
 	BinaryLiteral,
 	BinaryStartMark,
 	OctalLiteral,
@@ -53,6 +54,20 @@ export enum GroovyTokenId {
 	NumberExponentStartMark,
 	NumberExponentSign,
 	NumberSuffix,
+	// string literal
+	/** single quote string literal */ SsqSLiteral,
+	SsqSLMark,
+	/** triple quotes string literal */ TsqSLiteral,
+	TsqSLMark,
+	/** single double-quotes gstring literal */ SdqGsLiteral,
+	SdqGsLMark,
+	/** triple double-quotes gstring literal */ TdqGsLiteral,
+	TdqGsLMark,
+	/** slashy gstring literal */ SGsLiteral,
+	SGsLMark,
+	/** dollar slashy gstring literal */ DsGsLiteral,
+	DsGsLStartMark,
+	DsGsLEndMark,
 	// chars
 	Word,
 	UndeterminedChar,

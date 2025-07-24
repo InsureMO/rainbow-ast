@@ -5,13 +5,13 @@ import {ByCharTokenParser} from './by-char-token-parser';
 
 export abstract class BySingleCharTokenParser extends ByCharTokenParser {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	matches(_ch: Char, _context: ParseContext): boolean {
+	matches(_1: Char, _2: ParseContext): boolean {
 		return true;
 	}
 
 	protected abstract getTokenId(): GroovyTokenId;
 
-	parse(_ch: Char, context: ParseContext): boolean {
+	parse(_: Char, context: ParseContext): boolean {
 		const charIndex = context.charIndex;
 		const token = new AtomicToken({
 			id: this.getTokenId(),

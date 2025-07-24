@@ -13,19 +13,19 @@ export class SLCommentParser extends ByCharTokenParser {
 		super('/');
 	}
 
-	matches(_ch: Char, context: ParseContext): boolean {
+	matches(_: Char, context: ParseContext): boolean {
 		return context.nextChar() === '/';
 	}
 
-	private startBlock(_ch: Char, context: ParseContext): void {
+	private startBlock(_: Char, context: ParseContext): void {
 		const charIndex = context.charIndex;
-		const startMark = new AtomicToken({
+		const mark = new AtomicToken({
 			id: T.SLCommentStartMark,
 			text: '//',
 			start: charIndex, line: context.line, column: context.column
 		});
-		const shebang = new BlockToken(T.SLComment, startMark);
-		context.sink(shebang);
+		const cmt = new BlockToken(T.SLComment, mark);
+		context.sink(cmt);
 		context.forward(2);
 	}
 

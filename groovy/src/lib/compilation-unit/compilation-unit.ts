@@ -3,6 +3,7 @@ import {UndeterminedCharParser, WsTabNlParsers} from '../common-token';
 import {NumberParsers} from '../number-literal';
 import {ParseContext} from '../parse-context';
 import {ShebangParser} from '../shebang';
+import {StringParsers} from '../string-literal';
 import {ParserSelector} from '../token-parser';
 
 export class CompilationUnitParser {
@@ -12,6 +13,7 @@ export class CompilationUnitParser {
 			CommentParsers,
 			WsTabNlParsers,
 			NumberParsers,
+			StringParsers,
 			UndeterminedCharParser.instance
 		]
 	});

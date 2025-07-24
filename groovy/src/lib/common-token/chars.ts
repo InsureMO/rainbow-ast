@@ -6,11 +6,11 @@ import {T} from '../tokens';
 
 export class WordParser extends ByFuncTokenParser {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	matches(ch: Char, _context: ParseContext): boolean {
+	matches(ch: Char, _: ParseContext): boolean {
 		return JCM.Word(ch);
 	}
 
-	parse(_ch: Char, context: ParseContext): boolean {
+	parse(_: Char, context: ParseContext): boolean {
 		const charIndex = context.charIndex;
 		let cIndex = charIndex + 1;
 		let c = context.charAt(cIndex);

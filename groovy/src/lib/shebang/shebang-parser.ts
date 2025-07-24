@@ -29,18 +29,18 @@ export class ShebangParser extends ByCharTokenParser {
 		return !children.some(c => c.id !== T.Whitespaces && c.id !== T.Tabs);
 	}
 
-	matches(_ch: Char, context: ParseContext): boolean {
+	matches(_: Char, context: ParseContext): boolean {
 		return context.nextChar() === '!';
 	}
 
-	private startBlock(_ch: Char, context: ParseContext): void {
+	private startBlock(_: Char, context: ParseContext): void {
 		const charIndex = context.charIndex;
-		const startMark = new AtomicToken({
+		const mark = new AtomicToken({
 			id: T.ShebangStartMark,
 			text: '#!',
 			start: charIndex, line: context.line, column: context.column
 		});
-		const shebang = new BlockToken(T.Shebang, startMark);
+		const shebang = new BlockToken(T.Shebang, mark);
 		context.sink(shebang);
 		context.forward(2);
 	}

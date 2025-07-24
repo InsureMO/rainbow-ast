@@ -9,11 +9,11 @@ export class MLCommentEndMarkParser extends ByCharTokenParser {
 		super('*');
 	}
 
-	matches(_ch: Char, context: ParseContext): boolean {
+	matches(_: Char, context: ParseContext): boolean {
 		return context.nextChar() === '/';
 	}
 
-	parse(_ch: Char, context: ParseContext): boolean {
+	parse(_: Char, context: ParseContext): boolean {
 		const charIndex = context.charIndex;
 		const mark = new AtomicToken({
 			id: T.MLCommentEndMark,
@@ -40,19 +40,19 @@ export class MLCommentParser extends ByCharTokenParser {
 		super('/');
 	}
 
-	matches(_ch: Char, context: ParseContext): boolean {
+	matches(_: Char, context: ParseContext): boolean {
 		return context.nextChar() === '*';
 	}
 
-	private startBlock(_ch: Char, context: ParseContext): void {
+	private startBlock(_: Char, context: ParseContext): void {
 		const charIndex = context.charIndex;
-		const startMark = new AtomicToken({
+		const mark = new AtomicToken({
 			id: T.MLCommentStartMark,
 			text: '/*',
 			start: charIndex, line: context.line, column: context.column
 		});
-		const shebang = new BlockToken(T.MLComment, startMark);
-		context.sink(shebang);
+		const cmt = new BlockToken(T.MLComment, mark);
+		context.sink(cmt);
 		context.forward(2);
 	}
 

@@ -6,11 +6,11 @@ import {T} from '../tokens';
 
 export class WhitespacesParser extends ByFuncTokenParser {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	matches(ch: Char, _context: ParseContext): boolean {
+	matches(ch: Char, _: ParseContext): boolean {
 		return JCM.Whitespace(ch);
 	}
 
-	parse(_ch: Char, context: ParseContext): boolean {
+	parse(_: Char, context: ParseContext): boolean {
 		const charIndex = context.charIndex;
 		let cIndex = charIndex + 1;
 		let c = context.charAt(cIndex);
@@ -37,11 +37,11 @@ export class TabsParser extends ByCharTokenParser {
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	matches(_ch: Char, _context: ParseContext): boolean {
+	matches(_1: Char, _2: ParseContext): boolean {
 		return true;
 	}
 
-	parse(_ch: Char, context: ParseContext): boolean {
+	parse(_: Char, context: ParseContext): boolean {
 		const charIndex = context.charIndex;
 		let cIndex = charIndex + 1;
 		let c = context.charAt(cIndex);
@@ -68,11 +68,11 @@ export class NewlineParser1 extends ByCharTokenParser {
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	matches(_ch: Char, _context: ParseContext): boolean {
+	matches(_1: Char, _2: ParseContext): boolean {
 		return true;
 	}
 
-	parse(_ch: Char, context: ParseContext): boolean {
+	parse(_: Char, context: ParseContext): boolean {
 		const charIndex = context.charIndex;
 		const token = new AtomicToken({
 			id: T.Newline,
@@ -93,11 +93,11 @@ export class NewlineParser2 extends ByCharTokenParser {
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	matches(_ch: Char, context: ParseContext): boolean {
+	matches(_: Char, context: ParseContext): boolean {
 		return context.nextChar() === '\n';
 	}
 
-	parse(_ch: Char, context: ParseContext): boolean {
+	parse(_: Char, context: ParseContext): boolean {
 		const charIndex = context.charIndex;
 		const token = new AtomicToken({
 			id: T.Newline,

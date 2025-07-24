@@ -13,3 +13,5 @@
 2e+5g
 2.5E-3_1
 1__2.5_6F
+// string test
+'abc'
