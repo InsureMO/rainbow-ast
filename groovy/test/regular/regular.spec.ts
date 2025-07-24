@@ -165,7 +165,43 @@ describe('Regular test', () => {
 				[T.Word, 158, 161, l, 'abc'],
 				[T.SsqSLMark, 161, 162, l, '\'']
 			]],
-			[T.Newline, 162, 163, l++, '\n']
+			[T.Newline, 162, 163, l++, '\n'],
+			[T.SsqSLiteral, 163, 196, l, '\' \t{}[]()<>/~@#$%^&*?-+=_|"`.,:;\'', [
+				[T.SsqSLMark, 163, 164, l, '\''],
+				[T.Whitespaces, 164, 165, l, ' '],
+				[T.Tabs, 165, 166, l, '\t'],
+				[T.LBrace, 166, 167, l, '{'],
+				[T.RBrace, 167, 168, l, '}'],
+				[T.LBrack, 168, 169, l, '['],
+				[T.RBrack, 169, 170, l, ']'],
+				[T.LParen, 170, 171, l, '('],
+				[T.RParen, 171, 172, l, ')'],
+				[T.LAngle, 172, 173, l, '<'],
+				[T.RAngle, 173, 174, l, '>'],
+				[T.Slash, 174, 175, l, '/'],
+				[T.Tilde, 175, 176, l, '~'],
+				[T.At, 176, 177, l, '@'],
+				[T.Hash, 177, 178, l, '#'],
+				[T.Dollar, 178, 179, l, '$'],
+				[T.Percent, 179, 180, l, '%'],
+				[T.Exponent, 180, 181, l, '^'],
+				[T.And, 181, 182, l, '&'],
+				[T.Asterisk, 182, 183, l, '*'],
+				[T.Question, 183, 184, l, '?'],
+				[T.Minus, 184, 185, l, '-'],
+				[T.Plus, 185, 186, l, '+'],
+				[T.Equal, 186, 187, l, '='],
+				[T.Underscore, 187, 188, l, '_'],
+				[T.Pipe, 188, 189, l, '|'],
+				[T.DblQuote, 189, 190, l, '"'],
+				[T.BackQuote, 190, 191, l, '`'],
+				[T.Dot, 191, 192, l, '.'],
+				[T.Comma, 192, 193, l, ','],
+				[T.Colon, 193, 194, l, ':'],
+				[T.Semicolon, 194, 195, l, ';'],
+				[T.SsqSLMark, 195, 196, l, '\'']
+			]],
+			[T.Newline, 196, 197, l++, '\n']
 		]]);
 	});
 });
