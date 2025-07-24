@@ -48,4 +48,7 @@ export const StandaloneSymbolParsers: Array<ByCharTokenParser> = ([
 	return new ParserClass();
 });
 
-export const HashParser = StandaloneSymbolParsers.find(p => p.firstChar === '#');
+export const StandaloneSymbolNoSQParsers = StandaloneSymbolParsers.filter(p => p.firstChar !== '\'');
+export const StandaloneSymbolNoDQDollarParsers = StandaloneSymbolParsers.filter(p => p.firstChar !== '"' && p.firstChar !== '$');
+export const StandaloneSymbolNoSlashDollarParsers = StandaloneSymbolParsers.filter(p => p.firstChar !== '\\' && p.firstChar !== '$');
+export const StandaloneSymbolNoDollarParsers = StandaloneSymbolParsers.filter(p => p.firstChar !== '$');
