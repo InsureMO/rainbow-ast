@@ -80,7 +80,12 @@ export enum GroovyTokenId {
 	SlashEscape,
 	DoubleDollarsEscape,
 	OctalEscape,
+	OctalEscapeStartMark,
+	OctalEscapeContent,
 	UnicodeEscape,
+	UnicodeEscapeStartMark,
+	UnicodeEscapeContent,
+	/** newline eraser for multiple-lines string/gstring */ MLSNewlineEraser,
 	// chars
 	Word,
 	UndeterminedChar,

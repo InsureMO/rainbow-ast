@@ -1,5 +1,5 @@
 import {AtomicToken, BlockToken, Char} from '@rainbow-ast/core';
-import {CharsParsers, StandaloneSymbolNoSingleQuoteParsers, WsTabParsers} from '../common-token';
+import {CharsParsers, SLStandaloneSymbolParsers, WsTabParsers} from '../common-token';
 import {ParseContext} from '../parse-context';
 import {ByCharTokenParser, ParserSelector} from '../token-parser';
 import {T} from '../tokens';
@@ -35,7 +35,7 @@ export class SsqSLiteralParser extends ByCharTokenParser {
 		parsers: [
 			BackslashStartedEscapeParsers,
 			SsqSLiteralEndMarkParser.instance,
-			StandaloneSymbolNoSingleQuoteParsers, WsTabParsers, CharsParsers
+			SLStandaloneSymbolParsers, WsTabParsers, CharsParsers
 		]
 	});
 

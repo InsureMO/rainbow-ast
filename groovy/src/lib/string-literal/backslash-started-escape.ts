@@ -75,3 +75,5 @@ export const BackslashStartedEscapeParsers = [
 	BackslashStartedEscapeParser.instanceDoubleQuotes,
 	BackslashStartedEscapeParser.instanceDollar
 ];
+
+// TODO incorrect backslash escape parser

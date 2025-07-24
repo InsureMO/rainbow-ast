@@ -48,7 +48,7 @@ export const StandaloneSymbolParsers: Array<ByCharTokenParser> = ([
 	return new ParserClass();
 });
 
-export const StandaloneSymbolNoSingleQuoteParsers = StandaloneSymbolParsers.filter(p => p.firstChar !== '\'');
-export const StandaloneSymbolNoDoubleQuotesDollarParsers = StandaloneSymbolParsers.filter(p => p.firstChar !== '"' && p.firstChar !== '$');
-export const StandaloneSymbolNoSlashDollarParsers = StandaloneSymbolParsers.filter(p => p.firstChar !== '\\' && p.firstChar !== '$');
-export const StandaloneSymbolNoDollarParsers = StandaloneSymbolParsers.filter(p => p.firstChar !== '$');
+export const SLStandaloneSymbolParsers = StandaloneSymbolParsers.filter(p => !['\'', '\\'].includes(p.firstChar));
+export const GLStandaloneSymbolParsers = StandaloneSymbolParsers.filter(p => !['"', '\\', '$'].includes(p.firstChar));
+export const SGLStandaloneSymbolParsers = StandaloneSymbolParsers.filter(p => !['/', '\\', '$'].includes(p.firstChar));
+export const DSGLStandaloneSymbolParsers = StandaloneSymbolParsers.filter(p => !['\\', '$'].includes(p.firstChar));
