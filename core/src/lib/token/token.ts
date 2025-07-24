@@ -14,6 +14,10 @@ export abstract class Token {
 		return this._id;
 	}
 
+	rewriteId(tokenId: TokenId): void {
+		this._id = tokenId;
+	}
+
 	abstract get text(): string;
 
 	abstract get start(): number;

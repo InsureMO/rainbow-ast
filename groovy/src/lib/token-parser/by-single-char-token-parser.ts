@@ -18,7 +18,7 @@ export abstract class BySingleCharTokenParser extends ByCharTokenParser {
 			text: this.firstChar,
 			start: charIndex, line: context.line, column: context.column
 		});
-		context.block().appendChild(token);
+		context.collect(token);
 		context.forward(1);
 		return true;
 	}

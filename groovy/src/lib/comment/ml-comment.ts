@@ -20,7 +20,7 @@ export class MLCommentEndMarkParser extends ByCharTokenParser {
 			text: '*/',
 			start: charIndex, line: context.line, column: context.column
 		});
-		context.block().appendChild(mark);
+		context.collect(mark);
 		context.forward(2);
 		return true;
 	}

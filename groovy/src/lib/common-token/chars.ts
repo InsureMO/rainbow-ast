@@ -23,7 +23,7 @@ export class WordParser extends ByFuncTokenParser {
 			text: context.text(charIndex, cIndex),
 			start: charIndex, line: context.line, column: context.column
 		});
-		context.block().appendChild(token);
+		context.collect(token);
 		context.forward(cIndex - charIndex);
 		return true;
 	}
@@ -58,7 +58,7 @@ export class UndeterminedCharParser extends ByFuncTokenParser {
 			text: ch,
 			start: charIndex, line: context.line, column: context.column
 		});
-		context.block().appendChild(token);
+		context.collect(token);
 		context.forward(1);
 		return true;
 	}

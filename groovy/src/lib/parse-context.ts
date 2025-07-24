@@ -1,4 +1,4 @@
-import {BlockToken, Char, CompilationUnit} from '@rainbow-ast/core';
+import {BlockToken, Char, CompilationUnit, Token} from '@rainbow-ast/core';
 
 export interface ParseContextArgs {
 	shebang: boolean;
@@ -108,6 +108,10 @@ export class ParseContext {
 
 	rise(): void {
 		this._blocks.pop();
+	}
+
+	collect(token: Token): void {
+		this.block().appendChild(token);
 	}
 
 	/**

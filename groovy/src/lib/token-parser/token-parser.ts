@@ -5,6 +5,7 @@ export abstract class TokenParser {
 	/**
 	 * default available
 	 */
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	isAvailable(_context: ParseContext): boolean {
 		return true;
 	}

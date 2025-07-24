@@ -23,7 +23,7 @@ export class WhitespacesParser extends ByFuncTokenParser {
 			text: context.text(charIndex, cIndex),
 			start: charIndex, line: context.line, column: context.column
 		});
-		context.block().appendChild(token);
+		context.collect(token);
 		context.forward(cIndex - charIndex);
 		return true;
 	}
@@ -54,7 +54,7 @@ export class TabsParser extends ByCharTokenParser {
 			text: context.text(charIndex, cIndex),
 			start: charIndex, line: context.line, column: context.column
 		});
-		context.block().appendChild(token);
+		context.collect(token);
 		context.forward(cIndex - charIndex);
 		return true;
 	}
@@ -79,7 +79,7 @@ export class NewlineParser1 extends ByCharTokenParser {
 			text: '\n',
 			start: charIndex, line: context.line, column: context.column
 		});
-		context.block().appendChild(token);
+		context.collect(token);
 		context.newline(1);
 		return true;
 	}
@@ -104,7 +104,7 @@ export class NewlineParser2 extends ByCharTokenParser {
 			text: '\r\n',
 			start: charIndex, line: context.line, column: context.column
 		});
-		context.block().appendChild(token);
+		context.collect(token);
 		context.newline(2);
 		return true;
 	}
