@@ -3,7 +3,9 @@ import {CharsParsers, SLStandaloneSymbolParsers, WsTabParsers} from '../common-t
 import {ParseContext} from '../parse-context';
 import {ByCharTokenParser, ParserSelector} from '../token-parser';
 import {T} from '../tokens';
-import {BackslashStartedEscapeParsers} from './backslash-started-escape';
+import {QSLBackslashEscapeParsers, QSLBadBackslashEscapeParser} from './backslash-escape';
+import {OctalEscapeParser} from './octal-escape';
+import {QSLUnicodeEscapeParser} from './unicode-escape';
 
 export class SsqSLiteralEndMarkParser extends ByCharTokenParser {
 	constructor() {
@@ -33,7 +35,10 @@ export class SsqSLiteralEndMarkParser extends ByCharTokenParser {
 export class SsqSLiteralParser extends ByCharTokenParser {
 	private static readonly Selector: ParserSelector = new ParserSelector({
 		parsers: [
-			BackslashStartedEscapeParsers,
+			QSLBackslashEscapeParsers,
+			QSLBadBackslashEscapeParser.instance,
+			OctalEscapeParser.instance,
+			QSLUnicodeEscapeParser.instance,
 			SsqSLiteralEndMarkParser.instance,
 			SLStandaloneSymbolParsers, WsTabParsers, CharsParsers
 		]

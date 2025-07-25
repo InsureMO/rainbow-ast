@@ -126,6 +126,18 @@ export class JavaCharMatchFunctions {
 	}
 
 	/**
+	 * \t, \n, \r
+	 */
+	static Tnr(char: Char): boolean {
+		// eof
+		if (char == null) {
+			return false;
+		}
+
+		return (char === '\t' || char === '\r' || char === '\n');
+	}
+
+	/**
 	 * not exact same as java, it excludes tab, carriage return and newline
 	 */
 	static Whitespace(char: Char): boolean {

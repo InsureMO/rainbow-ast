@@ -92,6 +92,9 @@ export class ParseContext {
 		return [this._document.slice(this._charIndex + 1, this._charIndex + 1 + count), this._document[this._charIndex + 1 + count]];
 	}
 
+	/**
+	 * {@link start} includes, {@link end} excludes.
+	 */
 	text(start: number, end: number): string {
 		return this._document.slice(start, end);
 	}

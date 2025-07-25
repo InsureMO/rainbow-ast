@@ -38,13 +38,9 @@ export class WordParser extends ByFuncTokenParser {
 export class UndeterminedCharParser extends ByFuncTokenParser {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	matches(ch: Char, context: ParseContext): boolean {
-		if (ch === '\t') {
-			return false;
-		} else if (ch === '\n') {
-			return false;
-		} else if (ch === '\r') {
+		if (ch === '\r') {
 			return context.nextChar() !== '\n';
-		} else if (JCM.Whitespace(ch)) {
+		} else if (JCM.Tnr(ch) || JCM.Whitespace(ch)) {
 			return false;
 		}
 

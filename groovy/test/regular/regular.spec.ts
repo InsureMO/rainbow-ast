@@ -201,7 +201,53 @@ describe('Regular test', () => {
 				[T.Semicolon, 194, 195, l, ';'],
 				[T.SsqSLMark, 195, 196, l, '\'']
 			]],
-			[T.Newline, 196, 197, l++, '\n']
+			[T.Newline, 196, 197, l++, '\n'],
+			[T.SsqSLiteral, 197, 235, l, '\'\\0\\12\\345\\89\\u\\u0\\u12\\u345\\uabcd\\c\\ \'', [
+				[T.SsqSLMark, 197, 198, l, '\''],
+				[T.OctalEscape, 198, 200, l, '\\0', [
+					[T.OctalEscapeStartMark, 198, 199, l, '\\'],
+					[T.OctalEscapeContent, 199, 200, l, '0']
+				]],
+				[T.OctalEscape, 200, 203, l, '\\12', [
+					[T.OctalEscapeStartMark, 200, 201, l, '\\'],
+					[T.OctalEscapeContent, 201, 203, l, '12']
+				]],
+				[T.OctalEscape, 203, 207, l, '\\345', [
+					[T.OctalEscapeStartMark, 203, 204, l, '\\'],
+					[T.OctalEscapeContent, 204, 207, l, '345']
+				]],
+				[T.BadEscape, 207, 209, l, '\\8'],
+				[T.Word, 209, 210, l, '9'],
+				[T.UnicodeEscape, 210, 212, l, '\\u', [
+					[T.UnicodeEscapeStartMark, 210, 212, l, '\\u']
+				]],
+				[T.UnicodeEscape, 212, 215, l, '\\u0', [
+					[T.UnicodeEscapeStartMark, 212, 214, l, '\\u'],
+					[T.UnicodeEscapeContent, 214, 215, l, '0']
+				]],
+				[T.UnicodeEscape, 215, 219, l, '\\u12', [
+					[T.UnicodeEscapeStartMark, 215, 217, l, '\\u'],
+					[T.UnicodeEscapeContent, 217, 219, l, '12']
+				]],
+				[T.UnicodeEscape, 219, 224, l, '\\u345', [
+					[T.UnicodeEscapeStartMark, 219, 221, l, '\\u'],
+					[T.UnicodeEscapeContent, 221, 224, l, '345']
+				]],
+				[T.UnicodeEscape, 224, 230, l, '\\uabcd', [
+					[T.UnicodeEscapeStartMark, 224, 226, l, '\\u'],
+					[T.UnicodeEscapeContent, 226, 230, l, 'abcd']
+				]],
+				[T.BadEscape, 230, 232, l, '\\c'],
+				[T.BadEscape, 232, 233, l, '\\'],
+				[T.Whitespaces, 233, 234, l, ' '],
+				[T.SsqSLMark, 234, 235, l, '\'']
+			]],
+			[T.Newline, 235, 236, l++, '\n'],
+			[T.SsqSLiteral, 236, 238, l, '\'\\', [
+				[T.SsqSLMark, 236, 237, l, '\''],
+				[T.BadEscape, 237, 238, l, '\\']
+			]],
+			[T.Newline, 238, 239, l++, '\n']
 		]]);
 	});
 });

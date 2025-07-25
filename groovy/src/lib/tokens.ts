@@ -85,6 +85,7 @@ export enum GroovyTokenId {
 	UnicodeEscape,
 	UnicodeEscapeStartMark,
 	UnicodeEscapeContent,
+	BadEscape,
 	/** newline eraser for multiple-lines string/gstring */ MLSNewlineEraser,
 	// chars
 	Word,
