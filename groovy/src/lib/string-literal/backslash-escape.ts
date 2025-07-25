@@ -63,52 +63,9 @@ export class BackslashEscapeParser<E extends Escape> extends ByCharTokenParser {
 	static readonly instanceSlash = new BackslashEscapeParser('/', T.SlashEscape);
 }
 
-/**
- * for single-quote string literal, triple single-quotes string literal,
- * double-quotes gstring literal, triple double-quotes gstring literal.
- * QSL = quote string literal.
- */
-export const QSLBackslashEscapeParsers = [
-	BackslashEscapeParser.instanceB,
-	BackslashEscapeParser.instanceF,
-	BackslashEscapeParser.instanceN,
-	BackslashEscapeParser.instanceR,
-	BackslashEscapeParser.instanceT,
-	BackslashEscapeParser.instanceBackslash,
-	BackslashEscapeParser.instanceSingleQuote,
-	BackslashEscapeParser.instanceDoubleQuotes,
-	BackslashEscapeParser.instanceDollar
-];
-
-/**
- * incorrect backslash escape parser, works only for single-quote string literal, triple single-quotes string literal,
- * double-quotes gstring literal and triple double-quotes gstring literal.
- * 1. for a single-line string:
- *    if there is no character after the backslash,
- *    or the character after the backslash is not one of b, f, n, r, t, \, ', ", $, a digit from 0 to 7, or u,
- *    then it is determined to be an incorrect escape,
- * 2. for a multiple-lines string:
- *    the character after the backslash is not one of b, f, n, r, t, \, ', ", $, a digit from 0 to 7, or u,
- *    then it is determined to be an incorrect escape,
- *
- * QSL = quote string literal.
- */
-export class QSLBadBackslashEscapeParser extends ByCharTokenParser {
-	constructor() {
+abstract class QSLBadBackslashEscapeParser extends ByCharTokenParser {
+	protected constructor() {
 		super('\\');
-	}
-
-	matches(_: Char, context: ParseContext): boolean {
-		const block = context.block();
-		const blockTokenId = block.id;
-
-		const nextChar = context.nextChar();
-
-		if (blockTokenId === T.SsqSLiteral || blockTokenId === T.SdqGsLiteral) {
-			return !'bfnrt\\\'"$01234567u'.includes(nextChar);
-		} else {
-			return nextChar != null && !'bfnrt\\\'"$01234567u'.includes(nextChar);
-		}
 	}
 
 	parse(_: Char, context: ParseContext): boolean {
@@ -126,6 +83,48 @@ export class QSLBadBackslashEscapeParser extends ByCharTokenParser {
 		context.forward(1 + nextChar.length);
 		return true;
 	}
+}
 
-	static readonly instance = new QSLBadBackslashEscapeParser();
+/**
+ * incorrect backslash escape parser, works only for single-quote string literal, triple single-quotes string literal,
+ * double-quotes gstring literal and triple double-quotes gstring literal.
+ * if there is no character after the backslash,
+ * or the character after the backslash is not one of b, f, n, r, t, \, ', ", $, a digit from 0 to 7, or u,
+ * then it is determined to be an incorrect escape,
+ *
+ * SqSL = single-quote string literal, double-quotes gstring literal
+ */
+export class SqSLBadBackslashEscapeParser extends QSLBadBackslashEscapeParser {
+	matches(_: Char, context: ParseContext): boolean {
+		return !'bfnrt\\\'"$01234567u'.includes(context.nextChar());
+	}
+
+	static readonly instance = new SqSLBadBackslashEscapeParser();
+}
+
+/**
+ * incorrect backslash escape parser, works only for single-quote string literal, triple single-quotes string literal,
+ * double-quotes gstring literal and triple double-quotes gstring literal.
+ * for a multiple-lines string:
+ * the character after the backslash is not one of b, f, n, r, t, \, ', ", $, a digit from 0 to 7, or u,
+ * then it is determined to be an incorrect escape,
+ *
+ * TqSL = triple single-quotes string literal, triple double-quotes gstring literal
+ */
+export class TqSLBadBackslashEscapeParser extends QSLBadBackslashEscapeParser {
+	matches(_: Char, context: ParseContext): boolean {
+		const nextChar = context.nextChar();
+
+		if (nextChar == null) {
+			return false;
+		} else if (nextChar === '\n') {
+			return false;
+		} else if (nextChar === '\r' && context.charAt(context.charIndex + 2) === '\n') {
+			return false;
+		} else {
+			return !'bfnrt\\\'"$01234567u'.includes(nextChar);
+		}
+	}
+
+	static readonly instance = new TqSLBadBackslashEscapeParser();
 }

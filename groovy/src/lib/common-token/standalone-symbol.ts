@@ -47,8 +47,3 @@ export const StandaloneSymbolParsers: Array<ByCharTokenParser> = ([
 	Object.defineProperty(ParserClass, 'name', {value: `Standalone${T[tokenId]}Parser`});
 	return new ParserClass();
 });
-
-export const SLStandaloneSymbolParsers = StandaloneSymbolParsers.filter(p => !['\'', '\\'].includes(p.firstChar));
-export const GLStandaloneSymbolParsers = StandaloneSymbolParsers.filter(p => !['"', '\\', '$'].includes(p.firstChar));
-export const SGLStandaloneSymbolParsers = StandaloneSymbolParsers.filter(p => !['/', '\\', '$'].includes(p.firstChar));
-export const DSGLStandaloneSymbolParsers = StandaloneSymbolParsers.filter(p => !['\\', '$'].includes(p.firstChar));

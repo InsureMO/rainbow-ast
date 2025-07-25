@@ -247,7 +247,87 @@ describe('Regular test', () => {
 				[T.SsqSLMark, 236, 237, l, '\''],
 				[T.BadEscape, 237, 238, l, '\\']
 			]],
-			[T.Newline, 238, 239, l++, '\n']
+			[T.Newline, 238, 239, l++, '\n'],
+			[T.TsqSLiteral, 239, 322, l, '\'\'\' \t{}[]()<>/~@#$%^&*?-+=_|\'"`.,:;\n\\0\\12\\345\\89\\u\\u0\\u12\\u345\\uabcd\\ \\c\nabc\\\n\\\n\'\'\'', [
+				[T.TsqSLMark, 239, 242, l, '\'\'\''],
+				[T.Whitespaces, 242, 243, l, ' '],
+				[T.Tabs, 243, 244, l, '\t'],
+				[T.LBrace, 244, 245, l, '{'],
+				[T.RBrace, 245, 246, l, '}'],
+				[T.LBrack, 246, 247, l, '['],
+				[T.RBrack, 247, 248, l, ']'],
+				[T.LParen, 248, 249, l, '('],
+				[T.RParen, 249, 250, l, ')'],
+				[T.LAngle, 250, 251, l, '<'],
+				[T.RAngle, 251, 252, l, '>'],
+				[T.Slash, 252, 253, l, '/'],
+				[T.Tilde, 253, 254, l, '~'],
+				[T.At, 254, 255, l, '@'],
+				[T.Hash, 255, 256, l, '#'],
+				[T.Dollar, 256, 257, l, '$'],
+				[T.Percent, 257, 258, l, '%'],
+				[T.Exponent, 258, 259, l, '^'],
+				[T.And, 259, 260, l, '&'],
+				[T.Asterisk, 260, 261, l, '*'],
+				[T.Question, 261, 262, l, '?'],
+				[T.Minus, 262, 263, l, '-'],
+				[T.Plus, 263, 264, l, '+'],
+				[T.Equal, 264, 265, l, '='],
+				[T.Underscore, 265, 266, l, '_'],
+				[T.Pipe, 266, 267, l, '|'],
+				[T.Quote, 267, 268, l, '\''],
+				[T.DblQuote, 268, 269, l, '"'],
+				[T.BackQuote, 269, 270, l, '`'],
+				[T.Dot, 270, 271, l, '.'],
+				[T.Comma, 271, 272, l, ','],
+				[T.Colon, 272, 273, l, ':'],
+				[T.Semicolon, 273, 274, l, ';'],
+				[T.Newline, 274, 275, l++, '\n'],
+				[T.OctalEscape, 275, 277, l, '\\0', [
+					[T.OctalEscapeStartMark, 275, 276, l, '\\'],
+					[T.OctalEscapeContent, 276, 277, l, '0']
+				]],
+				[T.OctalEscape, 277, 280, l, '\\12', [
+					[T.OctalEscapeStartMark, 277, 278, l, '\\'],
+					[T.OctalEscapeContent, 278, 280, l, '12']
+				]],
+				[T.OctalEscape, 280, 284, l, '\\345', [
+					[T.OctalEscapeStartMark, 280, 281, l, '\\'],
+					[T.OctalEscapeContent, 281, 284, l, '345']
+				]],
+				[T.BadEscape, 284, 286, l, '\\8'],
+				[T.Word, 286, 287, l, '9'],
+				[T.UnicodeEscape, 287, 289, l, '\\u', [
+					[T.UnicodeEscapeStartMark, 287, 289, l, '\\u']
+				]],
+				[T.UnicodeEscape, 289, 292, l, '\\u0', [
+					[T.UnicodeEscapeStartMark, 289, 291, l, '\\u'],
+					[T.UnicodeEscapeContent, 291, 292, l, '0']
+				]],
+				[T.UnicodeEscape, 292, 296, l, '\\u12', [
+					[T.UnicodeEscapeStartMark, 292, 294, l, '\\u'],
+					[T.UnicodeEscapeContent, 294, 296, l, '12']
+				]],
+				[T.UnicodeEscape, 296, 301, l, '\\u345', [
+					[T.UnicodeEscapeStartMark, 296, 298, l, '\\u'],
+					[T.UnicodeEscapeContent, 298, 301, l, '345']
+				]],
+				[T.UnicodeEscape, 301, 307, l, '\\uabcd', [
+					[T.UnicodeEscapeStartMark, 301, 303, l, '\\u'],
+					[T.UnicodeEscapeContent, 303, 307, l, 'abcd']
+				]],
+				[T.BadEscape, 307, 308, l, '\\'],
+				[T.Whitespaces, 308, 309, l, ' '],
+				[T.BadEscape, 309, 311, l, '\\c'],
+				[T.Newline, 311, 312, l++, '\n'],
+				[T.Word, 312, 315, l, 'abc'],
+				[T.MLSNewlineEraser, 315, 316, l, '\\'],
+				[T.Newline, 316, 317, l++, '\n'],
+				[T.MLSNewlineEraser, 317, 318, l, '\\'],
+				[T.Newline, 318, 319, l++, '\n'],
+				[T.TsqSLMark, 319, 322, l, '\'\'\'']
+			]],
+			[T.Newline, 322, 323, l++, '\n']
 		]]);
 	});
 });
