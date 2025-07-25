@@ -3,7 +3,7 @@ import {CharsParsers, WsTabNlParsers} from '../common-token';
 import {ParseContext} from '../parse-context';
 import {ByCharTokenParser, ParserSelector} from '../token-parser';
 import {T} from '../tokens';
-import {SqSLEscapeParsers, TqSLEscapeParsers} from './escape';
+import {TqSLEscapeParsers} from './escape';
 import {MLEraserParser} from './ml-eraser';
 import {TsqSLStandaloneSymbolParsers} from './standalone-symbol';
 

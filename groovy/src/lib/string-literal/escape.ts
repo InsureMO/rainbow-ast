@@ -1,7 +1,7 @@
 import {BackslashEscapeParser, SqSLBadBackslashEscapeParser, TqSLBadBackslashEscapeParser} from './backslash-escape';
 import {DollarEscapeParser} from './dollar-escape';
 import {OctalEscapeParser} from './octal-escape';
-import {QSLUnicodeEscapeParser} from './unicode-escape';
+import {QSLUnicodeEscapeParser, SGsLUnicodeEscapeParser} from './unicode-escape';
 
 /**
  * SqSL = single-quote string literal, double-quotes gstring literal
@@ -44,15 +44,15 @@ export const TqSLEscapeParsers = [
  */
 export const SGsLEscapeParsers = [
 	BackslashEscapeParser.instanceSlash,
-	QSLUnicodeEscapeParser.instance
+	SGsLUnicodeEscapeParser.instance
 ];
 
 /**
  * for dollar slashy gstring literal
  * DSGsL = dollar slashy gstring literal.
  */
-export const DSGsLEscapeParsers = [
+export const DsGsLEscapeParsers = [
 	DollarEscapeParser.instanceDollar,
 	DollarEscapeParser.instanceSlash,
-	QSLUnicodeEscapeParser.instance
+	SGsLUnicodeEscapeParser.instance
 ];
