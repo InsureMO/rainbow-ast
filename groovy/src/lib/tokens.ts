@@ -27,7 +27,7 @@ export enum GroovyTokenId {
 	/** ?, S means symbol, to avoid duplication with the "Question" in the operators */ QuestionS,
 	/** - */ Minus,
 	/** + */ Plus,
-	/** = */ Equality,
+	/** =, S means symbol, to avoid duplication with the "Equal(==)" in the operators */ EqualS,
 	/** _ */ Underscore,
 	/** | */ Pipe,
 	/** ' */ Quote,

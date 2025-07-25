@@ -24,7 +24,7 @@ export const StandaloneSymbolParsers: Array<ByCharTokenParser> = ([
 	['?', T.QuestionS],
 	['-', T.Minus],
 	['+', T.Plus],
-	['=', T.Equality],
+	['=', T.EqualS],
 	['_', T.Underscore],
 	['|', T.Pipe],
 	['\'', T.Quote],
