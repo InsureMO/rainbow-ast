@@ -92,7 +92,6 @@ export class NewlineParser2 extends ByCharTokenParser {
 		super('\r');
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	matches(_: Char, context: ParseContext): boolean {
 		return context.nextChar() === '\n';
 	}

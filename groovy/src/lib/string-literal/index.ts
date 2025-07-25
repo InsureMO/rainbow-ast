@@ -1,4 +1,6 @@
+import {DsGsLiteralParser} from './dollar-slashy-gstring-literal';
 import {SdqGsLiteralParser} from './sdq-gstring-literal';
+import {SGsLiteralParser} from './slashy-gstring-literal';
 import {SsqSLiteralParser} from './ssq-string-literal';
 import {TdqGsLiteralParser} from './tdq-gstring-literal';
 import {TsqSLiteralParser} from './tsq-string-literal';
@@ -17,10 +19,14 @@ export * from './ssq-string-literal';
 export * from './tsq-string-literal';
 export * from './sdq-gstring-literal';
 export * from './tdq-gstring-literal';
+export * from './slashy-gstring-literal';
+export * from './dollar-slashy-gstring-literal';
 
 export const StringParsers = [
 	SsqSLiteralParser.instance,
 	TsqSLiteralParser.instance,
 	SdqGsLiteralParser.instance,
-	TdqGsLiteralParser.instance
+	TdqGsLiteralParser.instance,
+	SGsLiteralParser.instance,
+	DsGsLiteralParser.instance
 ];

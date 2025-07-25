@@ -12,8 +12,7 @@ export class TsqSLiteralEndMarkParser extends ByCharTokenParser {
 		super('\'');
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	matches(_1: Char, context: ParseContext): boolean {
+	matches(_: Char, context: ParseContext): boolean {
 		const [c2, c3] = context.nextChars(1);
 		return c2 === '\'' && c3 === '\'';
 	}

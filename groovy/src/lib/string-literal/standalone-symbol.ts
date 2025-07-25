@@ -11,4 +11,4 @@ export const TdqGsLStandaloneSymbolParsers = StandaloneSymbolParsers.filter(p =>
 /** for slashy gstring literal, excludes /, \, $ */
 export const SGsLStandaloneSymbolParsers = StandaloneSymbolParsers.filter(p => !['/', '\\', '$'].includes(p.firstChar));
 /** for dollar slashy gstring literal, excludes $ */
-export const DSGsLStandaloneSymbolParsers = StandaloneSymbolParsers.filter(p => !['$'].includes(p.firstChar));
+export const DsGsLStandaloneSymbolParsers = StandaloneSymbolParsers.filter(p => !['$'].includes(p.firstChar));

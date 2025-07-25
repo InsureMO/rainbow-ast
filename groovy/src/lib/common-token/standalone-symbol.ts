@@ -19,12 +19,12 @@ export const StandaloneSymbolParsers: Array<ByCharTokenParser> = ([
 	['$', T.Dollar],
 	['%', T.Percent],
 	['^', T.Exponent],
-	['&', T.And],
+	['&', T.Ampersand],
 	['*', T.Asterisk],
-	['?', T.Question],
+	['?', T.QuestionS],
 	['-', T.Minus],
 	['+', T.Plus],
-	['=', T.Equal],
+	['=', T.Equality],
 	['_', T.Underscore],
 	['|', T.Pipe],
 	['\'', T.Quote],
@@ -32,7 +32,7 @@ export const StandaloneSymbolParsers: Array<ByCharTokenParser> = ([
 	['`', T.BackQuote],
 	['.', T.Dot],
 	[',', T.Comma],
-	[':', T.Colon],
+	[':', T.ColonS],
 	[';', T.Semicolon]
 ] as Array<[Char, GroovyTokenId]>).map(([char, tokenId]) => {
 	const ParserClass = class extends BySingleCharTokenParser {
