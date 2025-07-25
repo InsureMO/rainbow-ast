@@ -46,14 +46,6 @@ export class TsqSLiteralParser extends ByCharTokenParser {
 		super('\'');
 	}
 
-	isAvailable(context: ParseContext): boolean {
-		return ![
-			T.TsqSLiteral, T.TsqSLiteral,
-			T.SdqGsLiteral, T.TdqGsLiteral,
-			T.SGsLiteral, T.DsGsLiteral
-		].includes(context.block().id);
-	}
-
 	matches(_: Char, context: ParseContext): boolean {
 		const [c2, c3] = context.nextChars(1);
 		return c2 === '\'' && c3 === '\'';

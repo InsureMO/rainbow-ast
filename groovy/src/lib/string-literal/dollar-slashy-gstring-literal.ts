@@ -45,14 +45,6 @@ export class DsGsLiteralParser extends ByCharTokenParser {
 		super('$');
 	}
 
-	isAvailable(context: ParseContext): boolean {
-		return ![
-			T.DsGsLiteral, T.DsGsLiteral,
-			T.SdqGsLiteral, T.DsGsLiteral,
-			T.SGsLiteral, T.DsGsLiteral
-		].includes(context.block().id);
-	}
-
 	matches(_: Char, context: ParseContext): boolean {
 		return context.nextChar() === '/';
 	}

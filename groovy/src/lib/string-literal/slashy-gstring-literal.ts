@@ -47,18 +47,8 @@ export class SGsLiteralParser extends ByCharTokenParser {
 	}
 
 	isAvailable(context: ParseContext): boolean {
-		const block = context.block();
-
-		if ([
-			T.SGsLiteral, T.SGsLiteral,
-			T.SdqGsLiteral, T.SGsLiteral,
-			T.SGsLiteral, T.DsGsLiteral
-		].includes(block.id)) {
-			return false;
-		}
-
 		const line = context.line;
-		const children = block.children;
+		const children = context.block().children;
 		let index = children.length - 1;
 		while (index >= 0) {
 			const child = children[index];
