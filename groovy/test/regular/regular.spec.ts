@@ -561,7 +561,76 @@ describe('Regular test', () => {
 				[T.Newline, 555, 556, l++, '\n'],
 				[T.SGsLMark, 556, 557, l, '/']
 			]],
-			[T.Newline, 557, 558, l++, '\n']
+			[T.Newline, 557, 558, l++, '\n'],
+			[T.DsGsLiteral, 558, 565, l, '$/abc/$', [
+				[T.DsGsLStartMark, 558, 560, l, '$/'],
+				[T.Word, 560, 563, l, 'abc'],
+				[T.DsGsLEndMark, 563, 565, l, '/$']
+			]],
+			[T.Newline, 565, 566, l++, '\n'],
+			[T.DsGsLiteral, 566, 602, l, '$/ \t{}[]()<>\\~@#$%^&*?-+=_|\'"`.,:;/$', [
+				[T.DsGsLStartMark, 566, 568, l, '$/'],
+				[T.Whitespaces, 568, 569, l, ' '],
+				[T.Tabs, 569, 570, l, '\t'],
+				[T.LBrace, 570, 571, l, '{'],
+				[T.RBrace, 571, 572, l, '}'],
+				[T.LBrack, 572, 573, l, '['],
+				[T.RBrack, 573, 574, l, ']'],
+				[T.LParen, 574, 575, l, '('],
+				[T.RParen, 575, 576, l, ')'],
+				[T.LAngle, 576, 577, l, '<'],
+				[T.RAngle, 577, 578, l, '>'],
+				[T.Backslash, 578, 579, l, '\\'],
+				[T.Tilde, 579, 580, l, '~'],
+				[T.At, 580, 581, l, '@'],
+				[T.Hash, 581, 582, l, '#'],
+				[T.Dollar, 582, 583, l, '$'],
+				[T.Percent, 583, 584, l, '%'],
+				[T.Exponent, 584, 585, l, '^'],
+				[T.Ampersand, 585, 586, l, '&'],
+				[T.Asterisk, 586, 587, l, '*'],
+				[T.QuestionS, 587, 588, l, '?'],
+				[T.Minus, 588, 589, l, '-'],
+				[T.Plus, 589, 590, l, '+'],
+				[T.EqualS, 590, 591, l, '='],
+				[T.Underscore, 591, 592, l, '_'],
+				[T.Pipe, 592, 593, l, '|'],
+				[T.Quote, 593, 594, l, '\''],
+				[T.DblQuote, 594, 595, l, '"'],
+				[T.BackQuote, 595, 596, l, '`'],
+				[T.Dot, 596, 597, l, '.'],
+				[T.Comma, 597, 598, l, ','],
+				[T.ColonS, 598, 599, l, ':'],
+				[T.Semicolon, 599, 600, l, ';'],
+				[T.DsGsLEndMark, 600, 602, l, '/$']
+			]],
+			[T.Newline, 602, 603, l++, '\n'],
+			[T.DsGsLiteral, 603, 631, l, '$/$/$$\\u\\u0\\u12\\u345\\uabcd/$', [
+				[T.DsGsLStartMark, 603, 605, l, '$/'],
+				[T.SlashEscape, 605, 607, l, '$/'],
+				[T.DollarEscape, 607, 609, l, '$$'],
+				[T.Backslash, 609, 610, l, '\\'],
+				[T.Word, 610, 611, l, 'u'],
+				[T.Backslash, 611, 612, l, '\\'],
+				[T.Word, 612, 614, l, 'u0'],
+				[T.Backslash, 614, 615, l, '\\'],
+				[T.Word, 615, 618, l, 'u12'],
+				[T.Backslash, 618, 619, l, '\\'],
+				[T.Word, 619, 623, l, 'u345'],
+				[T.UnicodeEscape, 623, 629, l, '\\uabcd', [
+					[T.UnicodeEscapeStartMark, 623, 625, l, '\\u'],
+					[T.UnicodeEscapeContent, 625, 629, l, 'abcd']
+				]],
+				[T.DsGsLEndMark, 629, 631, l, '/$']
+			]],
+			[T.Newline, 631, 632, l++, '\n'],
+			[T.DsGsLiteral, 632, 638, l, '$/\\\n/$', [
+				[T.DsGsLStartMark, 632, 634, l, '$/'],
+				[T.MLSNewlineEraser, 634, 635, l, '\\'],
+				[T.Newline, 635, 636, l++, '\n'],
+				[T.DsGsLEndMark, 636, 638, l, '/$']
+			]],
+			[T.Newline, 638, 639, l++, '\n'],
 		]]);
 	});
 });

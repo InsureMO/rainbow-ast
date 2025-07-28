@@ -19,7 +19,7 @@ export class DsGsLiteralEndMarkParser extends ByCharTokenParser {
 	parse(_: Char, context: ParseContext): boolean {
 		const charIndex = context.charIndex;
 		const mark = new AtomicToken({
-			id: T.DsGsLStartMark,
+			id: T.DsGsLEndMark,
 			text: '/$',
 			start: charIndex, line: context.line, column: context.column
 		});

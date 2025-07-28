@@ -12,7 +12,7 @@ export class DollarEscapeParser<E extends Escape> extends ByCharTokenParser {
 	private readonly _tokenId: E[1];
 
 	constructor(secondChar: E[0], tokenId: E[1]) {
-		super('\\');
+		super('$');
 		this._secondChar = secondChar;
 		this._tokenId = tokenId;
 	}
@@ -33,7 +33,7 @@ export class DollarEscapeParser<E extends Escape> extends ByCharTokenParser {
 		const charIndex = context.charIndex;
 		const escape = new AtomicToken({
 			id: this._tokenId,
-			text: '\\' + this._secondChar,
+			text: '$' + this._secondChar,
 			start: charIndex, line: context.line, column: context.column
 		});
 		context.collect(escape);
