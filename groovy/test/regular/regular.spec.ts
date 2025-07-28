@@ -631,6 +631,88 @@ describe('Regular test', () => {
 				[T.DsGsLEndMark, 636, 638, l, '/$']
 			]],
 			[T.Newline, 638, 639, l++, '\n'],
+			[T.SdqGsLiteral, 639, 659, l, '"$a$a.$a.b$$$_$1$$ "', [
+				[T.SdqGsLMark, 639, 640, l, '"'],
+				[T.GsInterpolation, 640, 642, l, '$a', [
+					[T.GsiStartMark, 640, 641, l, '$'],
+					[T.Identifier, 641, 642, l, 'a']
+				]],
+				[T.GsInterpolation, 642, 644, l, '$a', [
+					[T.GsiStartMark, 642, 643, l, '$'],
+					[T.Identifier, 643, 644, l, 'a']
+				]],
+				[T.Dot, 644, 645, l, '.'],
+				[T.GsInterpolation, 645, 649, l, '$a.b', [
+					[T.GsiStartMark, 645, 646, l, '$'],
+					[T.Identifier, 646, 647, l, 'a'],
+					[T.Dot, 647, 648, l, '.'],
+					[T.Identifier, 648, 649, l, 'b']
+				]],
+				[T.GsInterpolation, 649, 650, l, '$', [
+					[T.GsiStartMark, 649, 650, l, '$']
+				]],
+				[T.GsInterpolation, 650, 651, l, '$', [
+					[T.GsiStartMark, 650, 651, l, '$']
+				]],
+				[T.GsInterpolation, 651, 653, l, '$_', [
+					[T.GsiStartMark, 651, 652, l, '$'],
+					[T.Identifier, 652, 653, l, '_']
+				]],
+				[T.GsInterpolation, 653, 654, l, '$', [
+					[T.GsiStartMark, 653, 654, l, '$']
+				]],
+				[T.Word, 654, 655, l, '1'],
+				[T.GsInterpolation, 655, 656, l, '$', [
+					[T.GsiStartMark, 655, 656, l, '$']
+				]],
+				[T.GsInterpolation, 656, 657, l, '$', [
+					[T.GsiStartMark, 656, 657, l, '$']
+				]],
+				[T.Whitespaces, 657, 658, l, ' '],
+				[T.SdqGsLMark, 658, 659, l, '"']
+			]],
+			[T.Newline, 659, 660, l++, '\n'],
+			[T.TdqGsLiteral, 660, 684, l, '"""$a$a.$a.b$$$_$1$$ """', [
+				[T.TdqGsLMark, 660, 663, l, '"""'],
+				[T.GsInterpolation, 663, 665, l, '$a', [
+					[T.GsiStartMark, 663, 664, l, '$'],
+					[T.Identifier, 664, 665, l, 'a']
+				]],
+				[T.GsInterpolation, 665, 667, l, '$a', [
+					[T.GsiStartMark, 665, 666, l, '$'],
+					[T.Identifier, 666, 667, l, 'a']
+				]],
+				[T.Dot, 667, 668, l, '.'],
+				[T.GsInterpolation, 668, 672, l, '$a.b', [
+					[T.GsiStartMark, 668, 669, l, '$'],
+					[T.Identifier, 669, 670, l, 'a'],
+					[T.Dot, 670, 671, l, '.'],
+					[T.Identifier, 671, 672, l, 'b']
+				]],
+				[T.GsInterpolation, 672, 673, l, '$', [
+					[T.GsiStartMark, 672, 673, l, '$']
+				]],
+				[T.GsInterpolation, 673, 674, l, '$', [
+					[T.GsiStartMark, 673, 674, l, '$']
+				]],
+				[T.GsInterpolation, 674, 676, l, '$_', [
+					[T.GsiStartMark, 674, 675, l, '$'],
+					[T.Identifier, 675, 676, l, '_']
+				]],
+				[T.GsInterpolation, 676, 677, l, '$', [
+					[T.GsiStartMark, 676, 677, l, '$']
+				]],
+				[T.Word, 677, 678, l, '1'],
+				[T.GsInterpolation, 678, 679, l, '$', [
+					[T.GsiStartMark, 678, 679, l, '$']
+				]],
+				[T.GsInterpolation, 679, 680, l, '$', [
+					[T.GsiStartMark, 679, 680, l, '$']
+				]],
+				[T.Whitespaces, 680, 681, l, ' '],
+				[T.TdqGsLMark, 681, 684, l, '"""']
+			]],
+			[T.Newline, 684, 685, l++, '\n']
 		]]);
 	});
 });

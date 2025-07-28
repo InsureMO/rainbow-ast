@@ -5,8 +5,6 @@ export * from './dollar-escape';
 
 export * from './ml-eraser';
 
-export * from './interpolation-char-match-functions';
-export * from './gsi-identifier';
 export * from './gstring-intepolation';
 export * from './dq-gstring-intepolation';
 export * from './slashy-gstring-intepolation';

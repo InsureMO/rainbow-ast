@@ -1,16 +1,88 @@
 import {AtomicToken, BlockToken, Char} from '@rainbow-ast/core';
-import {DotParserInstance} from '../common-token';
+import {JCM} from '@rainbow-ast/java-base';
 import {ParseContext} from '../parse-context';
-import {ByCharTokenParser, ParserSelector} from '../token-parser';
-import {T} from '../tokens';
-import {GsiIdentifierParser} from './gsi-identifier';
+import {ByCharTokenParser, ByFuncTokenParser, BySingleCharTokenParser, ParserSelector} from '../token-parser';
+import {GroovyTokenId, T} from '../tokens';
+
+export class InterpolationCharMatchFunctions {
+	static INameStart(char: Char): boolean {
+		// eof
+		if (char == null) {
+			return false;
+		}
+
+		if (char === '$') {
+			return false;
+		}
+
+		return JCM.JNameStart(char);
+	}
+
+	static INamePart(char: Char): boolean {
+		// eof
+		if (char == null) {
+			return false;
+		}
+
+		if (char === '$') {
+			return false;
+		}
+
+		return JCM.JNamePart(char);
+	}
+}
+
+export const ICM = InterpolationCharMatchFunctions;
+
+export class GsiIdentifierParser extends ByFuncTokenParser {
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	matches(ch: Char, _: ParseContext): boolean {
+		return ICM.INameStart(ch);
+	}
+
+	parse(_: Char, context: ParseContext): boolean {
+		const charIndex = context.charIndex;
+		let cIndex = charIndex + 1;
+		let c = context.charAt(cIndex);
+		while (ICM.INamePart(c)) {
+			cIndex++;
+			c = context.charAt(cIndex);
+		}
+		const token = new AtomicToken({
+			id: T.Identifier,
+			text: context.text(charIndex, cIndex),
+			start: charIndex, line: context.line, column: context.column
+		});
+		context.collect(token);
+		context.forward(cIndex - charIndex);
+		return true;
+	}
+
+	static readonly instance = new GsiIdentifierParser();
+}
+
+export class GsiDotParser extends BySingleCharTokenParser {
+	constructor() {
+		super('.');
+	}
+
+	matches(_: Char, context: ParseContext): boolean {
+		return ICM.INameStart(context.nextChar());
+	}
+
+	protected getTokenId(): GroovyTokenId {
+		return T.Dot;
+	}
+
+	static readonly instance = new GsiDotParser();
+}
 
 export abstract class GsInterpolationParser extends ByCharTokenParser {
 	protected static readonly IdentifierSelector: ParserSelector = new ParserSelector({
 		parsers: [GsiIdentifierParser.instance]
 	});
 	protected static readonly DotSelector: ParserSelector = new ParserSelector({
-		parsers: [DotParserInstance]
+		parsers: [GsiDotParser.instance]
 	});
 
 	constructor() {
