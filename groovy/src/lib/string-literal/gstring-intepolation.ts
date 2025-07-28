@@ -180,7 +180,7 @@ export abstract class GsBraceInterpolationParser extends ByCharTokenParser {
 	protected startBlock(_: Char, context: ParseContext): void {
 		const charIndex = context.charIndex;
 		const mark = new AtomicToken({
-			id: T.GsiStartMark,
+			id: T.GsiBraceStartMark,
 			text: `$\{`,
 			start: charIndex, line: context.line, column: context.column
 		});
@@ -200,6 +200,10 @@ export abstract class GsBraceInterpolationParser extends ByCharTokenParser {
 				throw new Error(`No token parser found for char[${c}] at [offset=${context.charIndex}, line=${context.line}, column=${context.column}].`);
 			}
 			parser.parse(c, context);
+			if (parser instanceof GsBraceInterpolationEndMarkParser) {
+				// end
+				break;
+			}
 			c = context.char();
 		}
 

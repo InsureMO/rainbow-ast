@@ -3,7 +3,6 @@ import * as chalk from 'chalk';
 import type {MatcherFunction} from 'expect';
 import {GroovyTokenId} from '../../src';
 
-export type NodeType = any;
 export type TokenSpec =
 	| [GroovyTokenId, number, number, number, string] // leaf node
 	| [GroovyTokenId, number, number, number, string, Array<TokenSpec>] // container node

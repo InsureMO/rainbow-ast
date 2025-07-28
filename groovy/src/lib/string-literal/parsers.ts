@@ -19,6 +19,9 @@ export const StringParsers = [
 	DsGsLiteralParser.instance
 ];
 
+/**
+ * {@link GsBraceInterpolationParser#initSelector}
+ */
 GsBraceInterpolationParser.initSelector(new ParserSelector({
 	parsers: [
 		GsBraceInterpolationEndMarkParser.instance,
