@@ -8,7 +8,7 @@ export const TsqSLStandaloneSymbolParsers = StandaloneSymbolParsers.filter(p => 
 export const SdqGsLStandaloneSymbolParsers = StandaloneSymbolParsers.filter(p => !['"', '\\', '$'].includes(p.firstChar));
 /** for triple double-quotes gstring literal, excludes ", \, $ */
 export const TdqGsLStandaloneSymbolParsers = StandaloneSymbolParsers.filter(p => !['\\', '$'].includes(p.firstChar));
-/** for slashy gstring literal, excludes /, \, $ */
-export const SGsLStandaloneSymbolParsers = StandaloneSymbolParsers.filter(p => !['/', '\\', '$'].includes(p.firstChar));
-/** for dollar slashy gstring literal, excludes $ */
-export const DsGsLStandaloneSymbolParsers = StandaloneSymbolParsers.filter(p => !['$'].includes(p.firstChar));
+/** for slashy gstring literal, excludes / */
+export const SGsLStandaloneSymbolParsers = StandaloneSymbolParsers.filter(p => !['/'].includes(p.firstChar));
+/** for dollar slashy gstring literal, same as standalone symbols */
+export const DsGsLStandaloneSymbolParsers = StandaloneSymbolParsers;

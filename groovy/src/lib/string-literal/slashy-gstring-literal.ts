@@ -84,9 +84,9 @@ export class SGsLiteralParser extends ByCharTokenParser {
 		return true;
 	}
 
-	matches(_: Char, context: ParseContext): boolean {
-		const [c2, c3] = context.nextChars(1);
-		return c2 === '"' && c3 === '"';
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	matches(_1: Char, _2: ParseContext): boolean {
+		return true;
 	}
 
 	private startBlock(_: Char, context: ParseContext): void {
