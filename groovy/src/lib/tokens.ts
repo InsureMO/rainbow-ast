@@ -224,6 +224,7 @@ export enum GroovyTokenId {
 	/** ... */ Ellipsis,
 	/** 1.0 */ InstanceOf,
 	// chars
+	Identifier,
 	Word,
 	UndeterminedChar,
 	// shebang

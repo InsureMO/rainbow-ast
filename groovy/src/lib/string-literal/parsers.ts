@@ -1,0 +1,31 @@
+import {CommentParsers} from '../comment';
+import {UndeterminedCharParser, WsTabNlParsers} from '../common-token';
+import {NumberParsers} from '../number-literal';
+import {ParserSelector} from '../token-parser';
+import {DsGsLiteralParser} from './dollar-slashy-gstring-literal';
+import {GsBraceInterpolationEndMarkParser, GsBraceInterpolationParser} from './gstring-intepolation';
+import {SdqGsLiteralParser} from './sdq-gstring-literal';
+import {SGsLiteralParser} from './slashy-gstring-literal';
+import {SsqSLiteralParser} from './ssq-string-literal';
+import {TdqGsLiteralParser} from './tdq-gstring-literal';
+import {TsqSLiteralParser} from './tsq-string-literal';
+
+export const StringParsers = [
+	SsqSLiteralParser.instance,
+	TsqSLiteralParser.instance,
+	SdqGsLiteralParser.instance,
+	TdqGsLiteralParser.instance,
+	SGsLiteralParser.instance,
+	DsGsLiteralParser.instance
+];
+
+GsBraceInterpolationParser.initSelector(new ParserSelector({
+	parsers: [
+		GsBraceInterpolationEndMarkParser.instance,
+		CommentParsers,
+		WsTabNlParsers,
+		NumberParsers,
+		StringParsers,
+		UndeterminedCharParser.instance
+	]
+}));

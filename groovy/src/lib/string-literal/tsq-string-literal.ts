@@ -1,11 +1,12 @@
 import {AtomicToken, BlockToken, Char} from '@rainbow-ast/core';
-import {CharsParsers, WsTabNlParsers} from '../common-token';
+import {CharsParsers, StandaloneSymbolParsers, WsTabNlParsers} from '../common-token';
 import {ParseContext} from '../parse-context';
 import {ByCharTokenParser, ParserSelector} from '../token-parser';
 import {T} from '../tokens';
-import {TqSLEscapeParsers} from './escape';
+import {BackslashEscapeParser, TqSLBadBackslashEscapeParser} from './backslash-escape';
 import {MLEraserParser} from './ml-eraser';
-import {TsqSLStandaloneSymbolParsers} from './standalone-symbol';
+import {OctalEscapeParser} from './octal-escape';
+import {QSLUnicodeEscapeParser} from './unicode-escape';
 
 export class TsqSLiteralEndMarkParser extends ByCharTokenParser {
 	constructor() {
@@ -33,12 +34,24 @@ export class TsqSLiteralEndMarkParser extends ByCharTokenParser {
 }
 
 export class TsqSLiteralParser extends ByCharTokenParser {
+	private static readonly StandaloneSymbolParsers = StandaloneSymbolParsers.filter(p => !['\\'].includes(p.firstChar));
 	private static readonly Selector: ParserSelector = new ParserSelector({
 		parsers: [
-			TqSLEscapeParsers,
+			BackslashEscapeParser.instanceB,
+			BackslashEscapeParser.instanceF,
+			BackslashEscapeParser.instanceN,
+			BackslashEscapeParser.instanceR,
+			BackslashEscapeParser.instanceT,
+			BackslashEscapeParser.instanceBackslash,
+			BackslashEscapeParser.instanceSingleQuote,
+			BackslashEscapeParser.instanceDoubleQuotes,
+			BackslashEscapeParser.instanceDollar,
+			TqSLBadBackslashEscapeParser.instance,
+			OctalEscapeParser.instance,
+			QSLUnicodeEscapeParser.instance,
 			MLEraserParser.instance,
 			TsqSLiteralEndMarkParser.instance,
-			TsqSLStandaloneSymbolParsers, WsTabNlParsers, CharsParsers
+			TsqSLiteralParser.StandaloneSymbolParsers, WsTabNlParsers, CharsParsers
 		]
 	});
 

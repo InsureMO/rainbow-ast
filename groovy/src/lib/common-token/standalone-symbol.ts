@@ -47,3 +47,5 @@ export const StandaloneSymbolParsers: Array<ByCharTokenParser> = ([
 	Object.defineProperty(ParserClass, 'name', {value: `Standalone${T[tokenId]}Parser`});
 	return new ParserClass();
 });
+
+export const DotParserInstance = StandaloneSymbolParsers.find(p => p.firstChar === '.');

@@ -1,11 +1,12 @@
 import {AtomicToken, BlockToken, Char} from '@rainbow-ast/core';
-import {CharsParsers, IsOperator, WsTabNlParsers} from '../common-token';
+import {CharsParsers, IsOperator, StandaloneSymbolParsers, WsTabNlParsers} from '../common-token';
 import {ParseContext} from '../parse-context';
 import {ByCharTokenParser, ParserSelector} from '../token-parser';
 import {T} from '../tokens';
-import {SGsLEscapeParsers} from './escape';
+import {BackslashEscapeParser} from './backslash-escape';
 import {MLEraserParser} from './ml-eraser';
-import {SGsLStandaloneSymbolParsers} from './standalone-symbol';
+import {SGsBraceInterpolationParser, SGsInterpolationParser} from './slashy-gstring-intepolation';
+import {SGsLUnicodeEscapeParser} from './unicode-escape';
 
 export class SGsLiteralEndMarkParser extends ByCharTokenParser {
 	constructor() {
@@ -33,12 +34,16 @@ export class SGsLiteralEndMarkParser extends ByCharTokenParser {
 }
 
 export class SGsLiteralParser extends ByCharTokenParser {
+	private static readonly StandaloneSymbolParsers = StandaloneSymbolParsers.filter(p => !['/'].includes(p.firstChar));
 	private static readonly Selector: ParserSelector = new ParserSelector({
 		parsers: [
-			SGsLEscapeParsers,
+			SGsInterpolationParser.instance,
+			SGsBraceInterpolationParser.instance,
+			BackslashEscapeParser.instanceSlash,
+			SGsLUnicodeEscapeParser.instance,
 			MLEraserParser.instance,
 			SGsLiteralEndMarkParser.instance,
-			SGsLStandaloneSymbolParsers, WsTabNlParsers, CharsParsers
+			SGsLiteralParser.StandaloneSymbolParsers, WsTabNlParsers, CharsParsers
 		]
 	});
 

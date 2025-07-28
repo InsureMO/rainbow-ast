@@ -1,10 +1,12 @@
 import {AtomicToken, BlockToken, Char} from '@rainbow-ast/core';
-import {CharsParsers, WsTabParsers} from '../common-token';
+import {CharsParsers, StandaloneSymbolParsers, WsTabParsers} from '../common-token';
 import {ParseContext} from '../parse-context';
 import {ByCharTokenParser, ParserSelector} from '../token-parser';
 import {T} from '../tokens';
-import {SqSLEscapeParsers} from './escape';
-import {SdqGsLStandaloneSymbolParsers} from './standalone-symbol';
+import {BackslashEscapeParser, SqSLBadBackslashEscapeParser} from './backslash-escape';
+import {DqGsBraceInterpolationParser, DqGsInterpolationParser} from './dq-gstring-intepolation';
+import {OctalEscapeParser} from './octal-escape';
+import {QSLUnicodeEscapeParser} from './unicode-escape';
 
 export class SdqGsLiteralEndMarkParser extends ByCharTokenParser {
 	constructor() {
@@ -32,11 +34,25 @@ export class SdqGsLiteralEndMarkParser extends ByCharTokenParser {
 }
 
 export class SdqGsLiteralParser extends ByCharTokenParser {
+	private static readonly StandaloneSymbolParsers = StandaloneSymbolParsers.filter(p => !['"', '\\', '$'].includes(p.firstChar));
 	private static readonly Selector: ParserSelector = new ParserSelector({
 		parsers: [
-			SqSLEscapeParsers,
+			DqGsInterpolationParser.instance,
+			DqGsBraceInterpolationParser.instance,
+			BackslashEscapeParser.instanceB,
+			BackslashEscapeParser.instanceF,
+			BackslashEscapeParser.instanceN,
+			BackslashEscapeParser.instanceR,
+			BackslashEscapeParser.instanceT,
+			BackslashEscapeParser.instanceBackslash,
+			BackslashEscapeParser.instanceSingleQuote,
+			BackslashEscapeParser.instanceDoubleQuotes,
+			BackslashEscapeParser.instanceDollar,
+			SqSLBadBackslashEscapeParser.instance,
+			OctalEscapeParser.instance,
+			QSLUnicodeEscapeParser.instance,
 			SdqGsLiteralEndMarkParser.instance,
-			SdqGsLStandaloneSymbolParsers, WsTabParsers, CharsParsers
+			SdqGsLiteralParser.StandaloneSymbolParsers, WsTabParsers, CharsParsers
 		]
 	});
 

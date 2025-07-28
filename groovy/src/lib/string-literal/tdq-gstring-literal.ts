@@ -1,11 +1,13 @@
 import {AtomicToken, BlockToken, Char} from '@rainbow-ast/core';
-import {CharsParsers, WsTabNlParsers} from '../common-token';
+import {CharsParsers, StandaloneSymbolParsers, WsTabNlParsers} from '../common-token';
 import {ParseContext} from '../parse-context';
 import {ByCharTokenParser, ParserSelector} from '../token-parser';
 import {T} from '../tokens';
-import {TqSLEscapeParsers} from './escape';
+import {BackslashEscapeParser, TqSLBadBackslashEscapeParser} from './backslash-escape';
+import {DqGsBraceInterpolationParser, DqGsInterpolationParser} from './dq-gstring-intepolation';
 import {MLEraserParser} from './ml-eraser';
-import {TdqGsLStandaloneSymbolParsers} from './standalone-symbol';
+import {OctalEscapeParser} from './octal-escape';
+import {QSLUnicodeEscapeParser} from './unicode-escape';
 
 export class TdqGsLiteralEndMarkParser extends ByCharTokenParser {
 	constructor() {
@@ -33,12 +35,26 @@ export class TdqGsLiteralEndMarkParser extends ByCharTokenParser {
 }
 
 export class TdqGsLiteralParser extends ByCharTokenParser {
+	private static readonly StandaloneSymbolParsers = StandaloneSymbolParsers.filter(p => !['\\', '$'].includes(p.firstChar));
 	private static readonly Selector: ParserSelector = new ParserSelector({
 		parsers: [
-			TqSLEscapeParsers,
+			DqGsInterpolationParser.instance,
+			DqGsBraceInterpolationParser.instance,
+			BackslashEscapeParser.instanceB,
+			BackslashEscapeParser.instanceF,
+			BackslashEscapeParser.instanceN,
+			BackslashEscapeParser.instanceR,
+			BackslashEscapeParser.instanceT,
+			BackslashEscapeParser.instanceBackslash,
+			BackslashEscapeParser.instanceSingleQuote,
+			BackslashEscapeParser.instanceDoubleQuotes,
+			BackslashEscapeParser.instanceDollar,
+			TqSLBadBackslashEscapeParser.instance,
+			OctalEscapeParser.instance,
+			QSLUnicodeEscapeParser.instance,
 			MLEraserParser.instance,
 			TdqGsLiteralEndMarkParser.instance,
-			TdqGsLStandaloneSymbolParsers, WsTabNlParsers, CharsParsers
+			TdqGsLiteralParser.StandaloneSymbolParsers, WsTabNlParsers, CharsParsers
 		]
 	});
 

@@ -1,11 +1,12 @@
 import {AtomicToken, BlockToken, Char} from '@rainbow-ast/core';
-import {CharsParsers, WsTabNlParsers} from '../common-token';
+import {CharsParsers, StandaloneSymbolParsers, WsTabNlParsers} from '../common-token';
 import {ParseContext} from '../parse-context';
 import {ByCharTokenParser, ParserSelector} from '../token-parser';
 import {T} from '../tokens';
-import {DsGsLEscapeParsers} from './escape';
+import {DollarEscapeParser} from './dollar-escape';
+import {DsGsBraceInterpolationParser, DsGsInterpolationParser} from './dollar-slashy-gstring-intepolation';
 import {MLEraserParser} from './ml-eraser';
-import {DsGsLStandaloneSymbolParsers} from './standalone-symbol';
+import {SGsLUnicodeEscapeParser} from './unicode-escape';
 
 export class DsGsLiteralEndMarkParser extends ByCharTokenParser {
 	constructor() {
@@ -34,10 +35,14 @@ export class DsGsLiteralEndMarkParser extends ByCharTokenParser {
 export class DsGsLiteralParser extends ByCharTokenParser {
 	private static readonly Selector: ParserSelector = new ParserSelector({
 		parsers: [
-			DsGsLEscapeParsers,
+			DsGsInterpolationParser.instance,
+			DsGsBraceInterpolationParser.instance,
+			DollarEscapeParser.instanceDollar,
+			DollarEscapeParser.instanceSlash,
+			SGsLUnicodeEscapeParser.instance,
 			MLEraserParser.instance,
 			DsGsLiteralEndMarkParser.instance,
-			DsGsLStandaloneSymbolParsers, WsTabNlParsers, CharsParsers
+			StandaloneSymbolParsers, WsTabNlParsers, CharsParsers
 		]
 	});
 
