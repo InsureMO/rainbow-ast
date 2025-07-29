@@ -87,12 +87,12 @@ export const l45_48 = (l: { v: number }): Array<TokenSpec> => {
 		[T.Newline, 684, 685, l.v++, '\n'],
 		[T.SdqGsLiteral, 685, 694, l.v, '"${}${ }"', [
 			[T.SdqGsLMark, 685, 686, l.v, '"'],
-			[T.GsInterpolation, 686, 689, l.v, '\${}', [
-				[T.GsiBraceStartMark, 686, 688, l.v, '\${'],
+			[T.GsInterpolation, 686, 689, l.v, '${}', [
+				[T.GsiBraceStartMark, 686, 688, l.v, '${'],
 				[T.GsiBraceEndMark, 688, 689, l.v, `}`]
 			]],
-			[T.GsInterpolation, 689, 693, l.v, `\${ }`, [
-				[T.GsiBraceStartMark, 689, 691, l.v, '\${'],
+			[T.GsInterpolation, 689, 693, l.v, '${ }', [
+				[T.GsiBraceStartMark, 689, 691, l.v, '${'],
 				[T.Whitespaces, 691, 692, l.v, ' '],
 				[T.GsiBraceEndMark, 692, 693, l.v, `}`]
 			]],
@@ -101,12 +101,12 @@ export const l45_48 = (l: { v: number }): Array<TokenSpec> => {
 		[T.Newline, 694, 695, l.v++, '\n'],
 		[T.TdqGsLiteral, 695, 708, l.v, '"""${}${ }"""', [
 			[T.TdqGsLMark, 695, 698, l.v, '"""'],
-			[T.GsInterpolation, 698, 701, l.v, '\${}', [
-				[T.GsiBraceStartMark, 698, 700, l.v, '\${'],
+			[T.GsInterpolation, 698, 701, l.v, '${}', [
+				[T.GsiBraceStartMark, 698, 700, l.v, '${'],
 				[T.GsiBraceEndMark, 700, 701, l.v, `}`]
 			]],
-			[T.GsInterpolation, 701, 705, l.v, `\${ }`, [
-				[T.GsiBraceStartMark, 701, 703, l.v, '\${'],
+			[T.GsInterpolation, 701, 705, l.v, '${ }', [
+				[T.GsiBraceStartMark, 701, 703, l.v, '${'],
 				[T.Whitespaces, 703, 704, l.v, ' '],
 				[T.GsiBraceEndMark, 704, 705, l.v, `}`]
 			]],
