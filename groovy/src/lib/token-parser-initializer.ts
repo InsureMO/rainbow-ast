@@ -7,12 +7,14 @@ import {
 	WsTabNlParsers
 } from './common-token';
 import {CompilationUnitParser} from './compilation-unit';
+import {ImportDeclParser} from './import-decl';
 import {NumberParsers} from './number-literal';
 import {PackageDeclParser} from './package-decl';
 import {GsBraceInterpolationParser, StringParsers} from './string-literal';
 
 const CommonParsers = [
 	PackageDeclParser.instance,
+	ImportDeclParser.instance,
 	CommentParsers,
 	WsTabNlParsers,
 	NumberParsers,

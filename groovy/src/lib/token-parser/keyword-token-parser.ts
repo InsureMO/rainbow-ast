@@ -72,3 +72,11 @@ export abstract class KeywordTokenParser extends ByCharTokenParser {
 		});
 	}
 }
+
+export abstract class KeywordOnlyTokenParser extends KeywordTokenParser {
+	parse(ch: Char, context: ParseContext): boolean {
+		context.collect(this.createToken(ch, context));
+		context.forward(this.keyword.length);
+		return true;
+	}
+}
