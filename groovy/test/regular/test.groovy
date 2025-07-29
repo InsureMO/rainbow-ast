@@ -57,3 +57,11 @@ $/$abc $/$$$$$abc/$
 $/$/${abc} $abc/$
 $/$abc $/${abc}/$
 $/$abc $/$$${abc}/$
+// package declaration
+package java.util
+package	java./*
+*/util;
+package java..
+package java.util.
+package java util
+package as.def.var.record.sealed.permits.yield.in
