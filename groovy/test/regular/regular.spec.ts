@@ -13,6 +13,7 @@ import {l4_5} from './l4.5';
 import {l40_44} from './l40.44';
 import {l45_48} from './l45.48';
 import {l49} from './l49';
+import {l50_59} from './l50.59';
 import {l6_15} from './l6.15';
 
 const readFileAsText = (filePath: string): string => {
@@ -37,7 +38,8 @@ describe('Regular test', () => {
 			...l35_39(l),
 			...l40_44(l),
 			...l45_48(l),
-			...l49(l)
+			...l49(l),
+			...l50_59(l)
 		]]);
 	});
 });

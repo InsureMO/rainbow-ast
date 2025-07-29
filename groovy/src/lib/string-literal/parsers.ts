@@ -1,5 +1,5 @@
 import {CommentParsers} from '../comment';
-import {UndeterminedCharParser, WsTabNlParsers} from '../common-token';
+import {IdentifierParser, UndeterminedCharParser, WsTabNlParsers} from '../common-token';
 import {NumberParsers} from '../number-literal';
 import {ParserSelector} from '../token-parser';
 import {DsGsLiteralParser} from './dollar-slashy-gstring-literal';
@@ -29,6 +29,7 @@ GsBraceInterpolationParser.initSelector(new ParserSelector({
 		WsTabNlParsers,
 		NumberParsers,
 		StringParsers,
+		IdentifierParser.instance,
 		UndeterminedCharParser.instance
 	]
 }));

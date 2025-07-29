@@ -47,3 +47,13 @@ $/\
 "${}${ }"
 """${}${ }"""
 /$a$a.$a.b$$$_$1$$ a${}${ }$/
+$/abc $$$abc $abc/$
+$/abc $abc $$$abc/$
+$/abc $$${abc} $abc/$
+$/abc ${abc} $$${abc}/$
+$/$/$abc $abc/$
+$/$abc $/$abc/$
+$/$abc $/$$$$$abc/$
+$/$/${abc} $abc/$
+$/$abc $/${abc}/$
+$/$abc $/$$${abc}/$
