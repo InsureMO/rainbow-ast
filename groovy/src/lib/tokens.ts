@@ -236,6 +236,8 @@ export enum GroovyTokenId {
 	MLComment,
 	/** /* */ MLCommentStartMark,
 	/** * / (no blank in the middle) */ MLCommentEndMark,
+	// package declaration
+	PackageDecl,
 }
 
 export const T = GroovyTokenId;

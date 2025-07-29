@@ -1,23 +1,21 @@
-import {CommentParsers} from '../comment';
-import {IdentifierParser, UndeterminedCharParser, WsTabNlParsers} from '../common-token';
-import {NumberParsers} from '../number-literal';
 import {ParseContext} from '../parse-context';
 import {ShebangParser} from '../shebang';
-import {StringParsers} from '../string-literal';
-import {ParserSelector} from '../token-parser';
+import {ParserSelector, ParserSelectorArgs} from '../token-parser';
 
 export class CompilationUnitParser {
-	private static readonly Selector: ParserSelector = new ParserSelector({
-		parsers: [
-			ShebangParser.instance,
-			CommentParsers,
-			WsTabNlParsers,
-			NumberParsers,
-			StringParsers,
-			IdentifierParser.instance,
-			UndeterminedCharParser.instance
-		]
-	});
+	private static Selector: ParserSelector;
+
+	static initSelector(parsers: ParserSelectorArgs['parsers']) {
+		if (CompilationUnitParser.Selector != null) {
+			throw new Error('CompilationUnitParser.Selector is initialized.');
+		}
+		CompilationUnitParser.Selector = new ParserSelector({
+			parsers: [
+				ShebangParser.instance,
+				...parsers
+			]
+		});
+	}
 
 	parse(context: ParseContext): boolean {
 		let c = context.char();

@@ -1,7 +1,13 @@
 import {AtomicToken, BlockToken, Char} from '@rainbow-ast/core';
 import {JCM} from '@rainbow-ast/java-base';
 import {ParseContext} from '../parse-context';
-import {ByCharTokenParser, ByFuncTokenParser, BySingleCharTokenParser, ParserSelector} from '../token-parser';
+import {
+	ByCharTokenParser,
+	ByFuncTokenParser,
+	BySingleCharTokenParser,
+	ParserSelector,
+	ParserSelectorArgs
+} from '../token-parser';
 import {GroovyTokenId, T} from '../tokens';
 
 export class InterpolationCharMatchFunctions {
@@ -162,11 +168,16 @@ export abstract class GsBraceInterpolationParser extends ByCharTokenParser {
 	 * so move the selector initializing to parsers.ts to void it,
 	 * mainly remove the StringParsers importing statement from this file.
 	 */
-	static initSelector(selector: ParserSelector) {
+	static initSelector(parsers: ParserSelectorArgs['parsers']) {
 		if (GsBraceInterpolationParser.Selector != null) {
 			throw new Error('GsBraceInterpolationParser.Selector is initialized.');
 		}
-		GsBraceInterpolationParser.Selector = selector;
+		GsBraceInterpolationParser.Selector = new ParserSelector({
+			parsers: [
+				GsBraceInterpolationEndMarkParser.instance,
+				...parsers
+			]
+		});
 	}
 
 	constructor() {

@@ -49,3 +49,4 @@ export const StandaloneSymbolParsers: Array<ByCharTokenParser> = ([
 });
 
 export const DotParserInstance = StandaloneSymbolParsers.find(p => p.firstChar === '.');
+export const SemicolonParserInstance = StandaloneSymbolParsers.find(p => p.firstChar === ';');
