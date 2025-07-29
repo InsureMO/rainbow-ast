@@ -61,7 +61,7 @@ $/$abc $/$$${abc}/$
 package java.util
 package	java./*
 */util;
-package java..
+package java..;
 package java.util.
 package java util
 package as.def.var.record.sealed.permits.yield.in

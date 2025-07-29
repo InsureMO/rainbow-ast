@@ -1,5 +1,11 @@
 import {CommentParsers} from './comment';
-import {DotParserInstance, IdentifierParser, UndeterminedCharParser, WsTabNlParsers} from './common-token';
+import {
+	DotParserInstance,
+	IdentifierParser,
+	SemicolonParserInstance,
+	UndeterminedCharParser,
+	WsTabNlParsers
+} from './common-token';
 import {CompilationUnitParser} from './compilation-unit';
 import {NumberParsers} from './number-literal';
 import {PackageDeclParser} from './package-decl';
@@ -12,6 +18,7 @@ const CommonParsers = [
 	NumberParsers,
 	StringParsers,
 	DotParserInstance,
+	SemicolonParserInstance,
 	IdentifierParser.instance,
 	UndeterminedCharParser.instance
 ];

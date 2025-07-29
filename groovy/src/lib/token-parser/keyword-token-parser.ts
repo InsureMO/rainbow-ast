@@ -1,7 +1,7 @@
 import {AtomicToken, Char} from '@rainbow-ast/core';
 import {JCM} from '@rainbow-ast/java-base';
 import {ParseContext} from '../parse-context';
-import {GroovyTokenId} from '../tokens';
+import {GroovyTokenId, T} from '../tokens';
 import {ByCharTokenParser} from './by-char-token-parser';
 
 export abstract class KeywordTokenParser extends ByCharTokenParser {
@@ -20,6 +20,39 @@ export abstract class KeywordTokenParser extends ByCharTokenParser {
 
 	get restChars(): string {
 		return this._restChars;
+	}
+
+	isAvailable(context: ParseContext): boolean {
+		const block = context.block();
+		const children = block.children;
+
+		let childIndex = children.length - 1;
+		let child = children[childIndex];
+
+		while (childIndex >= 0) {
+			const childTokenId = child.id;
+			switch (childTokenId) {
+				case T.SLComment:
+				case T.MLComment:
+				case T.Whitespaces:
+				case T.Tabs:
+				case T.Newline: {
+					// ignore above token
+					childIndex--;
+					child = children[childIndex];
+					break;
+				}
+				case T.Dot:
+				case T.SafeDot:
+				case T.SafeChainDot: {
+					return false;
+				}
+				default: {
+					return true;
+				}
+			}
+		}
+		return true;
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars

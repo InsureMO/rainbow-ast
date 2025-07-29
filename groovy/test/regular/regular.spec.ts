@@ -27,7 +27,7 @@ describe('Regular test', () => {
 		const text = readFileAsText('test.groovy');
 		const ast = DGP.parse(text, {verbose: true, shebang: true});
 		const l = {v: 0};
-		AstChecker.check(ast, [T.CompilationUnit, l.v++, text.length, 1, text, [
+		AstChecker.check(ast, [T.CompilationUnit, l.v++, 1, text, [
 			...l1(l),
 			...l2(l),
 			...l3(l),

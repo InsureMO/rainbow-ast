@@ -3,9 +3,12 @@ import * as chalk from 'chalk';
 import type {MatcherFunction} from 'expect';
 import {GroovyTokenId} from '../../src';
 
+export type Offset = number;
+export type Line = number;
+export type Content = string;
 export type TokenSpec =
-	| [GroovyTokenId, number, number, number, string] // leaf node
-	| [GroovyTokenId, number, number, number, string, Array<TokenSpec>] // container node
+	| [GroovyTokenId, Offset, Line, Content] // leaf node
+	| [GroovyTokenId, Offset, Line, Content, Array<TokenSpec>] // container node
 
 const Is: MatcherFunction<[expected: any, where: string]> = function (received, expected, where: string) {
 	return {
@@ -42,13 +45,13 @@ export class AstChecker {
 	}
 
 	private doCheck(token: Token, spec: TokenSpec, bullet: string) {
-		const [tokenId, startOffset, endOffset, startLine, text, children] = spec;
+		const [tokenId, startOffset, startLine, text, children] = spec;
 		const indent = new Array(bullet.split('.').length - 2).fill('\t').join('');
 		try {
 			expect(token).not.toBeNull();
 			expect(token.id).is(tokenId, 'TokenId');
 			expect(token.start).is(startOffset, 'StartOffset');
-			expect(token.end).is(endOffset, 'EndOffset');
+			expect(token.end).is(startOffset + text.length, 'EndOffset');
 			expect(token.line).is(startLine, 'StartLine');
 			expect(token.text).is(text, 'Text');
 			this._logs.push([
@@ -56,7 +59,7 @@ export class AstChecker {
 				bullet,
 				' ✅ ',
 				`Check [type=${GroovyTokenId[tokenId]}, `,
-				`offsetInDoc=[${startOffset}, ${endOffset}], `,
+				`offsetInDoc=[${startOffset}, ${startOffset + text.length}], `,
 				`xyInDoc=[${startLine}, ${token.column}], `,
 				`text=${PrintUtils.escapeForPrint(text)}`,
 				'].'
@@ -67,7 +70,7 @@ export class AstChecker {
 				bullet,
 				' 💔 ',
 				`Check [type=${GroovyTokenId[tokenId]}, `,
-				`offsetInDoc=[${startOffset}, ${endOffset}], `,
+				`offsetInDoc=[${startOffset}, ${startOffset + text.length}], `,
 				`xyInDoc=[${startLine}, ${token.column}], `,
 				`text=${PrintUtils.escapeForPrint(text)}`,
 				'].'
