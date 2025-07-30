@@ -2,7 +2,7 @@ import {AtomicToken, Char} from '@rainbow-ast/core';
 import {JCM} from '@rainbow-ast/java-base';
 import {ParseContext} from '../parse-context';
 import {GroovyTokenId, T} from '../tokens';
-import {ByCharTokenParser} from './by-char-token-parser';
+import {ByCharTokenParser} from './token-parser';
 
 export abstract class KeywordTokenParser extends ByCharTokenParser {
 	private readonly _keyword: string;
@@ -73,7 +73,10 @@ export abstract class KeywordTokenParser extends ByCharTokenParser {
 	}
 }
 
-export abstract class KeywordOnlyTokenParser extends KeywordTokenParser {
+/**
+ * collect parsed keyword as atomic token.
+ */
+export abstract class SingleKeywordTokenParser extends KeywordTokenParser {
 	parse(ch: Char, context: ParseContext): boolean {
 		context.collect(this.createToken(ch, context));
 		context.forward(this.keyword.length);

@@ -1,7 +1,10 @@
-import {KeywordOnlyTokenParser} from '../token-parser';
+import {SingleKeywordTokenParser} from '../token-parser';
 import {GroovyTokenId, T} from '../tokens';
 
-export class StaticKwOnlyParser extends KeywordOnlyTokenParser {
+/**
+ * skw = Single keyword
+ */
+export class SkwStaticParser extends SingleKeywordTokenParser {
 	constructor() {
 		super('static');
 	}
@@ -10,5 +13,5 @@ export class StaticKwOnlyParser extends KeywordOnlyTokenParser {
 		return T.STATIC;
 	}
 
-	static readonly instance = new StaticKwOnlyParser();
+	static readonly instance = new SkwStaticParser();
 }

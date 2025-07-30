@@ -59,7 +59,7 @@ export const l60_67 = (l: { v: number }): Array<TokenSpec> => {
 		]],
 		[T.Identifier, 1046, l.v, 'util'],
 		[T.Newline, 1050, l.v++, '\n'],
-		[T.PackageDecl, 1051, l.v, 'package as.def.var.record.sealed.permits.yield.in', [
+		[T.PackageDecl, 1051, l.v, 'package as.def.var.record.sealed.trait.permits.yield.in', [
 			[T.PACKAGE, 1051, l.v, 'package'],
 			[T.Whitespaces, 1058, l.v, ' '],
 			[T.Identifier, 1059, l.v, 'as'],
@@ -72,12 +72,14 @@ export const l60_67 = (l: { v: number }): Array<TokenSpec> => {
 			[T.Dot, 1076, l.v, '.'],
 			[T.Identifier, 1077, l.v, 'sealed'],
 			[T.Dot, 1083, l.v, '.'],
-			[T.Identifier, 1084, l.v, 'permits'],
-			[T.Dot, 1091, l.v, '.'],
-			[T.Identifier, 1092, l.v, 'yield'],
+			[T.Identifier, 1084, l.v, 'trait'],
+			[T.Dot, 1089, l.v, '.'],
+			[T.Identifier, 1090, l.v, 'permits'],
 			[T.Dot, 1097, l.v, '.'],
-			[T.Identifier, 1098, l.v, 'in']
+			[T.Identifier, 1098, l.v, 'yield'],
+			[T.Dot, 1103, l.v, '.'],
+			[T.Identifier, 1104, l.v, 'in']
 		]],
-		[T.Newline, 1100, l.v++, '\n']
+		[T.Newline, 1106, l.v++, '\n']
 	];
 };

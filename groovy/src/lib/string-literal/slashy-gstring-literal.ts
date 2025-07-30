@@ -1,7 +1,7 @@
 import {AtomicToken, BlockToken, Char} from '@rainbow-ast/core';
 import {CharsParsers, IsOperator, StandaloneSymbolParsers, WsTabNlParsers} from '../common-token';
 import {ParseContext} from '../parse-context';
-import {ByCharTokenParser, ParserSelector} from '../token-parser';
+import {AfterChildParsed, ByCharTokenParser, ParserSelector, TokenParser} from '../token-parser';
 import {T} from '../tokens';
 import {BackslashEscapeParser} from './backslash-escape';
 import {MLEraserParser} from './ml-eraser';
@@ -94,7 +94,7 @@ export class SGsLiteralParser extends ByCharTokenParser {
 		return true;
 	}
 
-	private startBlock(_: Char, context: ParseContext): void {
+	protected startBlock(_: Char, context: ParseContext): void {
 		const charIndex = context.charIndex;
 		const mark = new AtomicToken({
 			id: T.SGsLMark,
@@ -106,26 +106,20 @@ export class SGsLiteralParser extends ByCharTokenParser {
 		context.forward(1);
 	}
 
-	parse(ch: Char, context: ParseContext): boolean {
-		this.startBlock(ch, context);
+	protected getInitBlockParserSelector(): ParserSelector {
+		return SGsLiteralParser.Selector;
+	}
 
-		let c = context.char();
-		while (c != null) {
-			const parser = SGsLiteralParser.Selector.find(c, context);
-			if (parser == null) {
-				break;
-			}
-			parser.parse(c, context);
-			if (parser instanceof SGsLiteralEndMarkParser) {
-				// end
-				break;
-			}
-			c = context.char();
+	protected afterChildParsed(_: ParseContext, parser: TokenParser): AfterChildParsed {
+		if (parser === SGsLiteralEndMarkParser.instance) {
+			return 'break';
+		} else {
+			return (void 0);
 		}
+	}
 
-		context.rise();
-
-		return true;
+	parse(ch: Char, context: ParseContext): boolean {
+		return this.parseAsBlock(ch, context);
 	}
 
 	static readonly instance = new SGsLiteralParser();

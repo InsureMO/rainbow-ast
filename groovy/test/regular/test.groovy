@@ -64,4 +64,4 @@ package	java./*
 package java..;
 package java.util.
 package java util
-package as.def.var.record.sealed.permits.yield.in
+package as.def.var.record.sealed.trait.permits.yield.in

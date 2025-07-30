@@ -1,14 +1,14 @@
 import {BlockToken, Char} from '@rainbow-ast/core';
 import {MLCommentParser} from '../comment';
-import {DotParserInstance, QualifiedNameParser, SemicolonParserInstance, WsTabParsers} from '../common-token';
+import {DotParserInstance, PackageNameParser, SemicolonParserInstance, WsTabParsers} from '../common-token';
 import {ParseContext} from '../parse-context';
-import {KeywordTokenParser, ParserSelector} from '../token-parser';
+import {AfterChildParsed, KeywordTokenParser, ParserSelector, TokenParser} from '../token-parser';
 import {GroovyTokenId, T} from '../tokens';
 
 export class PackageDeclParser extends KeywordTokenParser {
-	private static readonly QualifiedNameSelector: ParserSelector = new ParserSelector({
+	private static readonly NameSelector: ParserSelector = new ParserSelector({
 		parsers: [
-			QualifiedNameParser.instance,
+			PackageNameParser.instance,
 			SemicolonParserInstance,
 			MLCommentParser.instance, WsTabParsers
 		]
@@ -29,38 +29,31 @@ export class PackageDeclParser extends KeywordTokenParser {
 		return T.PACKAGE;
 	}
 
-	private startBlock(ch: Char, context: ParseContext): void {
+	protected startBlock(ch: Char, context: ParseContext): void {
 		const keyword = this.createToken(ch, context);
 		const decl = new BlockToken(T.PackageDecl, keyword);
 		context.sink(decl);
 		context.forward(7);
 	}
 
-	parse(ch: Char, context: ParseContext): boolean {
-		this.startBlock(ch, context);
+	protected getInitBlockParserSelector(): ParserSelector {
+		return PackageDeclParser.NameSelector;
+	}
 
-		let selector = PackageDeclParser.QualifiedNameSelector;
-
-		let c = context.char();
-		while (c != null) {
-			const parser = selector.find(c, context);
-			if (parser == null) {
-				break;
-			}
-			parser.parse(c, context);
-			if (parser === SemicolonParserInstance) {
-				break;
-			} else if (parser === QualifiedNameParser.instance) {
-				selector = PackageDeclParser.DotSelector;
-			} else if (parser === DotParserInstance) {
-				selector = PackageDeclParser.QualifiedNameSelector;
-			}
-			c = context.char();
+	protected afterChildParsed(_: ParseContext, parser: TokenParser): AfterChildParsed {
+		if (parser === SemicolonParserInstance) {
+			return 'break';
+		} else if (parser === PackageNameParser.instance) {
+			return PackageDeclParser.DotSelector;
+		} else if (parser === DotParserInstance) {
+			return PackageDeclParser.NameSelector;
+		} else {
+			return (void 0);
 		}
+	}
 
-		context.rise();
-
-		return true;
+	parse(ch: Char, context: ParseContext): boolean {
+		return this.parseAsBlock(ch, context);
 	}
 
 	static readonly instance = new PackageDeclParser();

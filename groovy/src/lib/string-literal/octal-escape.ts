@@ -18,7 +18,7 @@ export class OctalEscapeParser extends ByCharTokenParser {
 		return JCM.Oct(context.nextChar());
 	}
 
-	private startBlock(_: Char, context: ParseContext): void {
+	protected startBlock(_: Char, context: ParseContext): void {
 		const charIndex = context.charIndex;
 		const mark = new AtomicToken({
 			id: T.OctalEscapeStartMark,

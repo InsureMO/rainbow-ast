@@ -3,91 +3,100 @@ import {MLCommentParser} from '../comment';
 import {
 	AsteriskParserInstance,
 	DotParserInstance,
-	QualifiedNameParser,
+	PackageNameParser,
 	SemicolonParserInstance,
 	WsTabParsers
 } from '../common-token';
-import {StaticKwOnlyParser} from '../keyword';
+import {AliasAsParser, SkwStaticParser} from '../keyword';
 import {ParseContext} from '../parse-context';
-import {KeywordTokenParser, ParserSelector} from '../token-parser';
+import {AfterChildParsed, KeywordTokenParser, ParserSelector, TokenParser} from '../token-parser';
 import {GroovyTokenId, T} from '../tokens';
 
 export class ImportDeclParser extends KeywordTokenParser {
-	private static readonly StaticAndQualifiedNameSelector: ParserSelector = new ParserSelector({
+	private static readonly StaticAndNameSelector: ParserSelector = new ParserSelector({
 		parsers: [
-			StaticKwOnlyParser.instance,
-			QualifiedNameParser.instance,
+			SkwStaticParser.instance,
+			PackageNameParser.instance,
 			SemicolonParserInstance,
 			MLCommentParser.instance, WsTabParsers
 		]
 	});
-	private static readonly QualifiedNameSelector: ParserSelector = new ParserSelector({
+	private static readonly NameSelector: ParserSelector = new ParserSelector({
 		parsers: [
-			QualifiedNameParser.instance,
+			PackageNameParser.instance,
 			SemicolonParserInstance,
 			MLCommentParser.instance, WsTabParsers
 		]
 	});
 	private static readonly DotSelector: ParserSelector = new ParserSelector({
 		parsers: [
+			AliasAsParser.instance,
 			DotParserInstance,
 			SemicolonParserInstance,
 			MLCommentParser.instance, WsTabParsers
 		]
 	});
-	private static readonly QualifiedNameAndAsteriskSelector: ParserSelector = new ParserSelector({
+	private static readonly NameAndAsteriskSelector: ParserSelector = new ParserSelector({
 		parsers: [
-			QualifiedNameParser.instance,
+			PackageNameParser.instance,
 			AsteriskParserInstance,
+			SemicolonParserInstance,
+			MLCommentParser.instance, WsTabParsers
+		]
+	});
+	private static readonly AsSelector: ParserSelector = new ParserSelector({
+		parsers: [
+			AliasAsParser.instance,
+			SemicolonParserInstance,
+			MLCommentParser.instance, WsTabParsers
+		]
+	});
+	private static readonly EndSelector: ParserSelector = new ParserSelector({
+		parsers: [
 			SemicolonParserInstance,
 			MLCommentParser.instance, WsTabParsers
 		]
 	});
 
 	constructor() {
-		super('package');
+		super('import');
 	}
 
 	protected getTokenId(): GroovyTokenId {
 		return T.IMPORT;
 	}
 
-	private startBlock(ch: Char, context: ParseContext): void {
+	protected startBlock(ch: Char, context: ParseContext): void {
 		const keyword = this.createToken(ch, context);
 		const decl = new BlockToken(T.ImportDecl, keyword);
 		context.sink(decl);
-		context.forward(7);
+		context.forward(6);
+	}
+
+	protected getInitBlockParserSelector(): ParserSelector {
+		return ImportDeclParser.StaticAndNameSelector;
+	}
+
+	protected afterChildParsed(_: ParseContext, parser: TokenParser): AfterChildParsed {
+		if (parser === SemicolonParserInstance) {
+			return 'break';
+		} else if (parser === SkwStaticParser.instance) {
+			return ImportDeclParser.NameSelector;
+		} else if (parser === PackageNameParser.instance) {
+			return ImportDeclParser.DotSelector;
+		} else if (parser === DotParserInstance) {
+			return ImportDeclParser.NameAndAsteriskSelector;
+		} else if (parser === AsteriskParserInstance) {
+			return ImportDeclParser.AsSelector;
+		} else if (parser === AliasAsParser.instance) {
+			return ImportDeclParser.EndSelector;
+		} else {
+			return (void 0);
+		}
 	}
 
 	parse(ch: Char, context: ParseContext): boolean {
-		this.startBlock(ch, context);
-
-		let selector = ImportDeclParser.StaticAndQualifiedNameSelector;
-
-		let c = context.char();
-		while (c != null) {
-			const parser = selector.find(c, context);
-			if (parser == null) {
-				break;
-			}
-			parser.parse(c, context);
-			if (parser === SemicolonParserInstance) {
-				break;
-			} else if (parser === StaticKwOnlyParser.instance) {
-				selector = ImportDeclParser.QualifiedNameSelector;
-			} else if (parser === QualifiedNameParser.instance) {
-				selector = ImportDeclParser.DotSelector;
-			} else if (parser === DotParserInstance) {
-				selector = ImportDeclParser.QualifiedNameAndAsteriskSelector;
-			} else if (parser === AsteriskParserInstance) {
-				
-			}
-			c = context.char();
-		}
-
-		context.rise();
-
-		return true;
+		return this.parseAsBlock(ch, context);
 	}
 
 	static readonly instance = new ImportDeclParser();

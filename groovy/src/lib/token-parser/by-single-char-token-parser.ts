@@ -1,7 +1,7 @@
 import {AtomicToken, Char} from '@rainbow-ast/core';
 import {ParseContext} from '../parse-context';
 import {GroovyTokenId} from '../tokens';
-import {ByCharTokenParser} from './by-char-token-parser';
+import {ByCharTokenParser} from './token-parser';
 
 export abstract class BySingleCharTokenParser extends ByCharTokenParser {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars

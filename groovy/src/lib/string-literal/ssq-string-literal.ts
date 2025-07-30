@@ -1,7 +1,7 @@
 import {AtomicToken, BlockToken, Char} from '@rainbow-ast/core';
 import {CharsParsers, StandaloneSymbolParsers, WsTabParsers} from '../common-token';
 import {ParseContext} from '../parse-context';
-import {ByCharTokenParser, ParserSelector} from '../token-parser';
+import {AfterChildParsed, ByCharTokenParser, ParserSelector, TokenParser} from '../token-parser';
 import {T} from '../tokens';
 import {BackslashEscapeParser, SqSLBadBackslashEscapeParser} from './backslash-escape';
 import {OctalEscapeParser} from './octal-escape';
@@ -62,7 +62,7 @@ export class SsqSLiteralParser extends ByCharTokenParser {
 		return c2 !== '\'' || c3 !== '\'';
 	}
 
-	private startBlock(_: Char, context: ParseContext): void {
+	protected startBlock(_: Char, context: ParseContext): void {
 		const charIndex = context.charIndex;
 		const mark = new AtomicToken({
 			id: T.SsqSLMark,
@@ -74,26 +74,20 @@ export class SsqSLiteralParser extends ByCharTokenParser {
 		context.forward(1);
 	}
 
-	parse(ch: Char, context: ParseContext): boolean {
-		this.startBlock(ch, context);
+	protected getInitBlockParserSelector(): ParserSelector {
+		return SsqSLiteralParser.Selector;
+	}
 
-		let c = context.char();
-		while (c != null) {
-			const parser = SsqSLiteralParser.Selector.find(c, context);
-			if (parser == null) {
-				break;
-			}
-			parser.parse(c, context);
-			if (parser instanceof SsqSLiteralEndMarkParser) {
-				// end
-				break;
-			}
-			c = context.char();
+	protected afterChildParsed(_: ParseContext, parser: TokenParser): AfterChildParsed {
+		if (parser instanceof SsqSLiteralEndMarkParser) {
+			return 'break';
+		} else {
+			return (void 0);
 		}
+	}
 
-		context.rise();
-
-		return true;
+	parse(ch: Char, context: ParseContext): boolean {
+		return this.parseAsBlock(ch, context);
 	}
 
 	static readonly instance = new SsqSLiteralParser();

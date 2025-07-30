@@ -1,7 +1,7 @@
 import {AtomicToken, BlockToken, Char} from '@rainbow-ast/core';
 import {CharsParsers, StandaloneSymbolParsers, WsTabNlParsers} from '../common-token';
 import {ParseContext} from '../parse-context';
-import {ByCharTokenParser, ParserSelector} from '../token-parser';
+import {AfterChildParsed, ByCharTokenParser, ParserSelector, TokenParser} from '../token-parser';
 import {T} from '../tokens';
 import {BackslashEscapeParser, TqSLBadBackslashEscapeParser} from './backslash-escape';
 import {DqGsBraceInterpolationParser, DqGsInterpolationParser} from './dq-gstring-intepolation';
@@ -67,7 +67,7 @@ export class TdqGsLiteralParser extends ByCharTokenParser {
 		return c2 === '"' && c3 === '"';
 	}
 
-	private startBlock(_: Char, context: ParseContext): void {
+	protected startBlock(_: Char, context: ParseContext): void {
 		const charIndex = context.charIndex;
 		const mark = new AtomicToken({
 			id: T.TdqGsLMark,
@@ -79,26 +79,20 @@ export class TdqGsLiteralParser extends ByCharTokenParser {
 		context.forward(3);
 	}
 
-	parse(ch: Char, context: ParseContext): boolean {
-		this.startBlock(ch, context);
+	protected getInitBlockParserSelector(): ParserSelector {
+		return TdqGsLiteralParser.Selector;
+	}
 
-		let c = context.char();
-		while (c != null) {
-			const parser = TdqGsLiteralParser.Selector.find(c, context);
-			if (parser == null) {
-				break;
-			}
-			parser.parse(c, context);
-			if (parser instanceof TdqGsLiteralEndMarkParser) {
-				// end
-				break;
-			}
-			c = context.char();
+	protected afterChildParsed(_context: ParseContext, parser: TokenParser): AfterChildParsed {
+		if (parser instanceof TdqGsLiteralEndMarkParser) {
+			return 'break';
+		} else {
+			return (void 0);
 		}
+	}
 
-		context.rise();
-
-		return true;
+	parse(ch: Char, context: ParseContext): boolean {
+		return this.parseAsBlock(ch, context);
 	}
 
 	static readonly instance = new TdqGsLiteralParser();

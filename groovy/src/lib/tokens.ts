@@ -106,7 +106,7 @@ export enum GroovyTokenId {
 	/** G1.0 */ AS,
 	/** G1.0 */ DEF,
 	/** G2.3 */ TRAIT,
-	/** G2.4 @ThreadSafe */ THREADSAFE,
+	/** reserved, threadsafe */ THREADSAFE,
 	// java keywords
 	/** 1.0 */ ABSTRACT,
 	/** 1.4 */ ASSERT,
@@ -236,6 +236,8 @@ export enum GroovyTokenId {
 	MLComment,
 	/** /* */ MLCommentStartMark,
 	/** * / (no blank in the middle) */ MLCommentEndMark,
+	// declaration
+	AsDecl,
 	// package declaration
 	PackageDecl,
 	// import declaration

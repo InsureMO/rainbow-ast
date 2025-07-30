@@ -2,11 +2,13 @@ import {AtomicToken, BlockToken, Char} from '@rainbow-ast/core';
 import {JCM} from '@rainbow-ast/java-base';
 import {ParseContext} from '../parse-context';
 import {
+	AfterChildParsed,
 	ByCharTokenParser,
 	ByFuncTokenParser,
 	BySingleCharTokenParser,
 	ParserSelector,
-	ParserSelectorArgs
+	ParserSelectorArgs,
+	TokenParser
 } from '../token-parser';
 import {GroovyTokenId, T} from '../tokens';
 
@@ -107,25 +109,22 @@ export abstract class GsInterpolationParser extends ByCharTokenParser {
 		context.forward(1);
 	}
 
-	parse(ch: Char, context: ParseContext): boolean {
-		this.startBlock(ch, context);
+	protected getInitBlockParserSelector(): ParserSelector {
+		return GsInterpolationParser.IdentifierSelector;
+	}
 
-		let selector = GsInterpolationParser.DotSelector;
-
-		let c = context.char();
-		while (c != null) {
-			selector = selector === GsInterpolationParser.DotSelector ? GsInterpolationParser.IdentifierSelector : GsInterpolationParser.DotSelector;
-			const parser = selector.find(c, context);
-			if (parser == null) {
-				break;
-			}
-			parser.parse(c, context);
-			c = context.char();
+	protected afterChildParsed(_: ParseContext, parser: TokenParser): AfterChildParsed {
+		if (parser === GsiDotParser.instance) {
+			return GsInterpolationParser.IdentifierSelector;
+		} else if (parser === GsiIdentifierParser.instance) {
+			return GsInterpolationParser.DotSelector;
+		} else {
+			throw new Error(`Unsupported parser[${parser.constructor.name}].`);
 		}
+	}
 
-		context.rise();
-
-		return true;
+	parse(ch: Char, context: ParseContext): boolean {
+		return this.parseAsBlock(ch, context);
 	}
 }
 
@@ -200,26 +199,23 @@ export abstract class GsBraceInterpolationParser extends ByCharTokenParser {
 		context.forward(2);
 	}
 
-	parse(ch: Char, context: ParseContext): boolean {
-		this.startBlock(ch, context);
+	protected getInitBlockParserSelector(): ParserSelector {
+		return GsBraceInterpolationParser.Selector;
+	}
 
-		let c = context.char();
+	protected whenParserNotFound(context: ParseContext) {
+		throw new Error(`No token parser found for char[${context.char()}] at [offset=${context.charIndex}, line=${context.line}, column=${context.column}].`);
+	}
 
-		while (c != null) {
-			const parser = GsBraceInterpolationParser.Selector.find(c, context);
-			if (parser == null) {
-				throw new Error(`No token parser found for char[${c}] at [offset=${context.charIndex}, line=${context.line}, column=${context.column}].`);
-			}
-			parser.parse(c, context);
-			if (parser instanceof GsBraceInterpolationEndMarkParser) {
-				// end
-				break;
-			}
-			c = context.char();
+	protected afterChildParsed(_: ParseContext, parser: TokenParser): AfterChildParsed {
+		if (parser === GsBraceInterpolationEndMarkParser.instance) {
+			return 'break';
+		} else {
+			return (void 0);
 		}
+	}
 
-		context.rise();
-
-		return true;
+	parse(ch: Char, context: ParseContext): boolean {
+		return this.parseAsBlock(ch, context);
 	}
 }
