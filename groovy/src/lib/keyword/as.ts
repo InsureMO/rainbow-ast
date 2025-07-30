@@ -52,3 +52,5 @@ export class AliasAsParser extends AsParser {
 
 	static readonly instance = new AliasAsParser();
 }
+
+// TODO TypeAsParser
