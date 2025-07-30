@@ -81,7 +81,7 @@ export class TsqSLiteralParser extends ByCharTokenParser {
 	}
 
 	protected afterChildParsed(_context: ParseContext, parser: TokenParser): AfterChildParsed {
-		if (parser instanceof TsqSLiteralEndMarkParser) {
+		if (parser === TsqSLiteralEndMarkParser.instance) {
 			return 'break';
 		} else {
 			return (void 0);

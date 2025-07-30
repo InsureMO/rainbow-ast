@@ -79,7 +79,7 @@ export class SsqSLiteralParser extends ByCharTokenParser {
 	}
 
 	protected afterChildParsed(_: ParseContext, parser: TokenParser): AfterChildParsed {
-		if (parser instanceof SsqSLiteralEndMarkParser) {
+		if (parser === SsqSLiteralEndMarkParser.instance) {
 			return 'break';
 		} else {
 			return (void 0);

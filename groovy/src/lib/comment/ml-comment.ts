@@ -61,7 +61,7 @@ export class MLCommentParser extends ByCharTokenParser {
 	}
 
 	protected afterChildParsed(_: ParseContext, parser: TokenParser): AfterChildParsed {
-		if (parser instanceof MLCommentEndMarkParser) {
+		if (parser === MLCommentEndMarkParser.instance) {
 			return 'break';
 		} else {
 			return (void 0);

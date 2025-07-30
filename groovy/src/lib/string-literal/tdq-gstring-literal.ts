@@ -84,7 +84,7 @@ export class TdqGsLiteralParser extends ByCharTokenParser {
 	}
 
 	protected afterChildParsed(_context: ParseContext, parser: TokenParser): AfterChildParsed {
-		if (parser instanceof TdqGsLiteralEndMarkParser) {
+		if (parser === TdqGsLiteralEndMarkParser.instance) {
 			return 'break';
 		} else {
 			return (void 0);

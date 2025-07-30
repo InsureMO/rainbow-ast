@@ -3,6 +3,9 @@ import {ParseContext} from '../parse-context';
 
 export type AfterChildParsed = 'break' | ParserSelector | undefined;
 
+/**
+ * MUST BE SINGLETON!
+ */
 export abstract class TokenParser {
 	/**
 	 * default available

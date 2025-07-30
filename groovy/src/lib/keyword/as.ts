@@ -1,18 +1,11 @@
 import {BlockToken, Char} from '@rainbow-ast/core';
 import {MLCommentParser} from '../comment';
-import {IdentifierParser, WsTabParsers} from '../common-token';
+import {ClassNameParser, WsTabParsers} from '../common-token';
 import {ParseContext} from '../parse-context';
 import {AfterChildParsed, KeywordTokenParser, ParserSelector, TokenParser} from '../token-parser';
 import {GroovyTokenId, T} from '../tokens';
 
 export abstract class AsParser extends KeywordTokenParser {
-	private static readonly Selector: ParserSelector = new ParserSelector({
-		parsers: [
-			IdentifierParser.instance,
-			MLCommentParser.instance, WsTabParsers
-		]
-	});
-
 	constructor() {
 		super('as');
 	}
@@ -38,14 +31,23 @@ export abstract class AsParser extends KeywordTokenParser {
 }
 
 export class AliasAsParser extends AsParser {
+	private static readonly Selector: ParserSelector = new ParserSelector({
+		parsers: [
+			ClassNameParser.instance,
+			MLCommentParser.instance, WsTabParsers
+		]
+	});
+
 	protected getInitBlockParserSelector(): ParserSelector {
-		// TODO
-		return undefined;
+		return AliasAsParser.Selector;
 	}
 
-	protected afterChildParsed(_context: ParseContext, _parser: TokenParser): AfterChildParsed {
-		// TODO
-		return undefined;
+	protected afterChildParsed(_context: ParseContext, parser: TokenParser): AfterChildParsed {
+		if (parser === ClassNameParser.instance) {
+			return 'break';
+		} else {
+			return (void 0);
+		}
 	}
 
 	static readonly instance = new AliasAsParser();

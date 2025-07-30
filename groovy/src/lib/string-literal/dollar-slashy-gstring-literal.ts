@@ -71,7 +71,7 @@ export class DsGsLiteralParser extends ByCharTokenParser {
 	}
 
 	protected afterChildParsed(_: ParseContext, parser: TokenParser): AfterChildParsed {
-		if (parser instanceof DsGsLiteralEndMarkParser) {
+		if (parser === DsGsLiteralEndMarkParser.instance) {
 			return 'break';
 		} else {
 			return (void 0);
