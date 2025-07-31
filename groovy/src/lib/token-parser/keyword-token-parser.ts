@@ -77,9 +77,13 @@ export abstract class KeywordTokenParser extends ByCharTokenParser {
  * collect parsed keyword as atomic token.
  */
 export abstract class SingleKeywordTokenParser extends KeywordTokenParser {
-	parse(ch: Char, context: ParseContext): boolean {
+	protected collectToken(ch: Char, context: ParseContext): boolean {
 		context.collect(this.createToken(ch, context));
 		context.forward(this.keyword.length);
 		return true;
+	}
+
+	parse(ch: Char, context: ParseContext): boolean {
+		return this.collectToken(ch, context);
 	}
 }

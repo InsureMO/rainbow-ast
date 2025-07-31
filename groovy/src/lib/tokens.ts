@@ -238,10 +238,15 @@ export enum GroovyTokenId {
 	/** * / (no blank in the middle) */ MLCommentEndMark,
 	// declaration
 	AsDecl,
-	// package declaration
 	PackageDecl,
-	// import declaration
 	ImportDecl,
+	TypeDecl,
+	// csscmf
+	/*
+	 * temporary csscmf declaration, could be one of following:
+	 * type, static block, synchronized block, constructor, method, field, variable
+	 */
+	TsscmfvDecl,
 }
 
 export const T = GroovyTokenId;

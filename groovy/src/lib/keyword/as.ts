@@ -6,7 +6,7 @@ import {AfterChildParsed, KeywordTokenParser, ParserSelector, TokenParser} from 
 import {GroovyTokenId, T} from '../tokens';
 
 export abstract class AsParser extends KeywordTokenParser {
-	constructor() {
+	protected constructor() {
 		super('as');
 	}
 
@@ -30,6 +30,9 @@ export abstract class AsParser extends KeywordTokenParser {
 	}
 }
 
+/**
+ * as declaration, for import declaration to assign imported class or field an alias name.
+ */
 export class AliasAsParser extends AsParser {
 	private static readonly Selector: ParserSelector = new ParserSelector({
 		parsers: [

@@ -7,7 +7,7 @@ import {
 	SemicolonParserInstance,
 	WsTabParsers
 } from '../common-token';
-import {AliasAsParser, SkwStaticParser} from '../keyword';
+import {AliasAsParser, StaticParser} from '../keyword';
 import {ParseContext} from '../parse-context';
 import {AfterChildParsed, KeywordTokenParser, ParserSelector, TokenParser} from '../token-parser';
 import {GroovyTokenId, T} from '../tokens';
@@ -15,7 +15,7 @@ import {GroovyTokenId, T} from '../tokens';
 export class ImportDeclParser extends KeywordTokenParser {
 	private static readonly StaticAndNameSelector: ParserSelector = new ParserSelector({
 		parsers: [
-			SkwStaticParser.instance,
+			StaticParser.instance,
 			PackageNameParser.instance,
 			SemicolonParserInstance,
 			MLCommentParser.instance, WsTabParsers
@@ -80,7 +80,7 @@ export class ImportDeclParser extends KeywordTokenParser {
 	protected afterChildParsed(_: ParseContext, parser: TokenParser): AfterChildParsed {
 		if (parser === SemicolonParserInstance) {
 			return 'break';
-		} else if (parser === SkwStaticParser.instance) {
+		} else if (parser === StaticParser.instance) {
 			return ImportDeclParser.NameSelector;
 		} else if (parser === PackageNameParser.instance) {
 			return ImportDeclParser.DotSelector;
