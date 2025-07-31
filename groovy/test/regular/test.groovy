@@ -77,3 +77,8 @@ import java.lang.
 import java lang
 import java.lang.Integer as as
 import as.def.var.record.sealed.trait.permits.yield.in.Integer as record
+// type declaration #1
+class record;
+class trait;
+class as;
+class yield;

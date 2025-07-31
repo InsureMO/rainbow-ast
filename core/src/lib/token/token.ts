@@ -5,6 +5,8 @@ import {BlockToken} from './block-token';
 export abstract class Token {
 	protected _id: TokenId;
 	protected _parent?: BlockToken;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	protected _attrs?: Record<string, any>;
 
 	protected constructor(id: TokenId) {
 		this._id = id;
@@ -34,6 +36,35 @@ export abstract class Token {
 
 	setParent(parent: BlockToken): void {
 		this._parent = parent;
+	}
+
+	hasAttr(key: string): boolean {
+		return this._attrs?.[key] != null;
+	}
+
+	getAttr<V>(key: string): V | undefined {
+		return this._attrs?.[key];
+	}
+
+	setAttr<V>(key: string, value: V | null | undefined): void {
+		if (value == null) {
+			this.removeAttr(key);
+		} else {
+			if (this._attrs == null) {
+				this._attrs = {};
+			}
+			this._attrs[key] = value;
+		}
+	}
+
+	removeAttr(key: string): void {
+		if (this._attrs != null) {
+			if (Object.keys(this._attrs).length === 1) {
+				delete this._attrs;
+			} else {
+				delete this._attrs[key];
+			}
+		}
 	}
 
 	get ancestors(): ReadonlyArray<BlockToken> {

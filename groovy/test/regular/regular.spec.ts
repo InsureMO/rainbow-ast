@@ -1,5 +1,4 @@
 import * as fs from 'fs';
-import {before} from 'node:test';
 import * as path from 'path';
 import {DGP, T} from '../../src';
 import {AstChecker} from '../utils';
@@ -18,6 +17,7 @@ import {l50_59} from './l50.59';
 import {l6_15} from './l6.15';
 import {l60_67} from './l60.67';
 import {l68_79} from './l68.79';
+import {l80_92} from './l80.92';
 
 const readFileAsText = (filePath: string): string => {
 	const absolutePath = path.join(__dirname, filePath);
@@ -44,7 +44,8 @@ describe('Regular test', () => {
 			...l49(l),
 			...l50_59(l),
 			...l60_67(l),
-			...l68_79(l)
+			...l68_79(l),
+			...l80_92(l)
 		]]);
 	});
 });

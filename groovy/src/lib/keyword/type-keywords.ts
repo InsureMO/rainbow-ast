@@ -1,6 +1,7 @@
 import {BlockToken, Char} from '@rainbow-ast/core';
 import {SemicolonParserInstance, TypeDeclNameParser} from '../common-token';
 import {ParseContext} from '../parse-context';
+import {TA} from '../token-attributes';
 import {AfterChildParsed, KeywordTokenParser, ParserSelector, ParserSelectorArgs, TokenParser} from '../token-parser';
 import {GroovyTokenId, T} from '../tokens';
 
@@ -17,6 +18,9 @@ type TypeKeywordInitParsers = {
 	afterName: ParserSelectorArgs['parsers'];
 }
 
+/**
+ * use the first type keyword as class type, set into token's attribute
+ */
 export class TypeKeywordParser<A extends TypeKeywordParserArgs> extends KeywordTokenParser {
 	private static Selector: ParserSelector;
 	private static AfterNameSelector: ParserSelector;
@@ -51,13 +55,42 @@ export class TypeKeywordParser<A extends TypeKeywordParserArgs> extends KeywordT
 		return TypeKeywordParser.Selector;
 	}
 
-	public afterChildParsed(_context: ParseContext, parser: TokenParser): AfterChildParsed {
+	private writeTypeName(context: ParseContext) {
+		const block = context.block();
+		if (block.hasAttr(TA.TypeName)) {
+			return;
+		}
+
+		const name = block.children[block.children.length - 1];
+		block.setAttr(TA.TypeName, name.text);
+	}
+
+	public afterChildParsed(context: ParseContext, parser: TokenParser): AfterChildParsed {
 		if (parser === TypeDeclNameParser.instance) {
+			this.writeTypeName(context);
 			return TypeKeywordParser.AfterNameSelector;
 		} else if (parser === SemicolonParserInstance) {
 			return 'break';
 		} else {
 			return (void 0);
+		}
+	}
+
+	private writeTypeKind(context: ParseContext) {
+		const block = context.block();
+		switch (this._tokenId) {
+			case T.AT_INTERFACE:
+			case T.CLASS:
+			case T.ENUM:
+			case T.INTERFACE:
+			case T.RECORD:
+			case T.TRAIT: {
+				block.setAttr(TA.TypeKind, this._tokenId);
+				break;
+			}
+			default: {
+				throw new Error(`Unknown type kind[${this._tokenId}].`);
+			}
 		}
 	}
 
@@ -70,11 +103,15 @@ export class TypeKeywordParser<A extends TypeKeywordParserArgs> extends KeywordT
 		const block = context.block();
 		if (block.id === T.TsscmfvDecl) {
 			block.rewriteId(T.TypeDecl);
-			return this.collectToken(ch, context);
+			this.collectToken(ch, context);
+			this.writeTypeKind(context);
+			return true;
 		} else if (block.id === T.TypeDecl) {
 			return this.collectToken(ch, context);
 		} else {
-			return this.parseAsBlock(ch, context);
+			this.parseAsBlock(ch, context);
+			this.writeTypeKind(context);
+			return true;
 		}
 	}
 

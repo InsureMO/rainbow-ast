@@ -1,4 +1,5 @@
 export * from './tokens';
+export * from './token-attributes';
 
 export * from './parse-context';
 export * from './token-parser';
