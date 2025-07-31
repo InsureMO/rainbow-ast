@@ -3,7 +3,7 @@ import {TsscmfvModifierKeywordParser} from './tsscmfv-modifier-keyword';
 
 /**
  * abstract keyword.
- * can be modifier of type, constructor, method.
+ * can be modifier of type, constructor (incorrect), method.
  */
 export class AbstractParser extends TsscmfvModifierKeywordParser<['abstract', GroovyTokenId.ABSTRACT]> {
 	constructor() {

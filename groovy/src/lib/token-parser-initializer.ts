@@ -40,6 +40,7 @@ class TokenParserInitializer {
 			WsTabNlParsers,
 			SemicolonParserInstance
 		]);
+		/** {@link TypeKeywordParser#initSelectors} */
 		TypeKeywordParser.initSelectors({
 			init: [
 				// name in front of keyword, therefore the contextual keyword "record" and "trait" will be collected as type name.

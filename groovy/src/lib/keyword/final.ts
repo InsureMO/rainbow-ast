@@ -3,7 +3,7 @@ import {TsscmfvModifierKeywordParser} from './tsscmfv-modifier-keyword';
 
 /**
  * final keyword.
- * can be modifier of type, method.
+ * can be modifier of type, constructor (incorrect), method.
  */
 export class FinalParser extends TsscmfvModifierKeywordParser<['final', GroovyTokenId.FINAL]> {
 	constructor() {

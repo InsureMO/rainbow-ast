@@ -23,7 +23,8 @@ export class TypeKeywordParser<A extends TypeKeywordParserArgs> extends KeywordT
 	private readonly _tokenId: A[1];
 
 	static initSelectors(parsers: TypeKeywordInitParsers) {
-		if (TypeKeywordParser.Selector != null) {
+		if (TypeKeywordParser.Selector != null
+			|| TypeKeywordParser.AfterNameSelector != null) {
 			throw new Error('TypeKeywordParser.Selector is initialized.');
 		}
 		TypeKeywordParser.Selector = new ParserSelector({parsers: parsers.init});
