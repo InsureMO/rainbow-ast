@@ -54,6 +54,7 @@ export abstract class TsscmfvModifierKeywordParser<A extends TsscmfvModifierKeyw
 
 	protected afterChildParsed(context: ParseContext, parser: TokenParser): AfterChildParsed {
 		if (parser instanceof TypeKeywordParser) {
+			// TODO should delegate to TypeKeywordParser totally
 			return parser.afterChildParsed(context, parser);
 		} else if (parser === SemicolonParserInstance) {
 			return 'break';

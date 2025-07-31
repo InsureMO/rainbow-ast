@@ -1,4 +1,4 @@
-import {BlockToken, Char} from '@rainbow-ast/core';
+import {BlockToken, Char, Token} from '@rainbow-ast/core';
 import {SemicolonParserInstance, TypeDeclNameParser} from '../common-token';
 import {ParseContext} from '../parse-context';
 import {TA} from '../token-attributes';
@@ -47,6 +47,7 @@ export class TypeKeywordParser<A extends TypeKeywordParserArgs> extends KeywordT
 	protected startBlock(ch: Char, context: ParseContext): void {
 		const keyword = this.createToken(ch, context);
 		const decl = new BlockToken(T.TypeDecl, keyword);
+		this.writeTypeKind(decl);
 		context.sink(decl);
 		context.forward(this.keyword.length);
 	}
@@ -66,7 +67,10 @@ export class TypeKeywordParser<A extends TypeKeywordParserArgs> extends KeywordT
 	}
 
 	public afterChildParsed(context: ParseContext, parser: TokenParser): AfterChildParsed {
-		if (parser === TypeDeclNameParser.instance) {
+		if (parser instanceof TypeKeywordParser) {
+			parser.writeTypeKind(context.block());
+			return TypeKeywordParser.Selector;
+		} else if (parser === TypeDeclNameParser.instance) {
 			this.writeTypeName(context);
 			return TypeKeywordParser.AfterNameSelector;
 		} else if (parser === SemicolonParserInstance) {
@@ -76,8 +80,10 @@ export class TypeKeywordParser<A extends TypeKeywordParserArgs> extends KeywordT
 		}
 	}
 
-	private writeTypeKind(context: ParseContext) {
-		const block = context.block();
+	private writeTypeKind(block: Token): void {
+		if (block.hasAttr(TA.TypeKind)) {
+			return;
+		}
 		switch (this._tokenId) {
 			case T.AT_INTERFACE:
 			case T.CLASS:
@@ -104,14 +110,12 @@ export class TypeKeywordParser<A extends TypeKeywordParserArgs> extends KeywordT
 		if (block.id === T.TsscmfvDecl) {
 			block.rewriteId(T.TypeDecl);
 			this.collectToken(ch, context);
-			this.writeTypeKind(context);
+			this.writeTypeKind(block);
 			return true;
 		} else if (block.id === T.TypeDecl) {
 			return this.collectToken(ch, context);
 		} else {
-			this.parseAsBlock(ch, context);
-			this.writeTypeKind(context);
-			return true;
+			return this.parseAsBlock(ch, context);
 		}
 	}
 

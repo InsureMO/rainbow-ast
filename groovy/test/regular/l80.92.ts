@@ -24,7 +24,7 @@ export const l80_92 = (l: { v: number }): Array<TokenSpec> => {
 		[T.TypeDecl, 1484, l.v, 'class trait;', [
 			[T.CLASS, 1484, l.v, 'class'],
 			[T.Whitespaces, 1489, l.v, ' '],
-			[T.Identifier, 1480, l.v, 'trait'],
+			[T.Identifier, 1490, l.v, 'trait'],
 			[T.Semicolon, 1495, l.v, ';']
 		]],
 		[T.Newline, 1496, l.v++, '\n'],
@@ -42,5 +42,58 @@ export const l80_92 = (l: { v: number }): Array<TokenSpec> => {
 			[T.Semicolon, 1518, l.v, ';']
 		]],
 		[T.Newline, 1519, l.v++, '\n'],
+		[T.TypeDecl, 1520, l.v, 'public protected private\nabstract abstract\nfinal final\nstrictfp strictfp  // abc\nstatic /*\n*/ static\ndef\nclass @interface interface enum record trait A;', [
+			[T.PUBLIC, 1520, l.v, 'public'],
+			[T.Whitespaces, 1526, l.v, ' '],
+			[T.PROTECTED, 1527, l.v, 'protected'],
+			[T.Whitespaces, 1536, l.v, ' '],
+			[T.PRIVATE, 1537, l.v, 'private'],
+			[T.Newline, 1544, l.v++, '\n'],
+			[T.ABSTRACT, 1545, l.v, 'abstract'],
+			[T.Whitespaces, 1553, l.v, ' '],
+			[T.ABSTRACT, 1554, l.v, 'abstract'],
+			[T.Newline, 1562, l.v++, '\n'],
+			[T.FINAL, 1563, l.v, 'final'],
+			[T.Whitespaces, 1568, l.v, ' '],
+			[T.FINAL, 1569, l.v, 'final'],
+			[T.Newline, 1574, l.v++, '\n'],
+			[T.STRICTFP, 1575, l.v, 'strictfp'],
+			[T.Whitespaces, 1583, l.v, ' '],
+			[T.STRICTFP, 1584, l.v, 'strictfp'],
+			[T.Whitespaces, 1592, l.v, '  '],
+			[T.SLComment, 1594, l.v, '// abc', [
+				[T.SLCommentStartMark, 1594, l.v, '//'],
+				[T.Whitespaces, 1596, l.v, ' '],
+				[T.Word, 1597, l.v, 'abc']
+			]],
+			[T.Newline, 1600, l.v++, '\n'],
+			[T.STATIC, 1601, l.v, 'static'],
+			[T.Whitespaces, 1607, l.v, ' '],
+			[T.MLComment, 1608, l.v, '/*\n*/', [
+				[T.MLCommentStartMark, 1608, l.v, '/*'],
+				[T.Newline, 1610, l.v++, '\n'],
+				[T.MLCommentEndMark, 1611, l.v, '*/']
+			]],
+			[T.Whitespaces, 1613, l.v, ' '],
+			[T.STATIC, 1614, l.v, 'static'],
+			[T.Newline, 1620, l.v++, '\n'],
+			[T.DEF, 1621, l.v, 'def'],
+			[T.Newline, 1624, l.v++, '\n'],
+			[T.CLASS, 1625, l.v, 'class'],
+			[T.Whitespaces, 1630, l.v, ' '],
+			[T.AT_INTERFACE, 1631, l.v, '@interface'],
+			[T.Whitespaces, 1641, l.v, ' '],
+			[T.INTERFACE, 1642, l.v, 'interface'],
+			[T.Whitespaces, 1651, l.v, ' '],
+			[T.ENUM, 1652, l.v, 'enum'],
+			[T.Whitespaces, 1656, l.v, ' '],
+			[T.Identifier, 1657, l.v, 'record'],
+			[T.Whitespaces, 1663, l.v, ' '],
+			[T.Identifier, 1664, l.v, 'trait'],
+			[T.Whitespaces, 1669, l.v, ' '],
+			[T.Identifier, 1670, l.v, 'A'],
+			[T.Semicolon, 1671, l.v, ';']
+		]],
+		[T.Newline, 1672, l.v++, '\n']
 	];
 };

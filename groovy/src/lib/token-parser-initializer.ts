@@ -37,6 +37,7 @@ class TokenParserInitializer {
 		TsscmfvModifierKeywordParser.initSelector([
 			...TsscmfvKeywordParsers,
 			...TypeKeywordParsers,
+			CommentParsers,
 			WsTabNlParsers,
 			SemicolonParserInstance
 		]);
@@ -46,11 +47,13 @@ class TokenParserInitializer {
 				// name in front of keyword, therefore the contextual keyword "record" and "trait" will be collected as type name.
 				TypeDeclNameParser.instance,
 				...TypeKeywordParsers,
+				CommentParsers,
 				WsTabNlParsers,
 				SemicolonParserInstance
 			],
 			afterName: [
 				TypeDeclNameParser.instance,
+				CommentParsers,
 				WsTabNlParsers,
 				SemicolonParserInstance
 			]

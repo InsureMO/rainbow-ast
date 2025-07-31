@@ -108,25 +108,39 @@ export abstract class ByCharTokenParser extends TokenParser {
 export abstract class ByFuncTokenParser extends TokenParser {
 }
 
+/**
+ * parsers selection is EXACTLY follow the given order.
+ */
 export interface ParserSelectorArgs {
 	parsers?: ReadonlyArray<ByCharTokenParser | ByFuncTokenParser | ReadonlyArray<ByCharTokenParser | ByFuncTokenParser>>;
 }
 
+type ByCharParsers = Map<Char, Array<ByCharTokenParser>>;
+type ByFuncParsers = Array<ByFuncTokenParser>;
+
 export class ParserSelector {
-	private readonly _byChar: Map<Char, Array<ByCharTokenParser>> = new Map();
-	private readonly _byFunc: Array<ByFuncTokenParser> = [];
+	private readonly _parsers: Array<ByCharParsers | ByFuncParsers> = [];
 
 	constructor(args: ParserSelectorArgs) {
+		let parsers: ByCharParsers | ByFuncParsers = (void 0);
 		args.parsers?.flat().forEach(p => {
 			if (p instanceof ByCharTokenParser) {
-				const existing = this._byChar.get(p.firstChar);
+				if (parsers == null || Array.isArray(parsers)) {
+					parsers = new Map<Char, Array<ByCharTokenParser>>();
+					this._parsers.push(parsers);
+				}
+				const existing = parsers.get(p.firstChar);
 				if (existing == null) {
-					this._byChar.set(p.firstChar, [p]);
+					parsers.set(p.firstChar, [p]);
 				} else {
 					existing.push(p);
 				}
 			} else if (p instanceof ByFuncTokenParser) {
-				this._byFunc.push(p);
+				if (parsers == null || !Array.isArray(parsers)) {
+					parsers = [] as ByFuncParsers;
+					this._parsers.push(parsers);
+				}
+				parsers.push(p);
 			} else {
 				// @ts-expect-error guard logic
 				throw new Error(`Unsupported parser[${p.constructor?.name ?? p}].`);
@@ -134,19 +148,23 @@ export class ParserSelector {
 		});
 	}
 
-	private findByChar(ch: Char, context: ParseContext): TokenParser | undefined {
-		const parsers = this._byChar.get(ch);
-		if (parsers == null) {
-			return (void 0);
-		}
-		return parsers.find(p => p.isAvailable(context) && p.matches(ch, context));
-	}
-
-	private findByFunc(ch: Char, context: ParseContext): TokenParser | undefined {
-		return this._byFunc.find(p => p.isAvailable(context) && p.matches(ch, context));
-	}
-
 	find(ch: Char, context: ParseContext): TokenParser {
-		return this.findByChar(ch, context) ?? this.findByFunc(ch, context);
+		for (const parsers of this._parsers) {
+			if (Array.isArray(parsers)) {
+				const parser = parsers.find(p => p.isAvailable(context) && p.matches(ch, context));
+				if (parser != null) {
+					return parser;
+				}
+			} else {
+				const parsersOfChar = parsers.get(ch);
+				if (parsersOfChar != null) {
+					const parser = parsersOfChar.find(p => p.isAvailable(context) && p.matches(ch, context));
+					if (parser != null) {
+						return parser;
+					}
+				}
+			}
+		}
+		return (void 0);
 	}
 }
