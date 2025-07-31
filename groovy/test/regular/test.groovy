@@ -65,3 +65,15 @@ package java..;
 package java.util.
 package java util
 package as.def.var.record.sealed.trait.permits.yield.in
+// import declaration
+import java.lang.Integer
+import	java. lang.Integer as I
+import java.lang.*
+import static java./*
+*/lang.Integer.MIN_VALUE as MIN;
+import static java.lang.Integer.*
+import java..;
+import java.lang.
+import java lang
+import java.lang.Integer as as
+import as.def.var.record.sealed.trait.permits.yield.in.Integer as record
