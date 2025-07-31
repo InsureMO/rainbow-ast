@@ -10,7 +10,7 @@ export class GroovyParser extends AbstractAstParser {
 		const cu = new CompilationUnit(document);
 		GroovyLangParser.parse({
 			shebang: args?.shebang ?? false,
-			jdkVersion: args.jdkVersion ?? 17,
+			jdkVersion: args?.jdkVersion ?? 17,
 			compilationUnit: cu
 		});
 		return new Ast(cu);

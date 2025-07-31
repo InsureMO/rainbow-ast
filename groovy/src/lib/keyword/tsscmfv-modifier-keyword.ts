@@ -1,7 +1,15 @@
 import {BlockToken, Char} from '@rainbow-ast/core';
+import {SemicolonParserInstance} from '../common-token';
 import {ParseContext} from '../parse-context';
-import {ParserSelector, ParserSelectorArgs, SingleKeywordTokenParser} from '../token-parser';
+import {
+	AfterChildParsed,
+	ParserSelector,
+	ParserSelectorArgs,
+	SingleKeywordTokenParser,
+	TokenParser
+} from '../token-parser';
 import {GroovyTokenId, T} from '../tokens';
+import {TypeKeywordParser} from './type-keywords';
 
 type TsscmfvModifierKeywordParserArgs =
 	| ['abstract', GroovyTokenId.ABSTRACT]
@@ -17,17 +25,6 @@ export abstract class TsscmfvModifierKeywordParser<A extends TsscmfvModifierKeyw
 	private static Selector: ParserSelector;
 	private readonly _tokenId: A[1];
 
-	/**
-	 * this is for avoid the circular dependency of
-	 * 1. GsBraceInterpolationParser -> StringParsers,
-	 * 2. StringParsers -> DsGsLiteralParser,
-	 * 3. DsGsLiteralParser -> DsGsBraceInterpolationParser,
-	 * 4. DsGsBraceInterpolationParser -> GsBraceInterpolationParser.
-	 * it breaks the jest test.
-	 *
-	 * so move the selector initializing to parsers.ts to void it,
-	 * mainly remove the StringParsers importing statement from this file.
-	 */
 	static initSelector(parsers: ParserSelectorArgs['parsers']) {
 		if (TsscmfvModifierKeywordParser.Selector != null) {
 			throw new Error('TcmfModifierKeywordParser.Selector is initialized.');
@@ -53,6 +50,16 @@ export abstract class TsscmfvModifierKeywordParser<A extends TsscmfvModifierKeyw
 
 	protected getInitBlockParserSelector(): ParserSelector {
 		return TsscmfvModifierKeywordParser.Selector;
+	}
+
+	protected afterChildParsed(context: ParseContext, parser: TokenParser): AfterChildParsed {
+		if (parser instanceof TypeKeywordParser) {
+			return parser.afterChildParsed(context, parser);
+		} else if (parser === SemicolonParserInstance) {
+			return 'break';
+		} else {
+			return (void 0);
+		}
 	}
 
 	/**

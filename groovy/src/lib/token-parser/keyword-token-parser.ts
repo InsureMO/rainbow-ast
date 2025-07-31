@@ -71,18 +71,18 @@ export abstract class KeywordTokenParser extends ByCharTokenParser {
 			start: charIndex, line: context.line, column: context.column
 		});
 	}
+
+	protected collectToken(ch: Char, context: ParseContext): boolean {
+		context.collect(this.createToken(ch, context));
+		context.forward(this.keyword.length);
+		return true;
+	}
 }
 
 /**
  * collect parsed keyword as atomic token.
  */
 export abstract class SingleKeywordTokenParser extends KeywordTokenParser {
-	protected collectToken(ch: Char, context: ParseContext): boolean {
-		context.collect(this.createToken(ch, context));
-		context.forward(this.keyword.length);
-		return true;
-	}
-
 	parse(ch: Char, context: ParseContext): boolean {
 		return this.collectToken(ch, context);
 	}

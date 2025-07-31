@@ -4,6 +4,7 @@ import {FinalParser} from './final';
 import {PrivateParser, ProtectedParser, PublicParser} from './public-protected-private';
 import {StaticParser} from './static';
 import {StrictfpParser} from './strictfp';
+import {TypeKeywordParser} from './type-keywords';
 
 export * from './tsscmfv-modifier-keyword';
 
@@ -14,6 +15,7 @@ export * from './final';
 export * from './public-protected-private';
 export * from './static';
 export * from './strictfp';
+export * from './type-keywords';
 
 /**
  * keywords for type, static block, synchronized block, constructor, method, field and variable
@@ -26,5 +28,11 @@ export const TsscmfvKeywordParsers = [
 	ProtectedParser.instance,
 	PublicParser.instance,
 	StaticParser.instance,
-	StrictfpParser.instance
+	StrictfpParser.instance,
+	TypeKeywordParser.instanceAtInterface,
+	TypeKeywordParser.instanceClass,
+	TypeKeywordParser.instanceEnum,
+	TypeKeywordParser.instanceInterface,
+	TypeKeywordParser.instanceRecord,
+	TypeKeywordParser.instanceTrait
 ];

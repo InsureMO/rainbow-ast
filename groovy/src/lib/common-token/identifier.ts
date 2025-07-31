@@ -174,8 +174,7 @@ export abstract class NameParser extends IdentifiableTextParser {
  *    so before JDK17, if "non-sealed" appears, it will be counted as qualified name, and it is incorrect;
  *    and with JDK17 and after, it will be counted as keyword.
  * 2. there are 9 keywords are allowed to be package name, they are:
- *    as, def, in, permits, record, sealed, trait, var, yield.
- *    there 9 keywords are contextual keywords and keyword "def".
+ *    as, in, permits, record, sealed, trait, var, yield and def.
  */
 export class PackageNameParser extends NameParser {
 	/**
@@ -220,10 +219,8 @@ export class PackageNameParser extends NameParser {
 /**
  * normal identifier and 8 contextual keywords
  *
- * there are 8 keywords are allowed to be class name, variable name, import alias name, they are:
+ * there are 8 contextual keywords are allowed to be variable name, import alias name, they are:
  * as, in, permits, record, sealed, trait, var, yield.
- * there 8 keywords also known as contextual keywords.
- * and the 8th keyword "var" is not allowed.
  */
 export class VariableNameParser extends NameParser {
 	/**
@@ -239,14 +236,14 @@ export class VariableNameParser extends NameParser {
 }
 
 /**
+ * name allowed to in type declaration.
  * normal identifier and 7 contextual keywords (exclude "var")
  *
- * there are 8 keywords are allowed to be class name, variable name, import alias name, they are:
+ * there are 7 contextual keywords are allowed to be named of type declaration, they are:
  * as, in, permits, record, sealed, trait, yield.
- * there 8 keywords also known as contextual keywords.
  * and the 8th keyword "var" is not allowed.
  */
-export class ClassNameParser extends NameParser {
+export class TypeDeclNameParser extends NameParser {
 	/**
 	 * add keywords "def" and "var" to be disallowed
 	 */
@@ -257,5 +254,5 @@ export class ClassNameParser extends NameParser {
 		return map;
 	}
 
-	static readonly instance = new ClassNameParser();
+	static readonly instance = new TypeDeclNameParser();
 }

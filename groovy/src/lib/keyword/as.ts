@@ -1,6 +1,6 @@
 import {BlockToken, Char} from '@rainbow-ast/core';
 import {MLCommentParser} from '../comment';
-import {ClassNameParser, WsTabParsers} from '../common-token';
+import {TypeDeclNameParser, VariableNameParser, WsTabParsers} from '../common-token';
 import {ParseContext} from '../parse-context';
 import {AfterChildParsed, KeywordTokenParser, ParserSelector, TokenParser} from '../token-parser';
 import {GroovyTokenId, T} from '../tokens';
@@ -21,10 +21,6 @@ export abstract class AsParser extends KeywordTokenParser {
 		context.forward(2);
 	}
 
-	protected abstract getInitBlockParserSelector(): ParserSelector;
-
-	protected abstract afterChildParsed(_context: ParseContext, _parser: TokenParser): AfterChildParsed;
-
 	parse(ch: Char, context: ParseContext): boolean {
 		return this.parseAsBlock(ch, context);
 	}
@@ -36,7 +32,7 @@ export abstract class AsParser extends KeywordTokenParser {
 export class AliasAsParser extends AsParser {
 	private static readonly Selector: ParserSelector = new ParserSelector({
 		parsers: [
-			ClassNameParser.instance,
+			VariableNameParser.instance,
 			MLCommentParser.instance, WsTabParsers
 		]
 	});
@@ -46,7 +42,7 @@ export class AliasAsParser extends AsParser {
 	}
 
 	protected afterChildParsed(_context: ParseContext, parser: TokenParser): AfterChildParsed {
-		if (parser === ClassNameParser.instance) {
+		if (parser === TypeDeclNameParser.instance) {
 			return 'break';
 		} else {
 			return (void 0);

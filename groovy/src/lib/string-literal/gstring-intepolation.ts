@@ -156,17 +156,6 @@ export class GsBraceInterpolationEndMarkParser extends ByCharTokenParser {
 export abstract class GsBraceInterpolationParser extends ByCharTokenParser {
 	private static Selector: ParserSelector;
 
-	/**
-	 * this is for avoid the circular dependency of
-	 * 1. GsBraceInterpolationParser -> StringParsers,
-	 * 2. StringParsers -> DsGsLiteralParser,
-	 * 3. DsGsLiteralParser -> DsGsBraceInterpolationParser,
-	 * 4. DsGsBraceInterpolationParser -> GsBraceInterpolationParser.
-	 * it breaks the jest test.
-	 *
-	 * so move the selector initializing to parsers.ts to void it,
-	 * mainly remove the StringParsers importing statement from this file.
-	 */
 	static initSelector(parsers: ParserSelectorArgs['parsers']) {
 		if (GsBraceInterpolationParser.Selector != null) {
 			throw new Error('GsBraceInterpolationParser.Selector is initialized.');

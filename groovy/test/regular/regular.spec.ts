@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import {before} from 'node:test';
 import * as path from 'path';
 import {DGP, T} from '../../src';
 import {AstChecker} from '../utils';
