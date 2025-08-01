@@ -15,17 +15,26 @@ import {PackageDeclParser} from './package-decl';
 import {GsBraceInterpolationParser, StringParsers} from './string-literal';
 
 const CommonParsers = [
+	// package declaration
 	PackageDeclParser.instance,
+	// import declaration
 	ImportDeclParser.instance,
+	// type, static block, synchronized block, constructor, method, field, variable
 	TsscmfvKeywordParsers,
+	TypeKeywordParsers,                             // type: @interface, class, enum, interface, record, trait
+	CommentParsers,                                 // SL comment, ML comment
+	WsTabNlParsers,                                 // whitespaces, tabs, newline
+	NumberParsers,                                  // all numeric literals
+	StringParsers,                                  // all string literals
+	DotParserInstance,                              // dot
+	SemicolonParserInstance,                        // semicolon
+	IdentifierParser.instance,                      // identifier
+	UndeterminedCharParser.instance                 // undetermined char
+];
+const WrappableStatementParsers = [
 	CommentParsers,
 	WsTabNlParsers,
-	NumberParsers,
-	StringParsers,
-	DotParserInstance,
-	SemicolonParserInstance,
-	IdentifierParser.instance,
-	UndeterminedCharParser.instance
+	SemicolonParserInstance
 ];
 
 class TokenParserInitializer {
@@ -37,9 +46,7 @@ class TokenParserInitializer {
 		TsscmfvModifierKeywordParser.initSelector([
 			...TsscmfvKeywordParsers,
 			...TypeKeywordParsers,
-			CommentParsers,
-			WsTabNlParsers,
-			SemicolonParserInstance
+			...WrappableStatementParsers
 		]);
 		/** {@link TypeKeywordParser#initSelectors} */
 		TypeKeywordParser.initSelectors({
@@ -47,15 +54,11 @@ class TokenParserInitializer {
 				// name in front of keyword, therefore the contextual keyword "record" and "trait" will be collected as type name.
 				TypeDeclNameParser.instance,
 				...TypeKeywordParsers,
-				CommentParsers,
-				WsTabNlParsers,
-				SemicolonParserInstance
+				...WrappableStatementParsers
 			],
 			afterName: [
 				TypeDeclNameParser.instance,
-				CommentParsers,
-				WsTabNlParsers,
-				SemicolonParserInstance
+				...WrappableStatementParsers
 			]
 		});
 	}

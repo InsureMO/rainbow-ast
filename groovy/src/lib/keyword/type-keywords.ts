@@ -19,7 +19,20 @@ type TypeKeywordInitParsers = {
 }
 
 /**
- * use the first type keyword as class type, set into token's attribute.
+ * there are 3 scenarios that using this parser:
+ * 1. parent block is {@link T.TsscmfvDecl}, which created by {@link TsscmfvModifierKeywordParser}.
+ *    this parser will take over the parsing of all subsequent text (after the already parsed modifiers).
+ *    that is, after parsing the first type keyword, it will use the sub parser to parse the subsequent text.
+ * 2. parent block is {@link T.TypeDecl}, which created by this parser.
+ *    then simply add the keyword token.
+ *    since the parser for the parent block is also this parser, it will be responsible for the loop of the sub parsers.
+ * 3. parent block is not one of above.
+ *    then it's the same as the standard block token parsing.
+ *    after creating the block token, use the sub parsers to continue parsing.
+ *
+ * additional operations:
+ * - use the first type keyword as class type, set into token's attribute,
+ * - use the first type name as type name, set into token's attribute.
  */
 export class TypeKeywordParser<A extends TypeKeywordParserArgs> extends KeywordTokenParser {
 	private static Selector: ParserSelector;
@@ -67,10 +80,7 @@ export class TypeKeywordParser<A extends TypeKeywordParserArgs> extends KeywordT
 	}
 
 	public afterChildParsed(context: ParseContext, parser: TokenParser): AfterChildParsed {
-		if (parser instanceof TypeKeywordParser) {
-			parser.writeTypeKind(context.block());
-			return (void 0);
-		} else if (parser === TypeDeclNameParser.instance) {
+		if (parser === TypeDeclNameParser.instance) {
 			this.writeTypeName(context);
 			return TypeKeywordParser.AfterNameSelector;
 		} else if (parser === SemicolonParserInstance) {

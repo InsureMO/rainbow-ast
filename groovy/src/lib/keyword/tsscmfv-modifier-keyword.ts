@@ -52,8 +52,9 @@ export abstract class TsscmfvModifierKeywordParser<A extends TsscmfvModifierKeyw
 		return TsscmfvModifierKeywordParser.Selector;
 	}
 
-	protected afterChildParsed(context: ParseContext, parser: TokenParser): AfterChildParsed {
+	protected afterChildParsed(_: ParseContext, parser: TokenParser): AfterChildParsed {
 		if (parser instanceof TypeKeywordParser) {
+			// all following document hands over to type keyword parser
 			return 'break';
 		} else if (parser === SemicolonParserInstance) {
 			return 'break';
