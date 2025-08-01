@@ -26,10 +26,9 @@ class ModifiersParser {
 		context.sink(modifiers);
 		context.forward(token.text.length);
 
-		let selector = ModifiersParser.Selector;
 		let c = context.char();
 		while (c != null) {
-			const parser = selector.find(c, context);
+			const parser = ModifiersParser.Selector.find(c, context);
 			if (parser == null) {
 				break;
 			}
@@ -136,10 +135,12 @@ class TypeParser {
 
 class TypeInheritParser {
 	parse(token: AtomicToken, context: ParseContext): boolean {
+		// TODO
 		return true;
 	}
 
 	continue(context: ParseContext): boolean {
+		// TODO
 		return true;
 	}
 
