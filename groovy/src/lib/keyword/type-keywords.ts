@@ -19,7 +19,7 @@ type TypeKeywordInitParsers = {
 }
 
 /**
- * use the first type keyword as class type, set into token's attribute
+ * use the first type keyword as class type, set into token's attribute.
  */
 export class TypeKeywordParser<A extends TypeKeywordParserArgs> extends KeywordTokenParser {
 	private static Selector: ParserSelector;
@@ -69,7 +69,7 @@ export class TypeKeywordParser<A extends TypeKeywordParserArgs> extends KeywordT
 	public afterChildParsed(context: ParseContext, parser: TokenParser): AfterChildParsed {
 		if (parser instanceof TypeKeywordParser) {
 			parser.writeTypeKind(context.block());
-			return TypeKeywordParser.Selector;
+			return (void 0);
 		} else if (parser === TypeDeclNameParser.instance) {
 			this.writeTypeName(context);
 			return TypeKeywordParser.AfterNameSelector;
@@ -108,15 +108,17 @@ export class TypeKeywordParser<A extends TypeKeywordParserArgs> extends KeywordT
 	parse(ch: Char, context: ParseContext): boolean {
 		const block = context.block();
 		if (block.id === T.TsscmfvDecl) {
+			// take over from tsscmfv
 			block.rewriteId(T.TypeDecl);
 			this.collectToken(ch, context);
 			this.writeTypeKind(block);
-			return true;
+			this.parseBySubParsers(ch, context);
 		} else if (block.id === T.TypeDecl) {
-			return this.collectToken(ch, context);
+			this.collectToken(ch, context);
 		} else {
-			return this.parseAsBlock(ch, context);
+			this.parseAsBlock(ch, context);
 		}
+		return true;
 	}
 
 	static readonly instanceAtInterface = new TypeKeywordParser('@interface', T.AT_INTERFACE);

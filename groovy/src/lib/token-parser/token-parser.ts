@@ -56,10 +56,7 @@ export abstract class TokenParser {
 		return (void 0);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	protected parseAsBlock(ch: Char, context: ParseContext): boolean {
-		this.startBlock(ch, context);
-
+	protected parseBySubParsers(_ch: Char, context: ParseContext) {
 		let selector = this.getInitBlockParserSelector();
 		let c = context.char();
 		while (c != null) {
@@ -81,9 +78,13 @@ export abstract class TokenParser {
 			}
 			c = context.char();
 		}
+	}
 
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	protected parseAsBlock(ch: Char, context: ParseContext): boolean {
+		this.startBlock(ch, context);
+		this.parseBySubParsers(ch, context);
 		context.rise();
-
 		return true;
 	}
 }
