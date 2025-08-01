@@ -56,6 +56,12 @@ export abstract class TokenParser {
 		return (void 0);
 	}
 
+	/**
+	 * overrides {@link #whenParserNotFound} when want to handle parser not found, typically throw exception.
+	 * default behavior is ignoring this and break the sub parsing loop.
+	 * overrides {@link #afterChildParsed} when want to do something after child token parsed, typically change the parser selector.
+	 * default do nothing and using the current parser selector to continue the sub parsing loop.
+	 */
 	protected parseBySubParsers(_ch: Char, context: ParseContext) {
 		let selector = this.getInitBlockParserSelector();
 		let c = context.char();
@@ -80,6 +86,13 @@ export abstract class TokenParser {
 		}
 	}
 
+	/**
+	 * overrides {@link #startBlock}, {@link #getInitBlockParserSelector}.
+	 * overrides {@link #whenParserNotFound} when want to handle parser not found, typically throw exception.
+	 * default behavior is ignoring this and break the sub parsing loop.
+	 * overrides {@link #afterChildParsed} when want to do something after child token parsed, typically change the parser selector.
+	 * default do nothing and using the current parser selector to continue the sub parsing loop.
+	 */
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	protected parseAsBlock(ch: Char, context: ParseContext): boolean {
 		this.startBlock(ch, context);

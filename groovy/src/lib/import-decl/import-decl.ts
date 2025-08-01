@@ -7,22 +7,19 @@ import {
 	SemicolonParserInstance,
 	WsTabParsers
 } from '../common-token';
-import {AliasAsParser, StaticParser} from '../keyword';
 import {ParseContext} from '../parse-context';
 import {AfterChildParsed, KeywordTokenParser, ParserSelector, TokenParser} from '../token-parser';
 import {GroovyTokenId, T} from '../tokens';
+import {AsAliasDeclParser} from './as-alias-decl';
+import {StaticImportParser} from './static-import';
 
+/**
+ * multiple static keywords is allowed, it is incorrect.
+ */
 export class ImportDeclParser extends KeywordTokenParser {
 	private static readonly StaticAndNameSelector: ParserSelector = new ParserSelector({
 		parsers: [
-			StaticParser.instance,
-			PackageNameParser.instance,
-			SemicolonParserInstance,
-			MLCommentParser.instance, WsTabParsers
-		]
-	});
-	private static readonly NameSelector: ParserSelector = new ParserSelector({
-		parsers: [
+			StaticImportParser.instance,
 			PackageNameParser.instance,
 			SemicolonParserInstance,
 			MLCommentParser.instance, WsTabParsers
@@ -30,7 +27,7 @@ export class ImportDeclParser extends KeywordTokenParser {
 	});
 	private static readonly DotSelector: ParserSelector = new ParserSelector({
 		parsers: [
-			AliasAsParser.instance,
+			AsAliasDeclParser.instance,
 			DotParserInstance,
 			SemicolonParserInstance,
 			MLCommentParser.instance, WsTabParsers
@@ -46,7 +43,7 @@ export class ImportDeclParser extends KeywordTokenParser {
 	});
 	private static readonly AsSelector: ParserSelector = new ParserSelector({
 		parsers: [
-			AliasAsParser.instance,
+			AsAliasDeclParser.instance,
 			SemicolonParserInstance,
 			MLCommentParser.instance, WsTabParsers
 		]
@@ -78,18 +75,16 @@ export class ImportDeclParser extends KeywordTokenParser {
 	}
 
 	protected afterChildParsed(_: ParseContext, parser: TokenParser): AfterChildParsed {
-		if (parser === SemicolonParserInstance) {
-			return 'break';
-		} else if (parser === StaticParser.instance) {
-			return ImportDeclParser.NameSelector;
-		} else if (parser === PackageNameParser.instance) {
+		if (parser === PackageNameParser.instance) {
 			return ImportDeclParser.DotSelector;
 		} else if (parser === DotParserInstance) {
 			return ImportDeclParser.NameAndAsteriskSelector;
 		} else if (parser === AsteriskParserInstance) {
 			return ImportDeclParser.AsSelector;
-		} else if (parser === AliasAsParser.instance) {
+		} else if (parser === AsAliasDeclParser.instance) {
 			return ImportDeclParser.EndSelector;
+		} else if (parser === SemicolonParserInstance) {
+			return 'break';
 		} else {
 			return (void 0);
 		}

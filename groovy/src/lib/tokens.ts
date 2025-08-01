@@ -241,7 +241,9 @@ export enum GroovyTokenId {
 	PackageDecl,
 	ImportDecl,
 	TypeDecl,
-	// csscmf
+	TypeInheritDecl,
+	// csscmfv
+	Modifiers,
 	/*
 	 * temporary csscmf declaration, could be one of following:
 	 * type, static block, synchronized block, constructor, method, field, variable
