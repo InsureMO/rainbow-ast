@@ -87,6 +87,9 @@ export class TypeParser {
 		if (block.id === T.TsscmfvDecl) {
 			block.rewriteId(T.TypeDecl);
 			context.collect(token);
+		} else if (block.id === T.TypeDecl) {
+			// because of sealed, non-sealed keyword collected
+			context.collect(token);
 		} else {
 			const decl = new BlockToken(T.TypeDecl, token);
 			context.sink(decl);

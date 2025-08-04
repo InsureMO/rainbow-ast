@@ -17,10 +17,19 @@ export class ModifiersParser {
 	}
 
 	parse(token: AtomicToken, context: ParseContext): boolean {
+		let parentBlock: BlockToken;
 		const block = context.block();
 		if (block.id !== T.TsscmfvDecl) {
 			const decl = new BlockToken(T.TsscmfvDecl);
 			context.sink(decl);
+			parentBlock = decl;
+		} else {
+			parentBlock = block;
+		}
+		if (token.id === T.SEALED || token.id === T.NON_SEALED) {
+			if (parentBlock.id !== T.TypeDecl) {
+				parentBlock.rewriteId(T.TypeDecl);
+			}
 		}
 		const modifiers = new BlockToken(T.Modifiers, token);
 		context.sink(modifiers);
@@ -33,6 +42,11 @@ export class ModifiersParser {
 				break;
 			}
 			parser.parse(c, context);
+			if (parser === MKP.instanceSealed || parser === MKP.instanceNonSealed) {
+				if (parentBlock.id !== T.TypeDecl) {
+					parentBlock.rewriteId(T.TypeDecl);
+				}
+			}
 			c = context.char();
 		}
 

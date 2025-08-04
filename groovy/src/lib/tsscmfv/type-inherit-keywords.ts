@@ -107,6 +107,9 @@ export class TypeInheritKeywordParser<A extends TsscmfvTypeInheritKeywords> exte
 		const block = context.block();
 		if (block.id === T.TsscmfvDecl) {
 			block.rewriteId(T.TypeDecl);
+		} else if (block.id !== T.TypeDecl) {
+			const decl = new BlockToken(T.TypeDecl);
+			context.sink(decl);
 		}
 
 		const decl = new BlockToken(T.TypeInheritDecl, token);
