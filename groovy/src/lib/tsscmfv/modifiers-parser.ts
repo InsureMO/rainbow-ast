@@ -4,7 +4,7 @@ import {WsTabNlParsers} from '../common-token';
 import {ParseContext} from '../parse-context';
 import {ParserSelector, ParserSelectorArgs} from '../token-parser';
 import {T} from '../tokens';
-import {TKP} from './tsscmfv-keywords';
+import {MKP} from './modifier-keywords';
 
 export class ModifiersParser {
 	private static Selector: ParserSelector;
@@ -44,10 +44,10 @@ export class ModifiersParser {
 }
 
 ModifiersParser.initSelector([
-	TKP.instanceAbstract, TKP.instanceFinal, TKP.instanceStatic, TKP.instanceStrictfp,
-	TKP.instanceDef,
-	TKP.instancePrivate, TKP.instanceProtected, TKP.instancePublic,
-	TKP.instanceSealed, TKP.instanceNonSealed,
+	MKP.instanceAbstract, MKP.instanceFinal, MKP.instanceStatic, MKP.instanceStrictfp,
+	MKP.instanceDef,
+	MKP.instancePrivate, MKP.instanceProtected, MKP.instancePublic,
+	MKP.instanceSealed, MKP.instanceNonSealed,
 	CommentParsers,
 	WsTabNlParsers
 ]);

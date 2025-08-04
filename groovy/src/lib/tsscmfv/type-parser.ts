@@ -5,7 +5,7 @@ import {ParseContext} from '../parse-context';
 import {TA} from '../token-attributes';
 import {ParserSelector, ParserSelectorArgs} from '../token-parser';
 import {T} from '../tokens';
-import {TKP, TsscmfvKeywordParser} from './tsscmfv-keywords';
+import {TKP, TypeKeywordParser} from './type-keywords';
 
 interface TypeParserArgs {
 	Start: ParserSelectorArgs['parsers'];
@@ -64,7 +64,7 @@ export class TypeParser {
 				break;
 			}
 			parser.parse(c, context);
-			if (parser instanceof TsscmfvKeywordParser) {
+			if (parser instanceof TypeKeywordParser) {
 				const block = context.block();
 				if (block.id === T.TsscmfvDecl) {
 					block.rewriteId(T.TypeDecl);

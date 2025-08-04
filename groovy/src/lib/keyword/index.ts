@@ -1,5 +1,5 @@
-// @interface -> type keywords
-// abstract: type, constructor (incorrect), method
+// @interface -> tsscmfv: type
+// abstract -> tsscmfv: type, constructor (incorrect), method
 export * from './as';                               // as: as alias (import), as type (constant or variable)
 // assert: assert expression
 // boolean -> primitive types
@@ -8,43 +8,43 @@ export * from './as';                               // as: as alias (import), as
 // case: switch route
 // catch: try-catch
 // char -> primitive types
-// class -> type keywords
+// class -> tsscmfv: type
 // const: reserved
 // continue: for loop, while loop, do-while loop
-// def: type, constructor, method, field, variable
+// def -> tsscmfv: type, constructor, method, field, variable
 // default: constructor, method, switch route
 // do: do-while loop
 // double -> primitive types
 // else: if-else
-// enum -> type keywords
-// extends -> type inheriting keywords
+// enum -> tsscmfv: type
+// extends -> tsscmfv: type inheriting keywords
 // false -> boolean literal
-// final: type, constructor (incorrect), method
+// final -> tsscmfv: type, constructor (incorrect), method
 // finally: try-catch
 // float -> primitive types
 // for: for loop
 // goto: reserved
 // if: if-else
-// implements -> type inheriting keywords
+// implements -> tsscmfv: type inheriting keywords
 // import -> import declaration
 // in -> operators, and !in
 // instanceof -> operators, and !instanceof
 // int -> primitive types
-// interface -> type keywords
+// interface -> tsscmfv: type
 // long -> primitive types
 // native: constructor (incorrect), method
 // new: new expression
-// non-sealed: type
+// non-sealed -> tsscmfv: type
 // null -> null literal
 // package -> package declaration
-// permits: type
-// public protected private
-// record -> type keywords
+// permits -> tsscmfv: type inheriting keywords
+// public protected private -> tsscmfv: type, constructor, method, field
+// record -> tsscmfv: type
 // return: return expression
-// sealed: type
+// sealed -> tsscmfv: type
 // short -> primitive types
-// static
-// strictfp
+// static -> tsscmfv: type, constructor (incorrect), method, field; static import
+// strictfp -> tsscmfv: type, constructor, method, field
 // super
 // switch: switch-case
 // synchronized: method, synchronize block
@@ -52,7 +52,7 @@ export * from './as';                               // as: as alias (import), as
 // threadsafe: reserved
 // throw: throw expression
 // throws: constructor method
-// trait -> type keywords
+// trait -> tsscmfv: type
 // transient: field
 // true -> boolean literal
 // try: try-catch

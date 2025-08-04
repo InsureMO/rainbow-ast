@@ -5,7 +5,7 @@ import {ParseContext} from '../parse-context';
 import {KeywordTokenParser, ParserSelector} from '../token-parser';
 import {GroovyTokenId, T} from '../tokens';
 import {ModifiersParser} from './modifiers-parser';
-import {TsscmfvParserArgs} from './tsscmfv-args';
+import {TsscmfvKeywords} from './tsscmfv-keywords-types';
 import {TypeInheritParser} from './type-inherit-parser';
 import {TypeParser} from './type-parser';
 
@@ -13,7 +13,7 @@ enum TsscmfvKeywordKind {
 	Modifier, Type, Inherit,
 }
 
-export class TsscmfvDeclParser<A extends TsscmfvParserArgs> extends KeywordTokenParser {
+export class TsscmfvDeclParser<A extends TsscmfvKeywords> extends KeywordTokenParser {
 	private static Selector: ParserSelector = new ParserSelector({
 		parsers: [
 			SemicolonParserInstance,
