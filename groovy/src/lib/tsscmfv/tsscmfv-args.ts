@@ -11,6 +11,7 @@ export type TsscmfvParserArgs =
 	| ['implements', GroovyTokenId.IMPLEMENTS]
 	| ['interface', GroovyTokenId.INTERFACE]
 	| ['non-sealed', GroovyTokenId.NON_SEALED]
+	| ['permits', GroovyTokenId.PERMITS]
 	| ['private', GroovyTokenId.PRIVATE]
 	| ['protected', GroovyTokenId.PROTECTED]
 	| ['public', GroovyTokenId.PUBLIC]

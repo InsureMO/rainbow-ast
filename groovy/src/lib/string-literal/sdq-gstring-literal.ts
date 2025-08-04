@@ -65,7 +65,7 @@ export class SdqGsLiteralParser extends ByCharTokenParser {
 		return c2 !== '"' || c3 !== '"';
 	}
 
-	protected startBlock(_: Char, context: ParseContext): void {
+	protected startBlock(context: ParseContext): void {
 		const charIndex = context.charIndex;
 		const mark = new AtomicToken({
 			id: T.SdqGsLMark,

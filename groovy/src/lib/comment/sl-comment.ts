@@ -17,7 +17,7 @@ export class SLCommentParser extends ByCharTokenParser {
 		return context.nextChar() === '/';
 	}
 
-	protected startBlock(_: Char, context: ParseContext): void {
+	protected startBlock(context: ParseContext): void {
 		const charIndex = context.charIndex;
 		const mark = new AtomicToken({
 			id: T.SLCommentStartMark,

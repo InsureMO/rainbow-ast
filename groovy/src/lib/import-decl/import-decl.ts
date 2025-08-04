@@ -63,8 +63,8 @@ export class ImportDeclParser extends KeywordTokenParser {
 		return T.IMPORT;
 	}
 
-	protected startBlock(ch: Char, context: ParseContext): void {
-		const keyword = this.createToken(ch, context);
+	protected startBlock(context: ParseContext): void {
+		const keyword = this.createToken(context);
 		const decl = new BlockToken(T.ImportDecl, keyword);
 		context.sink(decl);
 		context.forward(6);

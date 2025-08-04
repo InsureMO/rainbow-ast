@@ -29,8 +29,8 @@ export class PackageDeclParser extends KeywordTokenParser {
 		return T.PACKAGE;
 	}
 
-	protected startBlock(ch: Char, context: ParseContext): void {
-		const keyword = this.createToken(ch, context);
+	protected startBlock(context: ParseContext): void {
+		const keyword = this.createToken(context);
 		const decl = new BlockToken(T.PackageDecl, keyword);
 		context.sink(decl);
 		context.forward(7);

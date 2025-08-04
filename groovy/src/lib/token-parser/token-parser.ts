@@ -24,7 +24,7 @@ export abstract class TokenParser {
 	 * overrides this method to create block token, and append it to context
 	 */
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	protected startBlock(_ch: Char, _context: ParseContext): void {
+	protected startBlock(_context: ParseContext): void {
 		throw new Error('#startBlock is not implemented.');
 	}
 
@@ -62,7 +62,7 @@ export abstract class TokenParser {
 	 * overrides {@link #afterChildParsed} when want to do something after child token parsed, typically change the parser selector.
 	 * default do nothing and using the current parser selector to continue the sub parsing loop.
 	 */
-	protected parseBySubParsers(_ch: Char, context: ParseContext) {
+	protected parseBySubParsers(context: ParseContext) {
 		let selector = this.getInitBlockParserSelector();
 		let c = context.char();
 		while (c != null) {
@@ -94,9 +94,9 @@ export abstract class TokenParser {
 	 * default do nothing and using the current parser selector to continue the sub parsing loop.
 	 */
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	protected parseAsBlock(ch: Char, context: ParseContext): boolean {
-		this.startBlock(ch, context);
-		this.parseBySubParsers(ch, context);
+	protected parseAsBlock(_: Char, context: ParseContext): boolean {
+		this.startBlock(context);
+		this.parseBySubParsers(context);
 		context.rise();
 		return true;
 	}

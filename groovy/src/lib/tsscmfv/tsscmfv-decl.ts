@@ -77,8 +77,8 @@ export class TsscmfvDeclParser<A extends TsscmfvParserArgs> extends KeywordToken
 		}
 	}
 
-	parse(ch: Char, context: ParseContext): boolean {
-		const token = this.createToken(ch, context);
+	parse(_: Char, context: ParseContext): boolean {
+		const token = this.createToken(context);
 
 		switch (this._tokenKind) {
 			case TsscmfvKeywordKind.Modifier:
@@ -129,6 +129,7 @@ export class TsscmfvDeclParser<A extends TsscmfvParserArgs> extends KeywordToken
 	static readonly instanceImplements = new TsscmfvDeclParser('implements', GroovyTokenId.IMPLEMENTS);
 	static readonly instanceInterface = new TsscmfvDeclParser('interface', GroovyTokenId.INTERFACE);
 	static readonly instanceNonSealed = new TsscmfvDeclParser('non-sealed', GroovyTokenId.NON_SEALED);
+	static readonly instancePermits = new TsscmfvDeclParser('permits', GroovyTokenId.PERMITS);
 	static readonly instancePrivate = new TsscmfvDeclParser('private', GroovyTokenId.PRIVATE);
 	static readonly instanceProtected = new TsscmfvDeclParser('protected', GroovyTokenId.PROTECTED);
 	static readonly instancePublic = new TsscmfvDeclParser('public', GroovyTokenId.PUBLIC);

@@ -96,32 +96,58 @@ export const l80_93 = (l: { v: number }): Array<TokenSpec> => {
 			[T.Identifier, 1670, l.v, 'A'],
 			[T.Semicolon, 1671, l.v, ';']
 		]],
-		[T.Newline, 1672, l.v++, '\n']
-		// [T.TypeDecl, 1673, l.v, 'public class A extends b.C implements d.E;', [
-		// 	[T.PUBLIC, 1673, l.v, 'public'],
-		// 	[T.Whitespaces, 1679, l.v, ' '],
-		// 	[T.CLASS, 1680, l.v, 'class'],
-		// 	[T.Whitespaces, 1685, l.v, ' '],
-		// 	[T.Identifier, 1686, l.v, 'A'],
-		// 	[T.Whitespaces, 1687, l.v, ' '],
-		// 	[T.TypeInheritDecl, 1688, l.v, 'extends b.C ', [
-		// 		[T.EXTENDS, 1688, l.v, 'extends'],
-		// 		[T.Whitespaces, 1695, l.v, ' '],
-		// 		[T.Identifier, 1696, l.v, 'b'],
-		// 		[T.Dot, 1697, l.v, ' '],
-		// 		[T.Identifier, 1698, l.v, 'C'],
-		// 		[T.Whitespaces, 1699, l.v, ' ']
-		// 	]],
-		// 	[T.TypeInheritDecl, 1700, l.v, 'implements d.E', [
-		// 		[T.EXTENDS, 1700, l.v, 'implements'],
-		// 		[T.Whitespaces, 1710, l.v, ' '],
-		// 		[T.Identifier, 1711, l.v, 'd'],
-		// 		[T.Dot, 1712, l.v, ' '],
-		// 		[T.Identifier, 1713, l.v, 'E'],
-		// 		[T.Whitespaces, 1714, l.v, ' ']
-		// 	]],
-		// 	[T.Semicolon, 1715, l.v, ';']
-		// ]],
-		// [T.Newline, 1716, l.v++, '\n']
+		[T.Newline, 1672, l.v++, '\n'],
+		[T.TypeDecl, 1673, l.v, 'public class A extends b.C extends implements implements d.E permits f.G, i.H permits;', [
+			[T.Modifiers, 1673, l.v, 'public ', [
+				[T.PUBLIC, 1673, l.v, 'public'],
+				[T.Whitespaces, 1679, l.v, ' '],
+			]],
+			[T.CLASS, 1680, l.v, 'class'],
+			[T.Whitespaces, 1685, l.v, ' '],
+			[T.Identifier, 1686, l.v, 'A'],
+			[T.Whitespaces, 1687, l.v, ' '],
+			[T.TypeInheritDecl, 1688, l.v, 'extends b.C ', [
+				[T.EXTENDS, 1688, l.v, 'extends'],
+				[T.Whitespaces, 1695, l.v, ' '],
+				[T.Identifier, 1696, l.v, 'b'],
+				[T.Dot, 1697, l.v, '.'],
+				[T.Identifier, 1698, l.v, 'C'],
+				[T.Whitespaces, 1699, l.v, ' ']
+			]],
+			[T.TypeInheritDecl, 1700, l.v, 'extends ', [
+				[T.EXTENDS, 1700, l.v, 'extends'],
+				[T.Whitespaces, 1707, l.v, ' ']
+			]],
+			[T.TypeInheritDecl, 1708, l.v, 'implements ', [
+				[T.IMPLEMENTS, 1708, l.v, 'implements'],
+				[T.Whitespaces, 1718, l.v, ' ']
+			]],
+			[T.TypeInheritDecl, 1719, l.v, 'implements d.E ', [
+				[T.IMPLEMENTS, 1719, l.v, 'implements'],
+				[T.Whitespaces, 1729, l.v, ' '],
+				[T.Identifier, 1730, l.v, 'd'],
+				[T.Dot, 1731, l.v, '.'],
+				[T.Identifier, 1732, l.v, 'E'],
+				[T.Whitespaces, 1733, l.v, ' ']
+			]],
+			[T.TypeInheritDecl, 1734, l.v, 'permits f.G, i.H ', [
+				[T.PERMITS, 1734, l.v, 'permits'],
+				[T.Whitespaces, 1741, l.v, ' '],
+				[T.Identifier, 1742, l.v, 'f'],
+				[T.Dot, 1743, l.v, '.'],
+				[T.Identifier, 1744, l.v, 'G'],
+				[T.Comma, 1745, l.v, ','],
+				[T.Whitespaces, 1746, l.v, ' '],
+				[T.Identifier, 1747, l.v, 'i'],
+				[T.Dot, 1748, l.v, '.'],
+				[T.Identifier, 1749, l.v, 'H'],
+				[T.Whitespaces, 1750, l.v, ' ']
+			]],
+			[T.TypeInheritDecl, 1751, l.v, 'permits', [
+				[T.PERMITS, 1751, l.v, 'permits']
+			]],
+			[T.Semicolon, 1758, l.v, ';']
+		]],
+		[T.Newline, 1759, l.v++, '\n']
 	];
 };

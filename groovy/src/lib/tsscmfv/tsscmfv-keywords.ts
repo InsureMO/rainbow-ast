@@ -19,9 +19,7 @@ export class TsscmfvKeywordParser<A extends TsscmfvParserArgs> extends SingleKey
 	static readonly instanceClass = new TsscmfvKeywordParser('class', GroovyTokenId.CLASS);
 	static readonly instanceDef = new TsscmfvKeywordParser('def', GroovyTokenId.DEF);
 	static readonly instanceEnum = new TsscmfvKeywordParser('enum', GroovyTokenId.ENUM);
-	static readonly instanceExtends = new TsscmfvKeywordParser('extends', GroovyTokenId.EXTENDS);
 	static readonly instanceFinal = new TsscmfvKeywordParser('final', GroovyTokenId.FINAL);
-	static readonly instanceImplements = new TsscmfvKeywordParser('implements', GroovyTokenId.IMPLEMENTS);
 	static readonly instanceInterface = new TsscmfvKeywordParser('interface', GroovyTokenId.INTERFACE);
 	static readonly instanceNonSealed = new TsscmfvKeywordParser('non-sealed', GroovyTokenId.NON_SEALED);
 	static readonly instancePrivate = new TsscmfvKeywordParser('private', GroovyTokenId.PRIVATE);

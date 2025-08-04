@@ -12,8 +12,8 @@ export abstract class AsParser extends KeywordTokenParser {
 		return T.AS;
 	}
 
-	protected startBlock(ch: Char, context: ParseContext): void {
-		const keyword = this.createToken(ch, context);
+	protected startBlock(context: ParseContext): void {
+		const keyword = this.createToken(context);
 		const decl = new BlockToken(T.AsDecl, keyword);
 		context.sink(decl);
 		context.forward(2);

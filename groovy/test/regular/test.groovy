@@ -90,3 +90,4 @@ static /*
 */ static
 def
 class @interface interface enum record trait A;
+public class A extends b.C extends implements implements d.E permits f.G, i.H permits;

@@ -9,7 +9,7 @@ abstract class UnicodeEscapeParser extends ByCharTokenParser {
 		super('\\');
 	}
 
-	protected startBlock(_: Char, context: ParseContext): void {
+	protected startBlock(context: ParseContext): void {
 		const charIndex = context.charIndex;
 		const mark = new AtomicToken({
 			id: T.UnicodeEscapeStartMark,
@@ -44,8 +44,8 @@ export class QSLUnicodeEscapeParser extends UnicodeEscapeParser {
 		return context.nextChar() === 'u';
 	}
 
-	parse(ch: Char, context: ParseContext): boolean {
-		this.startBlock(ch, context);
+	parse(_: Char, context: ParseContext): boolean {
+		this.startBlock(context);
 
 		const n1 = context.char();
 		if (JCM.Hex(n1)) {
@@ -92,8 +92,8 @@ export class SGsLUnicodeEscapeParser extends UnicodeEscapeParser {
 		return charsAfterU.length === 4 && !charsAfterU.split('').some(c => !JCM.Hex(c));
 	}
 
-	parse(ch: Char, context: ParseContext): boolean {
-		this.startBlock(ch, context);
+	parse(_: Char, context: ParseContext): boolean {
+		this.startBlock(context);
 
 		const charIndex = context.charIndex;
 		const charsAfterU = context.text(charIndex, charIndex + 4);

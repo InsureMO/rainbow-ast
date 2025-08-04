@@ -50,4 +50,5 @@ export const StandaloneSymbolParsers: Array<ByCharTokenParser> = ([
 
 export const AsteriskParserInstance = StandaloneSymbolParsers.find(p => p.firstChar === '*');
 export const DotParserInstance = StandaloneSymbolParsers.find(p => p.firstChar === '.');
+export const CommaParserInstance = StandaloneSymbolParsers.find(p => p.firstChar === ',');
 export const SemicolonParserInstance = StandaloneSymbolParsers.find(p => p.firstChar === ';');

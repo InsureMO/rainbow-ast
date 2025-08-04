@@ -18,6 +18,7 @@ export abstract class KeywordTokenParser extends ByCharTokenParser {
 		return this._keyword;
 	}
 
+	// noinspection JSUnusedGlobalSymbols
 	get restChars(): string {
 		return this._restChars;
 	}
@@ -63,7 +64,7 @@ export abstract class KeywordTokenParser extends ByCharTokenParser {
 
 	protected abstract getTokenId(): GroovyTokenId;
 
-	protected createToken(_: Char, context: ParseContext): AtomicToken {
+	protected createToken(context: ParseContext): AtomicToken {
 		const charIndex = context.charIndex;
 		return new AtomicToken({
 			id: this.getTokenId(),
@@ -72,8 +73,8 @@ export abstract class KeywordTokenParser extends ByCharTokenParser {
 		});
 	}
 
-	protected collectToken(ch: Char, context: ParseContext): boolean {
-		context.collect(this.createToken(ch, context));
+	protected collectToken(context: ParseContext): boolean {
+		context.collect(this.createToken(context));
 		context.forward(this.keyword.length);
 		return true;
 	}
@@ -83,7 +84,7 @@ export abstract class KeywordTokenParser extends ByCharTokenParser {
  * collect parsed keyword as atomic token.
  */
 export abstract class SingleKeywordTokenParser extends KeywordTokenParser {
-	parse(ch: Char, context: ParseContext): boolean {
-		return this.collectToken(ch, context);
+	parse(_: Char, context: ParseContext): boolean {
+		return this.collectToken(context);
 	}
 }

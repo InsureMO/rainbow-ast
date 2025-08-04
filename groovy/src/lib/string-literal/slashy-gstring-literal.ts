@@ -94,7 +94,7 @@ export class SGsLiteralParser extends ByCharTokenParser {
 		return true;
 	}
 
-	protected startBlock(_: Char, context: ParseContext): void {
+	protected startBlock(context: ParseContext): void {
 		const charIndex = context.charIndex;
 		const mark = new AtomicToken({
 			id: T.SGsLMark,

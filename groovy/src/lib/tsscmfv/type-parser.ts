@@ -49,6 +49,13 @@ export class TypeParser {
 		}
 	}
 
+	private writeTypeName(block: Token, child: Token): void {
+		if (block.hasAttr(TA.TypeName)) {
+			return;
+		}
+		block.setAttr(TA.TypeName, child.text);
+	}
+
 	private subsequent(selector: ParserSelector, context: ParseContext): void {
 		let c = context.char();
 		while (c != null) {
@@ -66,6 +73,9 @@ export class TypeParser {
 				this.writeTypeKind(block, token);
 				selector = TypeParser.StartedSelector;
 			} else if (parser === TypeDeclNameParser.instance) {
+				const block = context.block();
+				const token = block.children[block.children.length - 1];
+				this.writeTypeName(block, token);
 				selector = TypeParser.AfterNameSelector;
 			}
 			c = context.char();
