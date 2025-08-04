@@ -240,15 +240,17 @@ export enum GroovyTokenId {
 	AsDecl,
 	PackageDecl,
 	ImportDecl,
-	TypeDecl,
-	TypeInheritDecl,
-	// csscmfv
-	Modifiers,
 	/*
 	 * temporary csscmf declaration, could be one of following:
 	 * type, static block, synchronized block, constructor, method, field, variable
 	 */
 	TsscmfvDecl,
+	TypeDecl,
+	ModifierDecl,
+	TypeInheritDecl,
+	StaticBlockDecl,
+	TypeBody,
+	StaticBody,
 }
 
 export const T = GroovyTokenId;

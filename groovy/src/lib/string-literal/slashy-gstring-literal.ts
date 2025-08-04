@@ -1,33 +1,26 @@
 import {AtomicToken, BlockToken, Char} from '@rainbow-ast/core';
 import {CharsParsers, IsOperator, StandaloneSymbolParsers, WsTabNlParsers} from '../common-token';
 import {ParseContext} from '../parse-context';
-import {AfterChildParsed, ByCharTokenParser, ParserSelector, TokenParser} from '../token-parser';
-import {T} from '../tokens';
+import {
+	AfterChildParsed,
+	ByCharTokenParser,
+	BySingleCharTokenParser,
+	ParserSelector,
+	TokenParser
+} from '../token-parser';
+import {GroovyTokenId, T} from '../tokens';
 import {BackslashEscapeParser} from './backslash-escape';
 import {MLEraserParser} from './ml-eraser';
 import {SGsBraceInterpolationParser, SGsInterpolationParser} from './slashy-gstring-intepolation';
 import {SGsLUnicodeEscapeParser} from './unicode-escape';
 
-export class SGsLiteralEndMarkParser extends ByCharTokenParser {
+export class SGsLiteralEndMarkParser extends BySingleCharTokenParser {
 	constructor() {
 		super('/');
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	matches(_1: Char, _2: ParseContext): boolean {
-		return true;
-	}
-
-	parse(_: Char, context: ParseContext): boolean {
-		const charIndex = context.charIndex;
-		const mark = new AtomicToken({
-			id: T.SGsLMark,
-			text: '/',
-			start: charIndex, line: context.line, column: context.column
-		});
-		context.collect(mark);
-		context.forward(1);
-		return true;
+	protected getTokenId(): GroovyTokenId {
+		return T.SGsLMark;
 	}
 
 	static readonly instance = new SGsLiteralEndMarkParser();

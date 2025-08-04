@@ -31,7 +31,7 @@ export class ModifiersParser {
 				parentBlock.rewriteId(T.TypeDecl);
 			}
 		}
-		const modifiers = new BlockToken(T.Modifiers, token);
+		const modifiers = new BlockToken(T.ModifierDecl, token);
 		context.sink(modifiers);
 		context.forward(token.text.length);
 

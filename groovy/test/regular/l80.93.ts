@@ -43,7 +43,7 @@ export const l80_93 = (l: { v: number }): Array<TokenSpec> => {
 		]],
 		[T.Newline, 1519, l.v++, '\n'],
 		[T.TypeDecl, 1520, l.v, 'public protected private\nabstract abstract\nfinal final\nstrictfp strictfp  // abc\nstatic /*\n*/ static\ndef\nclass @interface interface enum record trait A;', [
-			[T.Modifiers, 1520, l.v, 'public protected private\nabstract abstract\nfinal final\nstrictfp strictfp  // abc\nstatic /*\n*/ static\ndef\n', [
+			[T.ModifierDecl, 1520, l.v, 'public protected private\nabstract abstract\nfinal final\nstrictfp strictfp  // abc\nstatic /*\n*/ static\ndef\n', [
 				[T.PUBLIC, 1520, l.v, 'public'],
 				[T.Whitespaces, 1526, l.v, ' '],
 				[T.PROTECTED, 1527, l.v, 'protected'],
@@ -98,7 +98,7 @@ export const l80_93 = (l: { v: number }): Array<TokenSpec> => {
 		]],
 		[T.Newline, 1672, l.v++, '\n'],
 		[T.TypeDecl, 1673, l.v, 'public class A extends b.C extends implements implements d.E permits f.G, i.H permits;', [
-			[T.Modifiers, 1673, l.v, 'public ', [
+			[T.ModifierDecl, 1673, l.v, 'public ', [
 				[T.PUBLIC, 1673, l.v, 'public'],
 				[T.Whitespaces, 1679, l.v, ' '],
 			]],

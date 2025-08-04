@@ -1,32 +1,25 @@
 import {AtomicToken, BlockToken, Char} from '@rainbow-ast/core';
 import {CharsParsers, StandaloneSymbolParsers, WsTabParsers} from '../common-token';
 import {ParseContext} from '../parse-context';
-import {AfterChildParsed, ByCharTokenParser, ParserSelector, TokenParser} from '../token-parser';
-import {T} from '../tokens';
+import {
+	AfterChildParsed,
+	ByCharTokenParser,
+	BySingleCharTokenParser,
+	ParserSelector,
+	TokenParser
+} from '../token-parser';
+import {GroovyTokenId, T} from '../tokens';
 import {BackslashEscapeParser, SqSLBadBackslashEscapeParser} from './backslash-escape';
 import {OctalEscapeParser} from './octal-escape';
 import {QSLUnicodeEscapeParser} from './unicode-escape';
 
-export class SsqSLiteralEndMarkParser extends ByCharTokenParser {
+export class SsqSLiteralEndMarkParser extends BySingleCharTokenParser {
 	constructor() {
 		super('\'');
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	matches(_1: Char, _2: ParseContext): boolean {
-		return true;
-	}
-
-	parse(_: Char, context: ParseContext): boolean {
-		const charIndex = context.charIndex;
-		const mark = new AtomicToken({
-			id: T.SsqSLMark,
-			text: '\'',
-			start: charIndex, line: context.line, column: context.column
-		});
-		context.collect(mark);
-		context.forward(1);
-		return true;
+	protected getTokenId(): GroovyTokenId {
+		return T.SsqSLMark;
 	}
 
 	static readonly instance = new SsqSLiteralEndMarkParser();

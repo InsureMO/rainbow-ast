@@ -128,26 +128,13 @@ export abstract class GsInterpolationParser extends ByCharTokenParser {
 	}
 }
 
-export class GsBraceInterpolationEndMarkParser extends ByCharTokenParser {
+export class GsBraceInterpolationEndMarkParser extends BySingleCharTokenParser {
 	constructor() {
 		super('}');
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	matches(_1: Char, _2: ParseContext): boolean {
-		return true;
-	}
-
-	parse(_: Char, context: ParseContext): boolean {
-		const charIndex = context.charIndex;
-		const mark = new AtomicToken({
-			id: T.GsiBraceEndMark,
-			text: '}',
-			start: charIndex, line: context.line, column: context.column
-		});
-		context.collect(mark);
-		context.forward(1);
-		return true;
+	protected getTokenId(): GroovyTokenId {
+		return T.GsiBraceEndMark;
 	}
 
 	static readonly instance = new GsBraceInterpolationEndMarkParser();

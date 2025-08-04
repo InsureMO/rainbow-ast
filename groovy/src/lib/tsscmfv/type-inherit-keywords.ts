@@ -4,7 +4,7 @@ import {CommaParserInstance, DotParserInstance, PackageNameParser, WsTabNlParser
 import {ParseContext} from '../parse-context';
 import {AfterChildParsed, ParserSelector, SingleKeywordTokenParser, TokenParser} from '../token-parser';
 import {GroovyTokenId, T} from '../tokens';
-import {TsscmfvTypeInheritKeywords} from './tsscmfv-keywords-types';
+import {TsscmfvTypeInheritKeywords} from './keywords-types';
 
 export class TypeInheritKeywordParser<A extends TsscmfvTypeInheritKeywords> extends SingleKeywordTokenParser {
 	private static readonly EISelector: ParserSelector = new ParserSelector({

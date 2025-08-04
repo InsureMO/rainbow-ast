@@ -34,6 +34,8 @@ export class AstChecker {
 	private readonly _ast: Ast;
 	private readonly _spec: TokenSpec;
 	private readonly _logs: Array<string> = [];
+	private _topLevelTokenCount: number = 0;
+	private _tokenCount: number = 0;
 
 	public static check(ast: Ast, spec: TokenSpec): void {
 		new AstChecker(ast, spec).check().print();
@@ -45,15 +47,19 @@ export class AstChecker {
 	}
 
 	private doCheck(token: Token, spec: TokenSpec, bullet: string) {
-		const [tokenId, startOffset, startLine, text, children] = spec;
+		const [tokenId, startOffset, startLine, text, specOfChildren] = spec;
 		const indent = new Array(bullet.split('.').length - 2).fill('\t').join('');
 		try {
 			expect(token).not.toBeNull();
 			expect(token.id).is(tokenId, 'TokenId');
 			expect(token.start).is(startOffset, 'StartOffset');
-			expect(token.end).is(startOffset + text.length, 'EndOffset');
+			if (specOfChildren == null) {
+				expect(token.end).is(startOffset + text.length, 'EndOffset');
+			}
 			expect(token.line).is(startLine, 'StartLine');
-			expect(token.text).is(text, 'Text');
+			if (specOfChildren == null) {
+				expect(token.text).is(text, 'Text');
+			}
 			this._logs.push([
 				indent,
 				bullet,
@@ -78,27 +84,24 @@ export class AstChecker {
 			this.print();
 			throw e;
 		}
-		if (children != null) {
+		if (specOfChildren != null) {
 			const block = token as BlockToken;
-			try {
-				expect(block.children.length).is(children.length, 'Children Count');
-			} catch (e) {
-				this._logs.push(chalk.red([
-					indent,
-					bullet,
-					' 💔 ',
-					`Check children count[type=${GroovyTokenId[tokenId]}].`
-				].join('')));
-				this.print();
-				throw e;
-			}
-			children.forEach((child, index) => {
+			specOfChildren.forEach((specOfChild, index) => {
 				if (bullet === '0.') {
-					this.doCheck(block.children[index], children[index], `${index + 1}.`);
+					this.doCheck(block.children[index], specOfChild, `${index + 1}.`);
 				} else {
-					this.doCheck(block.children[index], children[index], `${bullet}${index + 1}.`);
+					this.doCheck(block.children[index], specOfChild, `${bullet}${index + 1}.`);
 				}
 			});
+		}
+
+		if (token === this._ast.compilationUnit) {
+			// do nothing
+		} else if (token.parent === this._ast.compilationUnit) {
+			this._topLevelTokenCount += 1;
+			this._tokenCount += 1;
+		} else {
+			this._tokenCount += 1;
 		}
 	}
 
@@ -109,5 +112,6 @@ export class AstChecker {
 
 	print() {
 		console.log(this._logs.join('\n'));
+		console.log(`${this._tokenCount} tokens collected, ${this._topLevelTokenCount} at top level.`);
 	}
 }

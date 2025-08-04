@@ -4,10 +4,12 @@ import {SemicolonParserInstance, WsTabNlParsers} from '../common-token';
 import {ParseContext} from '../parse-context';
 import {KeywordTokenParser, ParserSelector} from '../token-parser';
 import {GroovyTokenId, T} from '../tokens';
+import {TsscmfvCodeBlockParser} from './code-block';
+import {TsscmfvKeywords} from './keywords-types';
 import {ModifiersParser} from './modifiers-parser';
-import {TsscmfvKeywords} from './tsscmfv-keywords-types';
 import {TypeInheritParser} from './type-inherit-parser';
 import {TypeParser} from './type-parser';
+import {TsscmfvKeywordUtils} from './utils';
 
 enum TsscmfvKeywordKind {
 	Modifier, Type, Inherit,
@@ -16,6 +18,7 @@ enum TsscmfvKeywordKind {
 export class TsscmfvDeclParser<A extends TsscmfvKeywords> extends KeywordTokenParser {
 	private static Selector: ParserSelector = new ParserSelector({
 		parsers: [
+			TsscmfvCodeBlockParser.instance,
 			SemicolonParserInstance,
 			CommentParsers,
 			WsTabNlParsers
@@ -28,11 +31,11 @@ export class TsscmfvDeclParser<A extends TsscmfvKeywords> extends KeywordTokenPa
 	constructor(keyword: A[0], tokenId: A[1]) {
 		super(keyword);
 		this._tokenId = tokenId;
-		if (this.isModifierKeyword()) {
+		if (TsscmfvKeywordUtils.isModifierKeyword(this._tokenId)) {
 			this._tokenKind = TsscmfvKeywordKind.Modifier;
-		} else if (this.isTypeKeyword()) {
+		} else if (TsscmfvKeywordUtils.isTypeKeyword(this._tokenId)) {
 			this._tokenKind = TsscmfvKeywordKind.Type;
-		} else if (this.isInheritKeyword()) {
+		} else if (TsscmfvKeywordUtils.isInheritKeyword(this._tokenId)) {
 			this._tokenKind = TsscmfvKeywordKind.Inherit;
 		} else {
 			throw new Error(`Tsscmfv keyword[${keyword}] is not supported.`);
@@ -43,25 +46,9 @@ export class TsscmfvDeclParser<A extends TsscmfvKeywords> extends KeywordTokenPa
 		return this._tokenId;
 	}
 
+	// noinspection JSUnusedGlobalSymbols
 	protected getTokenKind(): TsscmfvKeywordKind {
 		return this._tokenKind;
-	}
-
-	private isTypeKeyword() {
-		return [T.AT_INTERFACE, T.CLASS, T.ENUM, T.INTERFACE, T.RECORD, T.TRAIT].includes(this._tokenId);
-	}
-
-	private isInheritKeyword() {
-		return [T.EXTENDS, T.IMPLEMENTS, T.PERMITS].includes(this._tokenId);
-	}
-
-	private isModifierKeyword() {
-		return [
-			T.ABSTRACT, T.FINAL, T.STATIC, T.STRICTFP,
-			T.DEF,
-			T.NON_SEALED, T.SEALED,
-			T.PRIVATE, T.PROTECTED, T.PUBLIC
-		].includes(this._tokenId);
 	}
 
 	isAvailable(context: ParseContext): boolean {
@@ -114,6 +101,8 @@ export class TsscmfvDeclParser<A extends TsscmfvKeywords> extends KeywordTokenPa
 				c = context.char();
 			}
 			context.rise();
+		} else {
+			throw new Error(`Block token[${T[block.id]}] not supported.`);
 		}
 
 		return true;

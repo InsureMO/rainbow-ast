@@ -1,6 +1,6 @@
 import {SingleKeywordTokenParser} from '../token-parser';
 import {GroovyTokenId} from '../tokens';
-import {TsscmfvModifierKeywords} from './tsscmfv-keywords-types';
+import {TsscmfvModifierKeywords} from './keywords-types';
 
 export class ModifierKeywordParser<A extends TsscmfvModifierKeywords> extends SingleKeywordTokenParser {
 	private readonly _tokenId: A[1];

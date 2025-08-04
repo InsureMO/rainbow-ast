@@ -11,14 +11,17 @@ export abstract class BySingleCharTokenParser extends ByCharTokenParser {
 
 	protected abstract getTokenId(): GroovyTokenId;
 
-	parse(_: Char, context: ParseContext): boolean {
+	protected createToken(context: ParseContext): AtomicToken {
 		const charIndex = context.charIndex;
-		const token = new AtomicToken({
+		return new AtomicToken({
 			id: this.getTokenId(),
 			text: this.firstChar,
 			start: charIndex, line: context.line, column: context.column
 		});
-		context.collect(token);
+	}
+
+	parse(_: Char, context: ParseContext): boolean {
+		context.collect(this.createToken(context));
 		context.forward(1);
 		return true;
 	}
