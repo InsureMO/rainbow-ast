@@ -12,7 +12,7 @@ export * from './as';                               // as: as alias (import), as
 // const: reserved
 // continue: for loop, while loop, do-while loop
 // def -> tsscmfv: type, constructor, method, field, variable
-// default: constructor, method, switch route
+// default -> tsscmfv: constructor (incorrect), method; switch route
 // do: do-while loop
 // double -> primitive types
 // else: if-else
@@ -32,7 +32,7 @@ export * from './as';                               // as: as alias (import), as
 // int -> primitive types
 // interface -> tsscmfv: type
 // long -> primitive types
-// native: constructor (incorrect), method
+// native -> tsscmfv: constructor (incorrect), method
 // new: new expression
 // non-sealed -> tsscmfv: type
 // null -> null literal
@@ -51,13 +51,13 @@ export * from './as';                               // as: as alias (import), as
 // this
 // threadsafe: reserved
 // throw: throw expression
-// throws: constructor method
+// throws -> tsscmfv: constructor method
 // trait -> tsscmfv: type
-// transient: field
+// transient -> tsscmfv: field
 // true -> boolean literal
 // try: try-catch
-// var: field, variable
-// void: method
-// volatile: field
+// var -> tsscmfv: field, variable
+// void -> tsscmfv: method
+// volatile -> tsscmfv: field
 // while: while loop
 // yield: switch route

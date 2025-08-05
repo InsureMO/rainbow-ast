@@ -254,6 +254,10 @@ export enum GroovyTokenId {
 	SyncBlockDecl,
 	SyncExpr,
 	SyncBody,
+	MethodDecl,
+	MethodBody,
+	FieldDecl,
+	VarDecl,
 }
 
 export const T = GroovyTokenId;

@@ -48,6 +48,8 @@ export const StandaloneSymbolParsers: Array<ByCharTokenParser> = ([
 	return new ParserClass();
 });
 
+export const LBraceParserInstance = StandaloneSymbolParsers.find(p => p.firstChar === '{');
+export const RBraceParserInstance = StandaloneSymbolParsers.find(p => p.firstChar === '}');
 export const AsteriskParserInstance = StandaloneSymbolParsers.find(p => p.firstChar === '*');
 export const DotParserInstance = StandaloneSymbolParsers.find(p => p.firstChar === '.');
 export const CommaParserInstance = StandaloneSymbolParsers.find(p => p.firstChar === ',');

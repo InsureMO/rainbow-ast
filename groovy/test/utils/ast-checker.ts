@@ -86,6 +86,18 @@ export class AstChecker {
 		}
 		if (specOfChildren != null) {
 			const block = token as BlockToken;
+			try {
+				expect(block.children.length).is(specOfChildren.length, 'Children Count');
+			} catch (e) {
+				this._logs.push(chalk.red([
+					indent,
+					bullet,
+					' 💔 ',
+					`Check children count[type=${GroovyTokenId[tokenId]}].`
+				].join('')));
+				this.print();
+				throw e;
+			}
 			specOfChildren.forEach((specOfChild, index) => {
 				if (bullet === '0.') {
 					this.doCheck(block.children[index], specOfChild, `${index + 1}.`);

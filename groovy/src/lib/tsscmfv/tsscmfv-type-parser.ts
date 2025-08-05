@@ -22,7 +22,7 @@ export class TsscmfvTypeParser {
 		if (TsscmfvTypeParser.StartSelector != null
 			|| TsscmfvTypeParser.StartedSelector != null
 			|| TsscmfvTypeParser.AfterNameSelector != null) {
-			throw new Error('TypeParser.Selector is initialized.');
+			throw new Error('TsscmfvTypeParser.Selector is initialized.');
 		}
 		TsscmfvTypeParser.StartSelector = new ParserSelector({parsers: parsers.Start});
 		TsscmfvTypeParser.StartedSelector = new ParserSelector({parsers: parsers.Started});
@@ -56,13 +56,16 @@ export class TsscmfvTypeParser {
 		block.setAttr(TA.TypeName, child.text);
 	}
 
-	private subsequent(selector: ParserSelector, context: ParseContext): void {
+	private subsequent(selector: ParserSelector, context: ParseContext): boolean {
+		let parsed = false;
+
 		let c = context.char();
 		while (c != null) {
 			const parser = selector.find(c, context);
 			if (parser == null) {
 				break;
 			}
+			parsed = true;
 			parser.parse(c, context);
 			if (parser instanceof TsscmfvTypeKeywordParser) {
 				const block = context.block();
@@ -80,6 +83,8 @@ export class TsscmfvTypeParser {
 			}
 			c = context.char();
 		}
+
+		return parsed;
 	}
 
 	parse(token: AtomicToken, context: ParseContext): boolean {
@@ -98,13 +103,11 @@ export class TsscmfvTypeParser {
 		this.writeTypeKind(block, token);
 
 		this.subsequent(TsscmfvTypeParser.StartedSelector, context);
-
 		return true;
 	}
 
-	continue(context: ParseContext): boolean {
+	continue(context: ParseContext): void {
 		this.subsequent(TsscmfvTypeParser.StartSelector, context);
-		return true;
 	}
 
 	static readonly instance = new TsscmfvTypeParser();

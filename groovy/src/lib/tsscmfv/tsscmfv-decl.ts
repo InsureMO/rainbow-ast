@@ -1,25 +1,24 @@
-import {Char} from '@rainbow-ast/core';
+import {AtomicToken, BlockToken, Char} from '@rainbow-ast/core';
 import {CommentParsers} from '../comment';
 import {SemicolonParserInstance, WsTabNlParsers} from '../common-token';
 import {ParseContext} from '../parse-context';
 import {KeywordTokenParser, ParserSelector} from '../token-parser';
 import {GroovyTokenId, T} from '../tokens';
-import {TsscmfvCodeBlockParser} from './tsscmfv-code-block';
+import {TryCodeBlockParser} from './code-block';
+import {TrySynchronizedExpressionParser} from './synchronized-block';
 import {TsscmfvKeywords} from './tsscmfv-keywords-types';
 import {TsscmfvModifiersParser} from './tsscmfv-modifiers-parser';
-import {TsscmfvSyncExprParser} from './tsscmfv-synchronized-expression';
 import {TsscmfvTypeInheritParser} from './tsscmfv-type-inherit-parser';
 import {TsscmfvTypeParser} from './tsscmfv-type-parser';
 import {TsscmfvKeywordUtils} from './tsscmfv-utils';
 
 enum TsscmfvKeywordKind {
-	Modifier, Type, Inherit,
+	Modifier, Type, TypeInherit, MethodReturn, MethodThrows
 }
 
 export class TsscmfvDeclParser<A extends TsscmfvKeywords> extends KeywordTokenParser {
 	private static Selector: ParserSelector = new ParserSelector({
 		parsers: [
-			TsscmfvCodeBlockParser.instance,
 			SemicolonParserInstance,
 			CommentParsers,
 			WsTabNlParsers
@@ -36,8 +35,12 @@ export class TsscmfvDeclParser<A extends TsscmfvKeywords> extends KeywordTokenPa
 			this._tokenKind = TsscmfvKeywordKind.Modifier;
 		} else if (TsscmfvKeywordUtils.isTypeKeyword(this._tokenId)) {
 			this._tokenKind = TsscmfvKeywordKind.Type;
-		} else if (TsscmfvKeywordUtils.isInheritKeyword(this._tokenId)) {
-			this._tokenKind = TsscmfvKeywordKind.Inherit;
+		} else if (TsscmfvKeywordUtils.isTypeInheritKeyword(this._tokenId)) {
+			this._tokenKind = TsscmfvKeywordKind.TypeInherit;
+		} else if (TsscmfvKeywordUtils.isMethodReturnKeyword(this._tokenId)) {
+			this._tokenKind = TsscmfvKeywordKind.TypeInherit;
+		} else if (TsscmfvKeywordUtils.isMethodThrowsKeyword(this._tokenId)) {
+			this._tokenKind = TsscmfvKeywordKind.TypeInherit;
 		} else {
 			throw new Error(`Tsscmfv keyword[${keyword}] is not supported.`);
 		}
@@ -65,57 +68,165 @@ export class TsscmfvDeclParser<A extends TsscmfvKeywords> extends KeywordTokenPa
 		}
 	}
 
+	private finalizeBlock(block: BlockToken, context: ParseContext): void {
+		// if (TsscmfvKeywordUtils.onlyDefKeywords(modifierTokens)) {
+		// 	if (block.parent.id === T.TypeBody) {
+		// 		block.rewriteId(T.FieldDecl);
+		// 	} else {
+		// 		block.rewriteId(T.VarDecl);
+		// 	}
+		// }
+		//
+		let c = context.char();
+		while (c != null) {
+			const parser = TsscmfvDeclParser.Selector.find(c, context);
+			if (parser == null) {
+				break;
+			}
+			parser.parse(c, context);
+			if (parser === SemicolonParserInstance) {
+				break;
+			}
+			c = context.char();
+		}
+		context.rise();
+	}
+
+	/**
+	 * try to parse synchronized block body when modifiers has {@link T.SYNCHRONIZED} only (one or more).
+	 * if try successfully, rewrite block to {@link T.SyncBlockDecl}, end it and return true.
+	 * otherwise return false
+	 */
+	private trySynchronizedBlock(block: BlockToken, context: ParseContext): boolean {
+		if (!TsscmfvKeywordUtils.couldBeSynchronizedBlock(block)) {
+			return false;
+		}
+
+		TrySynchronizedExpressionParser.instance.try(context);
+		block = context.block();
+		if (block.id === T.SyncBlockDecl) {
+			// success
+			TryCodeBlockParser.instanceSynchronizedBody.try(context);
+			return true;
+		} else {
+			// not synchronized expression, it is method
+			block.rewriteId(T.MethodDecl);
+			return false;
+		}
+	}
+
+	/**
+	 * try to parse static block body when modifiers has {@link T.STATIC} only (one or more).
+	 * if try successfully, rewrite block to {@link T.StaticBlockDecl}, end it and return true.
+	 * otherwise return false
+	 */
+	private tryStaticBlock(block: BlockToken, context: ParseContext): boolean {
+		if (!TsscmfvKeywordUtils.couldBeStaticBlock(block)) {
+			return false;
+		}
+
+		if (TryCodeBlockParser.instanceStaticBody.try(context)) {
+			block.rewriteId(T.StaticBlockDecl);
+			context.rise();
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * try to parse type body.
+	 * end block when try successfully, or finalize block when try failed.
+	 */
+	private tryTypeBody(context: ParseContext): void {
+		if (TryCodeBlockParser.instanceTypeBody.try(context)) {
+			context.rise();
+		} else {
+			this.finalizeBlock(context.block(), context);
+		}
+	}
+
+	/**
+	 * try to parse type, type inherit and type body.
+	 * if try successfully, rewrite block to {@link T.TypeDecl}, end it and return true.
+	 * otherwise return false
+	 */
+	private tryType(block: BlockToken, context: ParseContext): boolean {
+		TsscmfvTypeParser.instance.continue(context);
+		TsscmfvTypeInheritParser.instance.continue(context);
+		const success = block.id === T.TypeDecl;
+		if (success) {
+			this.tryTypeBody(context);
+		}
+		return success;
+	}
+
+	private startWithModifier(firstModifierToken: AtomicToken, context: ParseContext): void {
+		TsscmfvModifiersParser.instance.parse(firstModifierToken, context);
+
+		const block = context.block();
+		switch (block.id) {
+			case T.TsscmfvDecl: {
+				let matched = this.trySynchronizedBlock(block, context);
+				if (!matched) {
+					// @ts-ignore
+					if (block.id === T.MethodDecl) {
+						// TODO continue parse method
+					} else {
+						matched = !matched && this.tryStaticBlock(block, context);
+						matched = !matched && this.tryType(block, context);
+						// TODO continue parse method, field or variable
+					}
+				}
+				break;
+			}
+			case T.TypeDecl: {
+				TsscmfvTypeParser.instance.continue(context);
+				TsscmfvTypeInheritParser.instance.continue(context);
+				this.tryTypeBody(context);
+				break;
+			}
+			case T.MethodDecl: {
+				// TODO continue parse method
+				break;
+			}
+			case T.FieldDecl:
+			case T.VarDecl: {
+				// TODO continue parse field or variable
+				break;
+			}
+		}
+	}
+
 	parse(_: Char, context: ParseContext): boolean {
 		const token = this.createToken(context);
 
 		switch (this._tokenKind) {
 			case TsscmfvKeywordKind.Modifier: {
-				TsscmfvModifiersParser.instance.parse(token, context);
-				const modifierTokens = TsscmfvKeywordUtils.getModifierTokens(context.block());
-				if (TsscmfvKeywordUtils.onlySynchronizedKeywords(modifierTokens)) {
-					// synchronized block
-					TsscmfvSyncExprParser.instance.continue(context);
-				} else {
-					// not synchronized block
-					TsscmfvTypeParser.instance.continue(context);
-					TsscmfvTypeInheritParser.instance.continue(context);
-				}
+				this.startWithModifier(token, context);
 				break;
 			}
 			case TsscmfvKeywordKind.Type: {
 				TsscmfvTypeParser.instance.parse(token, context);
 				TsscmfvTypeInheritParser.instance.continue(context);
+				this.tryTypeBody(context);
 				break;
 			}
-			case TsscmfvKeywordKind.Inherit: {
+			case TsscmfvKeywordKind.TypeInherit: {
 				TsscmfvTypeInheritParser.instance.parse(token, context);
+				this.tryTypeBody(context);
+				break;
+			}
+			case TsscmfvKeywordKind.MethodReturn: {
+				// TODO parse from method return
+				break;
+			}
+			case TsscmfvKeywordKind.MethodThrows: {
+				// TODO parse from method throws
 				break;
 			}
 			default:
 				throw new Error(`Tsscmfv token kind[${this._tokenKind}] is not supported.`);
-		}
-
-		// end tsscmfv if none of above ended it
-		const block = context.block();
-		if ([T.TsscmfvDecl, T.TypeDecl].includes(block.id)) {
-			// not end yet, scan the end token
-			let c = context.char();
-			while (c != null) {
-				const parser = TsscmfvDeclParser.Selector.find(c, context);
-				if (parser == null) {
-					break;
-				}
-				parser.parse(c, context);
-				if (parser === SemicolonParserInstance) {
-					break;
-				} else if (parser === TsscmfvCodeBlockParser.instance) {
-					break;
-				}
-				c = context.char();
-			}
-			context.rise();
-		} else {
-			throw new Error(`Block token[${T[block.id]}] not supported.`);
 		}
 
 		return true;
@@ -125,11 +236,13 @@ export class TsscmfvDeclParser<A extends TsscmfvKeywords> extends KeywordTokenPa
 	static readonly instanceAbstract = new TsscmfvDeclParser('abstract', GroovyTokenId.ABSTRACT);
 	static readonly instanceClass = new TsscmfvDeclParser('class', GroovyTokenId.CLASS);
 	static readonly instanceDef = new TsscmfvDeclParser('def', GroovyTokenId.DEF);
+	static readonly instanceDefault = new TsscmfvDeclParser('default', GroovyTokenId.DEFAULT);
 	static readonly instanceEnum = new TsscmfvDeclParser('enum', GroovyTokenId.ENUM);
 	static readonly instanceExtends = new TsscmfvDeclParser('extends', GroovyTokenId.EXTENDS);
 	static readonly instanceFinal = new TsscmfvDeclParser('final', GroovyTokenId.FINAL);
 	static readonly instanceImplements = new TsscmfvDeclParser('implements', GroovyTokenId.IMPLEMENTS);
 	static readonly instanceInterface = new TsscmfvDeclParser('interface', GroovyTokenId.INTERFACE);
+	static readonly instanceNative = new TsscmfvDeclParser('native', GroovyTokenId.NATIVE);
 	static readonly instanceNonSealed = new TsscmfvDeclParser('non-sealed', GroovyTokenId.NON_SEALED);
 	static readonly instancePermits = new TsscmfvDeclParser('permits', GroovyTokenId.PERMITS);
 	static readonly instancePrivate = new TsscmfvDeclParser('private', GroovyTokenId.PRIVATE);
@@ -140,7 +253,12 @@ export class TsscmfvDeclParser<A extends TsscmfvKeywords> extends KeywordTokenPa
 	static readonly instanceStatic = new TsscmfvDeclParser('static', GroovyTokenId.STATIC);
 	static readonly instanceStrictfp = new TsscmfvDeclParser('strictfp', GroovyTokenId.STRICTFP);
 	static readonly instanceSynchronized = new TsscmfvDeclParser('synchronized', GroovyTokenId.SYNCHRONIZED);
+	static readonly instanceThrows = new TsscmfvDeclParser('throws', GroovyTokenId.THROWS);
 	static readonly instanceTrait = new TsscmfvDeclParser('trait', GroovyTokenId.TRAIT);
+	static readonly instanceTransient = new TsscmfvDeclParser('transient', GroovyTokenId.TRANSIENT);
+	static readonly instanceVar = new TsscmfvDeclParser('var', GroovyTokenId.VAR);
+	static readonly instanceVoid = new TsscmfvDeclParser('void', GroovyTokenId.VOID);
+	static readonly instanceVolatile = new TsscmfvDeclParser('volatile', GroovyTokenId.VOLATILE);
 }
 
 export const TsscmfvTDP = TsscmfvDeclParser;
@@ -150,12 +268,15 @@ export const TsscmfvDeclParsers = [
 	TsscmfvTDP.instanceAbstract,
 	TsscmfvTDP.instanceClass,
 	TsscmfvTDP.instanceDef,
+	TsscmfvTDP.instanceDefault,
 	TsscmfvTDP.instanceEnum,
 	TsscmfvTDP.instanceExtends,
 	TsscmfvTDP.instanceFinal,
 	TsscmfvTDP.instanceImplements,
 	TsscmfvTDP.instanceInterface,
+	TsscmfvTDP.instanceNative,
 	TsscmfvTDP.instanceNonSealed,
+	TsscmfvTDP.instancePermits,
 	TsscmfvTDP.instancePrivate,
 	TsscmfvTDP.instanceProtected,
 	TsscmfvTDP.instancePublic,
@@ -164,5 +285,10 @@ export const TsscmfvDeclParsers = [
 	TsscmfvTDP.instanceStatic,
 	TsscmfvTDP.instanceStrictfp,
 	TsscmfvTDP.instanceSynchronized,
-	TsscmfvTDP.instanceTrait
+	TsscmfvTDP.instanceThrows,
+	TsscmfvTDP.instanceTrait,
+	TsscmfvTDP.instanceTransient,
+	TsscmfvTDP.instanceVar,
+	TsscmfvTDP.instanceVoid,
+	TsscmfvTDP.instanceVolatile
 ];

@@ -3,7 +3,9 @@ import {GroovyTokenId} from '../tokens';
 export type TsscmfvModifierKeywords =
 	| ['abstract', GroovyTokenId.ABSTRACT]
 	| ['def', GroovyTokenId.DEF]
+	| ['default', GroovyTokenId.DEFAULT]
 	| ['final', GroovyTokenId.FINAL]
+	| ['native', GroovyTokenId.NATIVE]
 	| ['non-sealed', GroovyTokenId.NON_SEALED]
 	| ['private', GroovyTokenId.PRIVATE]
 	| ['protected', GroovyTokenId.PROTECTED]
@@ -11,7 +13,10 @@ export type TsscmfvModifierKeywords =
 	| ['sealed', GroovyTokenId.SEALED]
 	| ['static', GroovyTokenId.STATIC]
 	| ['strictfp', GroovyTokenId.STRICTFP]
-	| ['synchronized', GroovyTokenId.SYNCHRONIZED];
+	| ['synchronized', GroovyTokenId.SYNCHRONIZED]
+	| ['transient', GroovyTokenId.TRANSIENT]
+	| ['var', GroovyTokenId.VAR]
+	| ['volatile', GroovyTokenId.VOLATILE];
 
 export type TsscmfvTypeKeywords =
 	| ['@interface', GroovyTokenId.AT_INTERFACE]
@@ -24,6 +29,15 @@ export type TsscmfvTypeKeywords =
 export type TsscmfvTypeInheritKeywords =
 	| ['extends', GroovyTokenId.EXTENDS]
 	| ['implements', GroovyTokenId.IMPLEMENTS]
-	| ['permits', GroovyTokenId.PERMITS]
+	| ['permits', GroovyTokenId.PERMITS];
 
-export type TsscmfvKeywords = TsscmfvModifierKeywords | TsscmfvTypeKeywords | TsscmfvTypeInheritKeywords;
+export type TsscmfvMethodReturnKeywords =
+	| ['void', GroovyTokenId.VOID];
+
+export type TsscmfvMethodThrowsKeywords =
+	| ['throws', GroovyTokenId.THROWS];
+
+export type TsscmfvKeywords =
+	| TsscmfvModifierKeywords
+	| TsscmfvTypeKeywords | TsscmfvTypeInheritKeywords
+	| TsscmfvMethodReturnKeywords | TsscmfvMethodThrowsKeywords;
