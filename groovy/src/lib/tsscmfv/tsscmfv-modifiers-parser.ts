@@ -60,7 +60,7 @@ export class TsscmfvModifiersParser {
 				selector = TsscmfvModifiersParser.MethodSelector;
 				break;
 			}
-			case T.TRANSIENT: case T.VAR: case T.VOLATILE: {
+			case T.TRANSIENT: case T.VOLATILE: {
 				if (block.parent.id === T.TypeBody) {
 					block.rewriteId(T.FieldDecl);
 				} else {
@@ -99,7 +99,7 @@ export class TsscmfvModifiersParser {
 			} else if (parser === TsscmfvMKP.instanceDefault || parser === TsscmfvMKP.instanceNative) {
 				block.rewriteId(T.MethodDecl);
 				selector = TsscmfvModifiersParser.MethodSelector;
-			} else if (parser === TsscmfvMKP.instanceTransient || parser === TsscmfvMKP.instanceVar || parser === TsscmfvMKP.instanceVolatile) {
+			} else if (parser === TsscmfvMKP.instanceTransient || parser === TsscmfvMKP.instanceVolatile) {
 				if (block.parent.id === T.TypeBody) {
 					block.rewriteId(T.FieldDecl);
 				} else {
@@ -135,7 +135,7 @@ TsscmfvModifiersParser.initSelector({
 	Type: [
 		TsscmfvMKP.instanceAbstract,
 		TsscmfvMKP.instanceFinal, TsscmfvMKP.instanceStatic, TsscmfvMKP.instanceStrictfp,
-		TsscmfvMKP.instanceDef,
+		TsscmfvMKP.instanceDef, TsscmfvMKP.instanceVar,
 		TsscmfvMKP.instancePrivate, TsscmfvMKP.instanceProtected, TsscmfvMKP.instancePublic,
 		TsscmfvMKP.instanceSealed, TsscmfvMKP.instanceNonSealed,
 		CommentParsers,
@@ -144,7 +144,7 @@ TsscmfvModifiersParser.initSelector({
 	Method: [
 		TsscmfvMKP.instanceAbstract,
 		TsscmfvMKP.instanceFinal, TsscmfvMKP.instanceStatic, TsscmfvMKP.instanceStrictfp,
-		TsscmfvMKP.instanceDef,
+		TsscmfvMKP.instanceDef, TsscmfvMKP.instanceVar,
 		TsscmfvMKP.instancePrivate, TsscmfvMKP.instanceProtected, TsscmfvMKP.instancePublic,
 		TsscmfvMKP.instanceSynchronized,
 		TsscmfvMKP.instanceDefault, TsscmfvMKP.instanceNative,

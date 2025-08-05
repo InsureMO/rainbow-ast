@@ -56,7 +56,7 @@ export * from './as';                               // as: as alias (import), as
 // transient -> tsscmfv: field
 // true -> boolean literal
 // try: try-catch
-// var -> tsscmfv: field, variable
+// var -> tsscmfv: type, constructor, method, field, variable
 // void -> tsscmfv: method
 // volatile -> tsscmfv: field
 // while: while loop
