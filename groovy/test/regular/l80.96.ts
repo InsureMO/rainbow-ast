@@ -1,7 +1,7 @@
 import {T} from '../../src';
 import {TokenSpec} from '../utils';
 
-export const l80_93 = (l: { v: number }): Array<TokenSpec> => {
+export const l80_96 = (l: { v: number }): Array<TokenSpec> => {
 	return [
 		[T.SLComment, 1447, l.v, '// type declaration #1', [
 			[T.SLCommentStartMark, 1447, l.v, '//'],
@@ -100,7 +100,7 @@ export const l80_93 = (l: { v: number }): Array<TokenSpec> => {
 		[T.TypeDecl, 1673, l.v, 'public class A extends b.C extends implements implements d.E permits f.G, i.H permits;', [
 			[T.ModifierDecl, 1673, l.v, 'public ', [
 				[T.PUBLIC, 1673, l.v, 'public'],
-				[T.Whitespaces, 1679, l.v, ' '],
+				[T.Whitespaces, 1679, l.v, ' ']
 			]],
 			[T.CLASS, 1680, l.v, 'class'],
 			[T.Whitespaces, 1685, l.v, ' '],
@@ -148,6 +148,68 @@ export const l80_93 = (l: { v: number }): Array<TokenSpec> => {
 			]],
 			[T.Semicolon, 1758, l.v, ';']
 		]],
-		[T.Newline, 1759, l.v++, '\n']
+		[T.Newline, 1759, l.v++, '\n'],
+		[T.TypeDecl, 1760, l.v, 'class A {}', [
+			[T.CLASS, 1760, l.v, 'class'],
+			[T.Whitespaces, 1765, l.v, ' '],
+			[T.Identifier, 1766, l.v, 'A'],
+			[T.Whitespaces, 1767, l.v, ' '],
+			[T.TypeBody, 1768, l.v, '{}', [
+				[T.LBrace, 1768, l.v, '{'],
+				[T.RBrace, 1769, l.v, '}']
+			]]
+		]],
+		[T.Newline, 1770, l.v++, '\n'],
+		[T.TypeDecl, 1771, l.v, 'public sealed class B extends C implements D permits E, F {}', [
+			[T.ModifierDecl, 1771, l.v, 'public ', [
+				[T.PUBLIC, 1771, l.v, 'public'],
+				[T.Whitespaces, 1777, l.v, ' '],
+				[T.SEALED, 1778, l.v, 'sealed'],
+				[T.Whitespaces, 1784, l.v, ' '],
+			]],
+			[T.CLASS, 1785, l.v, 'class'],
+			[T.Whitespaces, 1790, l.v, ' '],
+			[T.Identifier, 1791, l.v, 'B'],
+			[T.Whitespaces, 1792, l.v, ' '],
+			[T.TypeInheritDecl, 1793, l.v, 'extends C ', [
+				[T.EXTENDS, 1793, l.v, 'extends'],
+				[T.Whitespaces, 1800, l.v, ' '],
+				[T.Identifier, 1801, l.v, 'C'],
+				[T.Whitespaces, 1802, l.v, ' '],
+			]],
+			[T.TypeInheritDecl, 1803, l.v, 'implements D ', [
+				[T.IMPLEMENTS, 1803, l.v, 'implements'],
+				[T.Whitespaces, 1813, l.v, ' '],
+				[T.Identifier, 1814, l.v, 'D'],
+				[T.Whitespaces, 1815, l.v, ' '],
+			]],
+			[T.TypeInheritDecl, 1816, l.v, 'permits E, F ', [
+				[T.PERMITS, 1816, l.v, 'permits'],
+				[T.Whitespaces, 1823, l.v, ' '],
+				[T.Identifier, 1824, l.v, 'E'],
+				[T.Comma, 1825, l.v, ','],
+				[T.Whitespaces, 1826, l.v, ' '],
+				[T.Identifier, 1827, l.v, 'F'],
+				[T.Whitespaces, 1828, l.v, ' '],
+			]],
+			[T.TypeBody, 1829, l.v, '{}', [
+				[T.LBrace, 1829, l.v, '{'],
+				[T.RBrace, 1830, l.v, '}']
+			]]
+		]],
+		[T.Newline, 1831, l.v++, '\n'],
+		[T.StaticBlockDecl, 1832, l.v, 'static static {}', [
+			[T.ModifierDecl, 1832, l.v, 'static static ', [
+				[T.STATIC, 1832, l.v, 'static'],
+				[T.Whitespaces, 1838, l.v, ' '],
+				[T.STATIC, 1839, l.v, 'static'],
+				[T.Whitespaces, 1845, l.v, ' '],
+			]],
+			[T.StaticBody, 1846, l.v, '{}', [
+				[T.LBrace, 1846, l.v, '{'],
+				[T.RBrace, 1847, l.v, '}']
+			]]
+		]],
+		[T.Newline, 1848, l.v++, '\n'],
 	];
 };

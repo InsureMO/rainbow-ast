@@ -4,9 +4,9 @@ import {CommaParserInstance, DotParserInstance, PackageNameParser, WsTabNlParser
 import {ParseContext} from '../parse-context';
 import {AfterChildParsed, ParserSelector, SingleKeywordTokenParser, TokenParser} from '../token-parser';
 import {GroovyTokenId, T} from '../tokens';
-import {TsscmfvTypeInheritKeywords} from './keywords-types';
+import {TsscmfvTypeInheritKeywords} from './tsscmfv-keywords-types';
 
-export class TypeInheritKeywordParser<A extends TsscmfvTypeInheritKeywords> extends SingleKeywordTokenParser {
+export class TsscmfvTypeInheritKeywordParser<A extends TsscmfvTypeInheritKeywords> extends SingleKeywordTokenParser {
 	private static readonly EISelector: ParserSelector = new ParserSelector({
 		parsers: [
 			PackageNameParser.instance,
@@ -69,30 +69,30 @@ export class TypeInheritKeywordParser<A extends TsscmfvTypeInheritKeywords> exte
 
 	protected getInitBlockParserSelector(): ParserSelector {
 		if (this.getTokenId() === T.PERMITS) {
-			return TypeInheritKeywordParser.PSelector;
+			return TsscmfvTypeInheritKeywordParser.PSelector;
 		} else {
-			return TypeInheritKeywordParser.EISelector;
+			return TsscmfvTypeInheritKeywordParser.EISelector;
 		}
 	}
 
 	protected afterChildParsed(_: ParseContext, parser: TokenParser): AfterChildParsed {
 		if (this.getTokenId() === T.PERMITS) {
 			if (parser === PackageNameParser.instance) {
-				return TypeInheritKeywordParser.PAfterNameSelector;
+				return TsscmfvTypeInheritKeywordParser.PAfterNameSelector;
 			} else if (parser === DotParserInstance) {
-				return TypeInheritKeywordParser.PAfterDotSelector;
+				return TsscmfvTypeInheritKeywordParser.PAfterDotSelector;
 			} else if (parser === CommaParserInstance) {
-				return TypeInheritKeywordParser.PSelector;
+				return TsscmfvTypeInheritKeywordParser.PSelector;
 			} else {
 				return (void 0);
 			}
 		} else {
 			if (parser === PackageNameParser.instance) {
-				return TypeInheritKeywordParser.EIAfterNameSelector;
+				return TsscmfvTypeInheritKeywordParser.EIAfterNameSelector;
 			} else if (parser === DotParserInstance) {
-				return TypeInheritKeywordParser.EIAfterDotSelector;
+				return TsscmfvTypeInheritKeywordParser.EIAfterDotSelector;
 			} else if (parser === CommaParserInstance) {
-				return TypeInheritKeywordParser.EISelector;
+				return TsscmfvTypeInheritKeywordParser.EISelector;
 			} else {
 				return (void 0);
 			}
@@ -123,9 +123,9 @@ export class TypeInheritKeywordParser<A extends TsscmfvTypeInheritKeywords> exte
 		return true;
 	}
 
-	static readonly instanceExtends = new TypeInheritKeywordParser('extends', GroovyTokenId.EXTENDS);
-	static readonly instanceImplements = new TypeInheritKeywordParser('implements', GroovyTokenId.IMPLEMENTS);
-	static readonly instancePermits = new TypeInheritKeywordParser('permits', GroovyTokenId.PERMITS);
+	static readonly instanceExtends = new TsscmfvTypeInheritKeywordParser('extends', GroovyTokenId.EXTENDS);
+	static readonly instanceImplements = new TsscmfvTypeInheritKeywordParser('implements', GroovyTokenId.IMPLEMENTS);
+	static readonly instancePermits = new TsscmfvTypeInheritKeywordParser('permits', GroovyTokenId.PERMITS);
 }
 
-export const TIKP = TypeInheritKeywordParser;
+export const TsscmfvTIKP = TsscmfvTypeInheritKeywordParser;

@@ -4,16 +4,16 @@ import {WsTabNlParsers} from '../common-token';
 import {ParseContext} from '../parse-context';
 import {ParserSelector, ParserSelectorArgs} from '../token-parser';
 import {T} from '../tokens';
-import {MKP} from './modifier-keywords';
+import {TsscmfvMKP} from './tsscmfv-modifier-keywords';
 
-export class ModifiersParser {
+export class TsscmfvModifiersParser {
 	private static Selector: ParserSelector;
 
 	static initSelector(parsers: ParserSelectorArgs['parsers']) {
-		if (ModifiersParser.Selector != null) {
+		if (TsscmfvModifiersParser.Selector != null) {
 			throw new Error('ModifiersParser.Selector is initialized.');
 		}
-		ModifiersParser.Selector = new ParserSelector({parsers});
+		TsscmfvModifiersParser.Selector = new ParserSelector({parsers});
 	}
 
 	parse(token: AtomicToken, context: ParseContext): boolean {
@@ -37,12 +37,12 @@ export class ModifiersParser {
 
 		let c = context.char();
 		while (c != null) {
-			const parser = ModifiersParser.Selector.find(c, context);
+			const parser = TsscmfvModifiersParser.Selector.find(c, context);
 			if (parser == null) {
 				break;
 			}
 			parser.parse(c, context);
-			if (parser === MKP.instanceSealed || parser === MKP.instanceNonSealed) {
+			if (parser === TsscmfvMKP.instanceSealed || parser === TsscmfvMKP.instanceNonSealed) {
 				if (parentBlock.id !== T.TypeDecl) {
 					parentBlock.rewriteId(T.TypeDecl);
 				}
@@ -54,14 +54,15 @@ export class ModifiersParser {
 		return true;
 	}
 
-	static readonly instance = new ModifiersParser();
+	static readonly instance = new TsscmfvModifiersParser();
 }
 
-ModifiersParser.initSelector([
-	MKP.instanceAbstract, MKP.instanceFinal, MKP.instanceStatic, MKP.instanceStrictfp,
-	MKP.instanceDef,
-	MKP.instancePrivate, MKP.instanceProtected, MKP.instancePublic,
-	MKP.instanceSealed, MKP.instanceNonSealed,
+TsscmfvModifiersParser.initSelector([
+	TsscmfvMKP.instanceAbstract, TsscmfvMKP.instanceFinal, TsscmfvMKP.instanceStatic, TsscmfvMKP.instanceStrictfp,
+	TsscmfvMKP.instanceDef,
+	TsscmfvMKP.instancePrivate, TsscmfvMKP.instanceProtected, TsscmfvMKP.instancePublic,
+	TsscmfvMKP.instanceSealed, TsscmfvMKP.instanceNonSealed,
+	TsscmfvMKP.instanceSynchronized,
 	CommentParsers,
 	WsTabNlParsers
 ]);

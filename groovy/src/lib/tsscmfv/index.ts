@@ -1,12 +1,13 @@
-export * from './keywords-types';
-export * from './utils';
+export * from './tsscmfv-keywords-types';
+export * from './tsscmfv-utils';
 
-export * from './modifier-keywords';
-export * from './modifiers-parser';
-export * from './type-keywords';
-export * from './type-parser';
-export * from './type-inherit-keywords';
-export * from './type-inherit-parser';
-export * from './code-block';
+export * from './tsscmfv-modifier-keywords';
+export * from './tsscmfv-modifiers-parser';
+export * from './tsscmfv-type-keywords';
+export * from './tsscmfv-type-parser';
+export * from './tsscmfv-type-inherit-keywords';
+export * from './tsscmfv-type-inherit-parser';
+export * from './tsscmfv-synchronized-expression';
+export * from './tsscmfv-code-block';
 
 export * from './tsscmfv-decl';

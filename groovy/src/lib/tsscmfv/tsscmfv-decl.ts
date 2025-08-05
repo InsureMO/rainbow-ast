@@ -4,12 +4,13 @@ import {SemicolonParserInstance, WsTabNlParsers} from '../common-token';
 import {ParseContext} from '../parse-context';
 import {KeywordTokenParser, ParserSelector} from '../token-parser';
 import {GroovyTokenId, T} from '../tokens';
-import {TsscmfvCodeBlockParser} from './code-block';
-import {TsscmfvKeywords} from './keywords-types';
-import {ModifiersParser} from './modifiers-parser';
-import {TypeInheritParser} from './type-inherit-parser';
-import {TypeParser} from './type-parser';
-import {TsscmfvKeywordUtils} from './utils';
+import {TsscmfvCodeBlockParser} from './tsscmfv-code-block';
+import {TsscmfvKeywords} from './tsscmfv-keywords-types';
+import {TsscmfvModifiersParser} from './tsscmfv-modifiers-parser';
+import {TsscmfvSyncExprParser} from './tsscmfv-synchronized-expression';
+import {TsscmfvTypeInheritParser} from './tsscmfv-type-inherit-parser';
+import {TsscmfvTypeParser} from './tsscmfv-type-parser';
+import {TsscmfvKeywordUtils} from './tsscmfv-utils';
 
 enum TsscmfvKeywordKind {
 	Modifier, Type, Inherit,
@@ -68,18 +69,28 @@ export class TsscmfvDeclParser<A extends TsscmfvKeywords> extends KeywordTokenPa
 		const token = this.createToken(context);
 
 		switch (this._tokenKind) {
-			case TsscmfvKeywordKind.Modifier:
-				ModifiersParser.instance.parse(token, context);
-				TypeParser.instance.continue(context);
-				TypeInheritParser.instance.continue(context);
+			case TsscmfvKeywordKind.Modifier: {
+				TsscmfvModifiersParser.instance.parse(token, context);
+				const modifierTokens = TsscmfvKeywordUtils.getModifierTokens(context.block());
+				if (TsscmfvKeywordUtils.onlySynchronizedKeywords(modifierTokens)) {
+					// synchronized block
+					TsscmfvSyncExprParser.instance.continue(context);
+				} else {
+					// not synchronized block
+					TsscmfvTypeParser.instance.continue(context);
+					TsscmfvTypeInheritParser.instance.continue(context);
+				}
 				break;
-			case TsscmfvKeywordKind.Type:
-				TypeParser.instance.parse(token, context);
-				TypeInheritParser.instance.continue(context);
+			}
+			case TsscmfvKeywordKind.Type: {
+				TsscmfvTypeParser.instance.parse(token, context);
+				TsscmfvTypeInheritParser.instance.continue(context);
 				break;
-			case TsscmfvKeywordKind.Inherit:
-				TypeInheritParser.instance.parse(token, context);
+			}
+			case TsscmfvKeywordKind.Inherit: {
+				TsscmfvTypeInheritParser.instance.parse(token, context);
 				break;
+			}
 			default:
 				throw new Error(`Tsscmfv token kind[${this._tokenKind}] is not supported.`);
 		}
@@ -96,6 +107,8 @@ export class TsscmfvDeclParser<A extends TsscmfvKeywords> extends KeywordTokenPa
 				}
 				parser.parse(c, context);
 				if (parser === SemicolonParserInstance) {
+					break;
+				} else if (parser === TsscmfvCodeBlockParser.instance) {
 					break;
 				}
 				c = context.char();
@@ -126,28 +139,30 @@ export class TsscmfvDeclParser<A extends TsscmfvKeywords> extends KeywordTokenPa
 	static readonly instanceSealed = new TsscmfvDeclParser('sealed', GroovyTokenId.SEALED);
 	static readonly instanceStatic = new TsscmfvDeclParser('static', GroovyTokenId.STATIC);
 	static readonly instanceStrictfp = new TsscmfvDeclParser('strictfp', GroovyTokenId.STRICTFP);
+	static readonly instanceSynchronized = new TsscmfvDeclParser('synchronized', GroovyTokenId.SYNCHRONIZED);
 	static readonly instanceTrait = new TsscmfvDeclParser('trait', GroovyTokenId.TRAIT);
 }
 
-const TDP = TsscmfvDeclParser;
+export const TsscmfvTDP = TsscmfvDeclParser;
 
 export const TsscmfvDeclParsers = [
-	TDP.instanceAtInterface,
-	TDP.instanceAbstract,
-	TDP.instanceClass,
-	TDP.instanceDef,
-	TDP.instanceEnum,
-	TDP.instanceExtends,
-	TDP.instanceFinal,
-	TDP.instanceImplements,
-	TDP.instanceInterface,
-	TDP.instanceNonSealed,
-	TDP.instancePrivate,
-	TDP.instanceProtected,
-	TDP.instancePublic,
-	TDP.instanceRecord,
-	TDP.instanceSealed,
-	TDP.instanceStatic,
-	TDP.instanceStrictfp,
-	TDP.instanceTrait
+	TsscmfvTDP.instanceAtInterface,
+	TsscmfvTDP.instanceAbstract,
+	TsscmfvTDP.instanceClass,
+	TsscmfvTDP.instanceDef,
+	TsscmfvTDP.instanceEnum,
+	TsscmfvTDP.instanceExtends,
+	TsscmfvTDP.instanceFinal,
+	TsscmfvTDP.instanceImplements,
+	TsscmfvTDP.instanceInterface,
+	TsscmfvTDP.instanceNonSealed,
+	TsscmfvTDP.instancePrivate,
+	TsscmfvTDP.instanceProtected,
+	TsscmfvTDP.instancePublic,
+	TsscmfvTDP.instanceRecord,
+	TsscmfvTDP.instanceSealed,
+	TsscmfvTDP.instanceStatic,
+	TsscmfvTDP.instanceStrictfp,
+	TsscmfvTDP.instanceSynchronized,
+	TsscmfvTDP.instanceTrait
 ];

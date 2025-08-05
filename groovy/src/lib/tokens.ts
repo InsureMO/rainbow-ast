@@ -248,9 +248,12 @@ export enum GroovyTokenId {
 	TypeDecl,
 	ModifierDecl,
 	TypeInheritDecl,
-	StaticBlockDecl,
 	TypeBody,
+	StaticBlockDecl,
 	StaticBody,
+	SyncBlockDecl,
+	SyncExpr,
+	SyncBody,
 }
 
 export const T = GroovyTokenId;

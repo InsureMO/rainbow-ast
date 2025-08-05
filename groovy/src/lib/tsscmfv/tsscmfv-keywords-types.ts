@@ -10,7 +10,8 @@ export type TsscmfvModifierKeywords =
 	| ['public', GroovyTokenId.PUBLIC]
 	| ['sealed', GroovyTokenId.SEALED]
 	| ['static', GroovyTokenId.STATIC]
-	| ['strictfp', GroovyTokenId.STRICTFP];
+	| ['strictfp', GroovyTokenId.STRICTFP]
+	| ['synchronized', GroovyTokenId.SYNCHRONIZED];
 
 export type TsscmfvTypeKeywords =
 	| ['@interface', GroovyTokenId.AT_INTERFACE]

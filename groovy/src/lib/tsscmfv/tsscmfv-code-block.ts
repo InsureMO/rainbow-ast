@@ -8,7 +8,7 @@ import {
 	TokenParser
 } from '../token-parser';
 import {GroovyTokenId, T} from '../tokens';
-import {TsscmfvKeywordUtils} from './utils';
+import {TsscmfvKeywordUtils} from './tsscmfv-utils';
 
 export class TsscmfvCodeBlockRBraceParser extends BySingleCharTokenParser {
 	constructor() {
@@ -27,7 +27,7 @@ export class TsscmfvCodeBlockParser extends BySingleCharTokenParser {
 
 	static initSelector(parsers: ParserSelectorArgs['parsers']) {
 		if (TsscmfvCodeBlockParser.Selector != null) {
-			throw new Error('GsBraceInterpolationParser.Selector is initialized.');
+			throw new Error('TsscmfvCodeBlockParser.Selector is initialized.');
 		}
 		TsscmfvCodeBlockParser.Selector = new ParserSelector({
 			parsers: [
@@ -47,34 +47,46 @@ export class TsscmfvCodeBlockParser extends BySingleCharTokenParser {
 
 	protected startBlock(context: ParseContext) {
 		const block = context.block();
-		if (block.id === T.TsscmfvDecl) {
-			const firstChildOfTsscmfv = block.children[0];
-			if (firstChildOfTsscmfv.id === T.ModifierDecl) {
-				const modifierTokens = (firstChildOfTsscmfv as BlockToken).children?.filter(c => TsscmfvKeywordUtils.isModifierKeyword(c.id)) ?? [];
-				const staticToken = modifierTokens.filter(t => t.id === T.STATIC);
-				if (staticToken.length === modifierTokens.length) {
+		let body: BlockToken;
+		switch (block.id) {
+			case T.TsscmfvDecl: {
+				// not changed to TypeDecl, means there is neither type keyword nor type inherit keyword appeared
+				const modifierTokens = TsscmfvKeywordUtils.getModifierTokens(block);
+				if (modifierTokens.length === 0) {
+					// never happen
+					throw new Error(`No ${T[T.ModifierDecl]} token found from ${T[T.TsscmfvDecl]} block[start=${block.start}, line=${block.line}, column=${block.column}].`);
+				} else if (TsscmfvKeywordUtils.onlyStaticKeywords(modifierTokens)) {
 					// only static keyword exists, no matter one or more
 					block.rewriteId(T.StaticBlockDecl);
-					const body = new BlockToken(T.StaticBody, this.createToken(context));
-					context.sink(body);
-					context.forward(1);
+					body = new BlockToken(T.StaticBody, this.createToken(context));
+				} else if (TsscmfvKeywordUtils.onlySynchronizedKeywords(modifierTokens)) {
+					block.rewriteId(T.SyncBlockDecl);
+					body = new BlockToken(T.SyncBody, this.createToken(context));
 				} else {
 					// TODO only def keyword?
-					const body = new BlockToken(T.TypeBody, this.createToken(context));
-					context.sink(body);
-					context.forward(1);
+					body = new BlockToken(T.TypeBody, this.createToken(context));
 				}
-			} else {
-				// never happen
-				throw new Error(`Unpredicted token[${T[firstChildOfTsscmfv.id]}] of Tsscmfv block.`);
+				break;
 			}
-		} else if (block.id === T.TypeDecl) {
-			const body = new BlockToken(T.TypeBody, this.createToken(context));
-			context.sink(body);
-			context.forward(1);
-		} else {
-			throw new Error(`Cannot start code block under block[${T[block.id]}].`);
+			case T.TypeDecl: {
+				body = new BlockToken(T.TypeBody, this.createToken(context));
+				break;
+			}
+			case T.StaticBlockDecl: {
+				body = new BlockToken(T.StaticBody, this.createToken(context));
+				break;
+			}
+			case T.SyncBlockDecl: {
+				body = new BlockToken(T.SyncBlockDecl, this.createToken(context));
+				break;
+			}
+			default: {
+				throw new Error(`Cannot start code block under block[${T[block.id]}].`);
+			}
 		}
+
+		context.sink(body);
+		context.forward(1);
 	}
 
 	protected getInitBlockParserSelector(): ParserSelector {

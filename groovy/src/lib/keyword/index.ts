@@ -47,7 +47,7 @@ export * from './as';                               // as: as alias (import), as
 // strictfp -> tsscmfv: type, constructor, method, field
 // super
 // switch: switch-case
-// synchronized: method, synchronize block
+// synchronized -> tsscmfv: method, synchronize block
 // this
 // threadsafe: reserved
 // throw: throw expression
