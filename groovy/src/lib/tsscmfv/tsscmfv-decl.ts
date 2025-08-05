@@ -169,7 +169,7 @@ export class TsscmfvDeclParser<A extends TsscmfvKeywords> extends KeywordTokenPa
 			case T.TsscmfvDecl: {
 				let matched = this.trySynchronizedBlock(block, context);
 				if (!matched) {
-					// @ts-ignore
+					// @ts-expect-error block token id might be rewritten
 					if (block.id === T.MethodDecl) {
 						// TODO continue parse method
 					} else {
