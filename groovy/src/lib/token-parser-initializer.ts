@@ -1,7 +1,9 @@
 import {CommentParsers} from './comment';
 import {
+	CommaParserInstance,
 	DotParserInstance,
 	IdentifierParser,
+	OperatorParsers,
 	SemicolonParserInstance,
 	UndeterminedCharParser,
 	WsTabNlParsers
@@ -25,7 +27,9 @@ const AllParsers = [
 	// MUST after comment parsers
 	...StringParsers,                               // all string literals
 	...WsTabNlParsers,                              // whitespaces, tabs, newline
+	...OperatorParsers,                             // operators
 	DotParserInstance,                              // dot
+	CommaParserInstance,                            // comma
 	SemicolonParserInstance,                        // semicolon
 	IdentifierParser.instance,                      // identifier
 	UndeterminedCharParser.instance                 // undetermined char

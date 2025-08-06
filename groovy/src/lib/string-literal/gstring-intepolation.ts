@@ -148,10 +148,7 @@ export abstract class GsBraceInterpolationParser extends ByCharTokenParser {
 			throw new Error('GsBraceInterpolationParser.Selector is initialized.');
 		}
 		GsBraceInterpolationParser.Selector = new ParserSelector({
-			parsers: [
-				GsBraceInterpolationEndMarkParser.instance,
-				...parsers
-			]
+			parsers: [GsBraceInterpolationEndMarkParser.instance, ...parsers]
 		});
 	}
 

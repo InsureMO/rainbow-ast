@@ -14,6 +14,7 @@ export abstract class KeywordTokenParser extends ByCharTokenParser {
 		this._restChars = keyword.slice(1);
 	}
 
+	// noinspection JSUnusedGlobalSymbols
 	get keyword(): string {
 		return this._keyword;
 	}
@@ -68,14 +69,14 @@ export abstract class KeywordTokenParser extends ByCharTokenParser {
 		const charIndex = context.charIndex;
 		return new AtomicToken({
 			id: this.getTokenId(),
-			text: this.keyword,
+			text: this._keyword,
 			start: charIndex, line: context.line, column: context.column
 		});
 	}
 
 	protected collectToken(context: ParseContext): boolean {
 		context.collect(this.createToken(context));
-		context.forward(this.keyword.length);
+		context.forward(this._keyword.length);
 		return true;
 	}
 }

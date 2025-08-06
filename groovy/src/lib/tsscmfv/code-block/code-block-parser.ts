@@ -25,10 +25,7 @@ export class CodeBlockParser extends BySingleCharTokenParser {
 			throw new Error('CodeBlockParser.Selector is initialized.');
 		}
 		CodeBlockParser.Selector = new ParserSelector({
-			parsers: [
-				RBraceParserInstance,
-				...parsers
-			]
+			parsers: [RBraceParserInstance, ...parsers]
 		});
 	}
 

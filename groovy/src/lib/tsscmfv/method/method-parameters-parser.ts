@@ -18,11 +18,7 @@ export class MethodParametersParser extends BySingleCharTokenParser {
 			throw new Error('MethodParametersParser.Selector is initialized.');
 		}
 		MethodParametersParser.Selector = new ParserSelector({
-			parsers: [
-				RParenParserInstance,
-				CommaParserInstance,
-				...parsers
-			]
+			parsers: [RParenParserInstance, ...parsers]
 		});
 	}
 

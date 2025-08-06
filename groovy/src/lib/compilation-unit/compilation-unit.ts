@@ -10,10 +10,7 @@ export class CompilationUnitParser {
 			throw new Error('CompilationUnitParser.Selector is initialized.');
 		}
 		CompilationUnitParser.Selector = new ParserSelector({
-			parsers: [
-				ShebangParser.instance,
-				...parsers
-			]
+			parsers: [ShebangParser.instance, ...parsers]
 		});
 	}
 

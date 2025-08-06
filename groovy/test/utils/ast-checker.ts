@@ -75,7 +75,7 @@ export class AstChecker {
 				indent,
 				bullet,
 				' 💔 ',
-				`Check [type=${GroovyTokenId[tokenId]}, `,
+				`Mismatched [type=${GroovyTokenId[tokenId]}, `,
 				`offsetInDoc=[${startOffset}, ${startOffset + text.length}], `,
 				`xyInDoc=[${startLine}, ${token.column}], `,
 				`text=${PrintUtils.escapeForPrint(text)}`,
@@ -86,25 +86,49 @@ export class AstChecker {
 		}
 		if (specOfChildren != null) {
 			const block = token as BlockToken;
-			try {
-				expect(block.children.length).is(specOfChildren.length, 'Children Count');
-			} catch (e) {
-				this._logs.push(chalk.red([
-					indent,
-					bullet,
-					' 💔 ',
-					`Check children count[type=${GroovyTokenId[tokenId]}].`
-				].join('')));
-				this.print();
-				throw e;
-			}
 			specOfChildren.forEach((specOfChild, index) => {
-				if (bullet === '0.') {
-					this.doCheck(block.children[index], specOfChild, `${index + 1}.`);
+				const childBullet = bullet === '0.' ? `${index + 1}.` : `${bullet}${index + 1}.`;
+				const child = block.children?.[index];
+				if (child == null) {
+					const [tokenId, startOffset, startLine, text] = spec;
+					this._logs.push(chalk.red([
+						indent,
+						childBullet,
+						' 💔 ',
+						`Expect [type=${GroovyTokenId[tokenId]}, `,
+						`offsetInDoc=[${startOffset}, ?], `,
+						`xyInDoc=[${startLine}, ?], `,
+						`text=${PrintUtils.escapeForPrint(text)}`,
+						'].'
+					].join('')));
+					this.print();
+					throw new Error(`Expected token at index[${index}] not provided.`);
 				} else {
-					this.doCheck(block.children[index], specOfChild, `${bullet}${index + 1}.`);
+					this.doCheck(child, specOfChild, childBullet);
 				}
 			});
+			if (specOfChildren.length < (block.children?.length ?? 0)) {
+				const index = specOfChildren.length;
+				const childBullet = bullet === '0.' ? `${index + 1}.` : `${bullet}${index + 1}.`;
+				const {
+					id: tokenId,
+					start: startOffset,
+					line: startLine, column: startColumn,
+					text
+				} = block.children[index];
+				this._logs.push(chalk.red([
+					indent,
+					childBullet,
+					' 💔 ',
+					`Unexpect [type=${GroovyTokenId[tokenId]}, `,
+					`offsetInDoc=[${startOffset}, ${startOffset + text.length}], `,
+					`xyInDoc=[${startLine}, ${startColumn}], `,
+					`text=${PrintUtils.escapeForPrint(text)}`,
+					'].'
+				].join('')));
+				this.print();
+				throw new Error(`Unexpected token at index[${index}] provided.`);
+			}
 		}
 
 		if (token === this._ast.compilationUnit) {

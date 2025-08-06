@@ -1,8 +1,21 @@
 import {Char} from '@rainbow-ast/core';
-import {ByCharTokenParser, BySingleCharTokenParser} from '../token-parser';
+import {BySingleCharTokenParser} from '../token-parser';
 import {GroovyTokenId, T} from '../tokens';
 
-export const StandaloneSymbolParsers: Array<ByCharTokenParser> = ([
+export class StandaloneSymbolParser extends BySingleCharTokenParser {
+	private readonly _tokenId: GroovyTokenId;
+
+	constructor(char: Char, tokenId: GroovyTokenId) {
+		super(char);
+		this._tokenId = tokenId;
+	}
+
+	protected getTokenId(): GroovyTokenId {
+		return this._tokenId;
+	}
+}
+
+export const StandaloneSymbolParsers = ([
 	['{', T.LBrace],
 	['}', T.RBrace],
 	['[', T.LBrack],
@@ -34,19 +47,8 @@ export const StandaloneSymbolParsers: Array<ByCharTokenParser> = ([
 	[',', T.Comma],
 	[':', T.ColonS],
 	[';', T.Semicolon]
-] as Array<[Char, GroovyTokenId]>).map(([char, tokenId]) => {
-	const ParserClass = class extends BySingleCharTokenParser {
-		constructor() {
-			super(char);
-		}
-
-		protected getTokenId(): GroovyTokenId {
-			return tokenId;
-		}
-	};
-	Object.defineProperty(ParserClass, 'name', {value: `Standalone${T[tokenId]}Parser`});
-	return new ParserClass();
-});
+] as Array<[Char, GroovyTokenId]>)
+	.map(([char, tokenId]) => new StandaloneSymbolParser(char, tokenId));
 
 export const RBraceParserInstance = StandaloneSymbolParsers.find(p => p.firstChar === '}');
 export const RParenParserInstance = StandaloneSymbolParsers.find(p => p.firstChar === ')');

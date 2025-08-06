@@ -18,10 +18,7 @@ export class SynchronizedExpressionParser extends BySingleCharTokenParser {
 			throw new Error('SynchronizedExpressionParser.Selector is initialized.');
 		}
 		SynchronizedExpressionParser.Selector = new ParserSelector({
-			parsers: [
-				RParenParserInstance,
-				...parsers
-			]
+			parsers: [RParenParserInstance, ...parsers]
 		});
 	}
 
