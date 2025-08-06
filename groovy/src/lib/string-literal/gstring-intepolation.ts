@@ -179,7 +179,7 @@ export abstract class GsBraceInterpolationParser extends ByCharTokenParser {
 		return GsBraceInterpolationParser.Selector;
 	}
 
-	protected whenParserNotFound(context: ParseContext) {
+	protected whenParserNotFound(context: ParseContext): void {
 		throw new Error(`No token parser found for char[${context.char()}] at [offset=${context.charIndex}, line=${context.line}, column=${context.column}].`);
 	}
 

@@ -3,31 +3,38 @@ import {CommentParsers} from '../../comment';
 import {TypeDeclNameParser, WsTabNlParsers} from '../../common-token';
 import {ParseContext} from '../../parse-context';
 import {TA} from '../../token-attributes';
-import {ParserSelector, ParserSelectorArgs} from '../../token-parser';
+import {ParserSelector} from '../../token-parser';
 import {T} from '../../tokens';
 import {TsscmfvTKP, TsscmfvTypeKeywordParser} from './type-keywords';
 
-interface TsscmfvTypeParserArgs {
-	Start: ParserSelectorArgs['parsers'];
-	Started: ParserSelectorArgs['parsers'];
-	AfterName: ParserSelectorArgs['parsers'];
-}
-
+/**
+ * - accept multiple type keywords,
+ * - accept multiple type names,
+ * - TODO accept type variable after type name.
+ */
 export class TsscmfvTypeParser {
-	private static StartSelector: ParserSelector;
-	private static StartedSelector: ParserSelector;
-	private static AfterNameSelector: ParserSelector;
-
-	static initSelectors(parsers: TsscmfvTypeParserArgs) {
-		if (TsscmfvTypeParser.StartSelector != null
-			|| TsscmfvTypeParser.StartedSelector != null
-			|| TsscmfvTypeParser.AfterNameSelector != null) {
-			throw new Error('TsscmfvTypeParser.Selector is initialized.');
-		}
-		TsscmfvTypeParser.StartSelector = new ParserSelector({parsers: parsers.Start});
-		TsscmfvTypeParser.StartedSelector = new ParserSelector({parsers: parsers.Started});
-		TsscmfvTypeParser.AfterNameSelector = new ParserSelector({parsers: parsers.AfterName});
-	}
+	private static readonly StartSelector = new ParserSelector({
+		parsers: [
+			TsscmfvTKP.instanceAtInterface, TsscmfvTKP.instanceClass, TsscmfvTKP.instanceEnum, TsscmfvTKP.instanceInterface, TsscmfvTKP.instanceRecord, TsscmfvTKP.instanceTrait,
+			CommentParsers,
+			WsTabNlParsers
+		]
+	});
+	private static readonly StartedSelector = new ParserSelector({
+		parsers: [
+			TypeDeclNameParser.instance,
+			TsscmfvTKP.instanceAtInterface, TsscmfvTKP.instanceClass, TsscmfvTKP.instanceEnum, TsscmfvTKP.instanceInterface, TsscmfvTKP.instanceRecord, TsscmfvTKP.instanceTrait,
+			CommentParsers,
+			WsTabNlParsers
+		]
+	});
+	private static readonly AfterNameSelector = new ParserSelector({
+		parsers: [
+			TypeDeclNameParser.instance,
+			CommentParsers,
+			WsTabNlParsers
+		]
+	});
 
 	private writeTypeKind(block: Token, child: Token): void {
 		if (block.hasAttr(TA.TypeKind)) {
@@ -56,16 +63,13 @@ export class TsscmfvTypeParser {
 		block.setAttr(TA.TypeName, child.text);
 	}
 
-	private subsequent(selector: ParserSelector, context: ParseContext): boolean {
-		let parsed = false;
-
+	private subsequent(selector: ParserSelector, context: ParseContext): void {
 		let c = context.char();
 		while (c != null) {
 			const parser = selector.find(c, context);
 			if (parser == null) {
 				break;
 			}
-			parsed = true;
 			parser.parse(c, context);
 			if (parser instanceof TsscmfvTypeKeywordParser) {
 				const block = context.block();
@@ -83,8 +87,6 @@ export class TsscmfvTypeParser {
 			}
 			c = context.char();
 		}
-
-		return parsed;
 	}
 
 	parse(token: AtomicToken, context: ParseContext): boolean {
@@ -112,22 +114,3 @@ export class TsscmfvTypeParser {
 
 	static readonly instance = new TsscmfvTypeParser();
 }
-
-TsscmfvTypeParser.initSelectors({
-	Start: [
-		TsscmfvTKP.instanceAtInterface, TsscmfvTKP.instanceClass, TsscmfvTKP.instanceEnum, TsscmfvTKP.instanceInterface, TsscmfvTKP.instanceRecord, TsscmfvTKP.instanceTrait,
-		CommentParsers,
-		WsTabNlParsers
-	],
-	Started: [
-		TypeDeclNameParser.instance,
-		TsscmfvTKP.instanceAtInterface, TsscmfvTKP.instanceClass, TsscmfvTKP.instanceEnum, TsscmfvTKP.instanceInterface, TsscmfvTKP.instanceRecord, TsscmfvTKP.instanceTrait,
-		CommentParsers,
-		WsTabNlParsers
-	],
-	AfterName: [
-		TypeDeclNameParser.instance,
-		CommentParsers,
-		WsTabNlParsers
-	]
-});

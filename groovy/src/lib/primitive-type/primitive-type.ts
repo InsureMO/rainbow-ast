@@ -17,6 +17,7 @@ export type PrimitiveTypeParserArgs =
  * - start a method declaration
  * - start a variable statement
  * - type of as type declaration.
+ * - type cast
  */
 export class PrimitiveTypeParser<A extends PrimitiveTypeParserArgs> extends SingleKeywordTokenParser {
 	private readonly _tokenId: A[1];
@@ -39,3 +40,14 @@ export class PrimitiveTypeParser<A extends PrimitiveTypeParserArgs> extends Sing
 	static readonly instanceLong = new PrimitiveTypeParser('long', T.LONG);
 	static readonly instanceShort = new PrimitiveTypeParser('short', T.SHORT);
 }
+
+export const PrimitiveTypeParsers = [
+	PrimitiveTypeParser.instanceBoolean,
+	PrimitiveTypeParser.instanceByte,
+	PrimitiveTypeParser.instanceChar,
+	PrimitiveTypeParser.instanceDouble,
+	PrimitiveTypeParser.instanceFloat,
+	PrimitiveTypeParser.instanceInt,
+	PrimitiveTypeParser.instanceLong,
+	PrimitiveTypeParser.instanceShort
+];

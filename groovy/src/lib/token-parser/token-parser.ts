@@ -45,7 +45,15 @@ export abstract class TokenParser {
 	}
 
 	/**
-	 * overrides this method when
+	 * overrides this method if there is something need to be done before parsing by given parser.
+	 * default do nothing.
+	 */
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	protected beforeChildParsed(_context: ParseContext, _parser: TokenParser): void {
+	}
+
+	/**
+	 * overrides this method, when
 	 * 1. returns 'break', then break the child parsing, and parsing will be ended then,
 	 * 2. returns {@link ParserSelector}, then parsing will be continued by the returned parser selector,
 	 * 3. return undefined, the parsing will be continued by current parser selector.
@@ -71,6 +79,7 @@ export abstract class TokenParser {
 				this.whenParserNotFound(context);
 				break;
 			}
+			this.beforeChildParsed(context, parser);
 			parser.parse(c, context);
 			const after = this.afterChildParsed(context, parser);
 			if (after == 'break') {

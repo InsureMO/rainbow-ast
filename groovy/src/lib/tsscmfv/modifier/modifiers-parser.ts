@@ -2,16 +2,9 @@ import {AtomicToken, BlockToken} from '@rainbow-ast/core';
 import {CommentParsers} from '../../comment';
 import {WsTabNlParsers} from '../../common-token';
 import {ParseContext} from '../../parse-context';
-import {ParserSelector, ParserSelectorArgs} from '../../token-parser';
+import {ParserSelector} from '../../token-parser';
 import {T} from '../../tokens';
 import {TsscmfvMKP} from './modifier-keywords';
-
-export interface TsscmfvModifiersParserArgs {
-	Tsscmfv: ParserSelectorArgs['parsers'];
-	Type: ParserSelectorArgs['parsers'];
-	Method: ParserSelectorArgs['parsers'];
-	Field: ParserSelectorArgs['parsers'];
-}
 
 /**
  * continue parse modifiers,
@@ -28,23 +21,53 @@ export interface TsscmfvModifiersParserArgs {
  * - {@link T.TsscmfvDecl}: none of above, note that block id still can be any of 7 types.
  */
 export class TsscmfvModifiersParser {
-	private static TsscmfvSelector: ParserSelector;
-	private static TypeSelector: ParserSelector;
-	private static MethodSelector: ParserSelector;
-	private static FieldSelector: ParserSelector;
-
-	static initSelector(parsers: TsscmfvModifiersParserArgs) {
-		if (TsscmfvModifiersParser.TsscmfvSelector != null
-			|| TsscmfvModifiersParser.TypeSelector != null
-			|| TsscmfvModifiersParser.MethodSelector != null
-			|| TsscmfvModifiersParser.FieldSelector != null) {
-			throw new Error('TsscmfvModifiersParser.Selector is initialized.');
-		}
-		TsscmfvModifiersParser.TsscmfvSelector = new ParserSelector({parsers: parsers.Tsscmfv});
-		TsscmfvModifiersParser.TypeSelector = new ParserSelector({parsers: parsers.Type});
-		TsscmfvModifiersParser.MethodSelector = new ParserSelector({parsers: parsers.Method});
-		TsscmfvModifiersParser.FieldSelector = new ParserSelector({parsers: parsers.Field});
-	}
+	private static readonly TsscmfvSelector = new ParserSelector({
+		parsers: [
+			TsscmfvMKP.instanceAbstract,
+			TsscmfvMKP.instanceFinal, TsscmfvMKP.instanceStatic, TsscmfvMKP.instanceStrictfp,
+			TsscmfvMKP.instanceDef, TsscmfvMKP.instanceVar,
+			TsscmfvMKP.instancePrivate, TsscmfvMKP.instanceProtected, TsscmfvMKP.instancePublic,
+			TsscmfvMKP.instanceSealed, TsscmfvMKP.instanceNonSealed,
+			TsscmfvMKP.instanceSynchronized,
+			TsscmfvMKP.instanceDefault, TsscmfvMKP.instanceNative,
+			TsscmfvMKP.instanceTransient, TsscmfvMKP.instanceVolatile,
+			CommentParsers,
+			WsTabNlParsers
+		]
+	});
+	private static readonly TypeSelector = new ParserSelector({
+		parsers: [
+			TsscmfvMKP.instanceAbstract,
+			TsscmfvMKP.instanceFinal, TsscmfvMKP.instanceStatic, TsscmfvMKP.instanceStrictfp,
+			TsscmfvMKP.instanceDef, TsscmfvMKP.instanceVar,
+			TsscmfvMKP.instancePrivate, TsscmfvMKP.instanceProtected, TsscmfvMKP.instancePublic,
+			TsscmfvMKP.instanceSealed, TsscmfvMKP.instanceNonSealed,
+			CommentParsers,
+			WsTabNlParsers
+		]
+	});
+	private static readonly MethodSelector = new ParserSelector({
+		parsers: [
+			TsscmfvMKP.instanceAbstract,
+			TsscmfvMKP.instanceFinal, TsscmfvMKP.instanceStatic, TsscmfvMKP.instanceStrictfp,
+			TsscmfvMKP.instanceDef, TsscmfvMKP.instanceVar,
+			TsscmfvMKP.instancePrivate, TsscmfvMKP.instanceProtected, TsscmfvMKP.instancePublic,
+			TsscmfvMKP.instanceSynchronized,
+			TsscmfvMKP.instanceDefault, TsscmfvMKP.instanceNative,
+			CommentParsers,
+			WsTabNlParsers
+		]
+	});
+	private static readonly FieldSelector = new ParserSelector({
+		parsers: [
+			TsscmfvMKP.instanceFinal, TsscmfvMKP.instanceStatic, TsscmfvMKP.instanceStrictfp,
+			TsscmfvMKP.instanceDef, TsscmfvMKP.instanceVar,
+			TsscmfvMKP.instancePrivate, TsscmfvMKP.instanceProtected, TsscmfvMKP.instancePublic,
+			TsscmfvMKP.instanceTransient, TsscmfvMKP.instanceVolatile,
+			CommentParsers,
+			WsTabNlParsers
+		]
+	});
 
 	private detectBlockId(token: AtomicToken, block: BlockToken) {
 		let selector = TsscmfvModifiersParser.TsscmfvSelector;
@@ -118,45 +141,3 @@ export class TsscmfvModifiersParser {
 
 	static readonly instance = new TsscmfvModifiersParser();
 }
-
-TsscmfvModifiersParser.initSelector({
-	Tsscmfv: [
-		TsscmfvMKP.instanceAbstract,
-		TsscmfvMKP.instanceFinal, TsscmfvMKP.instanceStatic, TsscmfvMKP.instanceStrictfp,
-		TsscmfvMKP.instanceDef, TsscmfvMKP.instanceVar,
-		TsscmfvMKP.instancePrivate, TsscmfvMKP.instanceProtected, TsscmfvMKP.instancePublic,
-		TsscmfvMKP.instanceSealed, TsscmfvMKP.instanceNonSealed,
-		TsscmfvMKP.instanceSynchronized,
-		TsscmfvMKP.instanceDefault, TsscmfvMKP.instanceNative,
-		TsscmfvMKP.instanceTransient, TsscmfvMKP.instanceVolatile,
-		CommentParsers,
-		WsTabNlParsers
-	],
-	Type: [
-		TsscmfvMKP.instanceAbstract,
-		TsscmfvMKP.instanceFinal, TsscmfvMKP.instanceStatic, TsscmfvMKP.instanceStrictfp,
-		TsscmfvMKP.instanceDef, TsscmfvMKP.instanceVar,
-		TsscmfvMKP.instancePrivate, TsscmfvMKP.instanceProtected, TsscmfvMKP.instancePublic,
-		TsscmfvMKP.instanceSealed, TsscmfvMKP.instanceNonSealed,
-		CommentParsers,
-		WsTabNlParsers
-	],
-	Method: [
-		TsscmfvMKP.instanceAbstract,
-		TsscmfvMKP.instanceFinal, TsscmfvMKP.instanceStatic, TsscmfvMKP.instanceStrictfp,
-		TsscmfvMKP.instanceDef, TsscmfvMKP.instanceVar,
-		TsscmfvMKP.instancePrivate, TsscmfvMKP.instanceProtected, TsscmfvMKP.instancePublic,
-		TsscmfvMKP.instanceSynchronized,
-		TsscmfvMKP.instanceDefault, TsscmfvMKP.instanceNative,
-		CommentParsers,
-		WsTabNlParsers
-	],
-	Field: [
-		TsscmfvMKP.instanceFinal, TsscmfvMKP.instanceStatic, TsscmfvMKP.instanceStrictfp,
-		TsscmfvMKP.instanceDef, TsscmfvMKP.instanceVar,
-		TsscmfvMKP.instancePrivate, TsscmfvMKP.instanceProtected, TsscmfvMKP.instancePublic,
-		TsscmfvMKP.instanceTransient, TsscmfvMKP.instanceVolatile,
-		CommentParsers,
-		WsTabNlParsers
-	]
-});

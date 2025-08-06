@@ -1,6 +1,23 @@
 import {SingleKeywordTokenParser} from '../../token-parser';
 import {GroovyTokenId} from '../../tokens';
-import {TsscmfvModifierKeywords} from '../tsscmfv-keywords-types';
+
+export type TsscmfvModifierKeywords =
+	| ['abstract', GroovyTokenId.ABSTRACT]
+	| ['def', GroovyTokenId.DEF]
+	| ['default', GroovyTokenId.DEFAULT]
+	| ['final', GroovyTokenId.FINAL]
+	| ['native', GroovyTokenId.NATIVE]
+	| ['non-sealed', GroovyTokenId.NON_SEALED]
+	| ['private', GroovyTokenId.PRIVATE]
+	| ['protected', GroovyTokenId.PROTECTED]
+	| ['public', GroovyTokenId.PUBLIC]
+	| ['sealed', GroovyTokenId.SEALED]
+	| ['static', GroovyTokenId.STATIC]
+	| ['strictfp', GroovyTokenId.STRICTFP]
+	| ['synchronized', GroovyTokenId.SYNCHRONIZED]
+	| ['transient', GroovyTokenId.TRANSIENT]
+	| ['var', GroovyTokenId.VAR]
+	| ['volatile', GroovyTokenId.VOLATILE];
 
 export class TsscmfvModifierKeywordParser<A extends TsscmfvModifierKeywords> extends SingleKeywordTokenParser {
 	private readonly _tokenId: A[1];

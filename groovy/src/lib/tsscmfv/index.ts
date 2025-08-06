@@ -1,4 +1,3 @@
-export * from './tsscmfv-keywords-types';
 export * from './utils';
 
 export * from './code-block';

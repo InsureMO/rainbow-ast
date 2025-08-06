@@ -4,6 +4,12 @@ import {ParserSelector} from '../../token-parser';
 import {T} from '../../tokens';
 import {TsscmfvTIKP} from './type-inherit-keywords';
 
+/**
+ * - accept one type inherit keyword for one inheriting part,
+ * - accept multiple inheriting types, joined by comma,
+ * - inheriting type name could be alias name, qualified name, full qualified name.
+ * - TODO accept generic type after inheriting type name.
+ */
 export class TsscmfvTypeInheritParser {
 	private static Selector: ParserSelector = new ParserSelector({
 		parsers: [TsscmfvTIKP.instanceExtends, TsscmfvTIKP.instanceImplements, TsscmfvTIKP.instancePermits]

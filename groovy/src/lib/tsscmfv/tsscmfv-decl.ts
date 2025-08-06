@@ -6,12 +6,22 @@ import {KeywordTokenParser, ParserSelector} from '../token-parser';
 import {GroovyTokenId, T} from '../tokens';
 import {TryCodeBlockParser} from './code-block';
 import {TsscmfvFieldOrVariableParser} from './field-or-variable';
-import {TsscmfvMethodParser, TsscmfvMethodReturnParser, TsscmfvMethodThrowsParser} from './method';
-import {TsscmfvModifiersParser} from './modifier';
+import {
+	TsscmfvMethodParser,
+	TsscmfvMethodReturnKeywords,
+	TsscmfvMethodReturnParser,
+	TsscmfvMethodThrowsKeywords,
+	TsscmfvMethodThrowsParser
+} from './method';
+import {TsscmfvModifierKeywords, TsscmfvModifiersParser} from './modifier';
 import {TrySynchronizedExpressionParser} from './synchronized-block';
-import {TsscmfvKeywords} from './tsscmfv-keywords-types';
-import {TsscmfvTypeInheritParser, TsscmfvTypeParser} from './type';
+import {TsscmfvTypeInheritKeywords, TsscmfvTypeInheritParser, TsscmfvTypeKeywords, TsscmfvTypeParser} from './type';
 import {TsscmfvKeywordUtils} from './utils';
+
+export type TsscmfvKeywords =
+	| TsscmfvModifierKeywords
+	| TsscmfvTypeKeywords | TsscmfvTypeInheritKeywords
+	| TsscmfvMethodReturnKeywords | TsscmfvMethodThrowsKeywords;
 
 enum TsscmfvKeywordKind {
 	Modifier, Type, TypeInherit, MethodReturn, MethodThrows
@@ -69,7 +79,7 @@ export class TsscmfvDeclParser<A extends TsscmfvKeywords> extends KeywordTokenPa
 		}
 	}
 
-	private finalizeBlock(block: BlockToken, context: ParseContext): void {
+	private finalizeBlock(_block: BlockToken, context: ParseContext): void {
 		let c = context.char();
 		while (c != null) {
 			const parser = TsscmfvDeclParser.Selector.find(c, context);

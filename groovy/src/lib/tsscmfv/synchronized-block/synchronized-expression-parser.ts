@@ -1,4 +1,5 @@
 import {BlockToken, Char} from '@rainbow-ast/core';
+import {RParenParserInstance} from '../../common-token';
 import {ParseContext} from '../../parse-context';
 import {
 	AfterChildParsed,
@@ -9,18 +10,6 @@ import {
 } from '../../token-parser';
 import {GroovyTokenId, T} from '../../tokens';
 
-export class SynchronizedExpressionRParenParser extends BySingleCharTokenParser {
-	constructor() {
-		super(')');
-	}
-
-	protected getTokenId(): GroovyTokenId {
-		return T.RParen;
-	}
-
-	static readonly instance = new SynchronizedExpressionRParenParser();
-}
-
 export class SynchronizedExpressionParser extends BySingleCharTokenParser {
 	private static Selector: ParserSelector;
 
@@ -30,7 +19,7 @@ export class SynchronizedExpressionParser extends BySingleCharTokenParser {
 		}
 		SynchronizedExpressionParser.Selector = new ParserSelector({
 			parsers: [
-				SynchronizedExpressionRParenParser.instance,
+				RParenParserInstance,
 				...parsers
 			]
 		});
@@ -55,7 +44,7 @@ export class SynchronizedExpressionParser extends BySingleCharTokenParser {
 	}
 
 	protected afterChildParsed(_: ParseContext, parser: TokenParser): AfterChildParsed {
-		if (parser === SynchronizedExpressionRParenParser.instance) {
+		if (parser === RParenParserInstance) {
 			return 'break';
 		} else {
 			return (void 0);
