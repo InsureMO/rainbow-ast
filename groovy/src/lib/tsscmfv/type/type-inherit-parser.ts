@@ -15,27 +15,7 @@ export class TsscmfvTypeInheritParser {
 		parsers: [TsscmfvTIKP.instanceExtends, TsscmfvTIKP.instanceImplements, TsscmfvTIKP.instancePermits]
 	});
 
-	parse(token: AtomicToken, context: ParseContext): boolean {
-		switch (token.id) {
-			case T.EXTENDS: {
-				TsscmfvTIKP.instanceExtends.continue(token, context);
-				break;
-			}
-			case T.IMPLEMENTS: {
-				TsscmfvTIKP.instanceImplements.continue(token, context);
-				break;
-			}
-			case T.PERMITS: {
-				TsscmfvTIKP.instancePermits.continue(token, context);
-				break;
-			}
-			default:
-				throw new Error(`Token[id=${T[token.id]}] not supported.`);
-		}
-		return this.continue(context);
-	}
-
-	continue(context: ParseContext): boolean {
+	private subsequent(context: ParseContext): void {
 		let c = context.char();
 		while (c != null) {
 			const parser = TsscmfvTypeInheritParser.Selector.find(c, context);
@@ -45,7 +25,33 @@ export class TsscmfvTypeInheritParser {
 			parser.parse(c, context);
 			c = context.char();
 		}
+	}
+
+	parse(token: AtomicToken, context: ParseContext): boolean {
+		switch (token.id) {
+			case T.EXTENDS: {
+				TsscmfvTIKP.instanceExtends.startBy(token, context);
+				break;
+			}
+			case T.IMPLEMENTS: {
+				TsscmfvTIKP.instanceImplements.startBy(token, context);
+				break;
+			}
+			case T.PERMITS: {
+				TsscmfvTIKP.instancePermits.startBy(token, context);
+				break;
+			}
+			default:
+				throw new Error(`Token[id=${T[token.id]}] not supported.`);
+		}
+
+		this.subsequent(context);
+
 		return true;
+	}
+
+	try(context: ParseContext): void {
+		this.subsequent(context);
 	}
 
 	static readonly instance = new TsscmfvTypeInheritParser();

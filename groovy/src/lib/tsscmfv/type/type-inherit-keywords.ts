@@ -1,6 +1,12 @@
 import {AtomicToken, BlockToken, Char} from '@rainbow-ast/core';
 import {CommentParsers, MLCommentParser} from '../../comment';
-import {CommaParserInstance, DotParserInstance, PackageNameParser, WsTabNlParsers, WsTabParsers} from '../../common-token';
+import {
+	CommaParserInstance,
+	DotParserInstance,
+	PackageNameParser,
+	WsTabNlParsers,
+	WsTabParsers
+} from '../../common-token';
 import {ParseContext} from '../../parse-context';
 import {AfterChildParsed, ParserSelector, SingleKeywordTokenParser, TokenParser} from '../../token-parser';
 import {GroovyTokenId, T} from '../../tokens';
@@ -104,10 +110,10 @@ export class TsscmfvTypeInheritKeywordParser<A extends TsscmfvTypeInheritKeyword
 	}
 
 	parse(_: Char, context: ParseContext): boolean {
-		return this.continue(this.createToken(context), context);
+		return this.startBy(this.createToken(context), context);
 	}
 
-	continue(token: AtomicToken, context: ParseContext): boolean {
+	startBy(token: AtomicToken, context: ParseContext): boolean {
 		const block = context.block();
 		if (block.id === T.TsscmfvDecl) {
 			block.rewriteId(T.TypeDecl);

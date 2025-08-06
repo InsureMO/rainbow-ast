@@ -7,17 +7,21 @@ import {ParserSelector} from '../../token-parser';
 import {GroovyTokenId, T} from '../../tokens';
 
 // TODO add 8 primitive types?
-export type TsscmfvMethodReturnKeywords =
-	| ['void', GroovyTokenId.VOID];
+/**
+ * void also can be used in field/variable declaration, but it is incorrect
+ */
+export type TsscmfvMethodReturnTypeKeywords = ['void', GroovyTokenId.VOID];
 
 /**
- * return type could be alias name, qualified name, full qualified name, void and 8 primitive types.
+ * mfv = method, field, variable.
+ * mfv type is method return type or field/variable type
+ * type could be alias name, qualified name, full qualified name, void and 8 primitive types.
  *
- * - accept multiple return types, it is incorrect,
+ * - accept multiple types, it is incorrect,
  * - TODO accept type variable before return type,
  * - TODO accept type variable after return type, it is incorrect.
  */
-export class TsscmfvMethodReturnParser {
+export class MfvTypeParser {
 	private static readonly StartSelector = new ParserSelector({
 		parsers: [
 			PrimitiveTypeParsers, VoidParser.instance, PackageNameParser.instance,
@@ -48,22 +52,19 @@ export class TsscmfvMethodReturnParser {
 				|| parser === VoidParser.instance
 				|| parser instanceof PrimitiveTypeParser) {
 				const block = context.block();
-				if (block.id === T.TsscmfvDecl) {
-					block.rewriteId(T.MethodDecl);
-				}
-				if (block.id !== T.MethodReturnDecl) {
-					const decl = new BlockToken(T.MethodReturnDecl);
+				if (block.id !== T.MfvTypeDecl) {
+					const decl = new BlockToken(T.MfvTypeDecl);
 					context.sink(decl);
 				}
 			}
 			parser.parse(c, context);
 			if (parser === VoidParser.instance
 				|| parser instanceof PrimitiveTypeParser) {
-				selector = TsscmfvMethodReturnParser.StartedSelector;
+				selector = MfvTypeParser.StartedSelector;
 			} else if (parser === PackageNameParser.instance) {
-				selector = TsscmfvMethodReturnParser.AfterNameSelector;
+				selector = MfvTypeParser.AfterNameSelector;
 			} else if (parser === DotParserInstance) {
-				selector = TsscmfvMethodReturnParser.AfterDotSelector;
+				selector = MfvTypeParser.AfterDotSelector;
 			}
 			c = context.char();
 		}
@@ -71,30 +72,33 @@ export class TsscmfvMethodReturnParser {
 
 	parse(token: AtomicToken, context: ParseContext): boolean {
 		const block = context.block();
-		if (block.id === T.TsscmfvDecl) {
-			block.rewriteId(T.MethodDecl);
-		} else if (block.id === T.MethodDecl) {
-			// because of void keyword collected, do nothing
-		} else {
-			const decl = new BlockToken(T.MethodDecl);
-			context.sink(decl);
+		switch (block.id) {
+			case T.TsscmfvDecl:
+			case T.MethodDecl:
+			case T.FieldDecl:
+			case T.VarDecl: {
+				// do nothing
+				break;
+			}
+			default: {
+				const decl = new BlockToken(T.TsscmfvDecl);
+				context.sink(decl);
+				break;
+			}
 		}
-		const decl = new BlockToken(T.MethodReturnDecl, token);
+		const decl = new BlockToken(T.MfvTypeDecl, token);
 		context.sink(decl);
 		context.forward(token.text.length);
 
-		this.subsequent(TsscmfvMethodReturnParser.StartedSelector, context);
+		this.subsequent(MfvTypeParser.StartedSelector, context);
 
 		context.rise();
 		return true;
 	}
 
-	continue(context: ParseContext): void {
-		this.subsequent(TsscmfvMethodReturnParser.StartSelector, context);
-		if (context.block().id === T.MethodReturnDecl) {
-			context.rise();
-		}
+	try(context: ParseContext): void {
+		this.subsequent(MfvTypeParser.StartSelector, context);
 	}
 
-	static readonly instance = new TsscmfvMethodReturnParser();
+	static readonly instance = new MfvTypeParser();
 }

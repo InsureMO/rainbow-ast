@@ -93,7 +93,7 @@ export class TsscmfvMethodThrowsParser {
 		return true;
 	}
 
-	continue(context: ParseContext): void {
+	try(context: ParseContext): void {
 		this.subsequent(TsscmfvMethodThrowsParser.StartSelector, context);
 	}
 

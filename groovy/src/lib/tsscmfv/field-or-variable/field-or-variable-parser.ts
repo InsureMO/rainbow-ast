@@ -1,7 +1,7 @@
 import {ParseContext} from '../../parse-context';
 
 export class TsscmfvFieldOrVariableParser {
-	continue(context: ParseContext): void {
+	try(context: ParseContext): void {
 
 	}
 

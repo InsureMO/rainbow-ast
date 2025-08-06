@@ -6,13 +6,8 @@ import {KeywordTokenParser, ParserSelector} from '../token-parser';
 import {GroovyTokenId, T} from '../tokens';
 import {TryCodeBlockParser} from './code-block';
 import {TsscmfvFieldOrVariableParser} from './field-or-variable';
-import {
-	TsscmfvMethodParser,
-	TsscmfvMethodReturnKeywords,
-	TsscmfvMethodReturnParser,
-	TsscmfvMethodThrowsKeywords,
-	TsscmfvMethodThrowsParser
-} from './method';
+import {TryMethodParametersParserParser, TsscmfvMethodThrowsKeywords, TsscmfvMethodThrowsParser} from './method';
+import {MfvNameParser, MfvTypeParser, TsscmfvMethodReturnTypeKeywords} from './mfv';
 import {TsscmfvModifierKeywords, TsscmfvModifiersParser} from './modifier';
 import {TrySynchronizedExpressionParser} from './synchronized-block';
 import {TsscmfvTypeInheritKeywords, TsscmfvTypeInheritParser, TsscmfvTypeKeywords, TsscmfvTypeParser} from './type';
@@ -21,10 +16,10 @@ import {TsscmfvKeywordUtils} from './utils';
 export type TsscmfvKeywords =
 	| TsscmfvModifierKeywords
 	| TsscmfvTypeKeywords | TsscmfvTypeInheritKeywords
-	| TsscmfvMethodReturnKeywords | TsscmfvMethodThrowsKeywords;
+	| TsscmfvMethodReturnTypeKeywords | TsscmfvMethodThrowsKeywords;
 
 enum TsscmfvKeywordKind {
-	Modifier, Type, TypeInherit, MethodReturn, MethodThrows
+	Modifier, Type, TypeInherit, MfvType, MethodThrows
 }
 
 export class TsscmfvDeclParser<A extends TsscmfvKeywords> extends KeywordTokenParser {
@@ -48,8 +43,8 @@ export class TsscmfvDeclParser<A extends TsscmfvKeywords> extends KeywordTokenPa
 			this._tokenKind = TsscmfvKeywordKind.Type;
 		} else if (TsscmfvKeywordUtils.isTypeInheritKeyword(this._tokenId)) {
 			this._tokenKind = TsscmfvKeywordKind.TypeInherit;
-		} else if (TsscmfvKeywordUtils.isMethodReturnKeyword(this._tokenId)) {
-			this._tokenKind = TsscmfvKeywordKind.MethodReturn;
+		} else if (TsscmfvKeywordUtils.isMfvTypeKeyword(this._tokenId)) {
+			this._tokenKind = TsscmfvKeywordKind.MfvType;
 		} else if (TsscmfvKeywordUtils.isMethodThrowsKeyword(this._tokenId)) {
 			this._tokenKind = TsscmfvKeywordKind.MethodThrows;
 		} else {
@@ -79,7 +74,7 @@ export class TsscmfvDeclParser<A extends TsscmfvKeywords> extends KeywordTokenPa
 		}
 	}
 
-	private finalizeBlock(_block: BlockToken, context: ParseContext): void {
+	private finalizeBlock(context: ParseContext): void {
 		let c = context.char();
 		while (c != null) {
 			const parser = TsscmfvDeclParser.Selector.find(c, context);
@@ -145,7 +140,7 @@ export class TsscmfvDeclParser<A extends TsscmfvKeywords> extends KeywordTokenPa
 		if (TryCodeBlockParser.instanceTypeBody.try(context)) {
 			context.rise();
 		} else {
-			this.finalizeBlock(context.block(), context);
+			this.finalizeBlock(context);
 		}
 	}
 
@@ -154,14 +149,15 @@ export class TsscmfvDeclParser<A extends TsscmfvKeywords> extends KeywordTokenPa
 	 * if try successfully, rewrite block to {@link T.TypeDecl}, end it and return true.
 	 * otherwise return false
 	 */
-	private tryType(block: BlockToken, context: ParseContext): boolean {
-		TsscmfvTypeParser.instance.continue(context);
-		TsscmfvTypeInheritParser.instance.continue(context);
-		const success = block.id === T.TypeDecl;
-		if (success) {
+	private tryType(context: ParseContext): boolean {
+		TsscmfvTypeParser.instance.try(context);
+		TsscmfvTypeInheritParser.instance.try(context);
+		if (context.block().id === T.TypeDecl) {
 			this.tryTypeBody(context);
+			return true;
+		} else {
+			return false;
 		}
-		return success;
 	}
 
 	/**
@@ -172,28 +168,37 @@ export class TsscmfvDeclParser<A extends TsscmfvKeywords> extends KeywordTokenPa
 		if (TryCodeBlockParser.instanceMethodBody.try(context)) {
 			context.rise();
 		} else {
-			this.finalizeBlock(context.block(), context);
+			this.finalizeBlock(context);
 		}
 	}
 
-	private tryMethodReturn(block: BlockToken, context: ParseContext): boolean {
-		TsscmfvMethodReturnParser.instance.continue(context);
-		TsscmfvMethodParser.instance.continue(context);
-		TsscmfvMethodThrowsParser.instance.continue(context);
-		const success = block.id === T.MethodDecl;
-		if (success) {
+	private tryMethod(context: ParseContext): boolean {
+		TryMethodParametersParserParser.instance.try(context);
+		TsscmfvMethodThrowsParser.instance.try(context);
+		if (context.block().id === T.MethodDecl) {
 			this.tryMethodBody(context);
+			return true;
+		} else {
+			return false;
 		}
-		return success;
 	}
 
-	private tryFieldOrVariable(block: BlockToken, context: ParseContext): boolean {
-		TsscmfvFieldOrVariableParser.instance.continue(context);
-		const success = block.id === T.FieldDecl || block.id === T.VarDecl;
-		if (success) {
-			this.finalizeBlock(block, context);
+	private tryFieldOrVariable(context: ParseContext): boolean {
+		TsscmfvFieldOrVariableParser.instance.try(context);
+		// TODO really use the standard block finalizer?
+		this.finalizeBlock(context);
+		return true;
+	}
+
+	private tryMfv(context: ParseContext): boolean {
+		MfvTypeParser.instance.try(context);
+		MfvNameParser.instance.try(context);
+		const matched = this.tryMethod(context);
+		if (matched) {
+			return true;
+		} else {
+			return this.tryFieldOrVariable(context);
 		}
-		return success;
 	}
 
 	private startWithModifier(firstModifierToken: AtomicToken, context: ParseContext): void {
@@ -206,33 +211,32 @@ export class TsscmfvDeclParser<A extends TsscmfvKeywords> extends KeywordTokenPa
 				if (!matched) {
 					// @ts-expect-error block token id might be rewritten
 					if (block.id === T.MethodDecl) {
-						this.tryMethodReturn(block, context);
+						this.tryMfv(context);
 					} else {
 						matched = !matched && this.tryStaticBlock(block, context);
-						matched = !matched && this.tryType(block, context);
-						matched = !matched && this.tryMethodReturn(block, context);
-						matched = !matched && this.tryFieldOrVariable(block, context);
+						matched = !matched && this.tryType(context);
+						matched = !matched && this.tryMfv(context);
 					}
 				}
 				break;
 			}
 			case T.TypeDecl: {
-				TsscmfvTypeParser.instance.continue(context);
-				TsscmfvTypeInheritParser.instance.continue(context);
+				TsscmfvTypeParser.instance.try(context);
+				TsscmfvTypeInheritParser.instance.try(context);
 				this.tryTypeBody(context);
 				break;
 			}
 			case T.MethodDecl: {
-				TsscmfvMethodReturnParser.instance.continue(context);
-				TsscmfvMethodParser.instance.continue(context);
-				TsscmfvMethodThrowsParser.instance.continue(context);
-				this.tryMethodBody(context);
+				MfvTypeParser.instance.try(context);
+				MfvNameParser.instance.try(context);
+				this.tryMethod(context);
 				break;
 			}
 			case T.FieldDecl:
 			case T.VarDecl: {
-				TsscmfvFieldOrVariableParser.instance.continue(context);
-				this.finalizeBlock(block, context);
+				MfvTypeParser.instance.try(context);
+				MfvNameParser.instance.try(context);
+				this.tryFieldOrVariable(context);
 				break;
 			}
 			default: {
@@ -251,7 +255,7 @@ export class TsscmfvDeclParser<A extends TsscmfvKeywords> extends KeywordTokenPa
 			}
 			case TsscmfvKeywordKind.Type: {
 				TsscmfvTypeParser.instance.parse(token, context);
-				TsscmfvTypeInheritParser.instance.continue(context);
+				TsscmfvTypeInheritParser.instance.try(context);
 				this.tryTypeBody(context);
 				break;
 			}
@@ -260,11 +264,13 @@ export class TsscmfvDeclParser<A extends TsscmfvKeywords> extends KeywordTokenPa
 				this.tryTypeBody(context);
 				break;
 			}
-			case TsscmfvKeywordKind.MethodReturn: {
-				TsscmfvMethodReturnParser.instance.parse(token, context);
-				TsscmfvMethodParser.instance.continue(context);
-				TsscmfvMethodThrowsParser.instance.continue(context);
-				this.tryMethodBody(context);
+			case TsscmfvKeywordKind.MfvType: {
+				MfvTypeParser.instance.parse(token, context);
+				MfvNameParser.instance.try(context);
+				const matched = this.tryMethod(context);
+				if (!matched) {
+					this.tryFieldOrVariable(context);
+				}
 				break;
 			}
 			case TsscmfvKeywordKind.MethodThrows: {

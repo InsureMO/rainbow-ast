@@ -27,7 +27,7 @@ export class TsscmfvKeywordUtils {
 		].includes(tokenId);
 	}
 
-	static isMethodReturnKeyword(tokenId: GroovyTokenId): boolean {
+	static isMfvTypeKeyword(tokenId: GroovyTokenId): boolean {
 		return [T.VOID].includes(tokenId);
 	}
 
