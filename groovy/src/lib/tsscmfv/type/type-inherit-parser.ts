@@ -1,8 +1,8 @@
 import {AtomicToken} from '@rainbow-ast/core';
-import {ParseContext} from '../parse-context';
-import {ParserSelector} from '../token-parser';
-import {T} from '../tokens';
-import {TsscmfvTIKP} from './tsscmfv-type-inherit-keywords';
+import {ParseContext} from '../../parse-context';
+import {ParserSelector} from '../../token-parser';
+import {T} from '../../tokens';
+import {TsscmfvTIKP} from './type-inherit-keywords';
 
 export class TsscmfvTypeInheritParser {
 	private static Selector: ParserSelector = new ParserSelector({

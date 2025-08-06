@@ -1,10 +1,14 @@
 import {AtomicToken, BlockToken, Char} from '@rainbow-ast/core';
-import {CommentParsers, MLCommentParser} from '../comment';
-import {CommaParserInstance, DotParserInstance, PackageNameParser, WsTabNlParsers, WsTabParsers} from '../common-token';
-import {ParseContext} from '../parse-context';
-import {AfterChildParsed, ParserSelector, SingleKeywordTokenParser, TokenParser} from '../token-parser';
-import {GroovyTokenId, T} from '../tokens';
-import {TsscmfvTypeInheritKeywords} from './tsscmfv-keywords-types';
+import {CommentParsers, MLCommentParser} from '../../comment';
+import {CommaParserInstance, DotParserInstance, PackageNameParser, WsTabNlParsers, WsTabParsers} from '../../common-token';
+import {ParseContext} from '../../parse-context';
+import {AfterChildParsed, ParserSelector, SingleKeywordTokenParser, TokenParser} from '../../token-parser';
+import {GroovyTokenId, T} from '../../tokens';
+
+export type TsscmfvTypeInheritKeywords =
+	| ['extends', GroovyTokenId.EXTENDS]
+	| ['implements', GroovyTokenId.IMPLEMENTS]
+	| ['permits', GroovyTokenId.PERMITS];
 
 export class TsscmfvTypeInheritKeywordParser<A extends TsscmfvTypeInheritKeywords> extends SingleKeywordTokenParser {
 	private static readonly EISelector: ParserSelector = new ParserSelector({

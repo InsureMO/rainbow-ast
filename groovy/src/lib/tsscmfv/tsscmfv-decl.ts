@@ -5,12 +5,13 @@ import {ParseContext} from '../parse-context';
 import {KeywordTokenParser, ParserSelector} from '../token-parser';
 import {GroovyTokenId, T} from '../tokens';
 import {TryCodeBlockParser} from './code-block';
+import {TsscmfvFieldOrVariableParser} from './field-or-variable';
+import {TsscmfvMethodParser, TsscmfvMethodReturnParser, TsscmfvMethodThrowsParser} from './method';
+import {TsscmfvModifiersParser} from './modifier';
 import {TrySynchronizedExpressionParser} from './synchronized-block';
 import {TsscmfvKeywords} from './tsscmfv-keywords-types';
-import {TsscmfvModifiersParser} from './tsscmfv-modifiers-parser';
-import {TsscmfvTypeInheritParser} from './tsscmfv-type-inherit-parser';
-import {TsscmfvTypeParser} from './tsscmfv-type-parser';
-import {TsscmfvKeywordUtils} from './tsscmfv-utils';
+import {TsscmfvTypeInheritParser, TsscmfvTypeParser} from './type';
+import {TsscmfvKeywordUtils} from './utils';
 
 enum TsscmfvKeywordKind {
 	Modifier, Type, TypeInherit, MethodReturn, MethodThrows
@@ -38,9 +39,9 @@ export class TsscmfvDeclParser<A extends TsscmfvKeywords> extends KeywordTokenPa
 		} else if (TsscmfvKeywordUtils.isTypeInheritKeyword(this._tokenId)) {
 			this._tokenKind = TsscmfvKeywordKind.TypeInherit;
 		} else if (TsscmfvKeywordUtils.isMethodReturnKeyword(this._tokenId)) {
-			this._tokenKind = TsscmfvKeywordKind.TypeInherit;
+			this._tokenKind = TsscmfvKeywordKind.MethodReturn;
 		} else if (TsscmfvKeywordUtils.isMethodThrowsKeyword(this._tokenId)) {
-			this._tokenKind = TsscmfvKeywordKind.TypeInherit;
+			this._tokenKind = TsscmfvKeywordKind.MethodThrows;
 		} else {
 			throw new Error(`Tsscmfv keyword[${keyword}] is not supported.`);
 		}
@@ -69,14 +70,6 @@ export class TsscmfvDeclParser<A extends TsscmfvKeywords> extends KeywordTokenPa
 	}
 
 	private finalizeBlock(block: BlockToken, context: ParseContext): void {
-		// if (TsscmfvKeywordUtils.onlyDefKeywords(modifierTokens)) {
-		// 	if (block.parent.id === T.TypeBody) {
-		// 		block.rewriteId(T.FieldDecl);
-		// 	} else {
-		// 		block.rewriteId(T.VarDecl);
-		// 	}
-		// }
-		//
 		let c = context.char();
 		while (c != null) {
 			const parser = TsscmfvDeclParser.Selector.find(c, context);
@@ -161,6 +154,38 @@ export class TsscmfvDeclParser<A extends TsscmfvKeywords> extends KeywordTokenPa
 		return success;
 	}
 
+	/**
+	 * try to parse method body.
+	 * end block when try successfully, or finalize block when try failed.
+	 */
+	private tryMethodBody(context: ParseContext): void {
+		if (TryCodeBlockParser.instanceMethodBody.try(context)) {
+			context.rise();
+		} else {
+			this.finalizeBlock(context.block(), context);
+		}
+	}
+
+	private tryMethodReturn(block: BlockToken, context: ParseContext): boolean {
+		TsscmfvMethodReturnParser.instance.continue(context);
+		TsscmfvMethodParser.instance.continue(context);
+		TsscmfvMethodThrowsParser.instance.continue(context);
+		const success = block.id === T.MethodDecl;
+		if (success) {
+			this.tryMethodBody(context);
+		}
+		return success;
+	}
+
+	private tryFieldOrVariable(block: BlockToken, context: ParseContext): boolean {
+		TsscmfvFieldOrVariableParser.instance.continue(context);
+		const success = block.id === T.FieldDecl || block.id === T.VarDecl;
+		if (success) {
+			this.finalizeBlock(block, context);
+		}
+		return success;
+	}
+
 	private startWithModifier(firstModifierToken: AtomicToken, context: ParseContext): void {
 		TsscmfvModifiersParser.instance.parse(firstModifierToken, context);
 
@@ -171,11 +196,12 @@ export class TsscmfvDeclParser<A extends TsscmfvKeywords> extends KeywordTokenPa
 				if (!matched) {
 					// @ts-expect-error block token id might be rewritten
 					if (block.id === T.MethodDecl) {
-						// TODO continue parse method
+						this.tryMethodReturn(block, context);
 					} else {
 						matched = !matched && this.tryStaticBlock(block, context);
 						matched = !matched && this.tryType(block, context);
-						// TODO continue parse method, field or variable
+						matched = !matched && this.tryMethodReturn(block, context);
+						matched = !matched && this.tryFieldOrVariable(block, context);
 					}
 				}
 				break;
@@ -187,13 +213,20 @@ export class TsscmfvDeclParser<A extends TsscmfvKeywords> extends KeywordTokenPa
 				break;
 			}
 			case T.MethodDecl: {
-				// TODO continue parse method
+				TsscmfvMethodReturnParser.instance.continue(context);
+				TsscmfvMethodParser.instance.continue(context);
+				TsscmfvMethodThrowsParser.instance.continue(context);
+				this.tryMethodBody(context);
 				break;
 			}
 			case T.FieldDecl:
 			case T.VarDecl: {
-				// TODO continue parse field or variable
+				TsscmfvFieldOrVariableParser.instance.continue(context);
+				this.finalizeBlock(block, context);
 				break;
+			}
+			default: {
+				throw new Error(`Block token[${T[block.id]}] is not supported.`);
 			}
 		}
 	}
@@ -218,11 +251,15 @@ export class TsscmfvDeclParser<A extends TsscmfvKeywords> extends KeywordTokenPa
 				break;
 			}
 			case TsscmfvKeywordKind.MethodReturn: {
-				// TODO parse from method return
+				TsscmfvMethodReturnParser.instance.parse(token, context);
+				TsscmfvMethodParser.instance.continue(context);
+				TsscmfvMethodThrowsParser.instance.continue(context);
+				this.tryMethodBody(context);
 				break;
 			}
 			case TsscmfvKeywordKind.MethodThrows: {
-				// TODO parse from method throws
+				TsscmfvMethodThrowsParser.instance.parse(token, context);
+				this.tryMethodBody(context);
 				break;
 			}
 			default:

@@ -1,6 +1,13 @@
-import {SingleKeywordTokenParser} from '../token-parser';
-import {GroovyTokenId} from '../tokens';
-import {TsscmfvTypeKeywords} from './tsscmfv-keywords-types';
+import {SingleKeywordTokenParser} from '../../token-parser';
+import {GroovyTokenId} from '../../tokens';
+
+export type TsscmfvTypeKeywords =
+	| ['@interface', GroovyTokenId.AT_INTERFACE]
+	| ['class', GroovyTokenId.CLASS]
+	| ['enum', GroovyTokenId.ENUM]
+	| ['interface', GroovyTokenId.INTERFACE]
+	| ['record', GroovyTokenId.RECORD]
+	| ['trait', GroovyTokenId.TRAIT];
 
 export class TsscmfvTypeKeywordParser<A extends TsscmfvTypeKeywords> extends SingleKeywordTokenParser {
 	private readonly _tokenId: A[1];

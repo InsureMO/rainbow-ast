@@ -10,7 +10,11 @@ import {
 } from '../../token-parser';
 import {GroovyTokenId, T} from '../../tokens';
 
-export type CodeBlockTokenId = GroovyTokenId.TypeBody | GroovyTokenId.StaticBody | GroovyTokenId.SyncBody;
+export type CodeBlockTokenId =
+	| GroovyTokenId.TypeBody
+	| GroovyTokenId.MethodBody
+	| GroovyTokenId.StaticBody
+	| GroovyTokenId.SyncBody;
 
 export class CodeBlockParser extends BySingleCharTokenParser {
 	private readonly _blockTokenId: GroovyTokenId;
@@ -65,6 +69,7 @@ export class CodeBlockParser extends BySingleCharTokenParser {
 	}
 
 	static readonly instanceTypeBody = new CodeBlockParser(T.TypeBody);
+	static readonly instanceMethodBody = new CodeBlockParser(T.MethodBody);
 	static readonly instanceSynchronizedBody = new CodeBlockParser(T.SyncBody);
 	static readonly instanceStaticBody = new CodeBlockParser(T.StaticBody);
 }

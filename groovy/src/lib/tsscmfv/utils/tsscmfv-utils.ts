@@ -1,5 +1,5 @@
 import {BlockToken, Token} from '@rainbow-ast/core';
-import {GroovyTokenId, T} from '../tokens';
+import {GroovyTokenId, T} from '../../tokens';
 
 export class TsscmfvKeywordUtils {
 	// noinspection JSUnusedLocalSymbols

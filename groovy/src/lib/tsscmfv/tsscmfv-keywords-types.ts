@@ -1,4 +1,5 @@
 import {GroovyTokenId} from '../tokens';
+import {TsscmfvTypeInheritKeywords, TsscmfvTypeKeywords} from './type';
 
 export type TsscmfvModifierKeywords =
 	| ['abstract', GroovyTokenId.ABSTRACT]
@@ -17,19 +18,6 @@ export type TsscmfvModifierKeywords =
 	| ['transient', GroovyTokenId.TRANSIENT]
 	| ['var', GroovyTokenId.VAR]
 	| ['volatile', GroovyTokenId.VOLATILE];
-
-export type TsscmfvTypeKeywords =
-	| ['@interface', GroovyTokenId.AT_INTERFACE]
-	| ['class', GroovyTokenId.CLASS]
-	| ['enum', GroovyTokenId.ENUM]
-	| ['interface', GroovyTokenId.INTERFACE]
-	| ['record', GroovyTokenId.RECORD]
-	| ['trait', GroovyTokenId.TRAIT];
-
-export type TsscmfvTypeInheritKeywords =
-	| ['extends', GroovyTokenId.EXTENDS]
-	| ['implements', GroovyTokenId.IMPLEMENTS]
-	| ['permits', GroovyTokenId.PERMITS];
 
 export type TsscmfvMethodReturnKeywords =
 	| ['void', GroovyTokenId.VOID];

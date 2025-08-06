@@ -1,11 +1,11 @@
 import {AtomicToken, BlockToken, Token} from '@rainbow-ast/core';
-import {CommentParsers} from '../comment';
-import {TypeDeclNameParser, WsTabNlParsers} from '../common-token';
-import {ParseContext} from '../parse-context';
-import {TA} from '../token-attributes';
-import {ParserSelector, ParserSelectorArgs} from '../token-parser';
-import {T} from '../tokens';
-import {TsscmfvTKP, TsscmfvTypeKeywordParser} from './tsscmfv-type-keywords';
+import {CommentParsers} from '../../comment';
+import {TypeDeclNameParser, WsTabNlParsers} from '../../common-token';
+import {ParseContext} from '../../parse-context';
+import {TA} from '../../token-attributes';
+import {ParserSelector, ParserSelectorArgs} from '../../token-parser';
+import {T} from '../../tokens';
+import {TsscmfvTKP, TsscmfvTypeKeywordParser} from './type-keywords';
 
 interface TsscmfvTypeParserArgs {
 	Start: ParserSelectorArgs['parsers'];

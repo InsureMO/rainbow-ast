@@ -46,6 +46,7 @@ export class TryCodeBlockParser {
 	}
 
 	static readonly instanceTypeBody = new TryCodeBlockParser(CodeBlockParser.instanceTypeBody);
+	static readonly instanceMethodBody = new TryCodeBlockParser(CodeBlockParser.instanceMethodBody);
 	static readonly instanceSynchronizedBody = new TryCodeBlockParser(CodeBlockParser.instanceSynchronizedBody);
 	static readonly instanceStaticBody = new TryCodeBlockParser(CodeBlockParser.instanceStaticBody);
 }
