@@ -122,7 +122,7 @@ export class TsscmfvTypeInheritKeywordParser<A extends TsscmfvTypeInheritKeyword
 			context.sink(decl);
 		}
 
-		const decl = new BlockToken(T.TypeInheritDecl, token);
+		const decl = new BlockToken(T.TypeInheritSeg, token);
 		context.sink(decl);
 		context.forward(token.text.length);
 

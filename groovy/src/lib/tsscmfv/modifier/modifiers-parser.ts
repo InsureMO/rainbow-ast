@@ -105,7 +105,7 @@ export class TsscmfvModifiersParser {
 			block = decl;
 		}
 		let selector = this.detectBlockId(token, block);
-		const modifiers = new BlockToken(T.ModifierDecl, token);
+		const modifiers = new BlockToken(T.ModifierSeg, token);
 		context.sink(modifiers);
 		context.forward(token.text.length);
 

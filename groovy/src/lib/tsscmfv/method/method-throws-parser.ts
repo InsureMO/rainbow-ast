@@ -56,8 +56,8 @@ export class TsscmfvMethodThrowsParser {
 				if (block.id === T.TsscmfvDecl) {
 					block.rewriteId(T.MethodDecl);
 				}
-				if (block.id !== T.MethodThrowsDecl) {
-					const decl = new BlockToken(T.MethodThrowsDecl);
+				if (block.id !== T.MethodThrowsSeg) {
+					const decl = new BlockToken(T.MethodThrowsSeg);
 					context.sink(decl);
 				}
 			}
@@ -83,7 +83,7 @@ export class TsscmfvMethodThrowsParser {
 			const decl = new BlockToken(T.MethodDecl);
 			context.sink(decl);
 		}
-		const decl = new BlockToken(T.MethodThrowsDecl, token);
+		const decl = new BlockToken(T.MethodThrowsSeg, token);
 		context.sink(decl);
 		context.forward(token.text.length);
 

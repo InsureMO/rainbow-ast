@@ -52,8 +52,8 @@ export class MfvTypeParser {
 				|| parser === VoidParser.instance
 				|| parser instanceof PrimitiveTypeParser) {
 				const block = context.block();
-				if (block.id !== T.MfvTypeDecl) {
-					const decl = new BlockToken(T.MfvTypeDecl);
+				if (block.id !== T.MfvTypeSeg) {
+					const decl = new BlockToken(T.MfvTypeSeg);
 					context.sink(decl);
 				}
 			}
@@ -86,7 +86,7 @@ export class MfvTypeParser {
 				break;
 			}
 		}
-		const decl = new BlockToken(T.MfvTypeDecl, token);
+		const decl = new BlockToken(T.MfvTypeSeg, token);
 		context.sink(decl);
 		context.forward(token.text.length);
 

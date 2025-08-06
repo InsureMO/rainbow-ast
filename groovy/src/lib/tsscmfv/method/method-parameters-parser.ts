@@ -31,7 +31,7 @@ export class MethodParametersParser extends BySingleCharTokenParser {
 	}
 
 	protected startBlock(context: ParseContext): void {
-		const params = new BlockToken(T.MethodParamsDecl, this.createToken(context));
+		const params = new BlockToken(T.MethodParamsBlk, this.createToken(context));
 		context.sink(params);
 		context.forward(1);
 	}
@@ -51,13 +51,13 @@ export class MethodParametersParser extends BySingleCharTokenParser {
 	protected beforeChildParsed(context: ParseContext, parser: TokenParser) {
 		if (parser === RParenParserInstance || parser === CommaParserInstance) {
 			const block = context.block();
-			if (block.id === T.MethodParamDecl) {
+			if (block.id === T.MethodParamSeg) {
 				context.rise();
 			}
 		} else {
 			const block = context.block();
-			if (block.id !== T.MethodParamDecl) {
-				const decl = new BlockToken(T.MethodParamDecl);
+			if (block.id !== T.MethodParamSeg) {
+				const decl = new BlockToken(T.MethodParamSeg);
 				context.sink(decl);
 			}
 		}

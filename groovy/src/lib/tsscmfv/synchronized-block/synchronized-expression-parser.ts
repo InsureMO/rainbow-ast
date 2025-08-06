@@ -31,7 +31,7 @@ export class SynchronizedExpressionParser extends BySingleCharTokenParser {
 	}
 
 	protected startBlock(context: ParseContext) {
-		const expr = new BlockToken(T.SyncExpr, this.createToken(context));
+		const expr = new BlockToken(T.SyncExprBlk, this.createToken(context));
 		context.sink(expr);
 		context.forward(1);
 	}

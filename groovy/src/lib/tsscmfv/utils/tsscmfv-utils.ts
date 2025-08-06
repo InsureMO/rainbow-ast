@@ -41,7 +41,7 @@ export class TsscmfvKeywordUtils {
 	 */
 	static getModifierTokens(block: BlockToken): Array<Token> {
 		const firstChildOfTsscmfv = block.children[0];
-		if (firstChildOfTsscmfv.id === T.ModifierDecl) {
+		if (firstChildOfTsscmfv.id === T.ModifierSeg) {
 			return (firstChildOfTsscmfv as BlockToken).children?.filter(c => TsscmfvKeywordUtils.isModifierKeyword(c.id)) ?? [];
 		} else {
 			return [];

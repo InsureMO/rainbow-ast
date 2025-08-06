@@ -13,7 +13,13 @@ import {ImportDeclParser} from './import-decl';
 import {NumberParsers} from './number-literal';
 import {PackageDeclParser} from './package-decl';
 import {GsBraceInterpolationParser, StringParsers} from './string-literal';
-import {CodeBlockParser, MethodParametersParser, SynchronizedExpressionParser, TsscmfvDeclParsers} from './tsscmfv';
+import {
+	CodeBlockParser,
+	MethodParametersParser,
+	SynchronizedExpressionParser,
+	TsscmfvDeclParsers,
+	TsscmfvFieldOrVariableParser
+} from './tsscmfv';
 
 const AllParsers = [
 	// package declaration
@@ -42,6 +48,7 @@ class TokenParserInitializer {
 		SynchronizedExpressionParser.initSelector(AllParsers);
 		MethodParametersParser.initSelector(AllParsers);
 		CodeBlockParser.initSelector(AllParsers);
+		TsscmfvFieldOrVariableParser.initSelector([/* TODO HOW? */]);
 	}
 }
 

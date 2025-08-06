@@ -1,6 +1,6 @@
 import {AtomicToken, BlockToken, Char} from '@rainbow-ast/core';
-import {CommentParsers} from '../comment';
-import {SemicolonParserInstance, WsTabNlParsers} from '../common-token';
+import {MLCommentParser} from '../comment';
+import {SemicolonParserInstance, WsTabParsers} from '../common-token';
 import {ParseContext} from '../parse-context';
 import {KeywordTokenParser, ParserSelector} from '../token-parser';
 import {GroovyTokenId, T} from '../tokens';
@@ -26,8 +26,8 @@ export class TsscmfvDeclParser<A extends TsscmfvKeywords> extends KeywordTokenPa
 	private static Selector: ParserSelector = new ParserSelector({
 		parsers: [
 			SemicolonParserInstance,
-			CommentParsers,
-			WsTabNlParsers
+			MLCommentParser.instance,
+			WsTabParsers
 		]
 	});
 

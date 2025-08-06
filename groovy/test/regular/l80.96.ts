@@ -43,7 +43,7 @@ export const l80_96 = (l: { v: number }): Array<TokenSpec> => {
 		]],
 		[T.Newline, 1519, l.v++, '\n'],
 		[T.TypeDecl, 1520, l.v, 'public protected private\nabstract abstract\nfinal final\nstrictfp strictfp  // abc\nstatic /*\n*/ static\ndef\nclass @interface interface enum record trait A;', [
-			[T.ModifierDecl, 1520, l.v, 'public protected private\nabstract abstract\nfinal final\nstrictfp strictfp  // abc\nstatic /*\n*/ static\ndef\n', [
+			[T.ModifierSeg, 1520, l.v, 'public protected private\nabstract abstract\nfinal final\nstrictfp strictfp  // abc\nstatic /*\n*/ static\ndef\n', [
 				[T.PUBLIC, 1520, l.v, 'public'],
 				[T.Whitespaces, 1526, l.v, ' '],
 				[T.PROTECTED, 1527, l.v, 'protected'],
@@ -98,7 +98,7 @@ export const l80_96 = (l: { v: number }): Array<TokenSpec> => {
 		]],
 		[T.Newline, 1672, l.v++, '\n'],
 		[T.TypeDecl, 1673, l.v, 'public class A extends b.C extends implements implements d.E permits f.G, i.H permits;', [
-			[T.ModifierDecl, 1673, l.v, 'public ', [
+			[T.ModifierSeg, 1673, l.v, 'public ', [
 				[T.PUBLIC, 1673, l.v, 'public'],
 				[T.Whitespaces, 1679, l.v, ' ']
 			]],
@@ -106,7 +106,7 @@ export const l80_96 = (l: { v: number }): Array<TokenSpec> => {
 			[T.Whitespaces, 1685, l.v, ' '],
 			[T.Identifier, 1686, l.v, 'A'],
 			[T.Whitespaces, 1687, l.v, ' '],
-			[T.TypeInheritDecl, 1688, l.v, 'extends b.C ', [
+			[T.TypeInheritSeg, 1688, l.v, 'extends b.C ', [
 				[T.EXTENDS, 1688, l.v, 'extends'],
 				[T.Whitespaces, 1695, l.v, ' '],
 				[T.Identifier, 1696, l.v, 'b'],
@@ -114,15 +114,15 @@ export const l80_96 = (l: { v: number }): Array<TokenSpec> => {
 				[T.Identifier, 1698, l.v, 'C'],
 				[T.Whitespaces, 1699, l.v, ' ']
 			]],
-			[T.TypeInheritDecl, 1700, l.v, 'extends ', [
+			[T.TypeInheritSeg, 1700, l.v, 'extends ', [
 				[T.EXTENDS, 1700, l.v, 'extends'],
 				[T.Whitespaces, 1707, l.v, ' ']
 			]],
-			[T.TypeInheritDecl, 1708, l.v, 'implements ', [
+			[T.TypeInheritSeg, 1708, l.v, 'implements ', [
 				[T.IMPLEMENTS, 1708, l.v, 'implements'],
 				[T.Whitespaces, 1718, l.v, ' ']
 			]],
-			[T.TypeInheritDecl, 1719, l.v, 'implements d.E ', [
+			[T.TypeInheritSeg, 1719, l.v, 'implements d.E ', [
 				[T.IMPLEMENTS, 1719, l.v, 'implements'],
 				[T.Whitespaces, 1729, l.v, ' '],
 				[T.Identifier, 1730, l.v, 'd'],
@@ -130,7 +130,7 @@ export const l80_96 = (l: { v: number }): Array<TokenSpec> => {
 				[T.Identifier, 1732, l.v, 'E'],
 				[T.Whitespaces, 1733, l.v, ' ']
 			]],
-			[T.TypeInheritDecl, 1734, l.v, 'permits f.G, i.H ', [
+			[T.TypeInheritSeg, 1734, l.v, 'permits f.G, i.H ', [
 				[T.PERMITS, 1734, l.v, 'permits'],
 				[T.Whitespaces, 1741, l.v, ' '],
 				[T.Identifier, 1742, l.v, 'f'],
@@ -143,7 +143,7 @@ export const l80_96 = (l: { v: number }): Array<TokenSpec> => {
 				[T.Identifier, 1749, l.v, 'H'],
 				[T.Whitespaces, 1750, l.v, ' ']
 			]],
-			[T.TypeInheritDecl, 1751, l.v, 'permits', [
+			[T.TypeInheritSeg, 1751, l.v, 'permits', [
 				[T.PERMITS, 1751, l.v, 'permits']
 			]],
 			[T.Semicolon, 1758, l.v, ';']
@@ -161,7 +161,7 @@ export const l80_96 = (l: { v: number }): Array<TokenSpec> => {
 		]],
 		[T.Newline, 1770, l.v++, '\n'],
 		[T.TypeDecl, 1771, l.v, 'public sealed class B extends C implements D permits E, F {}', [
-			[T.ModifierDecl, 1771, l.v, 'public ', [
+			[T.ModifierSeg, 1771, l.v, 'public ', [
 				[T.PUBLIC, 1771, l.v, 'public'],
 				[T.Whitespaces, 1777, l.v, ' '],
 				[T.SEALED, 1778, l.v, 'sealed'],
@@ -171,19 +171,19 @@ export const l80_96 = (l: { v: number }): Array<TokenSpec> => {
 			[T.Whitespaces, 1790, l.v, ' '],
 			[T.Identifier, 1791, l.v, 'B'],
 			[T.Whitespaces, 1792, l.v, ' '],
-			[T.TypeInheritDecl, 1793, l.v, 'extends C ', [
+			[T.TypeInheritSeg, 1793, l.v, 'extends C ', [
 				[T.EXTENDS, 1793, l.v, 'extends'],
 				[T.Whitespaces, 1800, l.v, ' '],
 				[T.Identifier, 1801, l.v, 'C'],
 				[T.Whitespaces, 1802, l.v, ' '],
 			]],
-			[T.TypeInheritDecl, 1803, l.v, 'implements D ', [
+			[T.TypeInheritSeg, 1803, l.v, 'implements D ', [
 				[T.IMPLEMENTS, 1803, l.v, 'implements'],
 				[T.Whitespaces, 1813, l.v, ' '],
 				[T.Identifier, 1814, l.v, 'D'],
 				[T.Whitespaces, 1815, l.v, ' '],
 			]],
-			[T.TypeInheritDecl, 1816, l.v, 'permits E, F ', [
+			[T.TypeInheritSeg, 1816, l.v, 'permits E, F ', [
 				[T.PERMITS, 1816, l.v, 'permits'],
 				[T.Whitespaces, 1823, l.v, ' '],
 				[T.Identifier, 1824, l.v, 'E'],
@@ -199,7 +199,7 @@ export const l80_96 = (l: { v: number }): Array<TokenSpec> => {
 		]],
 		[T.Newline, 1831, l.v++, '\n'],
 		[T.StaticBlockDecl, 1832, l.v, 'static static {}', [
-			[T.ModifierDecl, 1832, l.v, 'static static ', [
+			[T.ModifierSeg, 1832, l.v, 'static static ', [
 				[T.STATIC, 1832, l.v, 'static'],
 				[T.Whitespaces, 1838, l.v, ' '],
 				[T.STATIC, 1839, l.v, 'static'],
