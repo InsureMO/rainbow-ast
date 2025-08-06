@@ -74,6 +74,11 @@ export class TsscmfvDeclParser<A extends TsscmfvKeywords> extends KeywordTokenPa
 		}
 	}
 
+	/**
+	 * TODO check the parsed tokens.
+	 *  if there are no other tokens except for some special ones,
+	 *  the current parsing result needs to be rewritten.
+	 */
 	private finalizeBlock(context: ParseContext): void {
 		let c = context.char();
 		while (c != null) {
@@ -203,20 +208,14 @@ export class TsscmfvDeclParser<A extends TsscmfvKeywords> extends KeywordTokenPa
 			// has parameters, continue parse left part of method
 			TsscmfvMethodThrowsParser.instance.try(context);
 			this.tryMethodBody(context);
-			return;
+		} else {
+			// has no method parameters, try field/variable
+			TsscmfvFieldOrVariableParser.instance.try(context);
+			if (block.id === T.FieldDecl || block.id === T.VarDecl) {
+				// is field or variable, finalize block
+				this.finalizeBlock(context);
+			}
 		}
-
-		// has no method parameters, try field/variable
-		TsscmfvFieldOrVariableParser.instance.try(context);
-		if (block.id === T.FieldDecl || block.id === T.VarDecl) {
-			// is field or variable, finalize block
-			this.finalizeBlock(context);
-			return;
-		}
-
-		// still not method, field or variable,
-		TsscmfvMethodThrowsParser.instance.try(context);
-		this.tryMethodBody(context);
 	}
 
 	private tryFieldOrVariable(context: ParseContext): void {
