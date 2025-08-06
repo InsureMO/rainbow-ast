@@ -13,7 +13,7 @@ export class MfvNameParser {
 	});
 
 	try(context: ParseContext): void {
-		let selector = MfvNameParser.Selector;
+		const selector = MfvNameParser.Selector;
 		let c = context.char();
 		while (c != null) {
 			const parser = selector.find(c, context);
