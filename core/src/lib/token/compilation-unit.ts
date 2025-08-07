@@ -35,6 +35,22 @@ export class CompilationUnit extends BlockToken {
 		return 1;
 	}
 
+	hasAttr(key: string): boolean {
+		return false;
+	}
+
+	getAttr<V>(key: string): V | undefined {
+		return (void 0);
+	}
+
+	setAttr<V>(_1: string, _2: V | null | undefined): void {
+		throw new Error('Attribute is not available on compilation unit.');
+	}
+
+	removeAttr(_: string): void {
+		throw new Error('Attribute is not available on compilation unit.');
+	}
+
 	get parent(): BlockToken | undefined {
 		return (void 0);
 	}

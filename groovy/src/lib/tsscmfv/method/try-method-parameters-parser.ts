@@ -18,7 +18,9 @@ export class TryMethodParametersParserParser {
 		if (c != null) {
 			const parser = TryMethodParametersParserParser.Selector.find(c, context);
 			if (parser != null) {
-				context.block().rewriteId(T.MethodDecl);
+				if (parser === MethodParametersParser.instance) {
+					context.block().rewriteId(T.MethodDecl);
+				}
 				parser.parse(c, context);
 			}
 		}

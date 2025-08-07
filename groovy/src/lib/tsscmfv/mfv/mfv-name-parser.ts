@@ -1,5 +1,5 @@
 import {CommentParsers} from '../../comment';
-import {IdentifierParser, WsTabNlParsers} from '../../common-token';
+import {IdentifierParser, VariableNameParser, WsTabNlParsers} from '../../common-token';
 import {ParseContext} from '../../parse-context';
 import {StringParsers} from '../../string-literal';
 import {ParserSelector} from '../../token-parser';
@@ -7,7 +7,7 @@ import {ParserSelector} from '../../token-parser';
 export class MfvNameParser {
 	private static readonly Selector = new ParserSelector({
 		parsers: [
-			IdentifierParser.instance, StringParsers,
+			VariableNameParser.instance, StringParsers,
 			CommentParsers, WsTabNlParsers
 		]
 	});

@@ -122,7 +122,10 @@ export class TsscmfvDeclParser<A extends TsscmfvKeywords> extends KeywordTokenPa
 
 	/**
 	 * looking for semicolon.
-	 * and before end block, rewrite token id to {@link T.TypeDecl} when there is no evidence to prove that the block is not  {@link T.TypeDecl}.
+	 * and before end block, rewrite token id to
+	 * - {@link T.FieldDecl} if in {@link T.TypeBody},
+	 * - {@link T.VarDecl} if not in {@link T.TypeBody},
+	 * when block token id still is {@link T.TsscmfvDecl}, because of no evidence of other kinds.
 	 */
 	private finalizeBlock(context: ParseContext): void {
 		let c = context.char();
@@ -140,7 +143,12 @@ export class TsscmfvDeclParser<A extends TsscmfvKeywords> extends KeywordTokenPa
 
 		const block = context.block();
 		if (block.id === T.TsscmfvDecl) {
-			block.rewriteId(T.TypeDecl);
+			const parent = block.parent;
+			if (parent.id === T.TypeBody) {
+				block.rewriteId(T.FieldDecl);
+			} else {
+				block.rewriteId(T.VarDecl);
+			}
 		}
 
 		context.rise();
@@ -286,6 +294,7 @@ export class TsscmfvDeclParser<A extends TsscmfvKeywords> extends KeywordTokenPa
 		const block = context.block();
 		switch (block.id) {
 			case T.TsscmfvDecl: {
+				// cannot decide which kind of tsscmfv based on parsed modifiers
 				let matched = this.trySynchronizedBlock(block, context);
 				// @ts-expect-error block token id might be rewritten
 				if (!matched && block.id === T.MethodDecl) {
@@ -304,15 +313,18 @@ export class TsscmfvDeclParser<A extends TsscmfvKeywords> extends KeywordTokenPa
 				break;
 			}
 			case T.TypeDecl: {
+				// at least has one type modifier
 				this.tryTypeAndFinalize(context);
 				break;
 			}
 			case T.MethodDecl: {
+				// at least has one method modifier
 				this.tryMethodAndFinalize(context);
 				break;
 			}
 			case T.FieldDecl:
 			case T.VarDecl: {
+				// at least has one field/variable modifier
 				this.tryFieldOrVariableAndFinalize(context);
 				break;
 			}
@@ -327,23 +339,31 @@ export class TsscmfvDeclParser<A extends TsscmfvKeywords> extends KeywordTokenPa
 
 		switch (this._tokenKind) {
 			case TsscmfvKeywordKind.Modifier: {
+				// starts with modifier keywords
 				this.afterModifiersAndFinalize(token, context);
 				break;
 			}
 			case TsscmfvKeywordKind.Type: {
+				// starts with type keywords
+				// @interface, class, enum, interface, record, trait
 				this.tryTypeAndFinalize(context, token);
 				break;
 			}
 			case TsscmfvKeywordKind.TypeInherit: {
+				// starts with type inherit keywords
+				// extends, implements, permits
 				TsscmfvTypeInheritParser.instance.parse(token, context);
 				this.tryTypeBodyAndFinalize(context);
 				break;
 			}
 			case TsscmfvKeywordKind.MfvType: {
+				// starts with mfv keywords
+				// void or 8 primitive type keywords
 				this.tryMfvAndFinalize(context, token);
 				break;
 			}
 			case TsscmfvKeywordKind.MethodThrows: {
+				// starts with keyword throws
 				TsscmfvMethodThrowsParser.instance.parse(token, context);
 				this.tryMethodBodyAndFinalize(context);
 				break;

@@ -100,3 +100,10 @@ void test() {}
 boolean void test();
 public java.util.List test() throws IOException, e.E {}
 public void /private/() {}
+// field declaration #1
+class A {
+	def a
+	public transient int long b
+		volatile java.util.List c =
+	public float d, e
+}

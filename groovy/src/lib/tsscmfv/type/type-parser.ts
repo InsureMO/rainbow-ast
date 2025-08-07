@@ -102,7 +102,7 @@ export class TsscmfvTypeParser {
 			context.sink(decl);
 		}
 		context.forward(token.text.length);
-		this.writeTypeKind(block, token);
+		this.writeTypeKind(context.block(), token);
 
 		this.subsequent(TsscmfvTypeParser.StartedSelector, context);
 		return true;
