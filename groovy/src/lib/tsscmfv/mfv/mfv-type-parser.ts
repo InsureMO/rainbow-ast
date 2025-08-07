@@ -6,11 +6,19 @@ import {PrimitiveTypeParser, PrimitiveTypeParsers, VoidParser} from '../../primi
 import {ParserSelector} from '../../token-parser';
 import {GroovyTokenId, T} from '../../tokens';
 
-// TODO add 8 primitive types?
 /**
  * void also can be used in field/variable declaration, but it is incorrect
  */
-export type TsscmfvMethodReturnTypeKeywords = ['void', GroovyTokenId.VOID];
+export type TsscmfvMethodReturnTypeKeywords =
+	| ['void', GroovyTokenId.VOID]
+	| ['boolean', GroovyTokenId.BOOLEAN]
+	| ['byte', GroovyTokenId.BYTE]
+	| ['char', GroovyTokenId.CHAR]
+	| ['double', GroovyTokenId.DOUBLE]
+	| ['float', GroovyTokenId.FLOAT]
+	| ['int', GroovyTokenId.INT]
+	| ['long', GroovyTokenId.LONG]
+	| ['short', GroovyTokenId.SHORT];
 
 /**
  * mfv = method, field, variable.

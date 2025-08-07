@@ -28,7 +28,7 @@ export class TsscmfvKeywordUtils {
 	}
 
 	static isMfvTypeKeyword(tokenId: GroovyTokenId): boolean {
-		return [T.VOID].includes(tokenId);
+		return [T.VOID, T.BOOLEAN, T.BYTE, T.CHAR, T.DOUBLE, T.FLOAT, T.INT, T.LONG, T.SHORT].includes(tokenId);
 	}
 
 	static isMethodThrowsKeyword(tokenId: GroovyTokenId): boolean {
@@ -36,8 +36,8 @@ export class TsscmfvKeywordUtils {
 	}
 
 	/**
-	 * for declaration which has {@link T.ModifierDecl}.
-	 * return empty array when no {@link T.ModifierDecl}.
+	 * for declaration which has {@link T.ModifierSeg}.
+	 * return empty array when no {@link T.ModifierSeg}.
 	 */
 	static getModifierTokens(block: BlockToken): Array<Token> {
 		const firstChildOfTsscmfv = block.children[0];
@@ -54,10 +54,6 @@ export class TsscmfvKeywordUtils {
 
 	static onlySynchronizedKeywords(modifiers: Array<Token>): boolean {
 		return !modifiers.some(t => t.id !== T.SYNCHRONIZED);
-	}
-
-	static onlyDefKeywords(modifiers: Array<Token>): boolean {
-		return !modifiers.some(t => t.id !== T.DEF);
 	}
 
 	static couldBeSynchronizedBlock(block: BlockToken): boolean {

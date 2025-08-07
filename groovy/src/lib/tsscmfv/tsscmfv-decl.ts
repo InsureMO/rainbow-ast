@@ -22,6 +22,52 @@ enum TsscmfvKeywordKind {
 	Modifier, Type, TypeInherit, MfvType, MethodThrows
 }
 
+/**
+ * Tsscmfv declaration starts with a keyword, which is one of following:
+ * - modifiers:
+ *   - abstract: type, method,
+ *   - final: type, method, field,
+ *   - private, protected, public, strictfp: type, constructor, method, field,
+ *   - static: type, static block, method,
+ *   - synchronized: synchronized block, method,
+ *   - default, native: method,
+ *   - non-sealed, sealed: type,
+ *   - def: type, constructor, method, field, variable,
+ *   - var: type (inner), field, variable,
+ * - @interface, class, enum, interface, record, trait: represents a class declaration,
+ * - extends, implements, permits: type,
+ * - void, boolean, byte, char, double, float, int, long, short: method, field, variable,
+ * - throws: constructor, method,
+ * - transient, volatile: field.
+ *
+ * However, in order to maximize compatibility with errors that may occur when writing code,
+ * the modifier keywords will be classified into the following situations during the initial parsing:
+ * - sealed, non-sealed: type,
+ * - default, native: method,
+ * - transient, volatile: field, variable (incorrect).
+ *
+ * Meanwhile, how to start the parsing will also be determined by the modifier keywords,
+ * 4 parser selectors which are for (1) type, (2) method, (3) field/variable and (4) accept all,
+ * see {@link TsscmfvModifiersParser} for more details.
+ * And there are 4 different kinds of keywords to determine what the subsequent parsing logic should be based on,
+ * they are (1) type, (2) type inheriting, (3) method/field/variable (mfv) and (4) method throws.
+ * These 4 types correspond to the way of starting the parsing directly when there is no modifier keyword.
+ *
+ * Although the parsing is carried out in a way that maximally accommodates writing errors,
+ * it's still impossible to guarantee the absence of ambiguity.
+ * For example, when contextual keywords appear alone, there are still semantic errors based on the completed parsing.
+ * However, these issues won't be addressed here but will be dealt with during semantic diagnosis.
+ * There are the following situations:
+ * - sealed, record, permits, trait appear independently or together without other keywords, they are considered as expressions,
+ * - non-sealed follows one of sealed, record, permits, trait,
+ * - var appears independently,
+ * - 8 primitive type keywords appear independently or two at a time.
+ * - etc.
+ *
+ * At the end of all parsing, there are two ways to end a block:
+ * - If the last part is a code block, end it immediately.
+ * - If the last part is not a code block, look for a semicolon as the terminator within the same line (ML comment are not considered as spanning lines).
+ */
 export class TsscmfvDeclParser<A extends TsscmfvKeywords> extends KeywordTokenParser {
 	private static Selector: ParserSelector = new ParserSelector({
 		parsers: [
@@ -75,9 +121,8 @@ export class TsscmfvDeclParser<A extends TsscmfvKeywords> extends KeywordTokenPa
 	}
 
 	/**
-	 * TODO check the parsed tokens.
-	 *  if there are no other tokens except for some special ones,
-	 *  the current parsing result needs to be rewritten.
+	 * looking for semicolon.
+	 * and before end block, rewrite token id to {@link T.TypeDecl} when there is no evidence to prove that the block is not  {@link T.TypeDecl}.
 	 */
 	private finalizeBlock(context: ParseContext): void {
 		let c = context.char();
@@ -92,6 +137,12 @@ export class TsscmfvDeclParser<A extends TsscmfvKeywords> extends KeywordTokenPa
 			}
 			c = context.char();
 		}
+
+		const block = context.block();
+		if (block.id === T.TsscmfvDecl) {
+			block.rewriteId(T.TypeDecl);
+		}
+
 		context.rise();
 	}
 
@@ -110,6 +161,7 @@ export class TsscmfvDeclParser<A extends TsscmfvKeywords> extends KeywordTokenPa
 		if (block.id === T.SyncBlockDecl) {
 			// success
 			TryCodeBlockParser.instanceSynchronizedBody.try(context);
+			context.rise();
 			return true;
 		} else {
 			// not synchronized expression, it is method
@@ -141,7 +193,7 @@ export class TsscmfvDeclParser<A extends TsscmfvKeywords> extends KeywordTokenPa
 	 * try to parse type body.
 	 * end block when try successfully, or finalize block when try failed.
 	 */
-	private tryTypeBody(context: ParseContext): void {
+	private tryTypeBodyAndFinalize(context: ParseContext): void {
 		if (TryCodeBlockParser.instanceTypeBody.try(context)) {
 			context.rise();
 		} else {
@@ -163,10 +215,16 @@ export class TsscmfvDeclParser<A extends TsscmfvKeywords> extends KeywordTokenPa
 
 		TsscmfvTypeInheritParser.instance.try(context);
 		if (context.block().id === T.TypeDecl) {
-			this.tryTypeBody(context);
+			this.tryTypeBodyAndFinalize(context);
 			return true;
 		} else {
 			return false;
+		}
+	}
+
+	private tryTypeAndFinalize(context: ParseContext, firstTypeToken?: AtomicToken) {
+		if (!this.tryType(context, firstTypeToken)) {
+			this.finalizeBlock(context);
 		}
 	}
 
@@ -174,7 +232,7 @@ export class TsscmfvDeclParser<A extends TsscmfvKeywords> extends KeywordTokenPa
 	 * try to parse method body.
 	 * end block when try successfully, or finalize block when try failed.
 	 */
-	private tryMethodBody(context: ParseContext): void {
+	private tryMethodBodyAndFinalize(context: ParseContext): void {
 		if (TryCodeBlockParser.instanceMethodBody.try(context)) {
 			context.rise();
 		} else {
@@ -182,15 +240,15 @@ export class TsscmfvDeclParser<A extends TsscmfvKeywords> extends KeywordTokenPa
 		}
 	}
 
-	private tryMethod(context: ParseContext): void {
+	private tryMethodAndFinalize(context: ParseContext): void {
 		MfvTypeParser.instance.try(context);
 		MfvNameParser.instance.try(context);
 		TryMethodParametersParserParser.instance.try(context);
 		TsscmfvMethodThrowsParser.instance.try(context);
-		this.tryMethodBody(context);
+		this.tryMethodBodyAndFinalize(context);
 	}
 
-	private tryMfv(context: ParseContext, firstMfvToken?: AtomicToken): void {
+	private tryMfvAndFinalize(context: ParseContext, firstMfvToken?: AtomicToken): void {
 		const block = context.block();
 
 		// common part of mfv
@@ -207,25 +265,24 @@ export class TsscmfvDeclParser<A extends TsscmfvKeywords> extends KeywordTokenPa
 		if (block.id === T.MethodDecl) {
 			// has parameters, continue parse left part of method
 			TsscmfvMethodThrowsParser.instance.try(context);
-			this.tryMethodBody(context);
-		} else {
-			// has no method parameters, try field/variable
-			TsscmfvFieldOrVariableParser.instance.try(context);
-			if (block.id === T.FieldDecl || block.id === T.VarDecl) {
-				// is field or variable, finalize block
-				this.finalizeBlock(context);
-			}
+			this.tryMethodBodyAndFinalize(context);
+			return;
 		}
+		// has no method parameters, try field/variable
+		TsscmfvFieldOrVariableParser.instance.try(context);
+
+		// finalize block anyway
+		this.finalizeBlock(context);
 	}
 
-	private tryFieldOrVariable(context: ParseContext): void {
+	private tryFieldOrVariableAndFinalize(context: ParseContext): void {
 		MfvTypeParser.instance.try(context);
 		MfvNameParser.instance.try(context);
 		TsscmfvFieldOrVariableParser.instance.try(context);
 		this.finalizeBlock(context);
 	}
 
-	private startWithModifier(firstModifierToken: AtomicToken, context: ParseContext): void {
+	private afterModifiersAndFinalize(firstModifierToken: AtomicToken, context: ParseContext): void {
 		TsscmfvModifiersParser.instance.parse(firstModifierToken, context);
 
 		const block = context.block();
@@ -235,28 +292,28 @@ export class TsscmfvDeclParser<A extends TsscmfvKeywords> extends KeywordTokenPa
 				if (!matched) {
 					// @ts-expect-error block token id might be rewritten
 					if (block.id === T.MethodDecl) {
-						this.tryMethod(context);
+						this.tryMethodAndFinalize(context);
 					} else {
 						matched = !matched && this.tryStaticBlock(block, context);
 						matched = !matched && this.tryType(context);
 						if (!matched) {
-							this.tryMfv(context);
+							this.tryMfvAndFinalize(context);
 						}
 					}
 				}
 				break;
 			}
 			case T.TypeDecl: {
-				this.tryType(context);
+				this.tryTypeAndFinalize(context);
 				break;
 			}
 			case T.MethodDecl: {
-				this.tryMethod(context);
+				this.tryMethodAndFinalize(context);
 				break;
 			}
 			case T.FieldDecl:
 			case T.VarDecl: {
-				this.tryFieldOrVariable(context);
+				this.tryFieldOrVariableAndFinalize(context);
 				break;
 			}
 			default: {
@@ -270,25 +327,25 @@ export class TsscmfvDeclParser<A extends TsscmfvKeywords> extends KeywordTokenPa
 
 		switch (this._tokenKind) {
 			case TsscmfvKeywordKind.Modifier: {
-				this.startWithModifier(token, context);
+				this.afterModifiersAndFinalize(token, context);
 				break;
 			}
 			case TsscmfvKeywordKind.Type: {
-				this.tryType(context, token);
+				this.tryTypeAndFinalize(context, token);
 				break;
 			}
 			case TsscmfvKeywordKind.TypeInherit: {
 				TsscmfvTypeInheritParser.instance.parse(token, context);
-				this.tryTypeBody(context);
+				this.tryTypeBodyAndFinalize(context);
 				break;
 			}
 			case TsscmfvKeywordKind.MfvType: {
-				this.tryMfv(context, token);
+				this.tryMfvAndFinalize(context, token);
 				break;
 			}
 			case TsscmfvKeywordKind.MethodThrows: {
 				TsscmfvMethodThrowsParser.instance.parse(token, context);
-				this.tryMethodBody(context);
+				this.tryMethodBodyAndFinalize(context);
 				break;
 			}
 			default:
@@ -300,14 +357,21 @@ export class TsscmfvDeclParser<A extends TsscmfvKeywords> extends KeywordTokenPa
 
 	static readonly instanceAtInterface = new TsscmfvDeclParser('@interface', GroovyTokenId.AT_INTERFACE);
 	static readonly instanceAbstract = new TsscmfvDeclParser('abstract', GroovyTokenId.ABSTRACT);
+	static readonly instanceBoolean = new TsscmfvDeclParser('boolean', GroovyTokenId.BOOLEAN);
+	static readonly instanceByte = new TsscmfvDeclParser('byte', GroovyTokenId.BYTE);
+	static readonly instanceChar = new TsscmfvDeclParser('char', GroovyTokenId.CHAR);
 	static readonly instanceClass = new TsscmfvDeclParser('class', GroovyTokenId.CLASS);
 	static readonly instanceDef = new TsscmfvDeclParser('def', GroovyTokenId.DEF);
 	static readonly instanceDefault = new TsscmfvDeclParser('default', GroovyTokenId.DEFAULT);
+	static readonly instanceDouble = new TsscmfvDeclParser('double', GroovyTokenId.DOUBLE);
 	static readonly instanceEnum = new TsscmfvDeclParser('enum', GroovyTokenId.ENUM);
 	static readonly instanceExtends = new TsscmfvDeclParser('extends', GroovyTokenId.EXTENDS);
 	static readonly instanceFinal = new TsscmfvDeclParser('final', GroovyTokenId.FINAL);
+	static readonly instanceFloat = new TsscmfvDeclParser('float', GroovyTokenId.FLOAT);
 	static readonly instanceImplements = new TsscmfvDeclParser('implements', GroovyTokenId.IMPLEMENTS);
+	static readonly instanceInt = new TsscmfvDeclParser('int', GroovyTokenId.INT);
 	static readonly instanceInterface = new TsscmfvDeclParser('interface', GroovyTokenId.INTERFACE);
+	static readonly instanceLong = new TsscmfvDeclParser('long', GroovyTokenId.LONG);
 	static readonly instanceNative = new TsscmfvDeclParser('native', GroovyTokenId.NATIVE);
 	static readonly instanceNonSealed = new TsscmfvDeclParser('non-sealed', GroovyTokenId.NON_SEALED);
 	static readonly instancePermits = new TsscmfvDeclParser('permits', GroovyTokenId.PERMITS);
@@ -316,6 +380,7 @@ export class TsscmfvDeclParser<A extends TsscmfvKeywords> extends KeywordTokenPa
 	static readonly instancePublic = new TsscmfvDeclParser('public', GroovyTokenId.PUBLIC);
 	static readonly instanceRecord = new TsscmfvDeclParser('record', GroovyTokenId.RECORD);
 	static readonly instanceSealed = new TsscmfvDeclParser('sealed', GroovyTokenId.SEALED);
+	static readonly instanceShort = new TsscmfvDeclParser('short', GroovyTokenId.SHORT);
 	static readonly instanceStatic = new TsscmfvDeclParser('static', GroovyTokenId.STATIC);
 	static readonly instanceStrictfp = new TsscmfvDeclParser('strictfp', GroovyTokenId.STRICTFP);
 	static readonly instanceSynchronized = new TsscmfvDeclParser('synchronized', GroovyTokenId.SYNCHRONIZED);
@@ -332,14 +397,21 @@ export const TsscmfvTDP = TsscmfvDeclParser;
 export const TsscmfvDeclParsers = [
 	TsscmfvTDP.instanceAtInterface,
 	TsscmfvTDP.instanceAbstract,
+	TsscmfvTDP.instanceBoolean,
+	TsscmfvTDP.instanceByte,
+	TsscmfvTDP.instanceChar,
 	TsscmfvTDP.instanceClass,
 	TsscmfvTDP.instanceDef,
 	TsscmfvTDP.instanceDefault,
+	TsscmfvTDP.instanceDouble,
 	TsscmfvTDP.instanceEnum,
 	TsscmfvTDP.instanceExtends,
 	TsscmfvTDP.instanceFinal,
+	TsscmfvTDP.instanceFloat,
 	TsscmfvTDP.instanceImplements,
+	TsscmfvTDP.instanceInt,
 	TsscmfvTDP.instanceInterface,
+	TsscmfvTDP.instanceLong,
 	TsscmfvTDP.instanceNative,
 	TsscmfvTDP.instanceNonSealed,
 	TsscmfvTDP.instancePermits,
@@ -348,6 +420,7 @@ export const TsscmfvDeclParsers = [
 	TsscmfvTDP.instancePublic,
 	TsscmfvTDP.instanceRecord,
 	TsscmfvTDP.instanceSealed,
+	TsscmfvTDP.instanceShort,
 	TsscmfvTDP.instanceStatic,
 	TsscmfvTDP.instanceStrictfp,
 	TsscmfvTDP.instanceSynchronized,

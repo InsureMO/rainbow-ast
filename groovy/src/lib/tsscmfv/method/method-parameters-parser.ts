@@ -45,8 +45,8 @@ export class MethodParametersParser extends BySingleCharTokenParser {
 	}
 
 	/**
-	 * - when meet rparen or comma, end previous {@link T.MethodParamDecl} (if exists),
-	 * - create a {@link T.MethodParamDecl} block when current block is not {@link T.MethodParamDecl}.
+	 * - when meet rparen or comma, end previous {@link T.MethodParamSeg} (if exists),
+	 * - create a {@link T.MethodParamSeg} block when current block is not {@link T.MethodParamSeg}.
 	 */
 	protected beforeChildParsed(context: ParseContext, parser: TokenParser) {
 		if (parser === RParenParserInstance || parser === CommaParserInstance) {
