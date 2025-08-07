@@ -99,3 +99,4 @@ synchronized () {}
 void test() {}
 boolean void test();
 public java.util.List test() throws IOException, e.E {}
+public void /private/() {}

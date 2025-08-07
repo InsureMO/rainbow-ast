@@ -1,7 +1,7 @@
 import {T} from '../../src';
 import {TokenSpec} from '../utils';
 
-export const l98_101 = (l: { v: number }): Array<TokenSpec> => {
+export const l98_102 = (l: { v: number }): Array<TokenSpec> => {
 	return [
 		[T.SLComment, 1868, l.v, '// method declaration #1', [
 			[T.SLCommentStartMark, 1868, l.v, '//'],
@@ -81,6 +81,31 @@ export const l98_101 = (l: { v: number }): Array<TokenSpec> => {
 				[T.RBrace, 1983, l.v, '}']
 			]]
 		]],
-		[T.Newline, 1984, l.v++, '\n']
+		[T.Newline, 1984, l.v++, '\n'],
+		[T.MethodDecl, 1985, l.v, 'public void /private/() {}', [
+			[T.ModifierSeg, 1985, l.v, 'public ', [
+				[T.PUBLIC, 1985, l.v, 'public'],
+				[T.Whitespaces, 1991, l.v, ' ']
+			]],
+			[T.MfvTypeSeg, 1992, l.v, 'void ', [
+				[T.VOID, 1992, l.v, 'void'],
+				[T.Whitespaces, 1996, l.v, ' ']
+			]],
+			[T.SGsLiteral, 1997, l.v, '/private/', [
+				[T.SGsLMark, 1997, l.v, '/'],
+				[T.Word, 1998, l.v, 'private'],
+				[T.SGsLMark, 2005, l.v, '/']
+			]],
+			[T.MethodParamsBlk, 2006, l.v, '()', [
+				[T.LParen, 2006, l.v, '('],
+				[T.RParen, 2007, l.v, ')']
+			]],
+			[T.Whitespaces, 2008, l.v, ' '],
+			[T.MethodBody, 2009, l.v, '{}', [
+				[T.LBrace, 2009, l.v, '{'],
+				[T.RBrace, 2010, l.v, '}']
+			]]
+		]],
+		[T.Newline, 2011, l.v++, '\n']
 	];
 };

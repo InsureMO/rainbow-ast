@@ -1,5 +1,5 @@
 import {AtomicToken, BlockToken, Char} from '@rainbow-ast/core';
-import {CharsParsers, IsOperator, StandaloneSymbolParsers, WsTabNlParsers} from '../common-token';
+import {CharsParsers, IsLookForStrIdentifier, StandaloneSymbolParsers, WsTabNlParsers} from '../common-token';
 import {ParseContext} from '../parse-context';
 import {
 	AfterChildParsed,
@@ -68,13 +68,9 @@ export class SGsLiteralParser extends ByCharTokenParser {
 					return true;
 				}
 				default: {
-					if (child.line !== line) {
-						// slash is first not ignored token of line, allowed
-						return true;
-					} else {
-						// at same line and after operator, allowed; otherwise not allowed.
-						return IsOperator(child);
-					}
+					return (child.line !== line) // slash is first not ignored token of line, allowed
+						|| IsLookForStrIdentifier(child) // at same line and after operator, allowed; otherwise not allowed.
+						;
 				}
 			}
 		}
