@@ -289,17 +289,19 @@ export class TsscmfvDeclParser<A extends TsscmfvKeywords> extends KeywordTokenPa
 		switch (block.id) {
 			case T.TsscmfvDecl: {
 				let matched = this.trySynchronizedBlock(block, context);
+				// @ts-expect-error block token id might be rewritten
+				if (!matched && block.id === T.MethodDecl) {
+					this.tryMethodAndFinalize(context);
+					break;
+				}
 				if (!matched) {
-					// @ts-expect-error block token id might be rewritten
-					if (block.id === T.MethodDecl) {
-						this.tryMethodAndFinalize(context);
-					} else {
-						matched = !matched && this.tryStaticBlock(block, context);
-						matched = !matched && this.tryType(context);
-						if (!matched) {
-							this.tryMfvAndFinalize(context);
-						}
-					}
+					matched = this.tryStaticBlock(block, context);
+				}
+				if (!matched) {
+					matched = this.tryType(context);
+				}
+				if (!matched) {
+					this.tryMfvAndFinalize(context);
 				}
 				break;
 			}

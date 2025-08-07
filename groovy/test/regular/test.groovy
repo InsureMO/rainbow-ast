@@ -94,3 +94,4 @@ public class A extends b.C extends implements implements d.E permits f.G, i.H pe
 class A {}
 public sealed class B extends C implements D permits E, F {}
 static static {}
+synchronized () {}

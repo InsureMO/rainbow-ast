@@ -1,7 +1,7 @@
 import {T} from '../../src';
 import {TokenSpec} from '../utils';
 
-export const l80_96 = (l: { v: number }): Array<TokenSpec> => {
+export const l80_97 = (l: { v: number }): Array<TokenSpec> => {
 	return [
 		[T.SLComment, 1447, l.v, '// type declaration #1', [
 			[T.SLCommentStartMark, 1447, l.v, '//'],
@@ -165,7 +165,7 @@ export const l80_96 = (l: { v: number }): Array<TokenSpec> => {
 				[T.PUBLIC, 1771, l.v, 'public'],
 				[T.Whitespaces, 1777, l.v, ' '],
 				[T.SEALED, 1778, l.v, 'sealed'],
-				[T.Whitespaces, 1784, l.v, ' '],
+				[T.Whitespaces, 1784, l.v, ' ']
 			]],
 			[T.CLASS, 1785, l.v, 'class'],
 			[T.Whitespaces, 1790, l.v, ' '],
@@ -175,13 +175,13 @@ export const l80_96 = (l: { v: number }): Array<TokenSpec> => {
 				[T.EXTENDS, 1793, l.v, 'extends'],
 				[T.Whitespaces, 1800, l.v, ' '],
 				[T.Identifier, 1801, l.v, 'C'],
-				[T.Whitespaces, 1802, l.v, ' '],
+				[T.Whitespaces, 1802, l.v, ' ']
 			]],
 			[T.TypeInheritSeg, 1803, l.v, 'implements D ', [
 				[T.IMPLEMENTS, 1803, l.v, 'implements'],
 				[T.Whitespaces, 1813, l.v, ' '],
 				[T.Identifier, 1814, l.v, 'D'],
-				[T.Whitespaces, 1815, l.v, ' '],
+				[T.Whitespaces, 1815, l.v, ' ']
 			]],
 			[T.TypeInheritSeg, 1816, l.v, 'permits E, F ', [
 				[T.PERMITS, 1816, l.v, 'permits'],
@@ -190,7 +190,7 @@ export const l80_96 = (l: { v: number }): Array<TokenSpec> => {
 				[T.Comma, 1825, l.v, ','],
 				[T.Whitespaces, 1826, l.v, ' '],
 				[T.Identifier, 1827, l.v, 'F'],
-				[T.Whitespaces, 1828, l.v, ' '],
+				[T.Whitespaces, 1828, l.v, ' ']
 			]],
 			[T.TypeBody, 1829, l.v, '{}', [
 				[T.LBrace, 1829, l.v, '{'],
@@ -203,7 +203,7 @@ export const l80_96 = (l: { v: number }): Array<TokenSpec> => {
 				[T.STATIC, 1832, l.v, 'static'],
 				[T.Whitespaces, 1838, l.v, ' '],
 				[T.STATIC, 1839, l.v, 'static'],
-				[T.Whitespaces, 1845, l.v, ' '],
+				[T.Whitespaces, 1845, l.v, ' ']
 			]],
 			[T.StaticBody, 1846, l.v, '{}', [
 				[T.LBrace, 1846, l.v, '{'],
@@ -211,5 +211,21 @@ export const l80_96 = (l: { v: number }): Array<TokenSpec> => {
 			]]
 		]],
 		[T.Newline, 1848, l.v++, '\n'],
+		[T.SyncBlockDecl, 1849, l.v, 'synchronized () {}', [
+			[T.ModifierSeg, 1849, l.v, 'synchronized ', [
+				[T.SYNCHRONIZED, 1849, l.v, 'synchronized'],
+				[T.Whitespaces, 1861, l.v, ' ']
+			]],
+			[T.SyncExprBlk, 1862, l.v, '()', [
+				[T.LParen, 1862, l.v, '('],
+				[T.RParen, 1863, l.v, ')']
+			]],
+			[T.Whitespaces, 1864, l.v, ' '],
+			[T.SyncBody, 1865, l.v, '{}', [
+				[T.LBrace, 1865, l.v, '{'],
+				[T.RBrace, 1866, l.v, '}']
+			]]
+		]],
+		[T.Newline, 1867, l.v++, '\n']
 	];
 };

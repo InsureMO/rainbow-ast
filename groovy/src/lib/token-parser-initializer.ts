@@ -48,7 +48,7 @@ class TokenParserInitializer {
 		SynchronizedExpressionParser.initSelector(AllParsers);
 		MethodParametersParser.initSelector(AllParsers);
 		CodeBlockParser.initSelector(AllParsers);
-		TsscmfvFieldOrVariableParser.initSelector([/* TODO HOW? */]);
+		TsscmfvFieldOrVariableParser.initSelector([/* TODO Expression parser? */]);
 	}
 }
 
