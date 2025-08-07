@@ -92,7 +92,7 @@ export class AstChecker {
 				if (child == null) {
 					const [tokenId, startOffset, startLine, text] = spec;
 					this._logs.push(chalk.red([
-						indent,
+						new Array(childBullet.split('.').length - 2).fill('\t').join(''),
 						childBullet,
 						' 💔 ',
 						`Expect [type=${GroovyTokenId[tokenId]}, `,
@@ -117,7 +117,7 @@ export class AstChecker {
 					text
 				} = block.children[index];
 				this._logs.push(chalk.red([
-					indent,
+					new Array(childBullet.split('.').length - 2).fill('\t').join(''),
 					childBullet,
 					' 💔 ',
 					`Unexpect [type=${GroovyTokenId[tokenId]}, `,

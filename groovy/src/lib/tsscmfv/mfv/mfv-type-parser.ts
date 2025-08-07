@@ -38,7 +38,7 @@ export class MfvTypeParser {
 	});
 	private static readonly StartedSelector = new ParserSelector({
 		parsers: [
-			PackageNameParser.instance, PrimitiveTypeParsers, VoidParser.instance,
+			PrimitiveTypeParsers, VoidParser.instance,
 			CommentParsers, WsTabNlParsers
 		]
 	});
@@ -106,6 +106,9 @@ export class MfvTypeParser {
 
 	try(context: ParseContext): void {
 		this.subsequent(MfvTypeParser.StartSelector, context);
+		if (context.block().id === T.MfvTypeSeg) {
+			context.rise();
+		}
 	}
 
 	static readonly instance = new MfvTypeParser();

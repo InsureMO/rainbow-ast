@@ -95,6 +95,9 @@ export class TsscmfvMethodThrowsParser {
 
 	try(context: ParseContext): void {
 		this.subsequent(TsscmfvMethodThrowsParser.StartSelector, context);
+		if (context.block().id === T.MethodThrowsSeg) {
+			context.rise();
+		}
 	}
 
 	static readonly instance = new TsscmfvMethodThrowsParser();

@@ -95,3 +95,7 @@ class A {}
 public sealed class B extends C implements D permits E, F {}
 static static {}
 synchronized () {}
+// method declaration #1
+void test() {}
+boolean void test();
+public java.util.List test() throws IOException, e.E {}

@@ -18,6 +18,7 @@ import {l6_15} from './l6.15';
 import {l60_67} from './l60.67';
 import {l68_79} from './l68.79';
 import {l80_97} from './l80.97';
+import {l98_101} from './l98.101';
 
 const readFileAsText = (filePath: string): string => {
 	const absolutePath = path.join(__dirname, filePath);
@@ -45,7 +46,8 @@ describe('Regular test', () => {
 			...l50_59(l),
 			...l60_67(l),
 			...l68_79(l),
-			...l80_97(l)
+			...l80_97(l),
+			...l98_101(l)
 		]]);
 	});
 });

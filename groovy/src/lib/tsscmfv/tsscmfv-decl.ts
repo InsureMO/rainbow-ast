@@ -249,8 +249,6 @@ export class TsscmfvDeclParser<A extends TsscmfvKeywords> extends KeywordTokenPa
 	}
 
 	private tryMfvAndFinalize(context: ParseContext, firstMfvToken?: AtomicToken): void {
-		const block = context.block();
-
 		// common part of mfv
 		if (firstMfvToken != null) {
 			MfvTypeParser.instance.parse(firstMfvToken, context);
@@ -262,17 +260,17 @@ export class TsscmfvDeclParser<A extends TsscmfvKeywords> extends KeywordTokenPa
 		// try method parameters first
 		TryMethodParametersParserParser.instance.try(context);
 
-		if (block.id === T.MethodDecl) {
+		if (context.block().id === T.MethodDecl) {
 			// has parameters, continue parse left part of method
 			TsscmfvMethodThrowsParser.instance.try(context);
 			this.tryMethodBodyAndFinalize(context);
 			return;
+		} else {
+			// has no method parameters, try field/variable
+			TsscmfvFieldOrVariableParser.instance.try(context);
+			// finalize block anyway
+			this.finalizeBlock(context);
 		}
-		// has no method parameters, try field/variable
-		TsscmfvFieldOrVariableParser.instance.try(context);
-
-		// finalize block anyway
-		this.finalizeBlock(context);
 	}
 
 	private tryFieldOrVariableAndFinalize(context: ParseContext): void {
