@@ -1,3 +1,4 @@
+import {AnnotationDeclParser, AnnotationParametersParser} from './annotation';
 import {CommentParsers} from './comment';
 import {
 	CommaParserInstance,
@@ -22,10 +23,9 @@ import {
 } from './tsscmfv';
 
 const AllParsers = [
-	// package declaration
-	PackageDeclParser.instance,
-	// import declaration
-	ImportDeclParser.instance,
+	PackageDeclParser.instance,                     // package declaration
+	ImportDeclParser.instance,                      // import declaration
+	AnnotationDeclParser.instance,                  // annotation declaration
 	// type, static block, synchronized block, constructor, method, field, variable
 	...TsscmfvDeclParsers,
 	...CommentParsers,                              // SL comment, ML comment
@@ -49,6 +49,7 @@ class TokenParserInitializer {
 		MethodParametersParser.initSelector(AllParsers);
 		CodeBlockParser.initSelector(AllParsers);
 		TsscmfvFieldOrVariableParser.initSelector([/* TODO Expression parser? */]);
+		AnnotationParametersParser.initSelector(AllParsers);
 	}
 }
 

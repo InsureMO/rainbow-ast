@@ -262,6 +262,9 @@ export enum GroovyTokenId {
 	MethodBody,
 	FieldDecl,
 	VarDecl,
+	AnnoDecl,
+	AnnoParamsBlk,
+	AnnoParamSeg,
 }
 
 export const T = GroovyTokenId;
