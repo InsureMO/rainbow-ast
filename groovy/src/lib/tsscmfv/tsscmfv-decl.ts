@@ -6,11 +6,17 @@ import {KeywordTokenParser, ParserSelector} from '../token-parser';
 import {GroovyTokenId, T} from '../tokens';
 import {TryCodeBlockParser} from './code-block';
 import {TsscmfvFieldOrVariableParser} from './field-or-variable';
-import {TryMethodParametersParserParser, TsscmfvMethodThrowsKeywords, TsscmfvMethodThrowsParser} from './method';
+import {TryMethodParametersParser, TsscmfvMethodThrowsKeywords, TsscmfvMethodThrowsParser} from './method';
 import {MfvNameParser, MfvTypeParser, TsscmfvMethodReturnTypeKeywords} from './mfv';
 import {TsscmfvModifierKeywords, TsscmfvModifiersParser} from './modifier';
 import {TrySynchronizedExpressionParser} from './synchronized-block';
-import {TsscmfvTypeInheritKeywords, TsscmfvTypeInheritParser, TsscmfvTypeKeywords, TsscmfvTypeParser} from './type';
+import {
+	TryRecordParametersParser,
+	TsscmfvTypeInheritKeywords,
+	TsscmfvTypeInheritParser,
+	TsscmfvTypeKeywords,
+	TsscmfvTypeParser
+} from './type';
 import {TsscmfvKeywordUtils} from './utils';
 
 export type TsscmfvKeywords =
@@ -221,6 +227,10 @@ export class TsscmfvDeclParser<A extends TsscmfvKeywords> extends KeywordTokenPa
 			TsscmfvTypeParser.instance.try(context);
 		}
 
+		if (context.block().id === T.TypeDecl) {
+			TryRecordParametersParser.instance.try(context);
+		}
+
 		TsscmfvTypeInheritParser.instance.try(context);
 		if (context.block().id === T.TypeDecl) {
 			this.tryTypeBodyAndFinalize(context);
@@ -251,7 +261,7 @@ export class TsscmfvDeclParser<A extends TsscmfvKeywords> extends KeywordTokenPa
 	private tryMethodAndFinalize(context: ParseContext): void {
 		MfvTypeParser.instance.try(context);
 		MfvNameParser.instance.try(context);
-		TryMethodParametersParserParser.instance.try(context);
+		TryMethodParametersParser.instance.try(context);
 		TsscmfvMethodThrowsParser.instance.try(context);
 		this.tryMethodBodyAndFinalize(context);
 	}
@@ -266,7 +276,7 @@ export class TsscmfvDeclParser<A extends TsscmfvKeywords> extends KeywordTokenPa
 		MfvNameParser.instance.try(context);
 
 		// try method parameters first
-		TryMethodParametersParserParser.instance.try(context);
+		TryMethodParametersParser.instance.try(context);
 
 		if (context.block().id === T.MethodDecl) {
 			// has parameters, continue parse left part of method

@@ -11,6 +11,7 @@ import {TsscmfvTKP, TsscmfvTypeKeywordParser} from './type-keywords';
  * - accept multiple type keywords,
  * - accept multiple type names,
  * - TODO accept type variable after type name.
+ * - TODO accept record parameters block after type name when it is a record class
  */
 export class TsscmfvTypeParser {
 	private static readonly StartSelector = new ParserSelector({

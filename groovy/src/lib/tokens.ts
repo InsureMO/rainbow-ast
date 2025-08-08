@@ -247,6 +247,8 @@ export enum GroovyTokenId {
 	TsscmfvDecl,
 	TypeDecl,
 	ModifierSeg,
+	/** record type parameters */ RecordParamsBlk,
+	/** record type parameter */ RecordParamSeg,
 	TypeInheritSeg,
 	TypeBody,
 	StaticBlockDecl,

@@ -17,6 +17,7 @@ import {GsBraceInterpolationParser, StringParsers} from './string-literal';
 import {
 	CodeBlockParser,
 	MethodParametersParser,
+	RecordParametersParser,
 	SynchronizedExpressionParser,
 	TsscmfvDeclParsers,
 	TsscmfvFieldOrVariableParser
@@ -46,6 +47,7 @@ class TokenParserInitializer {
 		CompilationUnitParser.initSelector(AllParsers);
 		GsBraceInterpolationParser.initSelector(AllParsers);
 		SynchronizedExpressionParser.initSelector(AllParsers);
+		RecordParametersParser.initSelector(AllParsers);
 		MethodParametersParser.initSelector(AllParsers);
 		CodeBlockParser.initSelector(AllParsers);
 		TsscmfvFieldOrVariableParser.initSelector([/* TODO Expression parser? */]);

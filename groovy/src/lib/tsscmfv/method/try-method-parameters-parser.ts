@@ -8,7 +8,7 @@ import {MethodParametersParser} from './method-parameters-parser';
 /**
  * parse only when current document matches method parameters
  */
-export class TryMethodParametersParserParser {
+export class TryMethodParametersParser {
 	private static Selector: ParserSelector = new ParserSelector({
 		parsers: [MethodParametersParser.instance, MLCommentParser.instance, WsTabParsers]
 	});
@@ -16,7 +16,7 @@ export class TryMethodParametersParserParser {
 	try(context: ParseContext): void {
 		const c = context.char();
 		if (c != null) {
-			const parser = TryMethodParametersParserParser.Selector.find(c, context);
+			const parser = TryMethodParametersParser.Selector.find(c, context);
 			if (parser != null) {
 				if (parser === MethodParametersParser.instance) {
 					context.block().rewriteId(T.MethodDecl);
@@ -26,5 +26,5 @@ export class TryMethodParametersParserParser {
 		}
 	}
 
-	static readonly instance = new TryMethodParametersParserParser();
+	static readonly instance = new TryMethodParametersParser();
 }
