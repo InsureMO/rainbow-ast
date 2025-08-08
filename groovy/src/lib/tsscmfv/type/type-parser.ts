@@ -1,4 +1,5 @@
 import {AtomicToken, BlockToken, Token} from '@rainbow-ast/core';
+import {AnnotationDeclParser} from '../../annotation';
 import {CommentParsers} from '../../comment';
 import {TypeDeclNameParser, WsTabNlParsers} from '../../common-token';
 import {ParseContext} from '../../parse-context';
@@ -17,6 +18,7 @@ export class TsscmfvTypeParser {
 	private static readonly StartSelector = new ParserSelector({
 		parsers: [
 			TsscmfvTKP.instanceAtInterface, TsscmfvTKP.instanceClass, TsscmfvTKP.instanceEnum, TsscmfvTKP.instanceInterface, TsscmfvTKP.instanceRecord, TsscmfvTKP.instanceTrait,
+			AnnotationDeclParser.instance,
 			CommentParsers,
 			WsTabNlParsers
 		]
@@ -25,6 +27,7 @@ export class TsscmfvTypeParser {
 		parsers: [
 			TypeDeclNameParser.instance,
 			TsscmfvTKP.instanceAtInterface, TsscmfvTKP.instanceClass, TsscmfvTKP.instanceEnum, TsscmfvTKP.instanceInterface, TsscmfvTKP.instanceRecord, TsscmfvTKP.instanceTrait,
+			AnnotationDeclParser.instance,
 			CommentParsers,
 			WsTabNlParsers
 		]
