@@ -1,4 +1,5 @@
 import {AtomicToken, BlockToken} from '@rainbow-ast/core';
+import {AnnotationDeclParser} from '../../annotation';
 import {CommentParsers} from '../../comment';
 import {WsTabNlParsers} from '../../common-token';
 import {ParseContext} from '../../parse-context';
@@ -31,6 +32,7 @@ export class TsscmfvModifiersParser {
 			TsscmfvMKP.instanceSynchronized,
 			TsscmfvMKP.instanceDefault, TsscmfvMKP.instanceNative,
 			TsscmfvMKP.instanceTransient, TsscmfvMKP.instanceVolatile,
+			AnnotationDeclParser.instance,
 			CommentParsers,
 			WsTabNlParsers
 		]
@@ -42,6 +44,7 @@ export class TsscmfvModifiersParser {
 			TsscmfvMKP.instanceDef, TsscmfvMKP.instanceVar,
 			TsscmfvMKP.instancePrivate, TsscmfvMKP.instanceProtected, TsscmfvMKP.instancePublic,
 			TsscmfvMKP.instanceSealed, TsscmfvMKP.instanceNonSealed,
+			AnnotationDeclParser.instance,
 			CommentParsers,
 			WsTabNlParsers
 		]
@@ -54,6 +57,7 @@ export class TsscmfvModifiersParser {
 			TsscmfvMKP.instancePrivate, TsscmfvMKP.instanceProtected, TsscmfvMKP.instancePublic,
 			TsscmfvMKP.instanceSynchronized,
 			TsscmfvMKP.instanceDefault, TsscmfvMKP.instanceNative,
+			AnnotationDeclParser.instance,
 			CommentParsers,
 			WsTabNlParsers
 		]
@@ -64,6 +68,7 @@ export class TsscmfvModifiersParser {
 			TsscmfvMKP.instanceDef, TsscmfvMKP.instanceVar,
 			TsscmfvMKP.instancePrivate, TsscmfvMKP.instanceProtected, TsscmfvMKP.instancePublic,
 			TsscmfvMKP.instanceTransient, TsscmfvMKP.instanceVolatile,
+			AnnotationDeclParser.instance,
 			CommentParsers,
 			WsTabNlParsers
 		]
