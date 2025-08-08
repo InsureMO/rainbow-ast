@@ -1,9 +1,13 @@
+import {AnnotationDeclParser} from '../../annotation';
 import {CommentParsers} from '../../comment';
 import {WsTabNlParsers} from '../../common-token';
 import {ParseContext} from '../../parse-context';
 import {ParserSelector} from '../../token-parser';
 import {CodeBlockParser} from '../code-block';
 
+/**
+ * annotation is allowed before code block
+ */
 export class TryCodeBlockParser {
 	private readonly _codeBlockParser: CodeBlockParser;
 	private readonly _selector: ParserSelector;
@@ -13,8 +17,7 @@ export class TryCodeBlockParser {
 		this._selector = new ParserSelector({
 			parsers: [
 				parser,
-				CommentParsers,
-				WsTabNlParsers
+				AnnotationDeclParser.instance, CommentParsers, WsTabNlParsers
 			]
 		});
 	}

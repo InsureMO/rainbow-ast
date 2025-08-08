@@ -1,4 +1,5 @@
 import {AtomicToken, BlockToken, Char} from '@rainbow-ast/core';
+import {AnnotationDeclParser} from '../../annotation';
 import {CommentParsers, MLCommentParser} from '../../comment';
 import {
 	CommaParserInstance,
@@ -16,53 +17,44 @@ export type TsscmfvTypeInheritKeywords =
 	| ['implements', GroovyTokenId.IMPLEMENTS]
 	| ['permits', GroovyTokenId.PERMITS];
 
+/**
+ * annotation is allowed after inherit keyword or comma.
+ */
 export class TsscmfvTypeInheritKeywordParser<A extends TsscmfvTypeInheritKeywords> extends SingleKeywordTokenParser {
 	private static readonly EISelector: ParserSelector = new ParserSelector({
 		parsers: [
-			PackageNameParser.instance,
-			CommaParserInstance,
-			CommentParsers,
-			WsTabNlParsers
+			AnnotationDeclParser.instance, PackageNameParser.instance, CommaParserInstance,
+			CommentParsers, WsTabNlParsers
 		]
 	});
 	private static readonly EIAfterNameSelector: ParserSelector = new ParserSelector({
 		parsers: [
-			DotParserInstance,
-			CommaParserInstance,
-			MLCommentParser.instance,
-			WsTabParsers
+			AnnotationDeclParser.instance, CommaParserInstance,
+			DotParserInstance, MLCommentParser.instance, WsTabParsers
 		]
 	});
 	private static readonly EIAfterDotSelector: ParserSelector = new ParserSelector({
 		parsers: [
-			PackageNameParser.instance,
-			CommaParserInstance,
-			MLCommentParser.instance,
-			WsTabParsers
+			PackageNameParser.instance, CommaParserInstance,
+			MLCommentParser.instance, WsTabParsers
 		]
 	});
 	private static readonly PSelector: ParserSelector = new ParserSelector({
 		parsers: [
-			PackageNameParser.instance,
-			CommaParserInstance,
-			CommentParsers,
-			WsTabNlParsers
+			AnnotationDeclParser.instance, PackageNameParser.instance, CommaParserInstance,
+			CommentParsers, WsTabNlParsers
 		]
 	});
 	private static readonly PAfterNameSelector: ParserSelector = new ParserSelector({
 		parsers: [
-			DotParserInstance,
-			CommaParserInstance,
-			MLCommentParser.instance,
-			WsTabParsers
+			AnnotationDeclParser.instance, CommaParserInstance,
+			DotParserInstance, MLCommentParser.instance, WsTabParsers
 		]
 	});
 	private static readonly PAfterDotSelector: ParserSelector = new ParserSelector({
 		parsers: [
-			PackageNameParser.instance,
-			CommaParserInstance,
-			MLCommentParser.instance,
-			WsTabParsers
+			PackageNameParser.instance, CommaParserInstance,
+			MLCommentParser.instance, WsTabParsers
 		]
 	});
 

@@ -13,12 +13,13 @@ import {TsscmfvTKP, TsscmfvTypeKeywordParser} from './type-keywords';
  * - accept multiple type names,
  * - TODO accept type variable after type name.
  * - TODO accept record parameters block after type name when it is a record class
+ *
+ * - annotation is allowed before or after any keyword, but not allowed after type name.
  */
 export class TsscmfvTypeParser {
 	private static readonly StartSelector = new ParserSelector({
 		parsers: [
 			TsscmfvTKP.instanceAtInterface, TsscmfvTKP.instanceClass, TsscmfvTKP.instanceEnum, TsscmfvTKP.instanceInterface, TsscmfvTKP.instanceRecord, TsscmfvTKP.instanceTrait,
-			AnnotationDeclParser.instance,
 			CommentParsers,
 			WsTabNlParsers
 		]

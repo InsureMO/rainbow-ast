@@ -1,4 +1,5 @@
 import {AtomicToken} from '@rainbow-ast/core';
+import {AnnotationDeclParser} from '../../annotation';
 import {ParseContext} from '../../parse-context';
 import {ParserSelector} from '../../token-parser';
 import {T} from '../../tokens';
@@ -9,10 +10,12 @@ import {TsscmfvTIKP} from './type-inherit-keywords';
  * - accept multiple inheriting types, joined by comma,
  * - inheriting type name could be alias name, qualified name, full qualified name.
  * - TODO accept generic type after inheriting type name.
+ *
+ * annotation is allowed before or after any inherit segment.
  */
 export class TsscmfvTypeInheritParser {
 	private static Selector: ParserSelector = new ParserSelector({
-		parsers: [TsscmfvTIKP.instanceExtends, TsscmfvTIKP.instanceImplements, TsscmfvTIKP.instancePermits]
+		parsers: [AnnotationDeclParser.instance, TsscmfvTIKP.instanceExtends, TsscmfvTIKP.instanceImplements, TsscmfvTIKP.instancePermits]
 	});
 
 	private subsequent(context: ParseContext): void {

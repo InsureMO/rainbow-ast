@@ -10,6 +10,7 @@ import {
 	WsTabNlParsers
 } from './common-token';
 import {CompilationUnitParser} from './compilation-unit';
+import {GenericTypeParser} from './generic-type';
 import {ImportDeclParser} from './import-decl';
 import {NumberParsers} from './number-literal';
 import {PackageDeclParser} from './package-decl';
@@ -52,6 +53,7 @@ class TokenParserInitializer {
 		CodeBlockParser.initSelector(AllParsers);
 		TsscmfvFieldOrVariableParser.initSelector([/* TODO Expression parser? */]);
 		AnnotationParametersParser.initSelector(AllParsers);
+		GenericTypeParser.initSelector(AllParsers);
 	}
 }
 

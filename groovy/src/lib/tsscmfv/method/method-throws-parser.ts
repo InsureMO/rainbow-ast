@@ -1,4 +1,5 @@
 import {AtomicToken, BlockToken} from '@rainbow-ast/core';
+import {AnnotationDeclParser} from '../../annotation';
 import {CommentParsers, MLCommentParser} from '../../comment';
 import {
 	CommaParserInstance,
@@ -30,18 +31,32 @@ export class ThrowsParser extends SingleKeywordTokenParser {
 	static readonly instance = new ThrowsParser();
 }
 
+/**
+ * annotation is allowed before and after keyword or comma.
+ */
 export class TsscmfvMethodThrowsParser {
 	private static readonly StartSelector = new ParserSelector({
-		parsers: [ThrowsParser.instance, CommentParsers, WsTabNlParsers]
+		parsers: [
+			AnnotationDeclParser.instance,
+			ThrowsParser.instance, CommentParsers, WsTabNlParsers
+		]
 	});
 	private static readonly StartedSelector = new ParserSelector({
-		parsers: [PackageNameParser.instance, CommaParserInstance, CommentParsers, WsTabNlParsers]
+		parsers: [
+			AnnotationDeclParser.instance, CommaParserInstance,
+			PackageNameParser.instance, CommentParsers, WsTabNlParsers
+		]
 	});
 	private static readonly AfterNameSelector = new ParserSelector({
-		parsers: [CommaParserInstance, DotParserInstance, MLCommentParser.instance, WsTabParsers]
+		parsers: [
+			AnnotationDeclParser.instance, CommaParserInstance,
+			DotParserInstance, MLCommentParser.instance, WsTabParsers]
 	});
 	private static readonly AfterDotSelector = new ParserSelector({
-		parsers: [CommaParserInstance, PackageNameParser.instance, MLCommentParser.instance, WsTabParsers]
+		parsers: [
+			CommaParserInstance,
+			PackageNameParser.instance, MLCommentParser.instance, WsTabParsers
+		]
 	});
 
 	private subsequent(selector: ParserSelector, context: ParseContext): void {

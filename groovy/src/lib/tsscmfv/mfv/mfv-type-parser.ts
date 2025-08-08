@@ -1,4 +1,5 @@
 import {AtomicToken, BlockToken} from '@rainbow-ast/core';
+import {AnnotationDeclParser} from '../../annotation';
 import {CommentParsers, MLCommentParser} from '../../comment';
 import {DotParserInstance, PackageNameParser, WsTabNlParsers, WsTabParsers} from '../../common-token';
 import {ParseContext} from '../../parse-context';
@@ -28,6 +29,8 @@ export type TsscmfvMethodReturnTypeKeywords =
  * - accept multiple types, it is incorrect,
  * - TODO accept type variable before return type,
  * - TODO accept type variable after return type, it is incorrect.
+ *
+ * annotation is allowed before or after any type keyword.
  */
 export class MfvTypeParser {
 	private static readonly StartSelector = new ParserSelector({
@@ -39,6 +42,7 @@ export class MfvTypeParser {
 	private static readonly StartedSelector = new ParserSelector({
 		parsers: [
 			PrimitiveTypeParsers, VoidParser.instance,
+			AnnotationDeclParser.instance,
 			CommentParsers, WsTabNlParsers
 		]
 	});

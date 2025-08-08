@@ -1,12 +1,17 @@
+import {AnnotationDeclParser} from '../../annotation';
 import {CommentParsers} from '../../comment';
 import {IdentifierParser, VariableNameParser, WsTabNlParsers} from '../../common-token';
 import {ParseContext} from '../../parse-context';
 import {StringParsers} from '../../string-literal';
 import {ParserSelector} from '../../token-parser';
 
+/**
+ * annotation is allowed before variable name (string literal).
+ */
 export class MfvNameParser {
 	private static readonly Selector = new ParserSelector({
 		parsers: [
+			AnnotationDeclParser.instance,
 			VariableNameParser.instance, StringParsers,
 			CommentParsers, WsTabNlParsers
 		]

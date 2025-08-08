@@ -267,6 +267,8 @@ export enum GroovyTokenId {
 	AnnoDecl,
 	AnnoParamsBlk,
 	AnnoParamSeg,
+	GenTDecl,
+	GenTVarSeg,
 }
 
 export const T = GroovyTokenId;

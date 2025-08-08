@@ -20,6 +20,8 @@ import {TsscmfvMKP} from './modifier-keywords';
  * - {@link T.VarDecl}: one of keyword {@link T.TRANSIENT}, {@link T.VAR}, {@link T.VOLATILE} detected,
  *                      and parent of this block is not {@link T.TypeBody}
  * - {@link T.TsscmfvDecl}: none of above, note that block id still can be any of 7 types.
+ *
+ * annotation is allowed before or after any keyword.
  */
 export class TsscmfvModifiersParser {
 	private static readonly TsscmfvSelector = new ParserSelector({
