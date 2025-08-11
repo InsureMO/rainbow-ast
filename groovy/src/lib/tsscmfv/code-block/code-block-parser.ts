@@ -18,7 +18,7 @@ export type CodeBlockTokenId =
 
 export class CodeBlockParser extends BySingleCharTokenParser {
 	private readonly _blockTokenId: GroovyTokenId;
-	private static Selector: ParserSelector;
+	protected static Selector: ParserSelector;
 
 	static initSelector(parsers: ParserSelectorArgs['parsers']) {
 		if (CodeBlockParser.Selector != null) {
@@ -65,7 +65,6 @@ export class CodeBlockParser extends BySingleCharTokenParser {
 		return this.parseAsBlock(ch, context);
 	}
 
-	static readonly instanceTypeBody = new CodeBlockParser(T.TypeBody);
 	static readonly instanceMethodBody = new CodeBlockParser(T.MethodBody);
 	static readonly instanceSynchronizedBody = new CodeBlockParser(T.SyncBody);
 	static readonly instanceStaticBody = new CodeBlockParser(T.StaticBody);

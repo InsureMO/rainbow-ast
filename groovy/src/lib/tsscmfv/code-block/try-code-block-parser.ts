@@ -4,6 +4,7 @@ import {WsTabNlParsers} from '../../common-token';
 import {ParseContext} from '../../parse-context';
 import {ParserSelector} from '../../token-parser';
 import {CodeBlockParser} from '../code-block';
+import {TypeBodyParser} from './type-body-parser';
 
 /**
  * annotation is allowed before code block, which is incorrect.
@@ -48,7 +49,7 @@ export class TryCodeBlockParser {
 		return false;
 	}
 
-	static readonly instanceTypeBody = new TryCodeBlockParser(CodeBlockParser.instanceTypeBody);
+	static readonly instanceTypeBody = new TryCodeBlockParser(TypeBodyParser.instance);
 	static readonly instanceMethodBody = new TryCodeBlockParser(CodeBlockParser.instanceMethodBody);
 	static readonly instanceSynchronizedBody = new TryCodeBlockParser(CodeBlockParser.instanceSynchronizedBody);
 	static readonly instanceStaticBody = new TryCodeBlockParser(CodeBlockParser.instanceStaticBody);

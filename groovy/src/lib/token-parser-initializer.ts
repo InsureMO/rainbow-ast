@@ -24,6 +24,7 @@ import {
 	TsscmfvDeclParsers,
 	TsscmfvFieldOrVariableParser
 } from './tsscmfv';
+import {TypeBodyParser} from './tsscmfv/code-block/type-body-parser';
 
 const AllParsers = [
 	PackageDeclParser.instance,                     // package declaration
@@ -53,6 +54,7 @@ class TokenParserInitializer {
 		RecordParametersParser.initSelector(AllParsers);
 		MethodParametersParser.initSelector(AllParsers);
 		CodeBlockParser.initSelector(AllParsers);
+		TypeBodyParser.initSelector(AllParsers);
 		TsscmfvFieldOrVariableParser.initSelector([/* TODO Expression parser? */]);
 		AnnotationParametersParser.initSelector(AllParsers);
 		GenericTypeParser.initSelector(AllParsers);
