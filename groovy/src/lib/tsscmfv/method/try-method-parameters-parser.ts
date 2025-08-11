@@ -9,7 +9,7 @@ import {MethodParametersParser} from './method-parameters-parser';
 /**
  * parse only when current document matches method parameters.
  *
- * annotation is allowed before method parameters.
+ * annotation is allowed before method parameters, which is incorrect.
  */
 export class TryMethodParametersParser {
 	private static Selector: ParserSelector = new ParserSelector({

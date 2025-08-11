@@ -49,7 +49,7 @@ export class TsscmfvMethodThrowsParser {
 	});
 	private static readonly AfterNameSelector = new ParserSelector({
 		parsers: [
-			AnnotationDeclParser.instance, CommaParserInstance,
+			CommaParserInstance,
 			DotParserInstance, MLCommentParser.instance, WsTabParsers]
 	});
 	private static readonly AfterDotSelector = new ParserSelector({

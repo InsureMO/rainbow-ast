@@ -6,7 +6,7 @@ import {ParserSelector} from '../../token-parser';
 import {CodeBlockParser} from '../code-block';
 
 /**
- * annotation is allowed before code block
+ * annotation is allowed before code block, which is incorrect.
  */
 export class TryCodeBlockParser {
 	private readonly _codeBlockParser: CodeBlockParser;
