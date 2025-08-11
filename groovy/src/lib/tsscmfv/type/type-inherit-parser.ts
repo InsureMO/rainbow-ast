@@ -1,5 +1,7 @@
 import {AtomicToken} from '@rainbow-ast/core';
 import {AnnotationDeclParser} from '../../annotation';
+import {CommentParsers} from '../../comment';
+import {WsTabNlParsers} from '../../common-token';
 import {ParseContext} from '../../parse-context';
 import {ParserSelector} from '../../token-parser';
 import {T} from '../../tokens';
@@ -15,7 +17,12 @@ import {TsscmfvTIKP} from './type-inherit-keywords';
  */
 export class TsscmfvTypeInheritParser {
 	private static Selector: ParserSelector = new ParserSelector({
-		parsers: [AnnotationDeclParser.instance, TsscmfvTIKP.instanceExtends, TsscmfvTIKP.instanceImplements, TsscmfvTIKP.instancePermits]
+		parsers: [
+			AnnotationDeclParser.instance,
+			TsscmfvTIKP.instanceExtends, TsscmfvTIKP.instanceImplements, TsscmfvTIKP.instancePermits,
+			CommentParsers,
+			WsTabNlParsers,
+		]
 	});
 
 	private subsequent(context: ParseContext): void {

@@ -48,6 +48,8 @@ export class AnnotationDeclParser extends BySingleCharTokenParser {
 			return AnnotationDeclParser.AfterNameSelector;
 		} else if (parser === DotParserInstance) {
 			return AnnotationDeclParser.AfterDotSelector;
+		} else if (parser === AnnotationParametersParser.instance) {
+			return 'break';
 			// @ts-expect-error ignore the type check
 		} else if (NewlineParsers.includes(parser)) {
 			// if there is no annotation name parsed, end

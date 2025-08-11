@@ -29,7 +29,7 @@ export class TsscmfvTypeInheritKeywordParser<A extends TsscmfvTypeInheritKeyword
 	});
 	private static readonly EIAfterNameSelector: ParserSelector = new ParserSelector({
 		parsers: [
-			AnnotationDeclParser.instance, CommaParserInstance,
+			CommaParserInstance,
 			DotParserInstance, MLCommentParser.instance, WsTabParsers
 		]
 	});
@@ -47,7 +47,7 @@ export class TsscmfvTypeInheritKeywordParser<A extends TsscmfvTypeInheritKeyword
 	});
 	private static readonly PAfterNameSelector: ParserSelector = new ParserSelector({
 		parsers: [
-			AnnotationDeclParser.instance, CommaParserInstance,
+			CommaParserInstance,
 			DotParserInstance, MLCommentParser.instance, WsTabParsers
 		]
 	});

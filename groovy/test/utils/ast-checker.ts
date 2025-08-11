@@ -90,7 +90,7 @@ export class AstChecker {
 				const childBullet = bullet === '0.' ? `${index + 1}.` : `${bullet}${index + 1}.`;
 				const child = block.children?.[index];
 				if (child == null) {
-					const [tokenId, startOffset, startLine, text] = spec;
+					const [tokenId, startOffset, startLine, text] = specOfChild;
 					this._logs.push(chalk.red([
 						new Array(childBullet.split('.').length - 2).fill('\t').join(''),
 						childBullet,
