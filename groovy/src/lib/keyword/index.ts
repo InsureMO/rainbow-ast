@@ -1,3 +1,12 @@
+import {ConstParser} from './const';
+import {FalseParser} from './false';
+import {GotoParser} from './goto';
+import {NullParser} from './null';
+import {SuperParser} from './super';
+import {ThisParser} from './this';
+import {ThreadsafeParser} from './threadsafe';
+import {TrueParser} from './true';
+
 // @interface -> tsscmfv: type
 // abstract -> tsscmfv: type, constructor (incorrect), method
 export * from './as';                               // as: as alias (import), as type (constant or variable)
@@ -9,7 +18,7 @@ export * from './as';                               // as: as alias (import), as
 // catch: try-catch
 // char -> primitive types
 // class -> tsscmfv: type
-// const: reserved
+export * from './const';                            // const: reserved
 // continue: for loop, while loop, do-while loop
 // def -> tsscmfv: type, constructor, method, field, variable
 // default -> tsscmfv: constructor (incorrect), method; switch route
@@ -18,12 +27,12 @@ export * from './as';                               // as: as alias (import), as
 // else: if-else
 // enum -> tsscmfv: type
 // extends -> tsscmfv: type inheriting keywords
-// false -> boolean literal
+export * from './false';                            // false
 // final -> tsscmfv: type, constructor (incorrect), method
 // finally: try-catch
 // float -> primitive types
 // for: for loop
-// goto: reserved
+export * from './goto';                             // goto: reserved
 // if: if-else
 // implements -> tsscmfv: type inheriting keywords
 // import -> import declaration
@@ -35,7 +44,7 @@ export * from './as';                               // as: as alias (import), as
 // native -> tsscmfv: constructor (incorrect), method
 // new: new expression
 // non-sealed -> tsscmfv: type
-// null -> null literal
+export * from './null';                             // null
 // package -> package declaration
 // permits -> tsscmfv: type inheriting keywords
 // public protected private -> tsscmfv: type, constructor, method, field
@@ -45,19 +54,30 @@ export * from './as';                               // as: as alias (import), as
 // short -> primitive types
 // static -> tsscmfv: type, constructor (incorrect), method, field; static import
 // strictfp -> tsscmfv: type, constructor, method, field
-// super
+export * from './super';                            // super
 // switch: switch-case
 // synchronized -> tsscmfv: method, synchronize block
-// this
-// threadsafe: reserved
+export * from './this';                             // this
+export * from './threadsafe';                       // threadsafe: reserved
 // throw: throw expression
 // throws -> tsscmfv: constructor method
 // trait -> tsscmfv: type
 // transient -> tsscmfv: field
-// true -> boolean literal
+export * from './true';                             // true
 // try: try-catch
 // var -> tsscmfv: type, constructor, method, field, variable
 // void -> tsscmfv: method
 // volatile -> tsscmfv: field
 // while: while loop
 // yield: switch route
+
+export const StandaloneKeywordParsers = [
+	ConstParser.instance,
+	FalseParser.instance,
+	GotoParser.instance,
+	NullParser.instance,
+	SuperParser.instance,
+	ThisParser.instance,
+	ThreadsafeParser.instance,
+	TrueParser.instance
+];

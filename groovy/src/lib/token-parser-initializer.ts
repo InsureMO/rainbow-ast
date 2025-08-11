@@ -12,6 +12,7 @@ import {
 import {CompilationUnitParser} from './compilation-unit';
 import {GenericTypeParser} from './generic-type';
 import {ImportDeclParser} from './import-decl';
+import {StandaloneKeywordParsers} from './keyword';
 import {NumberParsers} from './number-literal';
 import {PackageDeclParser} from './package-decl';
 import {GsBraceInterpolationParser, StringParsers} from './string-literal';
@@ -27,6 +28,7 @@ import {
 const AllParsers = [
 	PackageDeclParser.instance,                     // package declaration
 	ImportDeclParser.instance,                      // import declaration
+	StandaloneKeywordParsers,                       // standalone keywords
 	AnnotationDeclParser.instance,                  // annotation declaration
 	// type, static block, synchronized block, constructor, method, field, variable
 	...TsscmfvDeclParsers,
