@@ -21,37 +21,19 @@ export type TsscmfvTypeInheritKeywords =
  * annotation is allowed after inherit keyword or comma.
  */
 export class TsscmfvTypeInheritKeywordParser<A extends TsscmfvTypeInheritKeywords> extends SingleKeywordTokenParser {
-	private static readonly EISelector: ParserSelector = new ParserSelector({
+	private static readonly Selector: ParserSelector = new ParserSelector({
 		parsers: [
 			AnnotationDeclParser.instance, PackageNameParser.instance, CommaParserInstance,
 			CommentParsers, WsTabNlParsers
 		]
 	});
-	private static readonly EIAfterNameSelector: ParserSelector = new ParserSelector({
+	private static readonly AfterNameSelector: ParserSelector = new ParserSelector({
 		parsers: [
 			CommaParserInstance,
 			DotParserInstance, MLCommentParser.instance, WsTabParsers
 		]
 	});
-	private static readonly EIAfterDotSelector: ParserSelector = new ParserSelector({
-		parsers: [
-			PackageNameParser.instance, CommaParserInstance,
-			MLCommentParser.instance, WsTabParsers
-		]
-	});
-	private static readonly PSelector: ParserSelector = new ParserSelector({
-		parsers: [
-			AnnotationDeclParser.instance, PackageNameParser.instance, CommaParserInstance,
-			CommentParsers, WsTabNlParsers
-		]
-	});
-	private static readonly PAfterNameSelector: ParserSelector = new ParserSelector({
-		parsers: [
-			CommaParserInstance,
-			DotParserInstance, MLCommentParser.instance, WsTabParsers
-		]
-	});
-	private static readonly PAfterDotSelector: ParserSelector = new ParserSelector({
+	private static readonly AfterDotSelector: ParserSelector = new ParserSelector({
 		parsers: [
 			PackageNameParser.instance, CommaParserInstance,
 			MLCommentParser.instance, WsTabParsers
@@ -70,34 +52,18 @@ export class TsscmfvTypeInheritKeywordParser<A extends TsscmfvTypeInheritKeyword
 	}
 
 	protected getInitBlockParserSelector(): ParserSelector {
-		if (this.getTokenId() === T.PERMITS) {
-			return TsscmfvTypeInheritKeywordParser.PSelector;
-		} else {
-			return TsscmfvTypeInheritKeywordParser.EISelector;
-		}
+		return TsscmfvTypeInheritKeywordParser.Selector;
 	}
 
 	protected afterChildParsed(_: ParseContext, parser: TokenParser): AfterChildParsed {
-		if (this.getTokenId() === T.PERMITS) {
-			if (parser === PackageNameParser.instance) {
-				return TsscmfvTypeInheritKeywordParser.PAfterNameSelector;
-			} else if (parser === DotParserInstance) {
-				return TsscmfvTypeInheritKeywordParser.PAfterDotSelector;
-			} else if (parser === CommaParserInstance) {
-				return TsscmfvTypeInheritKeywordParser.PSelector;
-			} else {
-				return (void 0);
-			}
+		if (parser === PackageNameParser.instance) {
+			return TsscmfvTypeInheritKeywordParser.AfterNameSelector;
+		} else if (parser === DotParserInstance) {
+			return TsscmfvTypeInheritKeywordParser.AfterDotSelector;
+		} else if (parser === CommaParserInstance) {
+			return TsscmfvTypeInheritKeywordParser.Selector;
 		} else {
-			if (parser === PackageNameParser.instance) {
-				return TsscmfvTypeInheritKeywordParser.EIAfterNameSelector;
-			} else if (parser === DotParserInstance) {
-				return TsscmfvTypeInheritKeywordParser.EIAfterDotSelector;
-			} else if (parser === CommaParserInstance) {
-				return TsscmfvTypeInheritKeywordParser.EISelector;
-			} else {
-				return (void 0);
-			}
+			return (void 0);
 		}
 	}
 
