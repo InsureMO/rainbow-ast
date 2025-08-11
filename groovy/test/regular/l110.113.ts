@@ -1,7 +1,7 @@
 import {T} from '../../src';
 import {TokenSpec} from '../utils';
 
-export const l110_111 = (l: { v: number }): Array<TokenSpec> => {
+export const l110_113 = (l: { v: number }): Array<TokenSpec> => {
 	return [
 		[T.SLComment, 2133, l.v, '// annotation declaration #1', [
 			[T.SLCommentStartMark, 2133, l.v, '//'],
@@ -98,6 +98,56 @@ export const l110_111 = (l: { v: number }): Array<TokenSpec> => {
 				[T.RBrace, 2252, l.v, '}']
 			]]
 		]],
-		[T.Newline, 2253, l.v++, '\n']
+		[T.Newline, 2253, l.v++, '\n'],
+		[T.SyncBlockDecl, 2254, l.v, 'synchronized @A() () @B() {}', [
+			[T.ModifierSeg, 2254, l.v, 'synchronized @A ', [
+				[T.SYNCHRONIZED, 2254, l.v, 'synchronized'],
+				[T.Whitespaces, 2266, l.v, ' '],
+				[T.AnnoDecl, 2267, l.v, '@A ', [
+					[T.At, 2267, l.v, '@'],
+					[T.Identifier, 2268, l.v, 'A'],
+					[T.AnnoParamsBlk, 2269, l.v, '()', [
+						[T.LParen, 2269, l.v, '('],
+						[T.RParen, 2270, l.v, ')']
+					]]
+				]],
+				[T.Whitespaces, 2271, l.v, ' ']
+			]],
+			[T.SyncExprBlk, 2272, l.v, '()', [
+				[T.LParen, 2272, l.v, '('],
+				[T.RParen, 2273, l.v, ')']
+			]],
+			[T.Whitespaces, 2274, l.v, ' '],
+			[T.AnnoDecl, 2275, l.v, '@B ', [
+				[T.At, 2275, l.v, '@'],
+				[T.Identifier, 2276, l.v, 'B'],
+				[T.AnnoParamsBlk, 2277, l.v, '()', [
+					[T.LParen, 2277, l.v, '('],
+					[T.RParen, 2278, l.v, ')']
+				]]
+			]],
+			[T.Whitespaces, 2279, l.v, ' '],
+			[T.SyncBody, 2280, l.v, '{}', [
+				[T.LBrace, 2280, l.v, '{'],
+				[T.RBrace, 2281, l.v, '}']
+			]]
+		]],
+		[T.Newline, 2282, l.v++, '\n'],
+		[T.StaticBlockDecl, 2283, l.v, 'static @A {}', [
+			[T.ModifierSeg, 2283, l.v, 'static @A ', [
+				[T.STATIC, 2283, l.v, 'static'],
+				[T.Whitespaces, 2289, l.v, ' '],
+				[T.AnnoDecl, 2290, l.v, '@A ', [
+					[T.At, 2290, l.v, '@'],
+					[T.Identifier, 2291, l.v, 'A'],
+					[T.Whitespaces, 2292, l.v, ' ']
+				]]
+			]],
+			[T.StaticBody, 2293, l.v, '{}', [
+				[T.LBrace, 2293, l.v, '{'],
+				[T.RBrace, 2294, l.v, '}']
+			]]
+		]],
+		[T.Newline, 2295, l.v++, '\n']
 	];
 };

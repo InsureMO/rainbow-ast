@@ -109,3 +109,5 @@ class A {
 }
 // annotation declaration #1
 public @A() private @B() class @C() X @D() extends @E ArrayList @F implements @G List @H {}
+synchronized @A() () @B() {}
+static @A {}
