@@ -11,9 +11,9 @@ import {TsscmfvTIKP} from './type-inherit-keywords';
  * - accept one type inherit keyword for one inheriting part,
  * - accept multiple inheriting types, joined by comma,
  * - inheriting type name could be alias name, qualified name, full qualified name.
- * - TODO accept generic type after inheriting type name.
  *
- * annotation is allowed before or after any inherit segment.
+ * - annotation is allowed before or after any inherit segment
+ * - generic type is allowed after name
  */
 export class TsscmfvTypeInheritParser {
 	private static Selector: ParserSelector = new ParserSelector({
