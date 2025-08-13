@@ -1,13 +1,8 @@
 import {AtomicToken, BlockToken} from '@rainbow-ast/core';
 import {AnnotationDeclParser} from '../../annotation';
-import {CommentParsers, MLCommentParser} from '../../comment';
-import {
-	CommaParserInstance,
-	DotParserInstance,
-	PackageNameParser,
-	WsTabNlParsers,
-	WsTabParsers
-} from '../../common-token';
+import {CommentParsers} from '../../comment';
+import {CommaParserInstance, DotParserInstance, PackageNameParser, WsTabNlParsers} from '../../common-token';
+import {GenericTypeParser} from '../../generic-type';
 import {ParseContext} from '../../parse-context';
 import {ParserSelector, SingleKeywordTokenParser} from '../../token-parser';
 import {GroovyTokenId, T} from '../../tokens';
@@ -32,7 +27,8 @@ export class ThrowsParser extends SingleKeywordTokenParser {
 }
 
 /**
- * annotation is allowed before and after keyword or comma.
+ * - annotation is allowed before and after keyword or comma
+ * - generic type is allowed after name
  */
 export class TsscmfvMethodThrowsParser {
 	private static readonly StartSelector = new ParserSelector({
@@ -49,13 +45,20 @@ export class TsscmfvMethodThrowsParser {
 	});
 	private static readonly AfterNameSelector = new ParserSelector({
 		parsers: [
-			CommaParserInstance,
-			DotParserInstance, MLCommentParser.instance, WsTabParsers]
+			CommaParserInstance, GenericTypeParser.instance, DotParserInstance,
+			CommentParsers, WsTabNlParsers
+		]
 	});
 	private static readonly AfterDotSelector = new ParserSelector({
 		parsers: [
+			PackageNameParser.instance, GenericTypeParser.instance, CommaParserInstance,
+			CommentParsers, WsTabNlParsers
+		]
+	});
+	private static readonly AfterGenTSelector: ParserSelector = new ParserSelector({
+		parsers: [
 			CommaParserInstance,
-			PackageNameParser.instance, MLCommentParser.instance, WsTabParsers
+			CommentParsers, WsTabNlParsers
 		]
 	});
 
@@ -83,6 +86,8 @@ export class TsscmfvMethodThrowsParser {
 				selector = TsscmfvMethodThrowsParser.AfterNameSelector;
 			} else if (parser === DotParserInstance) {
 				selector = TsscmfvMethodThrowsParser.AfterDotSelector;
+			} else if (parser === GenericTypeParser.instance) {
+				selector = TsscmfvMethodThrowsParser.AfterGenTSelector;
 			}
 			c = context.char();
 		}
