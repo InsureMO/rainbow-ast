@@ -111,3 +111,4 @@ class A {
 public @A() private @B() class @C() X @D() extends @E ArrayList @F implements @G List @H {}
 synchronized @A() () @B() {}
 static @A {}
+public @A def @B a =;

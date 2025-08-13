@@ -1,7 +1,7 @@
 import {T} from '../../src';
 import {TokenSpec} from '../utils';
 
-export const l110_113 = (l: { v: number }): Array<TokenSpec> => {
+export const l110_114 = (l: { v: number }): Array<TokenSpec> => {
 	return [
 		[T.SLComment, 2133, l.v, '// annotation declaration #1', [
 			[T.SLCommentStartMark, 2133, l.v, '//'],
@@ -148,6 +148,29 @@ export const l110_113 = (l: { v: number }): Array<TokenSpec> => {
 				[T.RBrace, 2294, l.v, '}']
 			]]
 		]],
-		[T.Newline, 2295, l.v++, '\n']
+		[T.Newline, 2295, l.v++, '\n'],
+		[T.VarDecl, 2296, l.v, 'public @A def @B a =;', [
+			[T.ModifierSeg, 2296, l.v, 'public @A def @B ', [
+				[T.PUBLIC, 2296, l.v, 'public'],
+				[T.Whitespaces, 2302, l.v, ' '],
+				[T.AnnoDecl, 2303, l.v, '@A ', [
+					[T.At, 2303, l.v, '@'],
+					[T.Identifier, 2304, l.v, 'A'],
+					[T.Whitespaces, 2305, l.v, ' ']
+				]],
+				[T.DEF, 2306, l.v, 'def'],
+				[T.Whitespaces, 2309, l.v, ' '],
+				[T.AnnoDecl, 2310, l.v, '@B ', [
+					[T.At, 2310, l.v, '@'],
+					[T.Identifier, 2311, l.v, 'B'],
+					[T.Whitespaces, 2312, l.v, ' ']
+				]],
+			]],
+			[T.Identifier, 2313, l.v, 'a'],
+			[T.Whitespaces, 2314, l.v, ' '],
+			[T.Assign, 2315, l.v, '='],
+			[T.Semicolon, 2316, l.v, ';'],
+		]],
+		[T.Newline, 2317, l.v++, '\n'],
 	];
 };

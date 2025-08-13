@@ -4,7 +4,7 @@ import {DGP, T} from '../../src';
 import {AstChecker} from '../utils';
 import {l1} from './l1';
 import {l103_109} from './l103.109';
-import {l110_113} from './l110.113';
+import {l110_114} from './l110.114';
 import {l16} from './l16';
 import {l17_25} from './l17.25';
 import {l2} from './l2';
@@ -51,7 +51,7 @@ describe('Regular test', () => {
 			...l80_97(l),
 			...l98_102(l),
 			...l103_109(l),
-			...l110_113(l)
+			...l110_114(l)
 		]]);
 	});
 });

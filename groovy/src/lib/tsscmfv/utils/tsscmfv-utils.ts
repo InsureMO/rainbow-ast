@@ -73,4 +73,8 @@ export class TsscmfvKeywordUtils {
 		const modifierTokens = TsscmfvKeywordUtils.getModifierTokens(block);
 		return TsscmfvKeywordUtils.onlyStaticKeywords(modifierTokens);
 	}
+
+	static containsDefOrVar(block: BlockToken): boolean {
+		return TsscmfvKeywordUtils.getModifierTokens(block).some(t => t.id === T.DEF || t.id === T.VAR);
+	}
 }

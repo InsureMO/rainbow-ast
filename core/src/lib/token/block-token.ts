@@ -87,7 +87,7 @@ export class BlockToken extends Token {
 	/**
 	 * pop a specified number of child tokens
 	 */
-	popChild(count: number): void {
+	popChild(count: number): Array<Token> {
 		if (count <= 0) {
 			throw new Error('The number of children to be popped must be greater than 0.');
 		}
@@ -95,6 +95,6 @@ export class BlockToken extends Token {
 		if (length < count) {
 			throw new Error(`There are not enough children[count=${length}] for the pop operation[count=${count}].`);
 		}
-		this._children.splice(-count);
+		return this._children.splice(-count);
 	}
 }

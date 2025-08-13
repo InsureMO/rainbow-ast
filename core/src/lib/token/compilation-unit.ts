@@ -35,18 +35,22 @@ export class CompilationUnit extends BlockToken {
 		return 1;
 	}
 
-	hasAttr(key: string): boolean {
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	hasAttr(_: string): boolean {
 		return false;
 	}
 
-	getAttr<V>(key: string): V | undefined {
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	getAttr<V>(_: string): V | undefined {
 		return (void 0);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	setAttr<V>(_1: string, _2: V | null | undefined): void {
 		throw new Error('Attribute is not available on compilation unit.');
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	removeAttr(_: string): void {
 		throw new Error('Attribute is not available on compilation unit.');
 	}

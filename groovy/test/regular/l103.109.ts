@@ -28,9 +28,7 @@ export const l103_109 = (l: { v: number }): Array<TokenSpec> => {
 						[T.DEF, 2047, l.v, 'def'],
 						[T.Whitespaces, 2050, l.v, ' ']
 					]],
-					[T.MfvTypeSeg, 2051, l.v, 'a', [
-						[T.Identifier, 2051, l.v, 'a']
-					]],
+					[T.Identifier, 2051, l.v, 'a'],
 					[T.Newline, 2052, l.v++, '\n'],
 					[T.Tabs, 2053, l.v, '\t']
 				]],
@@ -83,7 +81,7 @@ export const l103_109 = (l: { v: number }): Array<TokenSpec> => {
 					[T.Comma, 2127, l.v, ','],
 					[T.Whitespaces, 2128, l.v, ' '],
 					[T.Identifier, 2129, l.v, 'e'],
-					[T.Newline, 2130, l.v++, '\n'],
+					[T.Newline, 2130, l.v++, '\n']
 				]],
 				[T.RBrace, 2131, l.v, '}']
 			]]
