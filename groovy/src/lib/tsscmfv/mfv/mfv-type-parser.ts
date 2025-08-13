@@ -2,6 +2,7 @@ import {AtomicToken, BlockToken} from '@rainbow-ast/core';
 import {AnnotationDeclParser} from '../../annotation';
 import {CommentParsers, MLCommentParser} from '../../comment';
 import {DotParserInstance, PackageNameParser, WsTabNlParsers, WsTabParsers} from '../../common-token';
+import {GenericTypeParser} from '../../generic-type';
 import {ParseContext} from '../../parse-context';
 import {PrimitiveTypeParser, PrimitiveTypeParsers, VoidParser} from '../../primitive-type';
 import {ParserSelector} from '../../token-parser';
@@ -23,26 +24,26 @@ export type TsscmfvMethodReturnTypeKeywords =
 
 /**
  * mfv = method, field, variable.
- * mfv type is method return type or field/variable type
+ * mfv type is method return type or field/variable type,
  * type could be alias name, qualified name, full qualified name, void and 8 primitive types.
  *
  * - accept multiple types, it is incorrect,
- * - TODO accept type variable before return type,
- * - TODO accept type variable after return type, it is incorrect.
  *
- * annotation is allowed before or after any type keyword.
+ * - annotation is allowed before or after any type keyword
+ * - generic type is allowed before type
  */
 export class MfvTypeParser {
 	private static readonly StartSelector = new ParserSelector({
 		parsers: [
+			GenericTypeParser.instance,
 			PrimitiveTypeParsers, VoidParser.instance, PackageNameParser.instance,
 			CommentParsers, WsTabNlParsers
 		]
 	});
 	private static readonly StartedSelector = new ParserSelector({
 		parsers: [
+			GenericTypeParser.instance, AnnotationDeclParser.instance,
 			PrimitiveTypeParsers, VoidParser.instance,
-			AnnotationDeclParser.instance,
 			CommentParsers, WsTabNlParsers
 		]
 	});
