@@ -22,6 +22,28 @@ export type TsscmfvMethodReturnTypeKeywords =
 	| ['long', GroovyTokenId.LONG]
 	| ['short', GroovyTokenId.SHORT];
 
+class GenericTypeForMethodParser extends GenericTypeParser {
+	isAvailable(context: ParseContext): boolean {
+		const block = context.block();
+		switch (block.id) {
+			case T.TsscmfvDecl:
+			case T.MethodDecl:
+				return true;
+			case T.FieldDecl:
+			case T.VarDecl:
+				return false;
+			case T.MfvTypeSeg: {
+				return [T.TsscmfvDecl, T.MethodDecl].includes(block.parent.id);
+			}
+			default: {
+				throw new Error(`Parent token[${T[block.id]}] is not supported.`);
+			}
+		}
+	}
+
+	static readonly instance = new GenericTypeForMethodParser();
+}
+
 /**
  * mfv = method, field, variable.
  * mfv type is method return type or field/variable type,
@@ -35,14 +57,14 @@ export type TsscmfvMethodReturnTypeKeywords =
 export class MfvTypeParser {
 	private static readonly StartSelector = new ParserSelector({
 		parsers: [
-			GenericTypeParser.instance,
+			GenericTypeForMethodParser.instance,
 			PrimitiveTypeParsers, VoidParser.instance, PackageNameParser.instance,
 			CommentParsers, WsTabNlParsers
 		]
 	});
 	private static readonly StartedSelector = new ParserSelector({
 		parsers: [
-			GenericTypeParser.instance, AnnotationDeclParser.instance,
+			GenericTypeForMethodParser.instance, AnnotationDeclParser.instance,
 			PrimitiveTypeParsers, VoidParser.instance,
 			CommentParsers, WsTabNlParsers
 		]
