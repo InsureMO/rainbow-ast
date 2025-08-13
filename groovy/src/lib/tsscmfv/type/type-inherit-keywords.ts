@@ -1,13 +1,8 @@
 import {AtomicToken, BlockToken, Char} from '@rainbow-ast/core';
 import {AnnotationDeclParser} from '../../annotation';
-import {CommentParsers, MLCommentParser} from '../../comment';
-import {
-	CommaParserInstance,
-	DotParserInstance,
-	PackageNameParser,
-	WsTabNlParsers,
-	WsTabParsers
-} from '../../common-token';
+import {CommentParsers} from '../../comment';
+import {CommaParserInstance, DotParserInstance, PackageNameParser, WsTabNlParsers} from '../../common-token';
+import {GenericTypeParser} from '../../generic-type';
 import {ParseContext} from '../../parse-context';
 import {AfterChildParsed, ParserSelector, SingleKeywordTokenParser, TokenParser} from '../../token-parser';
 import {GroovyTokenId, T} from '../../tokens';
@@ -18,7 +13,8 @@ export type TsscmfvTypeInheritKeywords =
 	| ['permits', GroovyTokenId.PERMITS];
 
 /**
- * annotation is allowed after inherit keyword or comma.
+ * - annotation is allowed after inherit keyword or comma.
+ * - generic type is allowed after name
  */
 export class TsscmfvTypeInheritKeywordParser<A extends TsscmfvTypeInheritKeywords> extends SingleKeywordTokenParser {
 	private static readonly Selector: ParserSelector = new ParserSelector({
@@ -29,14 +25,20 @@ export class TsscmfvTypeInheritKeywordParser<A extends TsscmfvTypeInheritKeyword
 	});
 	private static readonly AfterNameSelector: ParserSelector = new ParserSelector({
 		parsers: [
-			CommaParserInstance,
-			DotParserInstance, MLCommentParser.instance, WsTabParsers
+			CommaParserInstance, GenericTypeParser.instance, DotParserInstance,
+			CommentParsers, WsTabNlParsers
 		]
 	});
 	private static readonly AfterDotSelector: ParserSelector = new ParserSelector({
 		parsers: [
-			PackageNameParser.instance, CommaParserInstance,
-			MLCommentParser.instance, WsTabParsers
+			PackageNameParser.instance, GenericTypeParser.instance, CommaParserInstance,
+			CommentParsers, WsTabNlParsers
+		]
+	});
+	private static readonly AfterGenTSelector: ParserSelector = new ParserSelector({
+		parsers: [
+			CommaParserInstance,
+			CommentParsers, WsTabNlParsers
 		]
 	});
 
@@ -60,6 +62,8 @@ export class TsscmfvTypeInheritKeywordParser<A extends TsscmfvTypeInheritKeyword
 			return TsscmfvTypeInheritKeywordParser.AfterNameSelector;
 		} else if (parser === DotParserInstance) {
 			return TsscmfvTypeInheritKeywordParser.AfterDotSelector;
+		} else if (parser === GenericTypeParser.instance) {
+			return TsscmfvTypeInheritKeywordParser.AfterGenTSelector;
 		} else if (parser === CommaParserInstance) {
 			return TsscmfvTypeInheritKeywordParser.Selector;
 		} else {

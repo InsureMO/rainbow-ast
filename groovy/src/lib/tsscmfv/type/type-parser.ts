@@ -2,6 +2,7 @@ import {AtomicToken, BlockToken, Token} from '@rainbow-ast/core';
 import {AnnotationDeclParser} from '../../annotation';
 import {CommentParsers} from '../../comment';
 import {TypeDeclNameParser, WsTabNlParsers} from '../../common-token';
+import {GenericTypeParser} from '../../generic-type';
 import {ParseContext} from '../../parse-context';
 import {TA} from '../../token-attributes';
 import {ParserSelector} from '../../token-parser';
@@ -11,10 +12,9 @@ import {TsscmfvTKP, TsscmfvTypeKeywordParser} from './type-keywords';
 /**
  * - accept multiple type keywords,
  * - accept multiple type names,
- * - TODO accept type variable after type name.
- * - TODO accept record parameters block after type name when it is a record class
  *
- * - annotation is allowed before or after any keyword, but not allowed after type name.
+ * - annotation is allowed before or after any keyword, but not allowed after type name,
+ * - generic type is allowed after name
  */
 export class TsscmfvTypeParser {
 	private static readonly StartSelector = new ParserSelector({
@@ -35,6 +35,7 @@ export class TsscmfvTypeParser {
 	});
 	private static readonly AfterNameSelector = new ParserSelector({
 		parsers: [
+			GenericTypeParser.instance,
 			TypeDeclNameParser.instance,
 			CommentParsers,
 			WsTabNlParsers
@@ -89,6 +90,8 @@ export class TsscmfvTypeParser {
 				const token = block.children[block.children.length - 1];
 				this.writeTypeName(block, token);
 				selector = TsscmfvTypeParser.AfterNameSelector;
+			} else if (parser === GenericTypeParser.instance) {
+				break;
 			}
 			c = context.char();
 		}
