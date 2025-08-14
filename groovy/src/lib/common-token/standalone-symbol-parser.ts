@@ -54,6 +54,7 @@ export const RBraceParserInstance = StandaloneSymbolParsers.find(p => p.firstCha
 export const RParenParserInstance = StandaloneSymbolParsers.find(p => p.firstChar === ')');
 export const RAngleParserInstance = StandaloneSymbolParsers.find(p => p.firstChar === '>');
 export const AsteriskParserInstance = StandaloneSymbolParsers.find(p => p.firstChar === '*');
+export const PipeParserInstance = StandaloneSymbolParsers.find(p => p.firstChar === '|');
 export const DotParserInstance = StandaloneSymbolParsers.find(p => p.firstChar === '.');
 export const CommaParserInstance = StandaloneSymbolParsers.find(p => p.firstChar === ',');
 export const ColonParserInstance = StandaloneSymbolParsers.find(p => p.firstChar === ':');

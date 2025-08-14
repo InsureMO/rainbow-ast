@@ -33,7 +33,7 @@ export class SwitchDefaultParser extends KeywordTokenParser {
 
 	protected startBlock(context: ParseContext): void {
 		const keyword = this.createToken(context);
-		const decl = new BlockToken(T.SwitchDefaultBlk, keyword);
+		const decl = new BlockToken(T.SwitchDefaultStat, keyword);
 		context.sink(decl);
 		context.forward(4);
 	}

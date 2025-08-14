@@ -276,9 +276,20 @@ export enum GroovyTokenId {
 	SwitchStat,
 	SwitchExprBlk,
 	SwitchBody,
-	SwitchCaseBlk,
+	SwitchCaseStat,
 	SwitchCaseExprSeg,
-	SwitchDefaultBlk
+	SwitchDefaultStat,
+	TryCatchStat,
+	TryStat,
+	TryExprBlk,
+	TryResSeg,
+	TryBody,
+	CatchStat,
+	CatchExprBlk,
+	CatchExSeg,
+	CatchBody,
+	FinallyStat,
+	FinallyBody
 }
 
 export const T = GroovyTokenId;

@@ -5,10 +5,11 @@ import {FalseParser} from './false-parser';
 import {GotoParser} from './goto-parser';
 import {NullParser} from './null-parser';
 import {SuperParser} from './super-parser';
-import {SwitchCaseParser, SwitchParser} from './switch';
+import {SwitchCaseParser, SwitchParser} from './switch-case';
 import {ThisParser} from './this-parser';
 import {ThreadsafeParser} from './threadsafe-parser';
 import {TrueParser} from './true-parser';
+import {CatchParser, FinallyParser, TryParser} from './try-catch';
 
 // ✅ @interface -> tsscmfv: type
 // ✅ abstract -> tsscmfv: type, constructor (incorrect), method
@@ -19,7 +20,7 @@ export * from './as-parsers';
 // ✅ break: for loop, switch route, while loop, do-while loop
 // ✅ byte -> primitive types
 // ✅ case: switch-case
-// catch: try-catch
+// ✅ catch: try-catch
 // ✅ char -> primitive types
 // ✅ class -> tsscmfv: type
 // ✅ const: reserved
@@ -35,7 +36,7 @@ export * from './const-parser';
 // ✅ false
 export * from './false-parser';
 // ✅ final -> tsscmfv: type, constructor (incorrect), method
-// finally: try-catch
+// ✅ finally: try-catch
 // ✅ float -> primitive types
 // for: for loop
 // ✅ goto: reserved
@@ -65,7 +66,7 @@ export * from './null-parser';
 // ✅ super
 export * from './super-parser';
 // ✅ switch: switch-case
-export * from './switch';
+export * from './switch-case';
 // ✅ synchronized -> tsscmfv: method, synchronize block
 // ✅ this
 export * from './this-parser';
@@ -77,7 +78,8 @@ export * from './threadsafe-parser';
 // ✅ transient -> tsscmfv: field
 // ✅ true
 export * from './true-parser';
-// try: try-catch
+// ✅ try: try-catch
+export * from './try-catch';
 // ✅ var -> tsscmfv: type, constructor, method, field, variable
 // ✅ void -> tsscmfv: method
 // ✅ volatile -> tsscmfv: field
@@ -94,9 +96,12 @@ export const StandaloneKeywordParsers = [
 	ThreadsafeParser.instance,
 	TrueParser.instance
 ];
-export const ControlFlowKeywordParsers = [
+export const ControlFlowParsers = [
 	SwitchParser.instance,
 	SwitchCaseParser.instance,
 	BreakParser.instance,
-	ContinueParser.instance
+	ContinueParser.instance,
+	TryParser.instance,
+	CatchParser.instance,
+	FinallyParser.instance
 ];

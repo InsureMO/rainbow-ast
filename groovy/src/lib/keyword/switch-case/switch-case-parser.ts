@@ -33,7 +33,11 @@ export class SwitchCaseParser extends KeywordTokenParser {
 
 	protected startBlock(context: ParseContext): void {
 		const keyword = this.createToken(context);
-		const decl = new BlockToken(T.SwitchCaseBlk, keyword);
+		const block = context.block();
+		if (block.id !== T.SwitchStat) {
+			context.sink(new BlockToken(T.SwitchStat));
+		}
+		const decl = new BlockToken(T.SwitchCaseStat, keyword);
 		context.sink(decl);
 		context.forward(4);
 	}
@@ -66,8 +70,15 @@ export class SwitchCaseParser extends KeywordTokenParser {
 
 	parse(ch: Char, context: ParseContext): boolean {
 		this.parseAsBlock(ch, context);
-		const block = context.block();
-		if (block.id === T.SwitchCaseBlk) {
+		let block = context.block();
+		/** the closed block might be {@link T.SwitchCaseExprSeg} */
+		if (block.id === T.SwitchCaseStat) {
+			context.rise();
+		}
+		block = context.block();
+		if (block.children[0].id === T.SwitchCaseStat) {
+			// the switch-case statement is started with case keyword, close it immediately
+			// no matter what follows
 			context.rise();
 		}
 		return true;

@@ -14,12 +14,15 @@ import {GenericTypeDeclParser} from './generic-type';
 import {ImportDeclParser} from './import-decl';
 import {
 	AsTypeDeclParser,
-	ControlFlowKeywordParsers,
+	CatchExpressionParser,
+	ControlFlowParsers,
 	StandaloneKeywordParsers,
 	SwitchBodyParser,
 	SwitchCaseParser,
 	SwitchDefaultParser,
-	SwitchExpressionParser
+	SwitchExpressionParser,
+	TryCatchFinallyBodyParser,
+	TryExpressionParser
 } from './keyword';
 import {NumberParsers} from './number-literal';
 import {PackageDeclParser} from './package-decl';
@@ -40,7 +43,7 @@ const AllParsers = [
 	StandaloneKeywordParsers,                       // standalone keywords
 	AnnotationDeclParser.instance,                  // annotation declaration
 	...TsscmfvDeclParsers,                          // type, static block, synchronized block, constructor, method, field, variable
-	...ControlFlowKeywordParsers,                   // control flow, if-else/do-while/for/switch-case
+	...ControlFlowParsers,                   // control flow, if-else/do-while/for/switch-case
 	AsTypeDeclParser.instance,                      // as type
 	...CommentParsers,                              // SL comment, ML comment
 	...NumberParsers,                               // all numeric literals
@@ -67,12 +70,16 @@ class TokenParserInitializer {
 		TsscmfvFieldOrVariableParser.initSelector([/* TODO Expression parser? */]);
 		AnnotationParametersParser.initSelector(AllParsers);
 		GenericTypeDeclParser.initSelector(AllParsers);
-
+		// switch-case
 		SwitchExpressionParser.initSelector(AllParsers);
 		SwitchBodyParser.initSelector(AllParsers);
 		const SwitchCaseSubParsers = AllParsers.filter(p => p !== SwitchCaseParser.instance);
 		SwitchCaseParser.initSelector(SwitchCaseSubParsers);
 		SwitchDefaultParser.initSelector(SwitchCaseSubParsers);
+		// try-catch-finally
+		TryExpressionParser.initSelector(AllParsers);
+		CatchExpressionParser.initSelector(AllParsers);
+		TryCatchFinallyBodyParser.initSelector(AllParsers);
 	}
 }
 
