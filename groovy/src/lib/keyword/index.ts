@@ -15,7 +15,7 @@ import {CatchParser, FinallyParser, TryParser} from './try-catch';
 // ✅ abstract -> tsscmfv: type, constructor (incorrect), method
 // ✅ as: as alias (import), as type (constant or variable)
 export * from './as-parsers';
-// assert: assert expression
+// 🆘 assert: assert expression
 // ✅ boolean -> primitive types
 // ✅ break: for loop, switch route, while loop, do-while loop
 // ✅ byte -> primitive types
@@ -28,9 +28,9 @@ export * from './const-parser';
 // ✅ continue: for loop, while loop, do-while loop
 // ✅ def -> tsscmfv: type, constructor, method, field, variable
 // ✅ default -> tsscmfv: constructor (incorrect), method; switch-case
-// do: do-while loop
+// 🆘 do: do-while loop
 // ✅ double -> primitive types
-// else: if-else
+// 🆘 else: if-else
 // ✅ enum -> tsscmfv: type
 // ✅ extends -> tsscmfv: type inheriting keywords
 // ✅ false
@@ -38,10 +38,10 @@ export * from './false-parser';
 // ✅ final -> tsscmfv: type, constructor (incorrect), method
 // ✅ finally: try-catch
 // ✅ float -> primitive types
-// for: for loop
+// 🆘 for: for loop
 // ✅ goto: reserved
 export * from './goto-parser';
-// if: if-else
+// 🆘 if: if-else
 // ✅ implements -> tsscmfv: type inheriting keywords
 // ✅ import -> import declaration
 // ✅ in -> operators, and !in
@@ -50,7 +50,7 @@ export * from './goto-parser';
 // ✅ interface -> tsscmfv: type
 // ✅ long -> primitive types
 // ✅ native -> tsscmfv: constructor (incorrect), method
-// new: new expression
+// 🆘 new: new expression
 // ✅ non-sealed -> tsscmfv: type
 // ✅ null
 export * from './null-parser';
@@ -58,7 +58,7 @@ export * from './null-parser';
 // ✅ permits -> tsscmfv: type inheriting keywords
 // ✅ public ✅ protected ✅ private -> tsscmfv: type, constructor, method, field
 // ✅ record -> tsscmfv: type
-// return: return expression
+// 🆘 return: return expression
 // ✅ sealed -> tsscmfv: type
 // ✅ short -> primitive types
 // ✅ static -> tsscmfv: type, constructor (incorrect), method, field; static import
@@ -72,7 +72,7 @@ export * from './switch-case';
 export * from './this-parser';
 // ✅ threadsafe: reserved
 export * from './threadsafe-parser';
-// throw: throw expression
+// 🆘 throw: throw expression
 // ✅ throws -> tsscmfv: constructor method
 // ✅ trait -> tsscmfv: type
 // ✅ transient -> tsscmfv: field
@@ -83,8 +83,8 @@ export * from './try-catch';
 // ✅ var -> tsscmfv: type, constructor, method, field, variable
 // ✅ void -> tsscmfv: method
 // ✅ volatile -> tsscmfv: field
-// while: while loop
-// yield: switch-case
+// 🆘 while: while loop
+// 🆘 yield: switch-case
 
 export const StandaloneKeywordParsers = [
 	ConstParser.instance,
