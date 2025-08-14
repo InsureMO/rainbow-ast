@@ -9,10 +9,10 @@ import {
 	TokenParser
 } from '../token-parser';
 import {GroovyTokenId, T} from '../tokens';
-import {BackslashEscapeParser} from './backslash-escape';
-import {MLEraserParser} from './ml-eraser';
-import {SGsBraceInterpolationParser, SGsInterpolationParser} from './slashy-gstring-intepolation';
-import {SGsLUnicodeEscapeParser} from './unicode-escape';
+import {BackslashEscapeParser} from './backslash-escape-parsers';
+import {MLEraserParser} from './ml-eraser-parser';
+import {SGsBraceInterpolationParser, SGsInterpolationParser} from './slashy-gstring-interpolation-parsers';
+import {SGsLUnicodeEscapeParser} from './unicode-escape-parsers';
 
 export class SGsLiteralEndMarkParser extends BySingleCharTokenParser {
 	constructor() {
@@ -28,7 +28,7 @@ export class SGsLiteralEndMarkParser extends BySingleCharTokenParser {
 
 export class SGsLiteralParser extends ByCharTokenParser {
 	private static readonly StandaloneSymbolParsers = StandaloneSymbolParsers.filter(p => !['/'].includes(p.firstChar));
-	private static readonly Selector: ParserSelector = new ParserSelector({
+	private static readonly Selector = new ParserSelector({
 		parsers: [
 			SGsInterpolationParser.instance,
 			SGsBraceInterpolationParser.instance,

@@ -5,7 +5,7 @@ import {ParserSelector} from '../../token-parser';
 import {RecordParametersParser} from './record-parameters-parser';
 
 export class TryRecordParametersParser {
-	private static Selector: ParserSelector = new ParserSelector({
+	private static Selector = new ParserSelector({
 		parsers: [RecordParametersParser.instance, CommentParsers, WsTabNlParsers]
 	});
 

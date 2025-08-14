@@ -10,14 +10,14 @@ import {
 import {ParseContext} from '../parse-context';
 import {AfterChildParsed, KeywordTokenParser, ParserSelector, TokenParser} from '../token-parser';
 import {GroovyTokenId, T} from '../tokens';
-import {AsAliasDeclParser} from './as-alias-decl';
-import {StaticImportParser} from './static-import';
+import {AsAliasDeclParser} from './as-alias-decl-parser';
+import {StaticImportParser} from './static-import-parser';
 
 /**
  * multiple static keywords is allowed, it is incorrect.
  */
 export class ImportDeclParser extends KeywordTokenParser {
-	private static readonly StaticAndNameSelector: ParserSelector = new ParserSelector({
+	private static readonly StaticAndNameSelector = new ParserSelector({
 		parsers: [
 			StaticImportParser.instance,
 			PackageNameParser.instance,
@@ -25,7 +25,7 @@ export class ImportDeclParser extends KeywordTokenParser {
 			MLCommentParser.instance, WsTabParsers
 		]
 	});
-	private static readonly DotSelector: ParserSelector = new ParserSelector({
+	private static readonly DotSelector = new ParserSelector({
 		parsers: [
 			AsAliasDeclParser.instance,
 			DotParserInstance,
@@ -33,7 +33,7 @@ export class ImportDeclParser extends KeywordTokenParser {
 			MLCommentParser.instance, WsTabParsers
 		]
 	});
-	private static readonly NameAndAsteriskSelector: ParserSelector = new ParserSelector({
+	private static readonly NameAndAsteriskSelector = new ParserSelector({
 		parsers: [
 			PackageNameParser.instance,
 			AsteriskParserInstance,
@@ -41,14 +41,14 @@ export class ImportDeclParser extends KeywordTokenParser {
 			MLCommentParser.instance, WsTabParsers
 		]
 	});
-	private static readonly AsSelector: ParserSelector = new ParserSelector({
+	private static readonly AsSelector = new ParserSelector({
 		parsers: [
 			AsAliasDeclParser.instance,
 			SemicolonParserInstance,
 			MLCommentParser.instance, WsTabParsers
 		]
 	});
-	private static readonly EndSelector: ParserSelector = new ParserSelector({
+	private static readonly EndSelector = new ParserSelector({
 		parsers: [
 			SemicolonParserInstance,
 			MLCommentParser.instance, WsTabParsers

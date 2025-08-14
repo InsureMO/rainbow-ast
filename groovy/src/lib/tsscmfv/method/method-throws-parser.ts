@@ -2,7 +2,7 @@ import {AtomicToken, BlockToken} from '@rainbow-ast/core';
 import {AnnotationDeclParser} from '../../annotation';
 import {CommentParsers} from '../../comment';
 import {CommaParserInstance, DotParserInstance, PackageNameParser, WsTabNlParsers} from '../../common-token';
-import {GenericTypeParser} from '../../generic-type';
+import {GenericTypeDeclParser} from '../../generic-type';
 import {ParseContext} from '../../parse-context';
 import {ParserSelector, SingleKeywordTokenParser} from '../../token-parser';
 import {GroovyTokenId, T} from '../../tokens';
@@ -45,17 +45,17 @@ export class TsscmfvMethodThrowsParser {
 	});
 	private static readonly AfterNameSelector = new ParserSelector({
 		parsers: [
-			CommaParserInstance, GenericTypeParser.instance, DotParserInstance,
+			CommaParserInstance, GenericTypeDeclParser.instance, DotParserInstance,
 			CommentParsers, WsTabNlParsers
 		]
 	});
 	private static readonly AfterDotSelector = new ParserSelector({
 		parsers: [
-			PackageNameParser.instance, GenericTypeParser.instance, CommaParserInstance,
+			PackageNameParser.instance, GenericTypeDeclParser.instance, CommaParserInstance,
 			CommentParsers, WsTabNlParsers
 		]
 	});
-	private static readonly AfterGenTSelector: ParserSelector = new ParserSelector({
+	private static readonly AfterGenTSelector = new ParserSelector({
 		parsers: [
 			CommaParserInstance,
 			CommentParsers, WsTabNlParsers
@@ -86,7 +86,7 @@ export class TsscmfvMethodThrowsParser {
 				selector = TsscmfvMethodThrowsParser.AfterNameSelector;
 			} else if (parser === DotParserInstance) {
 				selector = TsscmfvMethodThrowsParser.AfterDotSelector;
-			} else if (parser === GenericTypeParser.instance) {
+			} else if (parser === GenericTypeDeclParser.instance) {
 				selector = TsscmfvMethodThrowsParser.AfterGenTSelector;
 			}
 			c = context.char();

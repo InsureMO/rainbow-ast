@@ -1,20 +1,20 @@
-export * from './backslash-escape';
-export * from './octal-escape';
-export * from './unicode-escape';
-export * from './dollar-escape';
+export * from './backslash-escape-parsers';
+export * from './octal-escape-parser';
+export * from './unicode-escape-parsers';
+export * from './dollar-escape-parser';
 
-export * from './ml-eraser';
+export * from './ml-eraser-parser';
 
-export * from './gstring-intepolation';
-export * from './dq-gstring-intepolation';
-export * from './slashy-gstring-intepolation';
-export * from './dollar-slashy-gstring-intepolation';
+export * from './gstring-interpolation-parsers';
+export * from './dq-gstring-interpolation-parsers';
+export * from './slashy-gstring-interpolation-parsers';
+export * from './dollar-slashy-gstring-interpolation-parsers';
 
-export * from './ssq-string-literal';
-export * from './tsq-string-literal';
-export * from './sdq-gstring-literal';
-export * from './tdq-gstring-literal';
-export * from './slashy-gstring-literal';
-export * from './dollar-slashy-gstring-literal';
+export * from './ssq-string-literal-parsers';
+export * from './tsq-string-literal-parsers';
+export * from './sdq-gstring-literal-parsers';
+export * from './tdq-gstring-literal-parsers';
+export * from './slashy-gstring-literal-parsers';
+export * from './dollar-slashy-gstring-literal-parsers';
 
 export * from './parsers';

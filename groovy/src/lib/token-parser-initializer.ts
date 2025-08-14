@@ -10,9 +10,17 @@ import {
 	WsTabNlParsers
 } from './common-token';
 import {CompilationUnitParser} from './compilation-unit';
-import {GenericTypeParser} from './generic-type';
+import {GenericTypeDeclParser} from './generic-type';
 import {ImportDeclParser} from './import-decl';
-import {StandaloneKeywordParsers} from './keyword';
+import {
+	AsTypeDeclParser,
+	ControlFlowKeywordParsers,
+	StandaloneKeywordParsers,
+	SwitchBodyParser,
+	SwitchCaseParser,
+	SwitchDefaultParser,
+	SwitchExpressionParser
+} from './keyword';
 import {NumberParsers} from './number-literal';
 import {PackageDeclParser} from './package-decl';
 import {GsBraceInterpolationParser, StringParsers} from './string-literal';
@@ -31,8 +39,9 @@ const AllParsers = [
 	ImportDeclParser.instance,                      // import declaration
 	StandaloneKeywordParsers,                       // standalone keywords
 	AnnotationDeclParser.instance,                  // annotation declaration
-	// type, static block, synchronized block, constructor, method, field, variable
-	...TsscmfvDeclParsers,
+	...TsscmfvDeclParsers,                          // type, static block, synchronized block, constructor, method, field, variable
+	...ControlFlowKeywordParsers,                   // control flow, if-else/do-while/for/switch-case
+	AsTypeDeclParser.instance,                      // as type
 	...CommentParsers,                              // SL comment, ML comment
 	...NumberParsers,                               // all numeric literals
 	// MUST after comment parsers
@@ -57,7 +66,13 @@ class TokenParserInitializer {
 		TypeBodyParser.initSelector(AllParsers);
 		TsscmfvFieldOrVariableParser.initSelector([/* TODO Expression parser? */]);
 		AnnotationParametersParser.initSelector(AllParsers);
-		GenericTypeParser.initSelector(AllParsers);
+		GenericTypeDeclParser.initSelector(AllParsers);
+
+		SwitchExpressionParser.initSelector(AllParsers);
+		SwitchBodyParser.initSelector(AllParsers);
+		const SwitchCaseSubParsers = AllParsers.filter(p => p !== SwitchCaseParser.instance);
+		SwitchCaseParser.initSelector(SwitchCaseSubParsers);
+		SwitchDefaultParser.initSelector(SwitchCaseSubParsers);
 	}
 }
 

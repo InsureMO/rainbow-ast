@@ -1,2 +1,2 @@
-export * from './primitive-type';
-export * from './void';
+export * from './primitive-type-parser';
+export * from './void-parser';

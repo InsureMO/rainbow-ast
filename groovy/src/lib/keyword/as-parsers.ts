@@ -27,19 +27,19 @@ export abstract class AsParser extends KeywordTokenParser {
 }
 
 export class AsTypeDeclParser extends AsParser {
-	private static readonly Selector: ParserSelector = new ParserSelector({
+	private static readonly Selector = new ParserSelector({
 		parsers: [
 			PackageNameParser.instance,
 			CommentParsers, WsTabNlParsers
 		]
 	});
-	private static readonly AfterNameSelector: ParserSelector = new ParserSelector({
+	private static readonly AfterNameSelector = new ParserSelector({
 		parsers: [
 			DotParserInstance,
 			MLCommentParser.instance, WsTabParsers
 		]
 	});
-	private static readonly AfterDotSelector: ParserSelector = new ParserSelector({
+	private static readonly AfterDotSelector = new ParserSelector({
 		parsers: [
 			PackageNameParser.instance,
 			MLCommentParser.instance, WsTabParsers

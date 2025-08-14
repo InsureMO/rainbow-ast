@@ -1,7 +1,7 @@
 import {Char, Token} from '@rainbow-ast/core';
 import {ParseContext} from '../parse-context';
 import {T} from '../tokens';
-import {GsBraceInterpolationParser, GsInterpolationParser, ICM} from './gstring-intepolation';
+import {GsBraceInterpolationParser, GsInterpolationParser, ICM} from './gstring-interpolation-parsers';
 
 /**
  * check the previous tokens.

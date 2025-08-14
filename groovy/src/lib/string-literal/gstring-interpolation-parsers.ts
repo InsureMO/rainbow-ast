@@ -86,10 +86,10 @@ export class GsiDotParser extends BySingleCharTokenParser {
 }
 
 export abstract class GsInterpolationParser extends ByCharTokenParser {
-	protected static readonly IdentifierSelector: ParserSelector = new ParserSelector({
+	protected static readonly IdentifierSelector = new ParserSelector({
 		parsers: [GsiIdentifierParser.instance]
 	});
-	protected static readonly DotSelector: ParserSelector = new ParserSelector({
+	protected static readonly DotSelector = new ParserSelector({
 		parsers: [GsiDotParser.instance]
 	});
 

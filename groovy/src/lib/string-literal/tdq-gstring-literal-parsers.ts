@@ -3,26 +3,27 @@ import {CharsParsers, StandaloneSymbolParsers, WsTabNlParsers} from '../common-t
 import {ParseContext} from '../parse-context';
 import {AfterChildParsed, ByCharTokenParser, ParserSelector, TokenParser} from '../token-parser';
 import {T} from '../tokens';
-import {BackslashEscapeParser, TqSLBadBackslashEscapeParser} from './backslash-escape';
-import {MLEraserParser} from './ml-eraser';
-import {OctalEscapeParser} from './octal-escape';
-import {QSLUnicodeEscapeParser} from './unicode-escape';
+import {BackslashEscapeParser, TqSLBadBackslashEscapeParser} from './backslash-escape-parsers';
+import {DqGsBraceInterpolationParser, DqGsInterpolationParser} from './dq-gstring-interpolation-parsers';
+import {MLEraserParser} from './ml-eraser-parser';
+import {OctalEscapeParser} from './octal-escape-parser';
+import {QSLUnicodeEscapeParser} from './unicode-escape-parsers';
 
-export class TsqSLiteralEndMarkParser extends ByCharTokenParser {
+export class TdqGsLiteralEndMarkParser extends ByCharTokenParser {
 	constructor() {
-		super('\'');
+		super('"');
 	}
 
 	matches(_: Char, context: ParseContext): boolean {
 		const [c2, c3] = context.nextChars(1);
-		return c2 === '\'' && c3 === '\'';
+		return c2 === '"' && c3 === '"';
 	}
 
 	parse(_: Char, context: ParseContext): boolean {
 		const charIndex = context.charIndex;
 		const mark = new AtomicToken({
-			id: T.TsqSLMark,
-			text: '\'\'\'',
+			id: T.TdqGsLMark,
+			text: '"""',
 			start: charIndex, line: context.line, column: context.column
 		});
 		context.collect(mark);
@@ -30,13 +31,15 @@ export class TsqSLiteralEndMarkParser extends ByCharTokenParser {
 		return true;
 	}
 
-	static readonly instance = new TsqSLiteralEndMarkParser();
+	static readonly instance = new TdqGsLiteralEndMarkParser();
 }
 
-export class TsqSLiteralParser extends ByCharTokenParser {
-	private static readonly StandaloneSymbolParsers = StandaloneSymbolParsers.filter(p => !['\\'].includes(p.firstChar));
-	private static readonly Selector: ParserSelector = new ParserSelector({
+export class TdqGsLiteralParser extends ByCharTokenParser {
+	private static readonly StandaloneSymbolParsers = StandaloneSymbolParsers.filter(p => !['\\', '$'].includes(p.firstChar));
+	private static readonly Selector = new ParserSelector({
 		parsers: [
+			DqGsInterpolationParser.instance,
+			DqGsBraceInterpolationParser.instance,
 			BackslashEscapeParser.instanceB,
 			BackslashEscapeParser.instanceF,
 			BackslashEscapeParser.instanceN,
@@ -50,38 +53,38 @@ export class TsqSLiteralParser extends ByCharTokenParser {
 			OctalEscapeParser.instance,
 			QSLUnicodeEscapeParser.instance,
 			MLEraserParser.instance,
-			TsqSLiteralEndMarkParser.instance,
-			TsqSLiteralParser.StandaloneSymbolParsers, WsTabNlParsers, CharsParsers
+			TdqGsLiteralEndMarkParser.instance,
+			TdqGsLiteralParser.StandaloneSymbolParsers, WsTabNlParsers, CharsParsers
 		]
 	});
 
 	constructor() {
-		super('\'');
+		super('"');
 	}
 
 	matches(_: Char, context: ParseContext): boolean {
 		const [c2, c3] = context.nextChars(1);
-		return c2 === '\'' && c3 === '\'';
+		return c2 === '"' && c3 === '"';
 	}
 
 	protected startBlock(context: ParseContext): void {
 		const charIndex = context.charIndex;
 		const mark = new AtomicToken({
-			id: T.TsqSLMark,
-			text: '\'\'\'',
+			id: T.TdqGsLMark,
+			text: '"""',
 			start: charIndex, line: context.line, column: context.column
 		});
-		const literal = new BlockToken(T.TsqSLiteral, mark);
+		const literal = new BlockToken(T.TdqGsLiteral, mark);
 		context.sink(literal);
 		context.forward(3);
 	}
 
 	protected getInitBlockParserSelector(): ParserSelector {
-		return TsqSLiteralParser.Selector;
+		return TdqGsLiteralParser.Selector;
 	}
 
 	protected afterChildParsed(_context: ParseContext, parser: TokenParser): AfterChildParsed {
-		if (parser === TsqSLiteralEndMarkParser.instance) {
+		if (parser === TdqGsLiteralEndMarkParser.instance) {
 			return 'break';
 		} else {
 			return (void 0);
@@ -92,5 +95,5 @@ export class TsqSLiteralParser extends ByCharTokenParser {
 		return this.parseAsBlock(ch, context);
 	}
 
-	static readonly instance = new TsqSLiteralParser();
+	static readonly instance = new TdqGsLiteralParser();
 }

@@ -5,7 +5,7 @@ import {WsTabNlParsers} from '../../common-token';
 import {ParseContext} from '../../parse-context';
 import {ParserSelector} from '../../token-parser';
 import {T} from '../../tokens';
-import {TsscmfvMKP} from './modifier-keywords';
+import {TsscmfvMKP} from './modifier-keyword-parser';
 
 /**
  * continue parse modifiers,

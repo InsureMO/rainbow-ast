@@ -2,7 +2,7 @@ import {AtomicToken, BlockToken} from '@rainbow-ast/core';
 import {AnnotationDeclParser} from '../../annotation';
 import {CommentParsers, MLCommentParser} from '../../comment';
 import {DotParserInstance, PackageNameParser, WsTabNlParsers, WsTabParsers} from '../../common-token';
-import {GenericTypeParser} from '../../generic-type';
+import {GenericTypeDeclParser} from '../../generic-type';
 import {ParseContext} from '../../parse-context';
 import {PrimitiveTypeParser, PrimitiveTypeParsers, VoidParser} from '../../primitive-type';
 import {ParserSelector} from '../../token-parser';
@@ -22,7 +22,7 @@ export type TsscmfvMethodReturnTypeKeywords =
 	| ['long', GroovyTokenId.LONG]
 	| ['short', GroovyTokenId.SHORT];
 
-class GenericTypeForMethodParser extends GenericTypeParser {
+class GenericTypeForMethodParser extends GenericTypeDeclParser {
 	isAvailable(context: ParseContext): boolean {
 		const block = context.block();
 		switch (block.id) {

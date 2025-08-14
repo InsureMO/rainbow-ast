@@ -1,2 +1,2 @@
-export * from './modifier-keywords';
+export * from './modifier-keyword-parser';
 export * from './modifiers-parser';

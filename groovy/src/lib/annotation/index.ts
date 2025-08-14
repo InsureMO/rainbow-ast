@@ -1,2 +1,2 @@
 export * from './annotation-parameters-parser';
-export * from './annotation';
+export * from './annotation-decl-parser';

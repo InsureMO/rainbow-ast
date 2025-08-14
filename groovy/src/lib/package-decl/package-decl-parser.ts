@@ -6,14 +6,14 @@ import {AfterChildParsed, KeywordTokenParser, ParserSelector, TokenParser} from 
 import {GroovyTokenId, T} from '../tokens';
 
 export class PackageDeclParser extends KeywordTokenParser {
-	private static readonly NameSelector: ParserSelector = new ParserSelector({
+	private static readonly NameSelector = new ParserSelector({
 		parsers: [
 			PackageNameParser.instance,
 			SemicolonParserInstance,
 			MLCommentParser.instance, WsTabParsers
 		]
 	});
-	private static readonly DotSelector: ParserSelector = new ParserSelector({
+	private static readonly DotSelector = new ParserSelector({
 		parsers: [
 			DotParserInstance,
 			SemicolonParserInstance,

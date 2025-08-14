@@ -1,1 +1,1 @@
-export * from './package-decl';
+export * from './package-decl-parser';

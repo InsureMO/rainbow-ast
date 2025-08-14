@@ -2,12 +2,12 @@ import {AtomicToken, BlockToken, Token} from '@rainbow-ast/core';
 import {AnnotationDeclParser} from '../../annotation';
 import {CommentParsers} from '../../comment';
 import {TypeDeclNameParser, WsTabNlParsers} from '../../common-token';
-import {GenericTypeParser} from '../../generic-type';
+import {GenericTypeDeclParser} from '../../generic-type';
 import {ParseContext} from '../../parse-context';
 import {TA} from '../../token-attributes';
 import {ParserSelector} from '../../token-parser';
 import {T} from '../../tokens';
-import {TsscmfvTKP, TsscmfvTypeKeywordParser} from './type-keywords';
+import {TsscmfvTKP, TsscmfvTypeKeywordParser} from './type-keyword-parser';
 
 /**
  * - accept multiple type keywords,
@@ -35,7 +35,7 @@ export class TsscmfvTypeParser {
 	});
 	private static readonly AfterNameSelector = new ParserSelector({
 		parsers: [
-			GenericTypeParser.instance,
+			GenericTypeDeclParser.instance,
 			TypeDeclNameParser.instance,
 			CommentParsers,
 			WsTabNlParsers
@@ -90,7 +90,7 @@ export class TsscmfvTypeParser {
 				const token = block.children[block.children.length - 1];
 				this.writeTypeName(block, token);
 				selector = TsscmfvTypeParser.AfterNameSelector;
-			} else if (parser === GenericTypeParser.instance) {
+			} else if (parser === GenericTypeDeclParser.instance) {
 				break;
 			}
 			c = context.char();

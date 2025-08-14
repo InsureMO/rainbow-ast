@@ -9,9 +9,9 @@ import {
 	TokenParser
 } from '../token-parser';
 import {GroovyTokenId, T} from '../tokens';
-import {BackslashEscapeParser, SqSLBadBackslashEscapeParser} from './backslash-escape';
-import {OctalEscapeParser} from './octal-escape';
-import {QSLUnicodeEscapeParser} from './unicode-escape';
+import {BackslashEscapeParser, SqSLBadBackslashEscapeParser} from './backslash-escape-parsers';
+import {OctalEscapeParser} from './octal-escape-parser';
+import {QSLUnicodeEscapeParser} from './unicode-escape-parsers';
 
 export class SsqSLiteralEndMarkParser extends BySingleCharTokenParser {
 	constructor() {
@@ -27,7 +27,7 @@ export class SsqSLiteralEndMarkParser extends BySingleCharTokenParser {
 
 export class SsqSLiteralParser extends ByCharTokenParser {
 	private static readonly StandaloneSymbolParsers = StandaloneSymbolParsers.filter(p => !['\'', '\\'].includes(p.firstChar));
-	private static readonly Selector: ParserSelector = new ParserSelector({
+	private static readonly Selector = new ParserSelector({
 		parsers: [
 			BackslashEscapeParser.instanceB,
 			BackslashEscapeParser.instanceF,

@@ -5,7 +5,7 @@ import {WsTabNlParsers} from '../../common-token';
 import {ParseContext} from '../../parse-context';
 import {ParserSelector} from '../../token-parser';
 import {T} from '../../tokens';
-import {TsscmfvTIKP} from './type-inherit-keywords';
+import {TsscmfvTIKP} from './type-inherit-keyword-parser';
 
 /**
  * - accept one type inherit keyword for one inheriting part,
@@ -16,7 +16,7 @@ import {TsscmfvTIKP} from './type-inherit-keywords';
  * - generic type is allowed after name
  */
 export class TsscmfvTypeInheritParser {
-	private static Selector: ParserSelector = new ParserSelector({
+	private static Selector = new ParserSelector({
 		parsers: [
 			AnnotationDeclParser.instance,
 			TsscmfvTIKP.instanceExtends, TsscmfvTIKP.instanceImplements, TsscmfvTIKP.instancePermits,

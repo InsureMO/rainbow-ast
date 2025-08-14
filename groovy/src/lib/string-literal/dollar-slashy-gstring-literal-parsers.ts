@@ -3,21 +3,25 @@ import {CharsParsers, StandaloneSymbolParsers, WsTabNlParsers} from '../common-t
 import {ParseContext} from '../parse-context';
 import {AfterChildParsed, ByCharTokenParser, ParserSelector, TokenParser} from '../token-parser';
 import {T} from '../tokens';
+import {DollarEscapeParser} from './dollar-escape-parser';
+import {DsGsBraceInterpolationParser, DsGsInterpolationParser} from './dollar-slashy-gstring-interpolation-parsers';
+import {MLEraserParser} from './ml-eraser-parser';
+import {SGsLUnicodeEscapeParser} from './unicode-escape-parsers';
 
-export class MLCommentEndMarkParser extends ByCharTokenParser {
+export class DsGsLiteralEndMarkParser extends ByCharTokenParser {
 	constructor() {
-		super('*');
+		super('/');
 	}
 
 	matches(_: Char, context: ParseContext): boolean {
-		return context.nextChar() === '/';
+		return context.nextChar() === '$';
 	}
 
 	parse(_: Char, context: ParseContext): boolean {
 		const charIndex = context.charIndex;
 		const mark = new AtomicToken({
-			id: T.MLCommentEndMark,
-			text: '*/',
+			id: T.DsGsLEndMark,
+			text: '/$',
 			start: charIndex, line: context.line, column: context.column
 		});
 		context.collect(mark);
@@ -25,43 +29,49 @@ export class MLCommentEndMarkParser extends ByCharTokenParser {
 		return true;
 	}
 
-	static readonly instance = new MLCommentEndMarkParser();
+	static readonly instance = new DsGsLiteralEndMarkParser();
 }
 
-export class MLCommentParser extends ByCharTokenParser {
-	private static readonly Selector: ParserSelector = new ParserSelector({
+export class DsGsLiteralParser extends ByCharTokenParser {
+	private static readonly Selector = new ParserSelector({
 		parsers: [
-			MLCommentEndMarkParser.instance,
+			DsGsInterpolationParser.instance,
+			DsGsBraceInterpolationParser.instance,
+			DollarEscapeParser.instanceDollar,
+			DollarEscapeParser.instanceSlash,
+			SGsLUnicodeEscapeParser.instance,
+			MLEraserParser.instance,
+			DsGsLiteralEndMarkParser.instance,
 			StandaloneSymbolParsers, WsTabNlParsers, CharsParsers
 		]
 	});
 
 	constructor() {
-		super('/');
+		super('$');
 	}
 
 	matches(_: Char, context: ParseContext): boolean {
-		return context.nextChar() === '*';
+		return context.nextChar() === '/';
 	}
 
 	protected startBlock(context: ParseContext): void {
 		const charIndex = context.charIndex;
 		const mark = new AtomicToken({
-			id: T.MLCommentStartMark,
-			text: '/*',
+			id: T.DsGsLStartMark,
+			text: '$/',
 			start: charIndex, line: context.line, column: context.column
 		});
-		const cmt = new BlockToken(T.MLComment, mark);
-		context.sink(cmt);
+		const literal = new BlockToken(T.DsGsLiteral, mark);
+		context.sink(literal);
 		context.forward(2);
 	}
 
 	protected getInitBlockParserSelector(): ParserSelector {
-		return MLCommentParser.Selector;
+		return DsGsLiteralParser.Selector;
 	}
 
 	protected afterChildParsed(_: ParseContext, parser: TokenParser): AfterChildParsed {
-		if (parser === MLCommentEndMarkParser.instance) {
+		if (parser === DsGsLiteralEndMarkParser.instance) {
 			return 'break';
 		} else {
 			return (void 0);
@@ -72,5 +82,5 @@ export class MLCommentParser extends ByCharTokenParser {
 		return this.parseAsBlock(ch, context);
 	}
 
-	static readonly instance = new MLCommentParser();
+	static readonly instance = new DsGsLiteralParser();
 }

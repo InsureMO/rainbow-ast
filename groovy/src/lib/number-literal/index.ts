@@ -1,1 +1,1 @@
-export * from './number-literal';
+export * from './number-literal-parser';

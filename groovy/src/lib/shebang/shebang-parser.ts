@@ -5,7 +5,7 @@ import {ByCharTokenParser, ParserSelector} from '../token-parser';
 import {T} from '../tokens';
 
 export class ShebangParser extends ByCharTokenParser {
-	private static readonly Selector: ParserSelector = new ParserSelector({
+	private static readonly Selector = new ParserSelector({
 		parsers: [StandaloneSymbolParsers, WsTabParsers, CharsParsers]
 	});
 

@@ -75,7 +75,7 @@ enum TsscmfvKeywordKind {
  * - If the last part is not a code block, look for a semicolon as the terminator within the same line (ML comment are not considered as spanning lines).
  */
 export class TsscmfvDeclParser<A extends TsscmfvKeywords> extends KeywordTokenParser {
-	private static Selector: ParserSelector = new ParserSelector({
+	private static Selector = new ParserSelector({
 		parsers: [
 			SemicolonParserInstance,
 			MLCommentParser.instance,

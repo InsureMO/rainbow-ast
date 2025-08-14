@@ -12,7 +12,7 @@ import {MethodParametersParser} from './method-parameters-parser';
  * annotation is allowed before method parameters, which is incorrect.
  */
 export class TryMethodParametersParser {
-	private static Selector: ParserSelector = new ParserSelector({
+	private static Selector = new ParserSelector({
 		parsers: [AnnotationDeclParser.instance, MethodParametersParser.instance, MLCommentParser.instance, WsTabParsers]
 	});
 

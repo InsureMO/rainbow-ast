@@ -1,6 +1,6 @@
 import {Char} from '@rainbow-ast/core';
 import {ParseContext} from '../parse-context';
-import {GsBraceInterpolationParser, GsInterpolationParser} from './gstring-intepolation';
+import {GsBraceInterpolationParser, GsInterpolationParser} from './gstring-interpolation-parsers';
 
 export class DqGsInterpolationParser extends GsInterpolationParser {
 	matches(_: Char, context: ParseContext): boolean {

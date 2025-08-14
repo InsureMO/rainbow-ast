@@ -8,7 +8,7 @@ import {AfterChildParsed, ParserSelector, TokenParser} from '../token-parser';
  * as declaration, for import declaration to assign imported class or field an alias name.
  */
 export class AsAliasDeclParser extends AsParser {
-	private static readonly Selector: ParserSelector = new ParserSelector({
+	private static readonly Selector = new ParserSelector({
 		parsers: [
 			VariableNameParser.instance,
 			MLCommentParser.instance,

@@ -10,14 +10,14 @@ import {
 } from '../token-parser';
 import {GroovyTokenId, T} from '../tokens';
 
-export class GenericTypeParser extends BySingleCharTokenParser {
+export class GenericTypeDeclParser extends BySingleCharTokenParser {
 	private static Selector: ParserSelector;
 
 	static initSelector(parsers: ParserSelectorArgs['parsers']) {
-		if (GenericTypeParser.Selector != null) {
+		if (GenericTypeDeclParser.Selector != null) {
 			throw new Error('GenericTypeParser.Selector is initialized.');
 		}
-		GenericTypeParser.Selector = new ParserSelector({
+		GenericTypeDeclParser.Selector = new ParserSelector({
 			parsers: [RAngleParserInstance, ...parsers]
 		});
 	}
@@ -37,7 +37,7 @@ export class GenericTypeParser extends BySingleCharTokenParser {
 	}
 
 	protected getInitBlockParserSelector(): ParserSelector {
-		return GenericTypeParser.Selector;
+		return GenericTypeDeclParser.Selector;
 	}
 
 	protected whenParserNotFound(context: ParseContext): void {
@@ -75,5 +75,5 @@ export class GenericTypeParser extends BySingleCharTokenParser {
 		return this.parseAsBlock(ch, context);
 	}
 
-	static readonly instance = new GenericTypeParser();
+	static readonly instance = new GenericTypeDeclParser();
 }

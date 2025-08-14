@@ -12,7 +12,7 @@ import {SynchronizedExpressionParser} from './synchronized-expression-parser';
  * annotation is allowed before synchronized expression.
  */
 export class TrySynchronizedExpressionParser {
-	private static Selector: ParserSelector = new ParserSelector({
+	private static Selector = new ParserSelector({
 		parsers: [
 			AnnotationDeclParser.instance, SynchronizedExpressionParser.instance,
 			CommentParsers, WsTabNlParsers

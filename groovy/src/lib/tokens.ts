@@ -269,6 +269,16 @@ export enum GroovyTokenId {
 	AnnoParamSeg,
 	GenTDecl,
 	GenTVarSeg,
+	ReturnStat,
+	BreakStat,
+	ContinueState,
+	YieldStat,
+	SwitchStat,
+	SwitchExprBlk,
+	SwitchBody,
+	SwitchCaseBlk,
+	SwitchCaseExprSeg,
+	SwitchDefaultBlk
 }
 
 export const T = GroovyTokenId;

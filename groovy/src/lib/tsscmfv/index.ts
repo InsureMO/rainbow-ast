@@ -7,4 +7,4 @@ export * from './type';
 export * from './method';
 export * from './field-or-variable';
 
-export * from './tsscmfv-decl';
+export * from './tsscmfv-decl-parser';
