@@ -22,9 +22,9 @@ import {
 	RecordParametersParser,
 	SynchronizedExpressionParser,
 	TsscmfvDeclParsers,
-	TsscmfvFieldOrVariableParser
+	TsscmfvFieldOrVariableParser,
+	TypeBodyParser
 } from './tsscmfv';
-import {TypeBodyParser} from './tsscmfv/code-block/type-body-parser';
 
 const AllParsers = [
 	PackageDeclParser.instance,                     // package declaration

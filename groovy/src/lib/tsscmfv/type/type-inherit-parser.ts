@@ -21,7 +21,7 @@ export class TsscmfvTypeInheritParser {
 			AnnotationDeclParser.instance,
 			TsscmfvTIKP.instanceExtends, TsscmfvTIKP.instanceImplements, TsscmfvTIKP.instancePermits,
 			CommentParsers,
-			WsTabNlParsers,
+			WsTabNlParsers
 		]
 	});
 
