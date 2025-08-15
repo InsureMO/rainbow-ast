@@ -1,6 +1,13 @@
 import {BlockToken, Char} from '@rainbow-ast/core';
 import {CommentParsers, MLCommentParser} from '../comment';
-import {DotParserInstance, NewlineParsers, PackageNameParser, WsTabNlParsers, WsTabParsers} from '../common-token';
+import {
+	DotParserInstance,
+	IsAfterDot,
+	NewlineParsers,
+	PackageNameParser,
+	WsTabNlParsers,
+	WsTabParsers
+} from '../common-token';
 import {ParseContext} from '../parse-context';
 import {AfterChildParsed, BySingleCharTokenParser, ParserSelector, TokenParser} from '../token-parser';
 import {GroovyTokenId, T} from '../tokens';
@@ -26,6 +33,10 @@ export class AnnotationDeclParser extends BySingleCharTokenParser {
 
 	protected getTokenId(): GroovyTokenId {
 		return T.At;
+	}
+
+	isAvailable(context: ParseContext): boolean {
+		return !IsAfterDot(context);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars

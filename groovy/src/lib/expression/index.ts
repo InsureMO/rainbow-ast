@@ -3,13 +3,13 @@
 // ✅ switch -> keyword
 // 🆘 bitnot -> level #1: ~exp
 // 🆘 not -> level #1: !exp
-// 🆘 power -> level #2: exp1 ** exp2
+// 🆘 power -> level #2: exp1 ** exp2; cannot have newline before **
 // 🆘 increase -> level #3: ++exp
 // 🆘 decrease -> level #3: --exp
 // 🆘 positive -> level #3: +exp
 // 🆘 negative -> level #3: -exp
 // 🆘 multiple -> level #4: exp1 * exp2
-// 🆘 divide -> level #4: exp1 / exp2
+// 🆘 divide -> level #4: exp1 / exp2; cannot have newline before /
 // 🆘 modulo -> level #4: exp1 % exp2
 // 🆘 add -> level #5: exp1 + exp2
 // 🆘 subtract -> level #5: exp1 - exp2
@@ -20,7 +20,7 @@
 // 🆘 range exclusive left -> level #6: exp1 <.. exp2
 // 🆘 range exclusive right -> level #6: exp1 ..< exp2
 // 🆘 range exclusive full -> level #6: exp1 <..< exp2
-// ✅ as type -> keyword. level #7: exp as type
+// ✅ as type -> keyword. level #7: exp as type; cannot have newline before as
 // 🆘 instanceof -> level #7: exp instanceof type
 // 🆘 not instanceof -> level #7: exp !instanceof type
 // 🆘 less than or equal -> level #7: exp1 <= exp2

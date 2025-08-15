@@ -53,6 +53,7 @@ export const StandaloneSymbolParsers = ([
 export const RBraceParserInstance = StandaloneSymbolParsers.find(p => p.firstChar === '}');
 export const RParenParserInstance = StandaloneSymbolParsers.find(p => p.firstChar === ')');
 export const RAngleParserInstance = StandaloneSymbolParsers.find(p => p.firstChar === '>');
+export const AtParserInstance = StandaloneSymbolParsers.find(p => p.firstChar === '@');
 export const AsteriskParserInstance = StandaloneSymbolParsers.find(p => p.firstChar === '*');
 export const PipeParserInstance = StandaloneSymbolParsers.find(p => p.firstChar === '|');
 export const DotParserInstance = StandaloneSymbolParsers.find(p => p.firstChar === '.');

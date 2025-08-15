@@ -1,6 +1,7 @@
 import {AnnotationDeclParser, AnnotationParametersParser} from './annotation';
 import {CommentParsers} from './comment';
 import {
+	AtParserInstance,
 	CommaParserInstance,
 	DotParserInstance,
 	IdentifierParser,
@@ -51,6 +52,7 @@ const AllParsers = [
 	...StringParsers,                               // all string literals
 	...WsTabNlParsers,                              // whitespaces, tabs, newline
 	...OperatorParsers,                             // operators
+	AtParserInstance,                               // @ after dot, or incorrect independent @
 	DotParserInstance,                              // dot
 	CommaParserInstance,                            // comma
 	SemicolonParserInstance,                        // semicolon
