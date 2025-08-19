@@ -48,7 +48,7 @@ export enum GroovyTokenId {
 	/** 0X, 0x */ HexadecimalStartMark,
 	DecimalLiteral,
 	/** 0-9, a-f, A-F, continuous. allowed number depends on radix (binary, octal, integral and hexadecimal) */ Numbers,
-	/** _, continuous */NumberSeparators,
+	/** _, continuous */ NumberSeparators,
 	/** . */ NumberDecimalPoint,
 	NumberExponent,
 	/** Ee */ NumberExponentStartMark,
