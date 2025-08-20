@@ -26,8 +26,7 @@ import {
 	rectangularSelection
 } from '@codemirror/view';
 import {useEffect, useRef, useState} from 'react';
-import {useEventBus} from './event-bus';
-import {EventTypes} from './types';
+import {EventTypes, useEventBus} from './event-bus';
 
 export interface UseInitEditorOptions {
 	language: LanguageSupport;

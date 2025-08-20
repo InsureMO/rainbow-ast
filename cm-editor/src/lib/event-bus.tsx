@@ -1,6 +1,10 @@
 import {EventEmitter} from 'events';
 import React, {createContext, ReactNode, useContext, useState} from 'react';
-import {EventTypes} from './types';
+
+export enum EventTypes {
+	TOGGLE_HELP = 'toggle-help',
+	DOC_CHANGED = 'doc-changed'
+}
 
 export interface EventBus {
 	fire(type: EventTypes.TOGGLE_HELP): this;

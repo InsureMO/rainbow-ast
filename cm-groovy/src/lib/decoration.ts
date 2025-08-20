@@ -18,6 +18,7 @@ export enum DecorationMarkTypes {
 	STR_ESCAPE = 'str-esc',
 	OPERATOR = 'operator',
 	IDENTIFIER = 'identifier',
+	COMMENT_MARK = 'cmt-mark',
 	WORD_OR_CHAR = 'woc',
 	BLOCK_SE = 'block-se'
 }
@@ -44,6 +45,7 @@ const markId = (name: string) => mark(DMT.IDENTIFIER, name);
 const markWoc = (name: string) => mark(DMT.WORD_OR_CHAR, name);
 const markBlockSE = (name: string) => mark(DMT.BLOCK_SE, name);
 
+const markCmtM = (name: string) => Decoration.mark({class: `gt-cmt gt-${DMT.COMMENT_MARK} gt-${DMT.COMMENT_MARK}-${name}`});
 const markCmtSym = (name: string) => Decoration.mark({class: `gt-cmt gt-${DMT.SYMBOL} gt-${DMT.SYMBOL}-${name}`});
 const markCmtWoc = (name: string) => Decoration.mark({class: `gt-cmt gt-${DMT.WORD_OR_CHAR} gt-${DMT.WORD_OR_CHAR}-${name}`});
 const markStrSym = (name: string) => Decoration.mark({class: `gt-sl gt-${DMT.SYMBOL} gt-${DMT.SYMBOL}-${name}`});
@@ -261,7 +263,11 @@ export const SyntaxNodeDecorations: Record<string, Decoration> = {
 	// chars
 	Identifier: markId('identifier'),
 	Word: markWoc('word'),
-	UndeterminedChar: markWoc('udc')
+	UndeterminedChar: markWoc('udc'),
+	/** #! */ ShebangStartMark: markCmtM('shebang-st'),
+	/** // */ SLCommentStartMark: markCmtM('sl-cmt-st'),
+	/** /* */ MLCommentStartMark: markCmtM('ml-cmt-st'),
+	/** * / (no blank in the middle) */ MLCommentEndMark: markCmtM('ml-cmt-ed')
 };
 export const CommentNodeDecorations: Record<string, Decoration> = {
 	// bracket

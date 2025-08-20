@@ -1,19 +1,23 @@
 import styled from 'styled-components';
-import {DecorationStyles, DecorationStyleVariables} from './styles';
+import {createDecorationStyles, createDecorationStyleVariables, DecorationStyleVariables} from './styles';
 
-// noinspection CssUnresolvedCustomProperty,CssUnusedSymbol,SpellCheckingInspection
-export const EditorContainer = styled.div.attrs({
-	// @ts-expect-error for avoid attribute name rule
-	'data-w': 'groovy-editor'
-})`
+// noinspection CssUnresolvedCustomProperty,CssUnusedSymbol,SpellCheckingInspection,CssNoGenericFontName
+export const EditorContainer = styled.div.attrs<{ $dsv?: DecorationStyleVariables }>(
+	// @ts-expect-error ignore the styled-components type error
+	({$dsv}) => {
+		return {
+			'data-w': 'rbcm-editor',
+			style: createDecorationStyleVariables($dsv)
+		};
+	})<{ $dsv?: DecorationStyleVariables }>`
     display: block;
     position: relative;
-    width: var(--rbcm-editor-width, 100%);
-    height: var(--rbcm-editor-height, 100%);
-    min-height: var(--rbcm-editor-min-width, 400px);
-    max-height: var(--rbcm-editor-max-width, 100%);
-    border: var(--rbcm-editor-border, 1px solid #ccc);
-    border-radius: var(--rbcm-editor-border-radius, 2px);
+    width: var(--rbcm-editor-width);
+    height: var(--rbcm-editor-height);
+    min-height: var(--rbcm-editor-min-width);
+    max-height: var(--rbcm-editor-max-width);
+    border: var(--rbcm-editor-border-width) var(--rbcm-editor-border-style) var(--rbcm-editor-border-color);
+    border-radius: var(--rbcm-editor-border-radius);
     overflow: hidden;
 
     &[data-visible=false] {
@@ -22,8 +26,11 @@ export const EditorContainer = styled.div.attrs({
 
     > div.cm-editor {
         height: 100%;
-        ${DecorationStyleVariables};
-        font-size: var(--rbcm-font-size);
+        font-family: var(--rbcm-editor-font-family);
+        font-size: var(--rbcm-editor-font-size);
+        font-weight: var(--rbcm-editor-font-weight);
+        font-style: var(--rbcm-editor-font-style);
+        color: var(--rbcm-editor-font-color);
 
         &.cm-focused {
             outline: none;
@@ -34,7 +41,7 @@ export const EditorContainer = styled.div.attrs({
                 background-color: transparent;
             }
 
-            ${DecorationStyles}
+            ${({$dsv}) => createDecorationStyles($dsv)}
         }
 
         div.cm-panel.cm-search {

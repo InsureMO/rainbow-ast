@@ -5,7 +5,8 @@
 		"java-base",
 		"groovy",
 		"cm-editor",
-		"cm-groovy"
+		"cm-groovy",
+		"cm-editor-demo"
 	],
 	"scripts": {
 		"core:build": "cd ./core && yarn build",
