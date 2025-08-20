@@ -18,9 +18,6 @@ export const GlobalStyles: any = createGlobalStyle`
 
     body {
         margin: 0;
-        font-family: var(--d9-font-family);
-        font-size: var(--d9-font-size);
-        color: var(--d9-font-color);
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         position: relative;

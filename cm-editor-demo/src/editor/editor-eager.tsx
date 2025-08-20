@@ -11,6 +11,7 @@
 // 	ProjectClassLoader
 // } from '@rainbow-n19/n2';
 import {Editor as GroovyEditor} from '@rainbow-ast/cm-editor';
+import {DecorationStyleVariables} from '@rainbow-ast/cm-editor/src';
 import {DefaultStyleDefs, groovy, transpileStyles} from '@rainbow-ast/cm-groovy';
 import React, {useState} from 'react';
 import TestGroovy1 from './test-groovy-1.groovy';
@@ -34,9 +35,7 @@ import TestGroovy1 from './test-groovy-1.groovy';
 export const Editor = () => {
 	const [state, setState] = useState({
 		language: groovy({language: {shebang: true}}),
-		styles: {
-			styles: transpileStyles(DefaultStyleDefs)
-		},
+		styles: transpileStyles<DecorationStyleVariables>(DefaultStyleDefs),
 		content: TestGroovy1
 	});
 

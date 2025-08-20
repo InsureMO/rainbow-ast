@@ -48,8 +48,8 @@ const markBlockSE = (name: string) => mark(DMT.BLOCK_SE, name);
 const markCmtM = (name: string) => Decoration.mark({class: `gt-cmt gt-${DMT.COMMENT_MARK} gt-${DMT.COMMENT_MARK}-${name}`});
 const markCmtSym = (name: string) => Decoration.mark({class: `gt-cmt gt-${DMT.SYMBOL} gt-${DMT.SYMBOL}-${name}`});
 const markCmtWoc = (name: string) => Decoration.mark({class: `gt-cmt gt-${DMT.WORD_OR_CHAR} gt-${DMT.WORD_OR_CHAR}-${name}`});
-const markStrSym = (name: string) => Decoration.mark({class: `gt-sl gt-${DMT.SYMBOL} gt-${DMT.SYMBOL}-${name}`});
-const markStrWoc = (name: string) => Decoration.mark({class: `gt-sl gt-${DMT.WORD_OR_CHAR} gt-${DMT.WORD_OR_CHAR}-${name}`});
+const markStrSym = (name: string) => Decoration.mark({class: `gt-str gt-${DMT.SYMBOL} gt-${DMT.SYMBOL}-${name}`});
+const markStrWoc = (name: string) => Decoration.mark({class: `gt-str gt-${DMT.WORD_OR_CHAR} gt-${DMT.WORD_OR_CHAR}-${name}`});
 
 export const SyntaxNodeDecorations: Record<string, Decoration> = {
 	// whitespace, tabs and newline
@@ -97,9 +97,9 @@ export const SyntaxNodeDecorations: Record<string, Decoration> = {
 	/** 0-9, a-f, A-F, continuous. allowed number depends on radix (binary, octal, integral and hexadecimal) */ Numbers: markLit('num'),
 	/** _, continuous */ NumberSeparators: markLit('num-sep'),
 	/** . */ NumberDecimalPoint: markLit('num-dot'),
-	/** Ee */ NumberExponentStartMark: markLitM('exp-st'),
-	/** +- */ NumberExponentSign: markLitM('exp-sig'),
-	/** IiLlFfDdGg */ NumberSuffix: markLitM('exp-sfx'),
+	/** Ee */ NumberExponentStartMark: markLitM('num-exp-st'),
+	/** +- */ NumberExponentSign: markLitM('num-exp-sig'),
+	/** IiLlFfDdGg */ NumberSuffix: markLitM('num-sfx'),
 	// string literal
 	/** single quote string literal mark */ SsqSLMark: markLitM('sqs-se'),
 	/** triple quotes string literal mark */ TsqSLMark: markLitM('tqs-se'),

@@ -7,6 +7,7 @@ export interface TextStyle {
 	style?: string;
 	color?: string;
 	bgcolor?: string;
+	decoration?: string;
 }
 
 export interface DecorationStyleVariables {
@@ -25,9 +26,14 @@ export interface DecorationStyleVariables {
 	fontColor?: string;
 	cmt?: TextStyle;
 	kw?: TextStyle;
+	str?: TextStyle;
+	strEsc?: TextStyle;
+	strBesc?: TextStyle;
+	num?: TextStyle;
+	bool?: TextStyle;
+	custom?: Record<string, string | number>;
 	/** follow style-components standard */
 	styles?: string;
-	[key: string]: string | number | TextStyle;
 }
 
 export const toPixel = (v: string | number): string | undefined => {
@@ -47,7 +53,8 @@ export const text = (name: string, style?: TextStyle) => {
 		[`--rbcm-${name}-font-weight`]: style.weight == null ? (void 0) : `${style.weight}`,
 		[`--rbcm-${name}-font-style`]: style.style,
 		[`--rbcm-${name}-color`]: style.color,
-		[`--rbcm-${name}-bgcolor`]: style.bgcolor
+		[`--rbcm-${name}-bgcolor`]: style.bgcolor,
+		[`--rbcm-${name}-decoration`]: style.decoration
 	};
 	Object.keys(styles).forEach(key => {
 		if (styles[key] == null || styles[key].trim() === '') {
@@ -56,6 +63,27 @@ export const text = (name: string, style?: TextStyle) => {
 	});
 
 	return styles;
+};
+const custom = (styles?: Record<string, string | number>) => {
+	if (styles == null) {
+		return {};
+	}
+	return Object.keys(styles).reduce((map, key) => {
+		const value = styles[key];
+		if (value != null) {
+			const k = `--rbcm-${key}`;
+			if (typeof value === 'number') {
+				if (key.toLowerCase().endsWith('font-weight')) {
+					map[k] = `${value}`;
+				} else {
+					map[k] = toPixel(value);
+				}
+			} else {
+				map[k] = value;
+			}
+		}
+		return map;
+	}, {} as Record<string, string>);
 };
 // noinspection CssUnresolvedCustomProperty
 export const createDecorationStyleVariables = (v: DecorationStyleVariables = {}) => {
@@ -74,18 +102,20 @@ export const createDecorationStyleVariables = (v: DecorationStyleVariables = {})
 		'--rbcm-editor-font-style': v.fontStyle ?? 'normal',
 		'--rbcm-editor-font-color': v.fontColor ?? '#333',
 
-		...text('cmt', {color: '#8C8C8C', ...(v.cmt ?? {})}),
-		...text('kw', {color: '#0033B3', ...(v.kw ?? {})})
+		...text('cmt', {color: '#8C8C8C', style: 'italic', ...(v.cmt ?? {})}),
+		...text('kw', {color: '#0033B3', ...(v.kw ?? {})}),
+		...text('str', {color: '#067D17', ...(v.str ?? {})}),
+		...text('str-esc', {color: '#0037A6', ...(v.strEsc ?? {})}),
+		...text('str-besc', {color: '#0037A6', bgcolor: '#FFCCCC', ...(v.strEsc ?? {})}),
+		...text('num', {color: '#1750EB', ...(v.num ?? {})}),
+		...text('bool', {color: '#1750EB', ...(v.bool ?? {})}),
+
+		...custom(v.custom)
 	};
-	//--rbcm-reserved-keyword-color: #0033B3;
 	//--rbcm-reserved-keyword-background-color: transparent;
 	//
 	//--rbcm-identifier-for-annotation-color: #9E880D;
 	//--rbcm-capitalized-identifier-for-annotation-color: #9E880D;
-	//
-	//--rbcm-string-literal-color: #067D17;
-	//--rbcm-number-literal-color: #1750EB;
-	//--rbcm-boolean-literal-color: #1750EB;
 	//
 	//--rbcm-gstring-color: #067D17;
 	//
@@ -108,14 +138,10 @@ export const createDecorationStyleVariables = (v: DecorationStyleVariables = {})
 	//--rbcm-at-for-annotation-color: #9E880D;
 	//--rbcm-at-for-annotation-font-weight: 900;
 	//
-	//--rbcm-nl-for-sl-comment-color: #8C8C8C;
-	//--rbcm-nl-for-sl-comment-font-style: italic;
 	//--rbcm-nl-for-sl-comment-todo-color: #008DDE;
 	//--rbcm-nl-for-sl-comment-todo-font-style: italic;
 	//--rbcm-nl-for-sl-comment-todo-font-weight: 600;
 	//
-	//--rbcm-nl-for-ml-comment-color: #8C8C8C;
-	//--rbcm-nl-for-ml-comment-font-style: italic;
 	//--rbcm-nl-for-ml-comment-todo-color: #008DDE;
 	//--rbcm-nl-for-ml-comment-todo-font-style: italic;
 	//--rbcm-nl-for-ml-comment-todo-font-weight: 600;
