@@ -13,7 +13,8 @@
 		"groovy:build": "cd ./groovy && yarn build",
 		"cm-editor:build": "cd ./cm-editor && yarn build",
 		"cm-groovy:build": "cd ./cm-groovy && yarn build",
-		"all:build": "yarn core:build && yarn java-base:build && yarn groovy:build"
+		"cm-all:build": "yarn cm-editor:build && yarn cm-groovy:build",
+		"all:build": "yarn core:build && yarn java-base:build && yarn groovy:build && yarn cm-all:build"
 	},
 	"volta": {
 		"node": "22.11.0",

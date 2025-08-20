@@ -4,7 +4,8 @@ import {Decoration, DecorationSet, EditorView, ViewPlugin, ViewUpdate} from '@co
 import {SyntaxNodeRef} from '@lezer/common';
 import {Token} from '@rainbow-ast/core';
 import {GroovyTokenId} from '@rainbow-ast/groovy';
-import {GroovyFacet, GroovyFacetDocument} from './facet';
+import {GroovyFacet} from './facet';
+import {GroovyFacetDocument} from './facet-document';
 
 // noinspection JSUnusedGlobalSymbols
 export enum DecorationMarkTypes {
@@ -337,17 +338,7 @@ export const StrNodeDecorations: Record<string, Decoration> = {
 	UndeterminedChar: markStrWoc('udc')
 };
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface GroovyDecorationOptions {
-}
-
 export class GroovyDecoration {
-	private readonly _options: GroovyDecorationOptions;
-
-	constructor(options?: GroovyDecorationOptions) {
-		this._options = {...(options ?? {})};
-	}
-
 	private tokenNameToId(name: string): GroovyTokenId {
 		return GroovyTokenId[name];
 	}
@@ -435,8 +426,8 @@ export class GroovyDecoration {
 	}
 }
 
-export const GroovyDecorationPlugin = (options?: GroovyDecorationOptions) => {
-	const decoration = new GroovyDecoration(options);
+export const GroovyDecorationPlugin = () => {
+	const decoration = new GroovyDecoration();
 	const decorate = (view: EditorView): DecorationSet => {
 		return decoration.decorate(view);
 	};
