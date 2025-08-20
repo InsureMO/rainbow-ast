@@ -112,39 +112,6 @@ export const createDecorationStyleVariables = (v: DecorationStyleVariables = {})
 
 		...custom(v.custom)
 	};
-	//--rbcm-reserved-keyword-background-color: transparent;
-	//
-	//--rbcm-identifier-for-annotation-color: #9E880D;
-	//--rbcm-capitalized-identifier-for-annotation-color: #9E880D;
-	//
-	//--rbcm-gstring-color: #067D17;
-	//
-	//--rbcm-brace-color: #B09633;
-	//--rbcm-brace-font-style: italic;
-	//--rbcm-brace-for-closure-color: #871094;
-	//--rbcm-brace-for-closure-font-weight: 600;
-	//--rbcm-brace-for-closure-font-style: var(--rbcm-brace-font-style);
-	//
-	//--rbcm-block-matched-side-background-color: #FF0000B3;
-	//
-	//--rbcm-arrow-font-weight: 600;
-	//--rbcm-arrow-for-closure-color: #871094;
-	//--rbcm-arrow-for-closure-font-weight: var(--rbcm-arrow-font-weight);
-	//
-	//--rbcm-semi-color: #888;
-	//
-	//--rbcm-at-for-interface-color: #0033B3;
-	//--rbcm-at-for-interface-font-weight: 900;
-	//--rbcm-at-for-annotation-color: #9E880D;
-	//--rbcm-at-for-annotation-font-weight: 900;
-	//
-	//--rbcm-nl-for-sl-comment-todo-color: #008DDE;
-	//--rbcm-nl-for-sl-comment-todo-font-style: italic;
-	//--rbcm-nl-for-sl-comment-todo-font-weight: 600;
-	//
-	//--rbcm-nl-for-ml-comment-todo-color: #008DDE;
-	//--rbcm-nl-for-ml-comment-todo-font-style: italic;
-	//--rbcm-nl-for-ml-comment-todo-font-weight: 600;
 };
 // noinspection CssUnresolvedCustomProperty,CssUnusedSymbol
 export const createDecorationStyles = (v: DecorationStyleVariables) => {
