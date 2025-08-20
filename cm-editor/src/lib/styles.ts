@@ -73,7 +73,8 @@ const custom = (styles?: Record<string, string | number>) => {
 		if (value != null) {
 			const k = `--rbcm-${key}`;
 			if (typeof value === 'number') {
-				if (key.toLowerCase().endsWith('font-weight')) {
+				const lcKey = key.toLowerCase();
+				if (lcKey.endsWith('font-weight') || lcKey.endsWith('opacity')) {
 					map[k] = `${value}`;
 				} else {
 					map[k] = toPixel(value);
