@@ -29,6 +29,7 @@ export interface DecorationStyleVariables {
 	str?: TextStyle;
 	strEsc?: TextStyle;
 	strBesc?: TextStyle;
+	gsi?: TextStyle;
 	num?: TextStyle;
 	bool?: TextStyle;
 	custom?: Record<string, string | number>;
@@ -108,6 +109,7 @@ export const createDecorationStyleVariables = (v: DecorationStyleVariables = {})
 		...text('str', {color: '#067D17', ...(v.str ?? {})}),
 		...text('str-esc', {color: '#0037A6', ...(v.strEsc ?? {})}),
 		...text('str-besc', {color: '#0037A6', bgcolor: '#FFCCCC', ...(v.strEsc ?? {})}),
+		...text('gsi', {color: '#AF5195', ...(v.gsi ?? {})}),
 		...text('num', {color: '#1750EB', ...(v.num ?? {})}),
 		...text('bool', {color: '#1750EB', ...(v.bool ?? {})}),
 

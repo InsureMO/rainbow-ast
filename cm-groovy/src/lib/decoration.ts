@@ -41,7 +41,7 @@ const markLit = (name: string) => mark(DMT.LITERAL, name);
 const markLitM = (name: string) => mark(DMT.LITERAL_MARK, name);
 const markStrE = (name: string) => mark(DMT.STR_ESCAPE, name);
 const markOp = (name: string) => mark(DMT.OPERATOR, name);
-const markId = (name: string) => mark(DMT.IDENTIFIER, name);
+const markId = () => Decoration.mark({class: 'gt-identifier'});
 const markWoc = (name: string) => mark(DMT.WORD_OR_CHAR, name);
 const markBlockSE = (name: string) => mark(DMT.BLOCK_SE, name);
 
@@ -261,7 +261,7 @@ export const SyntaxNodeDecorations: Record<string, Decoration> = {
 	/** ... */ Ellipsis: markOp('ellipsis'),
 	/** 1.0 */ InstanceOf: markOp('instanceof'),
 	// chars
-	Identifier: markId('identifier'),
+	Identifier: markId(),
 	Word: markWoc('word'),
 	UndeterminedChar: markWoc('udc'),
 	/** #! */ ShebangStartMark: markCmtM('shebang-st'),

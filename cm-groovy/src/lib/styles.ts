@@ -19,6 +19,7 @@ const StringStyleDefs = StyleDefs('str');
 const StringMarkStyleDefs = StringStyleDefs;
 const StringEscapeStyleDefs = StyleDefs('str-esc');
 const StringBadEscapeStyleDefs = {...StyleDefs('str-besc'), 'border-radius': '0.3em'};
+const GsiMarkStyleDefs = StyleDefs('gsi');
 export const DefaultStyleDefs: Styles = {
 	'&:not(:last-child):after': {
 		display: 'inline-block',
@@ -57,7 +58,10 @@ export const DefaultStyleDefs: Styles = {
 		...StringEscapeStyleDefs,
 		'background-color': 'var(--rbcm-str-nl-eraser-bgcolor, var(--rbcm-str-esc-bgcolor))',
 		'border-radius': 'var(--rbcm-str-nl-eraser-border-radius)'
-	}
+	},
+	'span.gt-literal-mark-gsi-st': GsiMarkStyleDefs,
+	'span.gt-literal-mark-gsi-brace-st': GsiMarkStyleDefs,
+	'span.gt-literal-mark-gsi-brace-ed': GsiMarkStyleDefs
 };
 export const CustomStyleVariableDefs = {
 	'num-mark-color': '#965AD8FF',
